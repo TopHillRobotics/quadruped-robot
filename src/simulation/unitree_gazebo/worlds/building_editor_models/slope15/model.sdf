@@ -1,0 +1,26 @@
+<?xml version='1.0'?>
+<sdf version='1.6'>
+  <model name='slope15'>
+    <pose frame=''>4.475 0 0 1.5707 0 3.1415</pose>
+    <link name='slope15'>
+      <visual name='slope15_0'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://slope15/meshes/slope15.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='slope15_0'>
+        <pose frame=''>-2.475 0 -0.5 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://slope15/meshes/slope15.stl</uri>
+          </mesh>
+        </geometry>
+        
+      </collision>
+    </link>
+    <static>1</static>
+  </model>
+</sdf>

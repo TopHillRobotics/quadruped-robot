@@ -1,0 +1,33 @@
+iriwam: #namespace
+
+    n_actions: 13 # Increase and decrease 7 joints.
+
+    init_joints: # Init pose so that camera can see the laser element .["iri_wam_joint_1","iri_wam_joint_2","iri_wam_joint_3","iri_wam_joint_4","iri_wam_joint_5","iri_wam_joint_6","iri_wam_joint_7"]
+      iri_wam_joint_1: 0.0
+      iri_wam_joint_2: 1.1
+      iri_wam_joint_3: 0.0
+      iri_wam_joint_4: 1.1
+      iri_wam_joint_5: 0.0
+      iri_wam_joint_6: 0.0
+      iri_wam_joint_7: 0.0
+
+    work_space: # 3D cube in which Sawyers TCP ( right_electric_gripper_base frame) is allowed to move in
+      x_max: 1.1
+      x_min: 0.0
+      y_max: 1.0
+      y_min: -1.0
+      z_max: 1.3
+      z_min: 0.3
+
+
+    joint_increment_value: 0.1 # Increments of the joints each action does.
+
+    max_distance_from_red_bowl: 145 # Maximum distace in pixels of the laser tip to the bowl. Bigger than this the episode finishes.
+    min_distance_from_red_bowl: 30 # Distance value that we consider it Over the red bowl
+
+    min_laser_distance: 0.3 # Laser distance minimum for the center laser beam. Smaller, and its considered to be close enough.
+
+    number_decimals_precision_obs: 1
+
+    done_reward: 1000.0 # reward
+    closer_to_block_reward: 100.0 # reward

@@ -1,0 +1,36 @@
+fetch: #namespace
+
+    # Fetch Task Realated parameters
+    n_actions: 6 # X+/-,Y+/-,Z+/-
+    n_observations: 4 # XYZ of the TCP and the distance from GOAL
+    position_ee_max: 1.0
+    position_ee_min: -1.0
+
+    init_pos: # This has to be validated in the fetch_moveit_test.py in fetch_openai_ros_example or something that tests this pos is possible
+      joint0: 0.0
+      joint1: -0.8
+      joint2: 0.0
+      joint3: 1.6
+      joint4: 0.0
+      joint5: 0.8
+      joint6: 0.0
+
+
+    setup_ee_pos: # This has to be validated in the fetch_moveit_test.py in fetch_openai_ros_example or something that tests this pos is possible
+      x: 0.598
+      y: 0.005
+      z: 0.9
+
+    goal_ee_pos: # This has to be validated in the fetch_moveit_test.py in fetch_openai_ros_example or something that tests this pos is possible
+      x: 2.0
+      y: 2.0
+      z: 2.0
+
+    position_delta: 0.1 # Increments of Decrements in the X/Y/Z positions each action step
+
+    step_punishment: -1
+    closer_reward: 10
+    impossible_movement_punishement: -100
+    reached_goal_reward: 100
+
+    max_distance: 3.0 # Maximum distance from EE to the desired GOAL EE

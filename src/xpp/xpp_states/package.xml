@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<package format="2">
+  <name>xpp_states</name>
+  <version>1.0.10</version>
+  <description>
+    Common definitions (positions, velocities, angular angles,
+    angular rates) and robot definitions in Cartesian and joint state
+    used in the Xpp Motion Framework, as well as conversions to/from
+    xpp_msgs.
+  </description>
+  
+  <author>Alexander W. Winkler</author>
+  <maintainer email="alexander.w.winkler@gmail.com">Alexander W. Winkler</maintainer>
+  <license>BSD</license>
+  
+  <url type="website">http://github.com/leggedrobotics/xpp</url>
+  <url type="bugtracker">http://github.com/leggedrobotics/xpp/issues</url>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>eigen</depend>
+</package>

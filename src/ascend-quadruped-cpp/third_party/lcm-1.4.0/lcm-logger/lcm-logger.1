@@ -1,0 +1,99 @@
+.TH lcm-logger 1 2009-07-28 "LCM" "Lightweight Communications and Marshalling (LCM)"
+.SH NAME
+lcm-logger \- data logger
+.SH SYNOPSIS
+.TP 5
+\fBlcm-logger \fI[options]\fR \fI[FILE]\fR
+
+.SH DESCRIPTION
+.PP
+LCM message logging utility.  Subscribes to all channels on an LCM network, and
+records all messages received to \fIFILE\fR.  If \fIFILE\fR is not specified,
+then a filename is automatically chosen.
+
+.SH OPTIONS
+The following options are provided by \fBlcm-logger\fR
+.TP
+.B \-c, \-\-channel=\fICHAN\fR
+Channel string to pass to lcm_subscribe. (default: ".*")
+.TP
+.B      \-\-flush\-interval=\fIMS\fR
+Flush the log file to disk every MS milliseconds. (default: 100)
+.TP
+.B \-f, \-\-force
+Overwrite existing files.  The default behavior is to fail if the output file
+already exists.
+.TP
+.B \-h, \-\-help
+Shows some help text and exits
+.TP
+.B \-i, \-\-increment
+Automatically append a suffix to \fIFILE\fR such that the resulting filename
+does not already exist.  This option precludes -f and --rotate.
+.TP
+.B \-l, \-\-lcm\-url=\fIURL\fR
+Log messages on the specified LCM URL
+.TP
+.B \-m, \-\-max\-unwritten-mb=\fISIZE\fR
+Maximum size of received but unwritten messages to store in memory before
+dropping messages.  (default: 100 MB)
+.TP
+.B \-\-rotate=\fINUM\fR
+When creating a new log file, rename existing files out of the way and always write to FILE.0.  If
+FILE.0 already exists, it is renamed to FILE.1.  If FILE.1 exists, it is
+renamed to FILE.2, etc.  If FILE.NUM exists, then it is deleted.  This option
+precludes -i.
+.TP
+.B \-\-split\-mb=\fIN\fR
+Automatically start writing to a new log file once the log file exceeds N MB in size
+(can be fractional).  This option requires -i or --rotate.
+.TP
+.B \-q, \-\-quiet
+Suppress normal output and only report errors.
+.TP
+.B \-s, \-\-strftime
+Format \fIFILE\fR with strftime.
+.TP
+.B \-v, \-\-invert-channels
+Invert channels.  Log evertyhing that \fICHAN\fR does not match.
+
+.SH ROTATING AND SPLITTING
+.PP
+For long-term logging, lcm-logger can rotate through a fixed number of log
+files, moving to a new log file as existing files reach a maximum size.  To do
+this, use --rotate and --split-mb.  For example:
+
+    # Rotate through logfile.0, logfile.1, ... logfile.4
+    lcm-logger --rotate=5 --split-mb=2 logfile
+
+Moving to a new file happens either when the current log file size exceeds the
+limit specified by --split-mb, or when lcm-logger receives a SIGHUP.
+
+.SH SIGNALS
+.PP
+On platforms defining SIGHUP, lcm-logger will react to HUP by closing the
+active log file and opening a new one.
+
+.SH SEE ALSO
+.BR strftime (3)
+
+.SH COPYRIGHT
+
+lcm-logger is part of the Lightweight Communications and Marshalling (LCM) project.
+Permission is granted to copy, distribute and/or modify it under the terms of
+the GNU Lesser General Public License as published by the Free Software
+Foundation; either version 2.1 of the License, or (at your option) any later
+version.  See the file COPYING in the LCM distribution for more details
+regarding distribution.
+
+LCM is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+You should have received a copy of the GNU Lesser General Public
+License along with LCM; if not, write to the Free Software Foundation, Inc., 51
+Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
+.SH AUTHOR
+
+This manual page was written by Albert Huang.

@@ -1,0 +1,24 @@
+wamv: #namespace
+    n_actions: 4 # Forwards, Backwards, TurnLeft and TurnRight
+    
+    propeller_high_speed: 1.0 # High Propeller Speed             
+    propeller_low_speed: 0.2 # Low Propeller Speed
+    max_angular_speed: 1.0 # Maximum Base Turn Angular speed
+   
+    work_space: # 3D cube in which Drone is allowed to move
+      x_max: 30.0
+      x_min: -1.0
+      y_max: 5.0
+      y_min: -5.0
+
+    desired_point:
+      x: 30.0
+      y: 0.0
+      z: 1.0
+    desired_point_epsilon: 0.5
+    max_distance_from_des_point: 30.0 # Maximum distance regitered in observations, has to be bigger than the largest distance of the workspace.
+    
+    number_decimals_precision_obs: 1
+
+    done_reward: 1000.0 # reward
+    closer_to_point_reward: 100.0 # reward

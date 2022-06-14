@@ -1,0 +1,23 @@
+actions: []
+authors: ''
+brief: ''
+bugtracker: ''
+depends:
+- catkin
+- gazebo_msgs
+- controller_manager_msgs
+- message_runtime
+- std_msgs
+- python-catkin-pkg
+- rospy
+- message_generation
+- geometry_msgs
+description: The openai_ros package
+license: TODO
+maintainers: rdaneel <rdaneel@todo.todo>
+msgs:
+- RLExperimentInfo
+package_type: package
+repo_url: ''
+srvs: []
+url: ''

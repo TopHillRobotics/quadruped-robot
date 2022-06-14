@@ -1,0 +1,19 @@
+shadow_tc: #namespace
+
+    n_actions: 8 # Increase and decrease 7 joints.
+
+    movement_delta: 0.1 # Movement Variation of the TCP position for each step in meters.
+
+    work_space: # 3D cube in which Sawyers TCP ( right_electric_gripper_base frame) is allowed to move in
+      x_max: 0.3
+      x_min: -0.5
+      y_max: 0.19
+      y_min: -0.45
+      z_max: 1.7
+      z_min: 1.45
+
+    number_decimals_precision_obs: 1
+    acceptable_distance_to_ball: 0.05 # Distance to the ball that we consider that it reached the ball.
+
+    done_reward: 1000.0 # reward
+    closer_to_block_reward: 100.0 # reward

@@ -1,0 +1,44 @@
+drone: #namespace
+
+    n_actions: 6 # We have 3 actions, Forwards,TurnLeft,TurnRight, STOP
+
+    linear_forward_speed: 0.5 # Spwwed for ging fowards
+    angular_turn_speed: 0.05 # Lienare speed when turning
+    angular_speed: 0.3 # Angular speed when turning Left or Right
+
+    init_linear_speed_vector:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+
+    init_angular_turn_speed: 0.0 # Initial angular speed in shich we start each episode
+
+
+    min_sonar_value: 0.5 # Minimum meters below wich we consider we have crashed
+    max_sonar_value: 5.0 # This can be retrieved form the sonar topic
+
+    work_space: # 3D cube in which Drone is allowed to move
+      x_max: 10.0
+      x_min: -1.0
+      y_max: 5.0
+      y_min: -1.0
+      z_max: 3.0
+      z_min: -1.0
+
+    max_roll: 1.57 # Max roll after which we end the episode
+    max_pitch: 1.57 # Max roll after which we end the episode
+    max_yaw: inf # Max yaw, its 4 because its bigger the pi, its a complete turn actually the maximum
+
+    desired_pose:
+      x: 9.0
+      y: 4.0
+      z: 2.0
+
+    desired_point_epsilon: 1.0 # Error acceptable to consider that it has reached the desired point
+
+
+    closer_to_point_reward: 10 # We give points for getting closer to the desired point
+    not_ending_point_reward: 1 # Points given if we just dont crash
+    end_episode_points: 200 # Points given when ending an episode
+
+
