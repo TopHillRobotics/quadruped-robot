@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(quadruped-controller)
+project(quadruped)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
@@ -13,7 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
+find_package(yaml-cpp REQUIRED eigen REQUIRED)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -112,16 +112,21 @@ catkin_package(
 ###########
 
 ## Specify additional locations of header files
-## Your package locations should be listed before other locations
 include_directories(
-  include
   ${catkin_INCLUDE_DIRS}
+  ${YAML_CPP_INCLUDE_DIRS}
+  include
 )
 
+## add all cpp files into QUADRUPED_SOURCE_FILES
+file(GLOB_RECURSE QUADRUPED_SOURCE_FILES src/*.cpp)
+
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/quadruped-controller.cpp
-# )
+add_library(${PROJECT_NAME}
+   ${QUADRUPED_SOURCE_FILES}
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIRECTORIES})
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -148,7 +153,7 @@ include_directories(
 #    ${PROJECT_NAME}_test_node
 #    ${catkin_LIBRARIES}
 # )
-
+target_link_libraries(${PROJECT_NAME} ${YAML_CPP_LIBRARIES})
 #############
 ## Install ##
 #############
