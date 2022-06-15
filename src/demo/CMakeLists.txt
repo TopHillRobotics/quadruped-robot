@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(quadruped-controller)
+project(demo)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
+# add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -102,8 +102,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES quadruped-controller
-   CATKIN_DEPENDS roscpp
+#  LIBRARIES demo
+#  CATKIN_DEPENDS roscpp
 #  DEPENDS system_lib
 )
 
@@ -114,13 +114,13 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-  include
+# include
   ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/quadruped-controller.cpp
+#   src/${PROJECT_NAME}/demo.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -131,9 +131,8 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/quadruped-controller_node.cpp)
-add_executable(${PROJECT_NAME}_test_node test/test_node.cpp)
-add_executable(${PROJECT_NAME}_demo_node demo/demo_walk.cpp)
+# add_executable(${PROJECT_NAME}_node src/demo_node.cpp)
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -145,15 +144,9 @@ add_executable(${PROJECT_NAME}_demo_node demo/demo_walk.cpp)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(
-   ${PROJECT_NAME}_test_node
-   ${catkin_LIBRARIES}
-)
-
-target_link_libraries(
-   ${PROJECT_NAME}_demo_node
-   ${catkin_LIBRARIES}
-)
+# target_link_libraries(${PROJECT_NAME}_node
+#   ${catkin_LIBRARIES}
+# )
 
 #############
 ## Install ##
@@ -202,7 +195,7 @@ target_link_libraries(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_quadruped-controller.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_demo.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
