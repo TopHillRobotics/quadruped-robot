@@ -22,13 +22,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE. 
 
+#ifndef QR_STANCE_LEG_CONTROLLER_H
+#define QR_STANCE_LEG_CONTROLLER_H
 namespace QuadrupedRobot{
 
-    class qrStanceLegController : public qrLegController{
+    class qrStanceLegController{
     public:
         /// Construct function of qrStanceLegController
         qrStanceLegController();
-        ~qrStanceLegController() = default;
+
+        virtual ~qrStanceLegController() = default;
         
         /// Reset the parameters of the qrStanceLegController.
         virtual void Reset();
@@ -42,3 +45,4 @@ namespace QuadrupedRobot{
         virtual std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
     };
 }
+#endif //QR_STANCE_LEG_CONTROLLER_H

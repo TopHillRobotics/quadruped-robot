@@ -22,24 +22,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "controller/qrLegController.cpp"
+#include "controller/qrStanceLegController.h"
 
-QuadrupedRobot::LocomotionController::LocomotionController()
+QuadrupedRobot::qrStanceLegController::qrStanceLegController()
 {
-    std::cout << "LocomotionController constructure function" << std::endl;
+    std::cout << "qrStanceLegController constructure function" << std::endl;
 }
 
-void QuadrupedRobot::LocomotionController::Reset()
+QuadrupedRobot::qrStanceLegController::Reset()
 {
-    std::cout << "LocomotionController Reset() function" << std::endl;
+    std::cout << "qrStanceLegController Reset() function" << std::endl;
 }
 
-void QuadrupedRobot::LocomotionController::Update()
+QuadrupedRobot::qrStanceLegController::Update()
 {
-    std::cout << "LocomotionController Update() function" << std::endl;
+    std::cout << "qrStanceLegController Update() function" << std::endl;
 }
 
-std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> QuadrupedRobot::LocomotionController::GetAction()
+std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> QuadrupedRobot::qrStanceLegController::GetAction()
 {
-    std::cout << "LocomotionController GetAction() function" << std::endl;
+    std::cout << "qrStanceLegController GetAction() function" << std::endl;
 }

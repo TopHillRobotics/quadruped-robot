@@ -22,13 +22,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#ifndef QR_SWING_LEG_CONTROLLER_H
+#define QR_SWING_LEG_CONTROLLER_H
 namespace QuadrupedRobot{
 
-    class qrSwingLegController : public qrLegController{
+    class qrSwingLegController{
     public:
         /// Construct function of qrSwingLegController
         qrSwingLegController();
-        ~qrSwingLegController() = default;
+        virtual ~qrSwingLegController() = default;
 
         /// Reset the parameters of the qrSwingLegController.
         virtual void Reset();
@@ -42,3 +44,4 @@ namespace QuadrupedRobot{
         virtual std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
     };
 }
+#endif //QR_SWING_LEG_CONTROLLER_H

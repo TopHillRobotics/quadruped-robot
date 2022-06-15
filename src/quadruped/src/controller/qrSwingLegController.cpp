@@ -22,29 +22,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-namespace QuadrupedRobot{
+#include "controller/qrSwingLegController.h"
 
-    /// LocomotionController is a leg controller class. It contains some
-    /// pure virtual methods for computing motor commands for each leg of
-    /// the robot.
-    class LegController{
-    public:
-        /// Constructs a new LegController
-        LegController();
-        ~LegController() = default;
-        
-        /// this function is an interface implemented by other controller
-        virtual void Reset() = 0;
-        
-        /// this function is an interface implemented by other controller
-        virtual void Update() = 0;
+QuadrupedRobot::qrSwingLegController::qrSwingLegController()
+{
+    std::cout << "qrSwingLegController constructure function" << std::endl;
+}
 
-        /// this function is an interface implemented by other controller
-        /// @return tuple<map, Matrix<3,4>> : 
-        ///         return control ouputs (e.g. positions/torques) for all (12) motors.
-        virtual std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction() = 0;
+QuadrupedRobot::qrSwingLegController::Reset()
+{
+    std::cout << "qrSwingLegController Reset() function" << std::endl;
+}
 
-    private:
+QuadrupedRobot::qrSwingLegController::Update()
+{
+    std::cout << "qrSwingLegController Update() function" << std::endl;
+}
 
-    };
+std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> QuadrupedRobot::qrSwingLegController::GetAction()
+{
+    std::cout << "qrSwingLegController GetAction() function" << std::endl;
+    
 }
