@@ -57,11 +57,6 @@ public:
 
 private:
 
-  /**
-   * @brief config: YAML node that opened the config file
-   */
-  YAML::Node config;
-
 };
 
 #endif // QR_ROBOTCONFIG_H

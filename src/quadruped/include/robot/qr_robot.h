@@ -22,22 +22,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef QR_ROBOT_BASE_H
-#define QR_ROBOT_BASE_H
+#ifndef QR_ROBOT_H
+#define QR_ROBOT_H
 
 #include <vector>
 #include "qr_robotconfig.h"
 #include "qr_motorcmd.h"
 
 namespace Robot {
-    class qrRobotBase;
+    class qrRobot;
 }
 
 
 /**
  *  @brief a base class for all robot classes.It stores runtime status and data of the robot.
  */
-class qrRobotBase
+class qrRobot
 {
 
 public:
@@ -45,12 +45,12 @@ public:
   /**
    *  @brief Constructor of the class
    */
-  qrRobotBase() = default;
+  qrRobot() = default;
 
   /**
    *  @brief Destructor of the class
    */
-  virtual ~qrRobotBase() = default;
+  virtual ~qrRobot() = default;
 
   /**
    *  @brief Recieve information estimation results.
@@ -61,7 +61,6 @@ public:
    *  @brief Update the state of the robot.
    */
   virtual void update()=0;
-
 
   /**
    * @brief get the motor command to be executed
@@ -82,4 +81,4 @@ protected:
   std::vector<qrMotorCmd> *cmds = nullptr;
 };
 
-#endif // QR_ROBOT_BASE_H
+#endif // QR_ROBOT_H

@@ -46,19 +46,18 @@ public:
 
   /**
    * @brief Constructor of qrMotorCmd. Initialize with input
-   * @param p: position, joint angle
-   * @param Kp: position factor
-   * @param d: joint velocity
-   * @param Kd: velocity factor
+   * @param q: angle
+   * @param dq: joint velocity
    * @param tau: torque
+   * @param Kp: position stiffness (unit: N.m/rad )
+   * @param Kd: velocity stiffness (unit: N.m/(rad/s) )
    */
-  qrMotorCmd(double p, double Kp, double d, double Kd, double tau);
+  qrMotorCmd(float q, float dq, float tau, float Kp, float Kd);
 
   /**
    * @brief Destructor of qrMotorCmd
    */
   ~qrMotorCmd();
-
 
   /**
    * @brief convert result to eigen vector
@@ -69,29 +68,29 @@ public:
 private:
 
   /**
-   * @brief position, joint angle
+   * @brief joint angle (unit: radian)
    */
-  double p;
+  float q;
 
   /**
-   * @brief position factor
+   * @brief joint velocity ( unit: radian/second)
    */
-  double Kp;
+  float dq;
 
   /**
-   * @brief joint velocity
+   * @brief torque (unit: N.m)
    */
-  double d;
+  float tau;
 
   /**
-   * @brief velocity factor
+   * @brief position stiffness (unit: N.m/rad )
    */
-  double Kd;
+  float Kp;
 
   /**
-   * @brief torque
+   * @brief velocity stiffness (unit: N.m/(rad/s) )
    */
-  double tau;
+  float Kd;
 };
 
 #endif // QR_MOTORCMD_H
