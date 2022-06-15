@@ -28,20 +28,27 @@ namespace QuadrupedRobot{
 
     class qrStanceLegController{
     public:
-        /// Construct function of qrStanceLegController
+        /**
+         * @brief Construct function of qrStanceLegController
+         */
         qrStanceLegController();
 
         virtual ~qrStanceLegController() = default;
         
-        /// Reset the parameters of the qrStanceLegController.
+        /**
+         * @brief Reset the parameters of the qrStanceLegController.
+         */
         virtual void Reset();
         
-        /// Update the parameters of the qrStanceLegController.
+        /**
+         * @brief Update the parameters of the qrStanceLegController.
+         */
         virtual void Update();
 
-        /// Compute all motors' commands via controllers.
-        /// @return tuple<map, Matrix<3,4>> : 
-        ///         return control ouputs (e.g. positions/torques) for all (12) motors.
+        /** @brief Compute all motors' commands via controllers.
+         *  @return tuple<map, Matrix<3,4>> : 
+         *          return control ouputs (e.g. positions/torques) for all (12) motors.
+         */
         virtual std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
     };
 }
