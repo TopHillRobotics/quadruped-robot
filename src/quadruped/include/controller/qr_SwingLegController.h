@@ -22,24 +22,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "controller/qrStanceLegController.h"
+#ifndef QR_SWING_LEG_CONTROLLER_H
+#define QR_SWING_LEG_CONTROLLER_H
 
-QuadrupedRobot::qrStanceLegController::qrStanceLegController()
-{
-    std::cout << "qrStanceLegController constructure function" << std::endl;
-}
+class qrSwingLegController{
+public:
+    /**
+     * @brief Construct function of qrSwingLegController
+     */
+    qrSwingLegController();
 
-QuadrupedRobot::qrStanceLegController::Reset()
-{
-    std::cout << "qrStanceLegController Reset() function" << std::endl;
-}
+    virtual ~qrSwingLegController();
 
-QuadrupedRobot::qrStanceLegController::Update()
-{
-    std::cout << "qrStanceLegController Update() function" << std::endl;
-}
+    /**
+     * @brief Reset the parameters of the qrSwingLegController.
+     */
+    virtual void Reset();
 
-std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> QuadrupedRobot::qrStanceLegController::GetAction()
-{
-    std::cout << "qrStanceLegController GetAction() function" << std::endl;
-}
+    /**
+     * @brief Update the parameters of the qrSwingLegController.
+     */
+    virtual void Update();
+
+    /** @brief Compute all motors' commands via controllers.
+     *  @return tuple<map, Matrix<3,4>> : 
+     *          return control ouputs (e.g. positions/torques) for all (12) motors.
+     */
+    virtual std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
+
+private:
+    
+};
+
+#endif //QR_SWING_LEG_CONTROLLER_H
