@@ -55,8 +55,11 @@
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>roscpp</build_depend>
+  <build_depend>unitree_legged_msgs</build_depend>
   <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>unitree_legged_msgs</build_export_depend>
   <exec_depend>roscpp</exec_depend>
+  <exec_depend>unitree_legged_msgs</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

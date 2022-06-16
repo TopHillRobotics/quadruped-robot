@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.10.2)
 project(quadruped)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -9,6 +9,7 @@ add_compile_options(-std=c++11)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  unitree_legged_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -100,12 +101,7 @@ find_package(yaml-cpp REQUIRED eigen REQUIRED)
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES quadruped-controller
-   CATKIN_DEPENDS roscpp
-#  DEPENDS system_lib
-)
+catkin_package()
 
 ###########
 ## Build ##
