@@ -24,6 +24,12 @@
 
 #ifndef QR_STANCE_LEG_CONTROLLER_H
 #define QR_STANCE_LEG_CONTROLLER_H
+
+#include <Eigen/Dense>
+#include <iostream>
+#include <vector>
+#include "robot/qr_motorCmd.h"
+
 namespace QuadrupedRobot{
 
     class qrStanceLegController{
@@ -42,7 +48,7 @@ namespace QuadrupedRobot{
         /// Compute all motors' commands via controllers.
         /// @return tuple<map, Matrix<3,4>> : 
         ///         return control ouputs (e.g. positions/torques) for all (12) motors.
-        virtual std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
+        virtual std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> GetAction();
     };
 }
 #endif //QR_STANCE_LEG_CONTROLLER_H

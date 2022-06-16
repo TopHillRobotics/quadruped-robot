@@ -22,5 +22,71 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "robot/qr_motorcmd.h"
+#ifndef QR_MOTORCMD_H
+#define QR_MOTORCMD_H
 
+#include <Eigen/Dense>
+
+/**
+ * @brief The qrMotorCmd class is used to store the result motor command of one iteration
+ */
+class qrMotorCmd
+{
+
+public:
+
+  /**
+   * @brief Constructor of qrMotorCmd
+   */
+  qrMotorCmd();
+
+  /**
+   * @brief Constructor of qrMotorCmd. Initialize with input
+   * @param q: angle
+   * @param dq: joint velocity
+   * @param tau: torque
+   * @param Kp: position stiffness (unit: N.m/rad )
+   * @param Kd: velocity stiffness (unit: N.m/(rad/s) )
+   */
+  qrMotorCmd(float q, float dq, float tau, float Kp, float Kd);
+
+  /**
+   * @brief Destructor of qrMotorCmd
+   */
+  ~qrMotorCmd();
+
+  /**
+   * @brief convert result to eigen vector
+   * @return eigen vector
+   */
+  Eigen::Matrix<float, 5, 1> toEigenVector();
+
+private:
+
+  /**
+   * @brief joint angle (unit: radian)
+   */
+  float q;
+
+  /**
+   * @brief joint velocity ( unit: radian/second)
+   */
+  float dq;
+
+  /**
+   * @brief torque (unit: N.m)
+   */
+  float tau;
+
+  /**
+   * @brief position stiffness (unit: N.m/rad )
+   */
+  float Kp;
+
+  /**
+   * @brief velocity stiffness (unit: N.m/(rad/s) )
+   */
+  float Kd;
+};
+
+#endif // QR_MOTORCMD_H

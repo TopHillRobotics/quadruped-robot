@@ -21,7 +21,6 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-
 #include "controller/qrSwingLegController.h"
 
 QuadrupedRobot::qrSwingLegController::qrSwingLegController()
@@ -29,17 +28,17 @@ QuadrupedRobot::qrSwingLegController::qrSwingLegController()
     std::cout << "qrSwingLegController constructure function" << std::endl;
 }
 
-QuadrupedRobot::qrSwingLegController::Reset()
+void QuadrupedRobot::qrSwingLegController::Reset()
 {
     std::cout << "qrSwingLegController Reset() function" << std::endl;
 }
 
-QuadrupedRobot::qrSwingLegController::Update()
+void QuadrupedRobot::qrSwingLegController::Update()
 {
     std::cout << "qrSwingLegController Update() function" << std::endl;
 }
 
-std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> QuadrupedRobot::qrSwingLegController::GetAction()
+std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> QuadrupedRobot::qrSwingLegController::GetAction()
 {
     std::cout << "qrSwingLegController GetAction() function" << std::endl;
     

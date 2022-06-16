@@ -1,4 +1,4 @@
-// The MIT License
+﻿// The MIT License
 
 // Copyright (c) 2022
 // Robot Motion and Vision Laboratory at East China Normal University
@@ -27,10 +27,7 @@
 
 #include <iostream>
 #include <yaml-cpp/yaml.h>
-
-namespace Robot {
-    class qrRobotConfig;
-}
+#include <Eigen/Dense>
 
 
 /**
@@ -45,6 +42,11 @@ public:
   qrRobotConfig();
 
   /**
+   * @brief Construction of qrRobotConfig
+   * @param path: the path to the YAML config file
+   */
+  qrRobotConfig(std::string path);
+  /**
    * @brief Destruction of qrRobotConfig
    */
   ~qrRobotConfig();
@@ -56,7 +58,62 @@ public:
   void load(std::string path);
 
 private:
+  /**
+   * @brief the weight of the main body
+   */
+  float bodyMass;
 
+  /**
+   * @brief the height of the main body
+   */
+  float bodyHeight;
+
+  /**
+   * @brief the length of three links, including hip, upper link and lowerlink
+   */
+  float hipLength, upperLength, lowerLength;
+
+  /**
+   * @brief the tensor of inertia of the body
+   */
+  Eigen::Matrix<float, 3, 3> bodyInertia;
+
+  // Eigen::Matrix<float, 3, 1> comOffset; this is not used
+  // Eigen::Matrix<float, 3, 4> hipOffset; this is not used
+
+  //TODO: discuss
+  // Eigen::Matrix<float, 3, 4> defaultHipPosition;
+
+  /**
+   * @brief motor position stiffness (unit: N.m/rad )
+   */
+  Eigen::Matrix<float, 12, 1> motorKps;
+
+
+  /**
+   * @brief velocity stiffness (unit: N.m/(rad/s) )
+   */
+  Eigen::Matrix<float, 12, 1> motorKds;
+
+  // TODO: check these variables
+  // Eigen::Matrix<float, 12, 1> jointDirection; this is not used
+  // Eigen::Matrix<float, 12, 1> jointOffset; this is not used
+  // Eigen::Matrix<float, 12, 1> standUpMotorAngles; should not used here
+  // Eigen::Matrix<float, 12, 1> sitDownMotorAngles; should not used here
+
+
+  /**
+   * @brief load kps parameter from YAML file
+   * @param node: node that load YAML file
+   */
+  Eigen::Matrix<float, 12, 1> loadKps(YAML::Node &node);
+
+
+  /**
+   * @brief load kps parameter from YAML file
+   * @param path: file path
+   */
+  Eigen::Matrix<float, 12, 1> loadKds(YAML::Node &node);
 };
 
 #endif // QR_ROBOTCONFIG_H

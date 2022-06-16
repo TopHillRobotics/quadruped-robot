@@ -29,17 +29,17 @@ QuadrupedRobot::qrStanceLegController::qrStanceLegController()
     std::cout << "qrStanceLegController constructure function" << std::endl;
 }
 
-QuadrupedRobot::qrStanceLegController::Reset()
+void QuadrupedRobot::qrStanceLegController::Reset()
 {
     std::cout << "qrStanceLegController Reset() function" << std::endl;
 }
 
-QuadrupedRobot::qrStanceLegController::Update()
+void QuadrupedRobot::qrStanceLegController::Update()
 {
     std::cout << "qrStanceLegController Update() function" << std::endl;
 }
 
-std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> QuadrupedRobot::qrStanceLegController::GetAction()
+std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> QuadrupedRobot::qrStanceLegController::GetAction()
 {
     std::cout << "qrStanceLegController GetAction() function" << std::endl;
 }

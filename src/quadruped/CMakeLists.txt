@@ -11,9 +11,10 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
 )
 
-## System dependencies are found with CMake's conventions
+## System dependencies are found with CMake's conventisons
 # find_package(Boost REQUIRED COMPONENTS system)
-find_package(yaml-cpp REQUIRED eigen REQUIRED)
+find_package(yaml-cpp REQUIRED)
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -153,7 +154,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIRECTORIES})
 #    ${PROJECT_NAME}_test_node
 #    ${catkin_LIBRARIES}
 # )
-target_link_libraries(${PROJECT_NAME} ${YAML_CPP_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${YAML_CPP_LIBRARIES} Eigen3::Eigen)
 #############
 ## Install ##
 #############
