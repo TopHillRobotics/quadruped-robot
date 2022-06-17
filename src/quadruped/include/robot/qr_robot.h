@@ -27,8 +27,8 @@
 
 #include <vector>
 #include <unordered_map>
-#include "qr_robotConfig.h"
-#include "qr_motorCmd.h"
+#include "qr_robot_config.h"
+#include "qr_motor_cmd.h"
 #include "qr_robotState.h"
 
 /**

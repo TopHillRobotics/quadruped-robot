@@ -1,8 +1,8 @@
-#ifndef SE3_H
-#define SE3_H
+#ifndef QR_SE3_H
+#define QR_SE3_H
 
 #include <Eigen/Dense>
-#include "common/eigentypes.h"
+#include "common/qr_eigentypes.h"
 namespace Math {
 
 // TODO: fill this file that will be used in qr_robot.h
@@ -15,4 +15,4 @@ namespace Math {
 //  }
 }
 
-#endif // SE3_H
+#endif // QR_SE3_H

@@ -22,8 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef QR_ROBOTCONFIG_H
-#define QR_ROBOTCONFIG_H
+#ifndef QR_ROBOT_CONFIG_H
+#define QR_ROBOT_CONFIG_H
 
 #include <iostream>
 #include <yaml-cpp/yaml.h>
@@ -116,4 +116,4 @@ private:
   Eigen::Matrix<float, 12, 1> loadKds(YAML::Node &node);
 };
 
-#endif // QR_ROBOTCONFIG_H
+#endif // QR_ROBOT_CONFIG_H

@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "robot/qr_robotConfig.h"
+#include "robot/qr_robot_config.h"
 #include "robot/qr_robot.h"
 
 qrRobotConfig::qrRobotConfig()

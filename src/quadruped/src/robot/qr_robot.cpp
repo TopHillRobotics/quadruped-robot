@@ -1,5 +1,5 @@
 #include "robot/qr_robot.h"
-#include "common/se3.h"
+#include "common/qr_se3.h"
 
 qrRobot::qrRobot()
 {
