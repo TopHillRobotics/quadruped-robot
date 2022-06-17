@@ -1,6 +1,6 @@
 // The MIT License
 
-// Copyright (c) 2022
+// Copyright (c) 2022 
 // Robot Motion and Vision Laboratory at East China Normal University
 // Contact: Xinyu Zhang   email: tophill.robotics@gmail.com
 
@@ -22,41 +22,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef QR_ROBOTCONFIG_H
-#define QR_ROBOTCONFIG_H
+#include "controller/qr_SwingLegController.h"
 
-#include <iostream>
-#include <yaml-cpp/yaml.h>
-
-namespace Robot {
-    class qrRobotConfig;
+QuadrupedRobot::qrSwingLegController::qrSwingLegController()
+{
+    std::cout << "qrSwingLegController constructure function" << std::endl;
 }
 
-
-/**
- * @brief a class that will load all robot configs from YAML file
- */
-class qrRobotConfig
+QuadrupedRobot::qrSwingLegController::Reset()
 {
-public:
-  /**
-   * @brief Construction of qrRobotConfig
-   */
-  qrRobotConfig();
+    std::cout << "qrSwingLegController Reset() function" << std::endl;
+}
 
-  /**
-   * @brief Destruction of qrRobotConfig
-   */
-  ~qrRobotConfig();
+QuadrupedRobot::qrSwingLegController::Update()
+{
+    std::cout << "qrSwingLegController Update() function" << std::endl;
+}
 
-  /**
-   * @brief load parameter of the robot
-   * @param path: the path to the YAML config file
-   */
-  void load(std::string path);
-
-private:
-
-};
-
-#endif // QR_ROBOTCONFIG_H
+std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> QuadrupedRobot::qrSwingLegController::GetAction()
+{
+    std::cout << "qrSwingLegController GetAction() function" << std::endl;
+    
+}
