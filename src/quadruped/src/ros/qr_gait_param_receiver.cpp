@@ -28,7 +28,7 @@ QrGaitParamReceiver::QrGaitParamReceiver(ros::NodeHandle &nhIn)
     : nh(nhIn)
 {
     ROS_INFO("gait param topic: %s", gaitParamTopic.c_str());
-    gaitParamSub = nh.subscribe(gaitParamTopic, 10, &GaitParameterReceiver::GaitParameterCallback, this);
+    gaitParamSub = nh.subscribe(gaitParamTopic, 10, &QrGaitParamReceiver::GaitParamCallback, this);
 }
 
 void QrGaitParamReceiver::GaitParamCallback(const unitree_legged_msgs::GaitParameter::ConstPtr &input)

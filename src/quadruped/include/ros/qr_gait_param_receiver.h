@@ -23,20 +23,19 @@
 // SOFTWARE.
 
 
+
+
+#ifndef QR_GAIT_PARAM_RECEIVER_H
+#define QR_GAIT_PARAM_RECEIVER_H
+
 #include <iostream>
 #include <string>
 #include <eigen3/Eigen/Dense>
 #include <ros/ros.h>
 #include <unitree_legged_msgs/GaitParameter.h>
-
-#ifndef QR_GAIT_PARAM_RECEIVER_H
-#define QR_GAIT_PARAM_RECEIVER_H
-
-
 // get gait param from topic for gait update
 class QrGaitParamReceiver {
     public:
-        QrGaitParamReceiver(){}
         QrGaitParamReceiver(ros::NodeHandle &nhIn);
 
         ~QrGaitParamReceiver() = default;
@@ -95,5 +94,5 @@ class QrGaitParamReceiver {
         Eigen::Matrix<int, 4, 1> initialLegState;
         Eigen::Matrix<float, 4, 1> initialLegPhase;
         float contactDetectionPhaseThreshold=0.1f;
-}
+};
 #endif //QR_GAIT_PARAM_RECEIVER_H

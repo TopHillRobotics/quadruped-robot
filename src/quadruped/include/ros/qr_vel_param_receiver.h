@@ -23,21 +23,20 @@
 // SOFTWARE.
 
 
+
+
+#ifndef QR_VEL_PARAM_RECEIVER_H
+#define QR_VEL_PARAM_RECEIVER_H
+
 #include <iostream>
 #include <string>
 #include <eigen3/Eigen/Dense>
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Pose.h>
-
-#ifndef QR_VEL_PARAM_RECEIVER_H
-#define QR_VEL_PARAM_RECEIVER_H
-
-
 // get velocity param from topic for velocity update
 class QrVelocityParamReceiver {
     public:
-        QrVelocityParamReceiver(){}
         QrVelocityParamReceiver(ros::NodeHandle &nhIn);
 
         ~QrVelocityParamReceiver() = default;
@@ -58,11 +57,11 @@ class QrVelocityParamReceiver {
         geometry_msgs::Twist velParam;
         ros::NodeHandle &nh;
         ros::Subscriber velParamSub;
-        std::string VelParamTopic = "/velocity_param";
+        std::string velParamTopic = "/velocity_param";
 
     private:
         Eigen::Matrix<float, 3, 1> linearVel = Eigen::Matrix<float, 3, 1>::Zero();
         Eigen::Matrix<float, 3, 1> angularVel = Eigen::Matrix<float, 3, 1>::Zero();
 
-}
+};
 #endif //QR_VEL_PARAM_RECEIVER_H
