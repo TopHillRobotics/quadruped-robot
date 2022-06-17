@@ -22,16 +22,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "controller/qr_StanceLegController.h"
+#include "controller/qr_stance_leg_controller.h"
 
 qrStanceLegController::
-    qrSwingLegController(Robot *robot,
-                         OpenloopGaitGenerator *gaitGenerator,
-                         RobotEstimator *robotVelocityEstimator,
-                         GroundSurfaceEstimator *groundEstimator,
-                         ComAdjuster *comAdjuster,
-                         PosePlanner *posePlanner,
-                         FootholdPlanner *footholdPlanner,
+    qrSwingLegController(qrRobot *robot,
+                         qrGaitGenerator *gaitGenerator,
+                         qrRobotEstimator *robotVelocityEstimator,
+                         qrGroundSurfaceEstimator *groundEstimator,
+                         qrComPlanner *comPlanner,
+                         qrPosePlanner *posePlanner,
+                         qrFootholdPlanner *footholdPlanner,
                          Eigen::Matrix<float, 3, 1> desired_speed,
                          float desiredTwistingSpeed,
                          float desiredBodyHeight,
@@ -39,7 +39,7 @@ qrStanceLegController::
                                                      gaitGenerator(gaitGenerator),
                                                      robotEstimator(robotVelocityEstimator),
                                                      groundEstimator(groundEstimator),
-                                                     comAdjuster(comAdjuster),
+                                                     comPlanner(comPlanner),
                                                      posePlanner(posePlanner),
                                                      footholdPlanner(footholdPlanner),
                                                      desiredSpeed(desired_speed),
@@ -83,7 +83,7 @@ void qrStanceLegController::Reset(float currentTime)
     this->gaitGenerator->Reset(timeSinceReset);
     this->stateEstimator->Reset(timeSinceReset);
     this->groundEstimator->Reset(timeSinceReset);
-    this->comAdjuster->Reset(timeSinceReset);
+    this->comPlanner->Reset(timeSinceReset);
     this->posePlanner->Reset(timeSinceReset);
 }
 
@@ -97,7 +97,7 @@ void qrStanceLegController::Update(float currentTime)
     this->stateEstimator->Update(this->timeSinceReset);
     switch (robot->controlParams["mode"]) {
         case LocomotionMode::POSITION_LOCOMOTION: {
-            this->comAdjuster->Update(this->timeSinceReset);
+            this->comPlanner->Update(this->timeSinceReset);
         } break; 
         case LocomotionMode::WALK_LOCOMOTION: {
             if (switchToSwing && swingSemaphore >=0) {
@@ -299,9 +299,9 @@ std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLegCon
             desiredComAngularVelocity = twist.tail(3); // world
         } break;
         case LocomotionMode::POSITION_LOCOMOTION: {
-            auto &comAdjPosInBaseFrame = comAdjuster->GetComPosInBaseFrame();
+            auto &comAdjPosInBaseFrame = comPlanner->GetComPosInBaseFrame();
             desiredComPosition = {comAdjPosInBaseFrame[0], comAdjPosInBaseFrame[1],
-                                desiredBodyHeight}; // get goal com position from comAdjuster, base frame
+                                desiredBodyHeight}; // get goal com position from comPlanner, base frame
             desiredComVelocity = {desiredSpeed[0], desiredSpeed[1], 0.f};
             // get goal rpy from footholdPlanner, in world frame
             desiredComRpy = footholdPlanner->GetDesiredComPose().tail(3);
