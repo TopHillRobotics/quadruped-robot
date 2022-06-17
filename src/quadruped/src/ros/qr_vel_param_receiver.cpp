@@ -31,6 +31,15 @@ QrVelocityParamReceiver::QrVelocityParamReceiver(ros::NodeHandle &nhIn)
     velParamSub = nh.subscribe(velParamTopic, 10, &QrVelocityParamReceiver::VelocityParamCallback, this);
 }
 
+
+Eigen::Matrix<float, 3, 1> QrVelocityParamReceiver::GetLinearVelocity() {
+    return linearVel;
+}
+
+float QrVelocityParamReceiver::GetAngularVelocity() {
+    return angularVel[2];
+}
+
 void QrVelocityParamReceiver::VelocityParamCallback(const geometry_msgs::Twist::ConstPtr &input)
 {
     linearVel << input->linear.x, input->linear.y, input->linear.z;

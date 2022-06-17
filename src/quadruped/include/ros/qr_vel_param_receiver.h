@@ -43,17 +43,11 @@ class QrVelocityParamReceiver {
 
         void VelocityParamCallback(const geometry_msgs::Twist::ConstPtr &input);
 
-        inline Eigen::Matrix<float, 3, 1> GetLinearVelocity()
-        {
-            return linearVel;
-        }
+        Eigen::Matrix<float, 3, 1> GetLinearVelocity();
 
         // z component
-        inline float GetAngularVelocity()
-        {
-            return angularVel[2];
-        }
-
+        float GetAngularVelocity();
+        
         geometry_msgs::Twist velParam;
         ros::NodeHandle &nh;
         ros::Subscriber velParamSub;
