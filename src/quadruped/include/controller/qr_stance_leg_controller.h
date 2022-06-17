@@ -30,32 +30,43 @@
 #include <eigen3/Eigen/Dense>
 
 #include "robots/timer.h"
-#include "common/qr_Types.h"
-#include "robot/qr_Robot.h"
-#include "robot/qr_MotorCmd.h"
-#include "planner/qr_OpenloopGaitGenerator.h"
-#include "planner/qr_WalkGaitGenerator.h"
-#include "planner/qr_ComAdjuster.h"
-#include "planner/qr_PosePlanner.h"
-#include "estimator/qr_RobotEstimator.h"
-#include "estimator/qr_GroundEstimator.h"
+#include "common/qr_types.h"
+#include "robot/qr_robot.h"
+#include "robot/qr_motor_cmd.h"
+#include "planner/qr_gait_generator.h"
+#include "planner/qr_walk_gaitGenerator.h"
+#include "planner/qr_com_planner.h"
+#include "planner/qr_pose_planner.h"
+#include "estimator/qr_robot_estimator.h"
+#include "estimator/qr_ground_estimator.h"
 
 class qrStanceLegController{
 public:
     /**
-     * @brief Construct function of qrStanceLegController
+     * @brief Construct function of qrStanceLegController\
+     * @param robot The robot object pointer.
+     * @param gaitGenerator 
+     * @param robotVelocityEstimator 
+     * @param groundEstimator 
+     * @param comPlanner 
+     * @param posePlanner 
+     * @param footholdPlanner 
+     * @param desired_speed 
+     * @param desiredTwistingSpeed 
+     * @param desiredBodyHeight 
+     * @param configFilepath 
      */
-    qrStanceLegController(Robot *robot,
-                            OpenloopGaitGenerator *gaitGenerator,
-                            RobotEstimator *robotVelocityEstimator,
-                            GroundSurfaceEstimator *groundEstimatorIn,
-                            ComAdjuster *comAdjuster,
-                            PosePlanner *posePlanner,
-                            FootholdPlanner *footholdPlanner,
-                            Eigen::Matrix<float, 3, 1> desired_speed,
-                            float desiredTwistingSpeed,
-                            float desiredBodyHeight,
-                            std::string configFilepath);
+    qrStanceLegController(qrRobot *robot,
+                          qrGaitGenerator *gaitGenerator,
+                          qrRobotEstimator *robotVelocityEstimator,
+                          qrGroundSurfaceEstimator *groundEstimator,
+                          qrComPlanner *comPlanner,
+                          qrPosePlanner *posePlanner,
+                          qrFootholdPlanner *footholdPlanner,
+                          Eigen::Matrix<float, 3, 1> desired_speed,
+                          float desiredTwistingSpeed,
+                          float desiredBodyHeight,
+                          std::string configFilepath);
 
     virtual ~qrStanceLegController();
     
@@ -85,34 +96,34 @@ public:
 
 private:
     /**
-     * @brief The robot object point.
+     * @brief The robot object pointer.
      */
-    Robot *robot;
+    qrRobot *robot;
     /**
-     * @brief Gait Generator object point.
+     * @brief Gait Generator object pointer.
      */
-    OpenloopGaitGenerator *gaitGenerator;
+    qrOpenloopGaitGenerator *gaitGenerator;
     /**
-     * @brief Robot estimator point. Get the estimated velocity.
+     * @brief Robot estimator pointre. Get the estimated velocity.
      */
-    RobotEstimator *robotEstimator;
+    qrRobotEstimator *robotEstimator;
     /**
-     * @brief Ground estimator point.
+     * @brief Ground estimator pointer.
      */
-    GroundSurfaceEstimator *groundEstimator;
+    qrGroundSurfaceEstimator *groundEstimator;
     /**
-     * @brief The center of mass adjuster point. Get the position of COM in base frame
+     * @brief The center of mass adjuster pointer. Get the position of COM in base frame
      *        in position locomotion.
      */
-    ComAdjuster *comAdjuster;
+    qrComPlanner *comPlanner;
     /**
-     * @brief Robot pose planner obejct point. Get the intermediate base pose.
+     * @brief Robot pose planner obejct pointer. Get the intermediate base pose.
      */
-    PosePlanner *posePlanner;                          
+    qrPosePlanner *posePlanner;                          
     /**
      * @brief Robot's foothold planner. Get desired COM pose when in walk locomotion.
      */
-    FootholdPlanner *footholdPlanner;
+    qrFootholdPlanner *footholdPlanner;
     /**
      * @brief Desired speed of the robot in walk or position locomotion.
      */
