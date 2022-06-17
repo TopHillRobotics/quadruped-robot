@@ -22,5 +22,5 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "robot/qr_robotconfig.h"
-#include "robot/qr_robot.h"
+#include "robot/qr_motorCmd.h"
+

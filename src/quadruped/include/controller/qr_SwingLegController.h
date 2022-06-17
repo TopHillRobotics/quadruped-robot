@@ -1,6 +1,6 @@
 // The MIT License
 
-// Copyright (c) 2022
+// Copyright (c) 2022 
 // Robot Motion and Vision Laboratory at East China Normal University
 // Contact: Xinyu Zhang   email: tophill.robotics@gmail.com
 
@@ -22,75 +22,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef QR_MOTORCMD_H
-#define QR_MOTORCMD_H
+#ifndef QR_SWING_LEG_CONTROLLER_H
+#define QR_SWING_LEG_CONTROLLER_H
 
-#include <eigen3/Eigen/Dense>
-
-namespace Robot {
-  class qrMotorCmd;
-}
-
-/**
- * @brief The qrMotorCmd class is used to store the result motor command of one iteration
- */
-class qrMotorCmd
-{
-
+class qrSwingLegController{
 public:
+    /**
+     * @brief Construct function of qrSwingLegController
+     */
+    qrSwingLegController();
 
-  /**
-   * @brief Constructor of qrMotorCmd
-   */
-  qrMotorCmd();
+    virtual ~qrSwingLegController();
 
-  /**
-   * @brief Constructor of qrMotorCmd. Initialize with input
-   * @param q: angle
-   * @param dq: joint velocity
-   * @param tau: torque
-   * @param Kp: position stiffness (unit: N.m/rad )
-   * @param Kd: velocity stiffness (unit: N.m/(rad/s) )
-   */
-  qrMotorCmd(float q, float dq, float tau, float Kp, float Kd);
+    /**
+     * @brief Reset the parameters of the qrSwingLegController.
+     */
+    virtual void Reset();
 
-  /**
-   * @brief Destructor of qrMotorCmd
-   */
-  ~qrMotorCmd();
+    /**
+     * @brief Update the parameters of the qrSwingLegController.
+     */
+    virtual void Update();
 
-  /**
-   * @brief convert result to eigen vector
-   * @return eigen vector
-   */
-  Eigen::Matrix<float, 5, 1> toEigenVector();
+    /** @brief Compute all motors' commands via controllers.
+     *  @return tuple<map, Matrix<3,4>> : 
+     *          return control ouputs (e.g. positions/torques) for all (12) motors.
+     */
+    virtual std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
 
 private:
-
-  /**
-   * @brief joint angle (unit: radian)
-   */
-  float q;
-
-  /**
-   * @brief joint velocity ( unit: radian/second)
-   */
-  float dq;
-
-  /**
-   * @brief torque (unit: N.m)
-   */
-  float tau;
-
-  /**
-   * @brief position stiffness (unit: N.m/rad )
-   */
-  float Kp;
-
-  /**
-   * @brief velocity stiffness (unit: N.m/(rad/s) )
-   */
-  float Kd;
+    
 };
 
-#endif // QR_MOTORCMD_H
+#endif //QR_SWING_LEG_CONTROLLER_H
