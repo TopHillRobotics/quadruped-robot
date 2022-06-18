@@ -70,6 +70,27 @@ public:
      */
     virtual void Update();
 
+    /**
+     * @brief Quadratic interpolation function, used to generate polygon curve.
+     * @param phase
+     * @param start
+     * @param mid
+     * @param end
+     * @return a float value with phase
+     */
+    float GenParabola(float phase, float start, float mid, float end);
+
+    /**
+     * @brief Generating the trajectory of the swing leg
+     * @param inputPhase
+     * @param startPos
+     * @param endPos
+     * @return foot position like (x,y,z)
+     */
+    Eigen::Matrix<float, 3, 1> GenSwingFootTrajectory(float inputPhase,
+                                                        Eigen::Matrix<float, 3, 1> startPos,
+                                                        Eigen::Matrix<float, 3, 1> endPos);
+
     /** @brief Compute all motors' commands via controllers.
      *  @return tuple<map, Matrix<3,4>> : 
      *          return control ouputs (e.g. positions/torques) for all (12) motors.
@@ -132,25 +153,9 @@ private:
      */
     Eigen::Matrix<float, 3, 4> footHoldInWorldFrame;
     /**
-     * @brief Orientation in control frame.(not use)
-     */
-    Quat<float> controlFrameOrientationSource;
-    /**
-     * @brief Robot position.(not use)
-     */
-    Vec3<float> controlFrameOriginSource;
-    /**
-     * @brief (not use)
-     */
-    Eigen::Matrix<float, 3, 4> phaseSwitchFootControlPos;
-    /**
-     * @brief (not use)
-     */
-    Eigen::Matrix<float, 3, 4> footHoldInControlFrame;
-    /**
      * @brief The trajectories of each leg.
      */
-    SwingFootTrajectory swingFootTrajectories[4];
+    qrSwingFootTrajectory swingFootTrajectories[4];
     /**
      * @brief File path of swing_leg_controller.yaml.
      */
