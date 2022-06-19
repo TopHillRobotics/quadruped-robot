@@ -31,6 +31,38 @@ QrGaitParamReceiver::QrGaitParamReceiver(ros::NodeHandle &nhIn)
     gaitParamSub = nh.subscribe(gaitParamTopic, 10, &QrGaitParamReceiver::GaitParamCallback, this);
 }
 
+Eigen::Matrix<float, 4, 1> QrGaitParamReceiver::GetStanceDuration() {
+    return stanceDuration;
+}
+
+Eigen::Matrix<float, 4, 1> QrGaitParamReceiver::GetDutyFactor() {
+    return dutyFactor;
+}
+
+Eigen::Matrix<int, 4, 1> QrGaitParamReceiver::GetInitialLegState() {
+    return initialLegState;
+}
+
+Eigen::Matrix<float, 4, 1> QrGaitParamReceiver::GetInitialLegPhase() {
+    return initialLegPhase;
+}
+
+float QrGaitParamReceiver::GetContactDetectionPhaseThreshold() {
+    return contactDetectionPhaseThreshold;
+}
+
+bool QrGaitParamReceiver::GetFlag() {
+    return flag;
+}
+
+std::string QrGaitParamReceiver::GetGaitName() {
+    return gaitName;
+}
+
+void QrGaitParamReceiver::SetFlag() {
+    flag = false;
+}
+
 void QrGaitParamReceiver::GaitParamCallback(const unitree_legged_msgs::GaitParameter::ConstPtr &input)
 {
     this->gaitName = input->gaitName;

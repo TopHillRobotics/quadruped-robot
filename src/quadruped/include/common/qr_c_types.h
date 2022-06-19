@@ -22,28 +22,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "ros/qr_vel_param_receiver.h"
+#ifndef QR_C_TYPES_H
+#define QR_C_TYPES_H
 
-QrVelocityParamReceiver::QrVelocityParamReceiver(ros::NodeHandle &nhIn)
-    : nh(nhIn)
-{
-    ROS_INFO("velocity param topic: %s", velParamTopic.c_str());
-    velParamSub = nh.subscribe(velParamTopic, 10, &QrVelocityParamReceiver::VelocityParamCallback, this);
-}
+#include <stddef.h>
+#include <stdint.h>
 
+// short version of the stdint default integer types
+typedef uint64_t u64;
+typedef uint32_t u32;
+typedef uint16_t u16;
+typedef uint8_t u8;
+typedef int8_t s8;
+typedef int16_t s16;
+typedef int32_t s32;
+typedef int64_t s64;
+typedef float fpt;
 
-Eigen::Matrix<float, 3, 1> QrVelocityParamReceiver::GetLinearVelocity() {
-    return linearVel;
-}
+#define M_2PI 6.28318530718 // 2 * PI
 
-float QrVelocityParamReceiver::GetAngularVelocity() {
-    return angularVel[2];
-}
-
-void QrVelocityParamReceiver::VelocityParamCallback(const geometry_msgs::Twist::ConstPtr &input)
-{
-    linearVel << input->linear.x, input->linear.y, input->linear.z;
-    angularVel << input->angular.x, input->angular.y, input->angular.z;
-}
-
-
+#endif  // QR_C_TYPES_H

@@ -22,9 +22,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
-
-
 #ifndef QR_GAIT_PARAM_RECEIVER_H
 #define QR_GAIT_PARAM_RECEIVER_H
 
@@ -33,6 +30,7 @@
 #include <eigen3/Eigen/Dense>
 #include <ros/ros.h>
 #include <unitree_legged_msgs/GaitParameter.h>
+
 // get gait param from topic for gait update
 class QrGaitParamReceiver {
     public:
@@ -42,43 +40,21 @@ class QrGaitParamReceiver {
 
         void GaitParamCallback(const unitree_legged_msgs::GaitParameter::ConstPtr &input);
 
-        inline Eigen::Matrix<float, 4, 1> GetStanceDuration()
-        {
-            return stanceDuration; 
-        }
+        Eigen::Matrix<float, 4, 1> GetStanceDuration();
+       
+        Eigen::Matrix<float, 4, 1> GetDutyFactor();
 
-        inline Eigen::Matrix<float, 4, 1> GetDutyFactor()
-        {
-            return dutyFactor; 
-        }
+        Eigen::Matrix<int, 4, 1> GetInitialLegState();
 
-        inline Eigen::Matrix<int, 4, 1> GetInitialLegState()
-        {
-            return initialLegState; 
-        }
+        Eigen::Matrix<float, 4, 1> GetInitialLegPhase();
 
-        inline Eigen::Matrix<float, 4, 1> GetInitialLegPhase()
-        {
-            return initialLegPhase; 
-        }
+        float GetContactDetectionPhaseThreshold();
 
-        inline float GetContactDetectionPhaseThreshold()
-        {
-            return contactDetectionPhaseThreshold; 
-        }
+        bool GetFlag();
 
-        inline bool GetFlag()
-        {
-            return flag;
-        }
+        std::string GetGaitName();
 
-        inline std::string GetGaitName() {
-            return gaitName;
-        }
-
-        inline void SetFlag() {
-            flag = false;
-        }
+        void SetFlag();
 
 
         ros::NodeHandle &nh;
