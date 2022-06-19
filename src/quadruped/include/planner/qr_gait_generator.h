@@ -27,8 +27,13 @@
 #define QR_GAIT_GENERATOR_H
 
 #include <eigen3/Eigen/Dense>
+#include <yaml-cpp/yaml.h>
+#include <math.h>
 #include <string>
-#include <common/qr_types.h>
+#include <vector>
+#include "common/qr_types.h"
+#include "common/qr_cpp_types.h"
+#include "common/qr_algebra.h"
 
 class qrGaitGenerator {
     public:
@@ -69,4 +74,4 @@ class qrGaitGenerator {
         // when the leg status is swing, used for identifying effectiveness of the contact dection judgement
         float contactDetectionPhaseThreshold; 
 };
-#endif QR_GAIT_GENERATOR_H
+#endif //QR_GAIT_GENERATOR_H

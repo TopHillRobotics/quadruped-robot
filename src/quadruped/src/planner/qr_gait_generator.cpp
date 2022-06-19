@@ -22,6 +22,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+
 #include "planner/qr_gait_generator.h"
 
 qrGaitGenerator::qrGaitGenerator() {}
@@ -61,15 +62,15 @@ qrGaitGenerator::qrGaitGenerator(std::string configFilePath)
         config = YAML::LoadFile(configFilePath);
 
         // this->robot = robot;
-        string gaitName = config["gait_params"]["gaitName"].as<string>();
+        std::string gaitName = config["gait_params"]["gaitName"].as<std::string>();
 
-        vector<float> stanceDurationList = config["gait_params"][gaitName]["stance_duration"].as<vector<float >>();
+        std::vector<float> stanceDurationList = config["gait_params"][gaitName]["stance_duration"].as<std::vector<float>>();
         stanceDuration = Eigen::MatrixXf::Map(&stanceDurationList[0], 4, 1);
-        vector<float> dutyFactorList = config["gait_params"][gaitName]["duty_factor"].as<vector<float >>();
+        std::vector<float> dutyFactorList = config["gait_params"][gaitName]["duty_factor"].as<std::vector<float >>();
         dutyFactor = Eigen::MatrixXf::Map(&dutyFactorList[0], 4, 1);
-        vector<int> initialLegStateList = config["gait_params"][gaitName]["initial_leg_state"].as<vector<int >>();
+        std::vector<int> initialLegStateList = config["gait_params"][gaitName]["initial_leg_state"].as<std::vector<int >>();
         initialLegState = Eigen::MatrixXi::Map(&initialLegStateList[0], 4, 1);
-        vector<float> initialLegPhaseList = config["gait_params"][gaitName]["init_phase_full_cycle"].as<vector<float >>();
+        std::vector<float> initialLegPhaseList = config["gait_params"][gaitName]["init_phase_full_cycle"].as<std::vector<float >>();
         initialLegPhase = Eigen::MatrixXf::Map(&initialLegPhaseList[0], 4, 1);
         contactDetectionPhaseThreshold = config["gait_params"][gaitName]["contact_detection_phase_threshold"].as<float>();
         
@@ -108,6 +109,7 @@ void qrGaitGenerator::Reset(float currentTime)
 void qrGaitGenerator::Update(float currentTime) 
 {
     // Eigen::Matrix<bool, 4, 1> contactState = robot->GetFootContacts();
+    Eigen::Matrix<bool, 4, 1> contactState = {true,true,true,true};
     float fullCyclePeriod, augmentedTime, phaseInFullCycle, ratio;
     
 

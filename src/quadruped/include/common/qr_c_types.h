@@ -22,10 +22,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-enum LegState {
-    SWING,
-    STANCE,
-    EARLY_CONTACT,
-    LOSE_CONTACT,
-    USERDEFINED_SWING
-};
+#ifndef QR_C_TYPES_H
+#define QR_C_TYPES_H
+
+#include <stddef.h>
+#include <stdint.h>
+
+// short version of the stdint default integer types
+typedef uint64_t u64;
+typedef uint32_t u32;
+typedef uint16_t u16;
+typedef uint8_t u8;
+typedef int8_t s8;
+typedef int16_t s16;
+typedef int32_t s32;
+typedef int64_t s64;
+typedef float fpt;
+
+#define M_2PI 6.28318530718 // 2 * PI
+
+#endif  // QR_C_TYPES_H
