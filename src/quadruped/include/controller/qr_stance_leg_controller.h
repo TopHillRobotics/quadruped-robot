@@ -2,7 +2,7 @@
 
 // Copyright (c) 2022 
 // Robot Motion and Vision Laboratory at East China Normal University
-// Contact: Xinyu Zhang   email: tophill.robotics@gmail.com
+// Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -27,9 +27,10 @@
 
 #include <iostream>
 #include <map>
+
 #include <eigen3/Eigen/Dense>
 
-#include "robots/timer.h"
+#include "robot/timer.h"
 #include "common/qr_types.h"
 #include "robot/qr_robot.h"
 #include "robot/qr_motor_cmd.h"
@@ -40,21 +41,24 @@
 #include "estimator/qr_robot_estimator.h"
 #include "estimator/qr_ground_estimator.h"
 
+/**
+ * @brief Controller for stance leg.
+ */
 class qrStanceLegController{
 public:
     /**
-     * @brief Construct function of qrStanceLegController\
+     * @brief Constructor of qrStanceLegController using given many object pointers and attributes.
      * @param robot The robot object pointer.
-     * @param gaitGenerator 
-     * @param robotVelocityEstimator 
-     * @param groundEstimator 
-     * @param comPlanner 
-     * @param posePlanner 
-     * @param footholdPlanner 
-     * @param desired_speed 
-     * @param desiredTwistingSpeed 
-     * @param desiredBodyHeight 
-     * @param configFilepath 
+     * @param gaitGenerator The gait generator object pointer.
+     * @param robotVelocityEstimator The robot estimator object pointer.
+     * @param groundEstimator The ground estimator object pointer.
+     * @param comPlanner The COM planner object pointer.
+     * @param posePlanner The pose planner object pointer.
+     * @param footholdPlanner The foothold planner object pointer.
+     * @param desired_speed The robot desired speed in velocity control.
+     * @param desiredTwistingSpeed The robot desired twisting speed in velocity control.
+     * @param desiredBodyHeight The desired body height of robot.
+     * @param configFilepath The stance leg config file path.
      */
     qrStanceLegController(qrRobot *robot,
                           qrGaitGenerator *gaitGenerator,

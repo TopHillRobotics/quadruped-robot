@@ -2,7 +2,7 @@
 
 // Copyright (c) 2022 
 // Robot Motion and Vision Laboratory at East China Normal University
-// Contact: Xinyu Zhang   email: tophill.robotics@gmail.com
+// Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@
 #define QR_SWING_LEG_CONTROLLER_H
 
 #include "robot/qr_motor_cmd.h"
-#include "planner/qr_openloop_gait_generator.h"
+#include "planner/qr_gait_generator.h"
 #include "estimator/qr_robot_estimator.h"
 #include "estimator/qr_ground_estimator.h"
 #include "planner/qr_foothold_planner.h"
