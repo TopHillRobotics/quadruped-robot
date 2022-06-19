@@ -22,9 +22,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
-
-
 #ifndef QR_GAIT_PARAM_RECEIVER_H
 #define QR_GAIT_PARAM_RECEIVER_H
 
@@ -33,6 +30,7 @@
 #include <eigen3/Eigen/Dense>
 #include <ros/ros.h>
 #include <unitree_legged_msgs/GaitParameter.h>
+
 // get gait param from topic for gait update
 class QrGaitParamReceiver {
     public:
