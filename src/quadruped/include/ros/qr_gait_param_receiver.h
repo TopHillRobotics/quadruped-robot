@@ -33,11 +33,11 @@
 #include <unitree_legged_msgs/GaitParameter.h>
 
 // get gait param from topic for gait update
-class QrGaitParamReceiver {
+class qrGaitParamReceiver {
     public:
-        QrGaitParamReceiver(ros::NodeHandle &nhIn);
+        qrGaitParamReceiver(ros::NodeHandle &nhIn);
 
-        ~QrGaitParamReceiver() = default;
+        ~qrGaitParamReceiver() = default;
 
         void GaitParamCallback(const unitree_legged_msgs::GaitParameter::ConstPtr &input);
 

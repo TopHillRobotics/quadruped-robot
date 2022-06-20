@@ -34,11 +34,11 @@
 #include <geometry_msgs/Pose.h>
 
 // get velocity param from topic for velocity update
-class QrVelocityParamReceiver {
+class qrVelocityParamReceiver {
     public:
-        QrVelocityParamReceiver(ros::NodeHandle &nhIn);
+        qrVelocityParamReceiver(ros::NodeHandle &nhIn);
 
-        ~QrVelocityParamReceiver() = default;
+        ~qrVelocityParamReceiver() = default;
 
         void VelocityParamCallback(const geometry_msgs::Twist::ConstPtr &input);
 

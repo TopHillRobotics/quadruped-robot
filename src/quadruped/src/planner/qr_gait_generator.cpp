@@ -25,9 +25,9 @@
 
 #include "planner/qr_gait_generator.h"
 namespace Quadruped {
-    QrGaitGenerator::QrGaitGenerator() {}
+    qrGaitGenerator::qrGaitGenerator() {}
 
-    QrGaitGenerator::QrGaitGenerator(Eigen::Matrix<float, 4, 1> stanceDuration,
+    qrGaitGenerator::qrGaitGenerator(Eigen::Matrix<float, 4, 1> stanceDuration,
                                         Eigen::Matrix<float, 4, 1> dutyFactor,
                                         Eigen::Matrix<int, 4, 1> initialLegState,
                                         Eigen::Matrix<float, 4, 1> initialLegPhase,
@@ -55,7 +55,7 @@ namespace Quadruped {
         }
 
 
-    QrGaitGenerator::QrGaitGenerator(std::string configFilePath)
+    qrGaitGenerator::qrGaitGenerator(std::string configFilePath)
         {
 
             this->configFilePath = configFilePath;
@@ -97,7 +97,7 @@ namespace Quadruped {
             Reset(0);
         }
 
-    void QrGaitGenerator::Reset(float currentTime) 
+    void qrGaitGenerator::Reset(float currentTime) 
     {
         normalizedPhase = Eigen::Matrix<float, 4, 1>::Zero();
         lastLegState = initialLegState;
@@ -106,7 +106,7 @@ namespace Quadruped {
         desiredLegState = initialLegState;
     }
 
-    void QrGaitGenerator::Update(float currentTime) 
+    void qrGaitGenerator::Update(float currentTime) 
     {
         // Eigen::Matrix<bool, 4, 1> contactState = robot->GetFootContacts();
         Eigen::Matrix<bool, 4, 1> contactState = {true,true,true,true};
@@ -136,7 +136,7 @@ namespace Quadruped {
                 
             } else {
                 desiredLegState[legId] = nextLegState[legId];
-                normalizedPhase(legId) = (phaseInFullCycle - ratio) / (1 - ratio);
+                normalizedPhase[legId] = (phaseInFullCycle - ratio) / (1 - ratio);
             }
             
             legState[legId] = desiredLegState[legId];
