@@ -2,7 +2,7 @@
 
 // Copyright (c) 2022
 // Robot Motion and Vision Laboratory at East China Normal University
-// Contact: Xinyu Zhang   email: tophill.robotics@gmail.com
+// Contact:tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,18 +22,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
-
-
 #ifndef QR_VEL_PARAM_RECEIVER_H
 #define QR_VEL_PARAM_RECEIVER_H
 
 #include <iostream>
 #include <string>
+
 #include <eigen3/Eigen/Dense>
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Pose.h>
+
 // get velocity param from topic for velocity update
 class QrVelocityParamReceiver {
     public:
