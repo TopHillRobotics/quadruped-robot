@@ -2,7 +2,7 @@
 
 // Copyright (c) 2022
 // Robot Motion and Vision Laboratory at East China Normal University
-// Contact: Xinyu Zhang   email: tophill.robotics@gmail.com
+// Contact:tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@
 
 #include <eigen3/Eigen/LU>
 #include <eigen3/Eigen/SVD>
+
 #include "qr_sparse_matrix.hpp"
 
 namespace robotics {

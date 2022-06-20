@@ -1,5 +1,5 @@
-#ifndef QR_EIGENTYPES_H
-#define QR_EIGENTYPES_H
+#ifndef QR_EIGEN_TYPES_H
+#define QR_EIGEN_TYPES_H
 
 #include <Eigen/Dense>
 
@@ -10,4 +10,4 @@
 template<typename T>
 using Mat3 = typename Eigen::Matrix<T, 3, 3>;
 
-#endif // QR_EIGENTYPES_H
+#endif // QR_EIGEN_TYPES_H

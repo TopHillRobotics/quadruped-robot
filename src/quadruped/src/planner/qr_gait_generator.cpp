@@ -3,7 +3,7 @@
 
 // Copyright (c) 2022
 // Robot Motion and Vision Laboratory at East China Normal University
-// Contact: Xinyu Zhang   email: tophill.robotics@gmail.com
+// Contact:tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,9 @@
 
 #include "planner/qr_gait_generator.h"
 namespace Quadruped {
-    qrGaitGenerator::qrGaitGenerator() {}
+    QrGaitGenerator::QrGaitGenerator() {}
 
-    qrGaitGenerator::qrGaitGenerator(Eigen::Matrix<float, 4, 1> stanceDuration,
+    QrGaitGenerator::QrGaitGenerator(Eigen::Matrix<float, 4, 1> stanceDuration,
                                         Eigen::Matrix<float, 4, 1> dutyFactor,
                                         Eigen::Matrix<int, 4, 1> initialLegState,
                                         Eigen::Matrix<float, 4, 1> initialLegPhase,
@@ -55,7 +55,7 @@ namespace Quadruped {
         }
 
 
-    qrGaitGenerator::qrGaitGenerator(std::string configFilePath)
+    QrGaitGenerator::QrGaitGenerator(std::string configFilePath)
         {
 
             this->configFilePath = configFilePath;
@@ -97,7 +97,7 @@ namespace Quadruped {
             Reset(0);
         }
 
-    void qrGaitGenerator::Reset(float currentTime) 
+    void QrGaitGenerator::Reset(float currentTime) 
     {
         normalizedPhase = Eigen::Matrix<float, 4, 1>::Zero();
         lastLegState = initialLegState;
@@ -106,7 +106,7 @@ namespace Quadruped {
         desiredLegState = initialLegState;
     }
 
-    void qrGaitGenerator::Update(float currentTime) 
+    void QrGaitGenerator::Update(float currentTime) 
     {
         // Eigen::Matrix<bool, 4, 1> contactState = robot->GetFootContacts();
         Eigen::Matrix<bool, 4, 1> contactState = {true,true,true,true};

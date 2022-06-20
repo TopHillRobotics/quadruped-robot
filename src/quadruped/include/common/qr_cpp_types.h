@@ -2,7 +2,7 @@
 
 // Copyright (c) 2022
 // Robot Motion and Vision Laboratory at East China Normal University
-// Contact: Xinyu Zhang   email: tophill.robotics@gmail.com
+// Contact:tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,10 @@
 
 #include <cassert>
 #include <vector>
+
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Geometry>
+
 #include "qr_c_types.h"
 
 // USE (void) to silent unused warnings
@@ -143,4 +145,4 @@ using vectorAligned = typename std::vector<T, Eigen::aligned_allocator<T>>;
 
 enum class RobotType { A1, CHEETAH_3, MINI_CHEETAH };
 
-#endif  // PROJECT_CPPTYPES_H
+#endif  // QR_CPP_TYPES_H

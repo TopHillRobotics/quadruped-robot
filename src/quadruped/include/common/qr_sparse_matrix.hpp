@@ -1,6 +1,8 @@
 #ifndef QR_SPARSE_MATRIX
 #define QR_SPARSE_MATRIX
+
 #include <vector>
+
 #include "qr_cpp_types.h"
 
 template<typename T>

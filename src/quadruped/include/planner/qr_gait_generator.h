@@ -2,7 +2,7 @@
 
 // Copyright (c) 2022
 // Robot Motion and Vision Laboratory at East China Normal University
-// Contact: Xinyu Zhang   email: tophill.robotics@gmail.com
+// Contact:tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,31 +26,42 @@
 #ifndef QR_GAIT_GENERATOR_H
 #define QR_GAIT_GENERATOR_H
 
-#include <eigen3/Eigen/Dense>
-#include <yaml-cpp/yaml.h>
 #include <math.h>
 #include <string>
 #include <vector>
+
+#include <eigen3/Eigen/Dense>
+#include <yaml-cpp/yaml.h>
+
 #include "common/qr_types.h"
 #include "common/qr_cpp_types.h"
 #include "common/qr_algebra.h"
-namespace Quadruped {
-    class qrGaitGenerator {
-        public:
-            qrGaitGenerator();
-            //TODO: add robot param
-            qrGaitGenerator(std::string configFilePath);
 
-            qrGaitGenerator(Eigen::Matrix<float, 4, 1> stanceDuration,
+namespace Quadruped {
+    class QrGaitGenerator {
+        public:
+            QrGaitGenerator();
+            //TODO: add robot param
+            QrGaitGenerator(std::string configFilePath);
+
+            /**
+             * @brief Construct function of qrGaitGenerator\
+             * @param stanceDuration 
+             * @param dutyFactor 
+             * @param initialLegState 
+             * @param initialLegPhase 
+             * @param contactDetectionPhaseThreshold
+            */
+            QrGaitGenerator(Eigen::Matrix<float, 4, 1> stanceDuration,
                             Eigen::Matrix<float, 4, 1> dutyFactor,
                             Eigen::Matrix<int, 4, 1> initialLegState,
                             Eigen::Matrix<float, 4, 1> initialLegPhase,
                             float contactDetectionPhaseThreshold = 0.1f);
 
-            virtual ~qrGaitGenerator() = default;
+            virtual ~QrGaitGenerator() = default;
             virtual void Reset(float currentTime);
             virtual void Update(float currentTime);
-        private:
+
             std::string configFilePath;
             // load from config file
             YAML::Node config; 
