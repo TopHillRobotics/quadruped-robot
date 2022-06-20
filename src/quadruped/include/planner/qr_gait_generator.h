@@ -94,25 +94,42 @@ namespace Quadruped {
             /// i.e. stanceDuration / (stanceDuration + swingDuration)
             Eigen::Matrix<float, 4, 1> dutyFactor;
 
-            /// The percent of the total cycle which a given foot is on the ground. 
+            /// The relative (normalized) phase at beginning. 
+            /// Here, phase is the percent of the total cycle  which a given foot is on the ground. 
+            /// The one leg is assigned relative phase 0 and the others have the relative phases in the range [0,1].
             Eigen::Matrix<float, 4, 1> initialLegPhase;
             
+            /// The desired relative phase w.r.t a given leg. 
+            /// Note that this is NOT the total periodic/cyclic duration.
+            Eigen::Matrix<float, 4, 1> desiredLegPhase;
+
+            // The phase w.r.t a given stage, NOT the total periodic/cyclic duration.
+            Eigen::Matrix<float, 4, 1> normalizedPhase; // the phase for the desired state.
+
+
             /// The initial leg state (STANCE or SWING).
             Eigen::Matrix<int, 4, 1> initialLegState;
+
+            /// stance/swing/early stane/lost stance
+            Eigen::Matrix<int, 4, 1> desiredLegState;
 
             /// The next leg state (STANCE or SWING).
             Eigen::Matrix<int, 4, 1> nextLegState;
 
-            /// The current leg state (STANCE or SWING).
+            /// The previous leg state (STANCE or SWING).
+            Eigen::Matrix<int, 4, 1> lastLegState;
+
+            // The planned current state, while legState is the state actually detected via senros.
+            // curLegState is the planned current state, while legState is the state actually detected via senros.
+            Eigen::Matrix<int, 4, 1> curLegState; 
+            
+            /// The current leg state (STANCE or SWING) detected via senros.
             Eigen::Matrix<int, 4, 1> legState;
 
-
-            // The phase w.r.t a certain stage, NOT the total periodic/cyclic duration.
-            Eigen::Matrix<float, 4, 1> normalizedPhase; // the phase for the desired state.
-            
-            Eigen::Matrix<int, 4, 1> desiredLegState;  // stance/swing/early stane/lost stance
-            Eigen::Matrix<int, 4, 1> lastLegState;
-            Eigen::Matrix<int, 4, 1> curLegState; // curLegState is the planned current state, while legState is the state actually detected via senros.
+          
+            //Eigen::Matrix<int, 4, 1> desiredLegState;  // stance/swing/early stane/lost stance
+            //Eigen::Matrix<int, 4, 1> lastLegState;
+            //Eigen::Matrix<int, 4, 1> curLegState; // curLegState is the planned current state, while legState is the state actually detected via senros.
             Eigen::Matrix<float, 4, 1> initStateRadioInCycle;
             Vec4<float> fullCyclePeriod;
             
