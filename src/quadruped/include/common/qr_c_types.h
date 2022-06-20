@@ -22,71 +22,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef QR_MOTOR_CMD_H
-#define QR_MOTOR_CMD_H
+#ifndef QR_C_TYPES_H
+#define QR_C_TYPES_H
 
-#include <Eigen/Dense>
+#include <stddef.h>
+#include <stdint.h>
 
-/**
- * @brief The qrMotorCmd class is used to store the result motor command of one iteration
- */
-class qrMotorCmd
-{
+// short version of the stdint default integer types
+typedef uint64_t u64;
+typedef uint32_t u32;
+typedef uint16_t u16;
+typedef uint8_t u8;
+typedef int8_t s8;
+typedef int16_t s16;
+typedef int32_t s32;
+typedef int64_t s64;
+typedef float fpt;
 
-public:
+#define M_2PI 6.28318530718 // 2 * PI
 
-  /**
-   * @brief Constructor of qrMotorCmd
-   */
-  qrMotorCmd();
-
-  /**
-   * @brief Constructor of qrMotorCmd. Initialize with input
-   * @param q: angle
-   * @param dq: joint velocity
-   * @param tau: torque
-   * @param Kp: position stiffness (unit: N.m/rad )
-   * @param Kd: velocity stiffness (unit: N.m/(rad/s) )
-   */
-  qrMotorCmd(float q, float dq, float tau, float Kp, float Kd);
-
-  /**
-   * @brief Destructor of qrMotorCmd
-   */
-  ~qrMotorCmd();
-
-  /**
-   * @brief convert result to eigen vector
-   * @return eigen vector
-   */
-  Eigen::Matrix<float, 5, 1> toEigenVector();
-
-private:
-
-  /**
-   * @brief joint angle (unit: radian)
-   */
-  float q;
-
-  /**
-   * @brief joint velocity ( unit: radian/second)
-   */
-  float dq;
-
-  /**
-   * @brief torque (unit: N.m)
-   */
-  float tau;
-
-  /**
-   * @brief position stiffness (unit: N.m/rad )
-   */
-  float Kp;
-
-  /**
-   * @brief velocity stiffness (unit: N.m/(rad/s) )
-   */
-  float Kd;
-};
-
-#endif // QR_MOTORCMD_H
+#endif  // QR_C_TYPES_H
