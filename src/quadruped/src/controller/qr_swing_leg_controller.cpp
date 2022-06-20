@@ -50,8 +50,8 @@ qrSwingLegController::
 
 qrSwingLegController::Reset()
 {
-    this->phaseSwitchFootLocalPos = robot->GetFootPositionsInBaseFrame();
-    this->phaseSwitchFootGlobalPos = robot->GetFootPositionsInWorldFrame();
+    this->phaseSwitchFootLocalPos = this->robot->GetFootPositionsInBaseFrame();
+    this->phaseSwitchFootGlobalPos = this->robot->GetFootPositionsInWorldFrame();
     Matrix<float, 1, 4> footX = MatrixXf::Map(&this->footInitPose[0][0], 1, 4);
     Matrix<float, 1, 4> footY = MatrixXf::Map(&this->footInitPose[1][0], 1, 4);
     Matrix<float, 1, 4> footZ = MatrixXf::Map(&this->footInitPose[2][0], 1, 4);      
@@ -80,12 +80,21 @@ qrSwingLegController::Reset()
         } break;
         default: break;  
     }
-
+    resetTime = this->robot->GetTimeSinceReset();
+    this->gaitGenerator->Reset(0.f);
+    this->robotEstimator->Reset(0.f);
+    this->groundEstimator->Reset(0.f);
     swingJointAnglesVelocities.clear();
 }
 
 qrSwingLegController::Update()
 {
+    if(!this->robot->stop){
+        float timeSinceReset = this->robot->timeSinceReset() - this->resetTime;
+    }
+    this->gaitGenerator->Update(timeSinceReset);
+    this->groundEstimator->Update();
+    this->robotEstimator->Update(timeSinceReset);
     const Vec4<int>& newLegState = this->gaitGenerator->desiredLegState;
     const Vec4<int>& curLegState = this->gaitGenerator->curLegState;
     // the footHoldOffset is first init at robot.h, then update it at groundEstimator.cpp 

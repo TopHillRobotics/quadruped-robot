@@ -164,6 +164,10 @@ private:
      * @brief Init pose in position mode.
      */
     std::vector<std::vector<float>> footInitPose;
+    /**
+     * @brief The time when call Reset().
+     */
+    float resetTime;
     
 };
 
