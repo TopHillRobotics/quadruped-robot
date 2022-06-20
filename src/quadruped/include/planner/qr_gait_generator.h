@@ -37,52 +37,142 @@
 #include "common/qr_cpp_types.h"
 #include "common/qr_algebra.h"
 
+/**
+ * @brief The qrGaitGenerator class generate the corresponding gait 
+ * with the defined gait parameters and reset and update them regularly.
+ */
 namespace Quadruped {
-    class QrGaitGenerator {
+    class qrGaitGenerator {
         public:
-            QrGaitGenerator();
+            /**
+             * @brief Default constructor that constructs a qrGaitGenerator object.
+             * 
+             */
+            qrGaitGenerator();
             //TODO: add robot param
-            QrGaitGenerator(std::string configFilePath);
 
             /**
-             * @brief Construct function of qrGaitGenerator\
-             * @param stanceDuration 
-             * @param dutyFactor 
-             * @param initialLegState 
-             * @param initialLegPhase 
-             * @param contactDetectionPhaseThreshold
+             * @brief Construct a qrGaitGenerator object using a given config file.
+             * @param configFilePath the given config file.
+             */
+            qrGaitGenerator(std::string configFilePath);
+
+            /**
+             * @brief Construct a qrGaitGenerator object using defined param
+             * @param stanceDuration define the amount of stance time in a gait cycle.
+             * @param dutyFactor define stand duration as a proportion of the whole gait cycle
+             * @param initialLegState define the state of the leg at initialization e.g. SWING/STAND
+             * @param initialLegPhase define the control order between legs by phase difference
+             * @param contactDetectionPhaseThreshold when the leg status is swing, used for identifying effectiveness of the contact dection judgement
             */
-            QrGaitGenerator(Eigen::Matrix<float, 4, 1> stanceDuration,
+            qrGaitGenerator(Eigen::Matrix<float, 4, 1> stanceDuration,
                             Eigen::Matrix<float, 4, 1> dutyFactor,
                             Eigen::Matrix<int, 4, 1> initialLegState,
                             Eigen::Matrix<float, 4, 1> initialLegPhase,
                             float contactDetectionPhaseThreshold = 0.1f);
 
-            virtual ~QrGaitGenerator() = default;
+            virtual ~qrGaitGenerator() = default;
+
+            /**
+             * @brief reset of the gait parameters based on the current clock
+             * @param currentTime the current clock
+             */
             virtual void Reset(float currentTime);
+
+            /**
+             * @brief update of the gait parameters based on the current clock
+             * @param currentTime the current clock
+             */
             virtual void Update(float currentTime);
 
+            /**
+             * @brief the config file path 
+             */
             std::string configFilePath;
-            // load from config file
-            YAML::Node config; 
+
+            /**
+             * @brief the yaml object for load yaml config file 
+             */
+            YAML::Node config;
+
             // Robot *robot;
+
+            /**
+             * @brief define the amount of stance time in a gait cycle.
+             */
             Eigen::Matrix<float, 4, 1> stanceDuration;
+
+            /**
+             * @brief define the amount of swing time in a gait cycle.
+             */
             Eigen::Matrix<float, 4, 1> swingDuration;
-            // the time period ratio for stance stage, i.e. stanceDur/(stanceDur+swingDur)
+
+            /**
+             * @brief the time period ratio for stance stage, i.e. dutyFactor = stanceDurtion/(stanceDurtion+swingDurtion).
+             */
             Eigen::Matrix<float, 4, 1> dutyFactor;
+
+            /**
+             * @brief define the control order between legs by phase difference 
+             */
             Eigen::Matrix<float, 4, 1> initialLegPhase;
+
+            /**
+             * @brief define the state of the leg at initialization e.g. SWING/STAND.
+             */
             Eigen::Matrix<int, 4, 1> initialLegState;
+
+            /**
+             * @brief define whether the current leg should be standing or swinging after switching. 
+             * e.g. SWING->STAND/STAND->SWING
+             */
             Eigen::Matrix<int, 4, 1> nextLegState;
+
+            /**
+             * @brief define whether the current state of the leg should be standing or swinging
+             */
             Eigen::Matrix<int, 4, 1> legState;
-            // the phase w.r.t a certain stage, NOT the total periodic/cyclic duration.
-            Eigen::Matrix<float, 4, 1> normalizedPhase; // the phase for the desired state.
-            Eigen::Matrix<int, 4, 1> desiredLegState;  // stance/swing/early stane/lost stance
+
+            /**
+             * @brief the phase for the desired state. 
+             * e.g. when leg state is stand, normalizedPhase = currentPhase / dutyFactor
+             */
+            Eigen::Matrix<float, 4, 1> normalizedPhase;
+
+            /**
+             * @brief define whether the current state of the leg should be standing or swinging at each moment 
+             * e.g. legState = STAND, when normalizedPhase < 1.0 ,desiredLegState = legState
+             * e.g. legState = STAND, when normalizedPhase >= 1.0, desiredLegState = nextLegState
+             */
+            Eigen::Matrix<int, 4, 1> desiredLegState;
+
+            /**
+             * @brief record the previous state of the current leg, 
+             * used to determine whether the state has changed in Velocity Mode
+             */
             Eigen::Matrix<int, 4, 1> lastLegState;
-            Eigen::Matrix<int, 4, 1> curLegState; // curLegState is the planned current state, while legState is the state actually detected via senros.
+
+            /**
+             * @brief record the previous state of the current leg, 
+             * used to determine whether the state has changed in Position Mode or Walk Mode
+             */
+            Eigen::Matrix<int, 4, 1> curLegState;
+
+            /**
+             * @brief define stand duration or swing duration as a proportion of the whole gait cycle
+             * e.g. if legState = STAND, value is dutyfactor else value is 1 - dutyfactor.
+             */
             Eigen::Matrix<float, 4, 1> initStateRadioInCycle;
+
+            /**
+             * @brief duration of a gait cycle
+             */
             Vec4<float> fullCyclePeriod;
             
-            // when the leg status is swing, used for identifying effectiveness of the contact dection judgement
+            /**
+             * @brief when the leg status is swing, used for identifying effectiveness of the contact dection judgement
+             * 
+             */
             float contactDetectionPhaseThreshold; 
     };
 } // namespace Quadruped

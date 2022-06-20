@@ -24,23 +24,23 @@
 
 #include "ros/qr_vel_param_receiver.h"
 
-QrVelocityParamReceiver::QrVelocityParamReceiver(ros::NodeHandle &nhIn)
+qrVelocityParamReceiver::qrVelocityParamReceiver(ros::NodeHandle &nhIn)
     : nh(nhIn)
 {
     ROS_INFO("velocity param topic: %s", velParamTopic.c_str());
-    velParamSub = nh.subscribe(velParamTopic, 10, &QrVelocityParamReceiver::VelocityParamCallback, this);
+    velParamSub = nh.subscribe(velParamTopic, 10, &qrVelocityParamReceiver::VelocityParamCallback, this);
 }
 
 
-Eigen::Matrix<float, 3, 1> QrVelocityParamReceiver::GetLinearVelocity() {
+Eigen::Matrix<float, 3, 1> qrVelocityParamReceiver::GetLinearVelocity() {
     return linearVel;
 }
 
-float QrVelocityParamReceiver::GetAngularVelocity() {
+float qrVelocityParamReceiver::GetAngularVelocity() {
     return angularVel[2];
 }
 
-void QrVelocityParamReceiver::VelocityParamCallback(const geometry_msgs::Twist::ConstPtr &input)
+void qrVelocityParamReceiver::VelocityParamCallback(const geometry_msgs::Twist::ConstPtr &input)
 {
     linearVel << input->linear.x, input->linear.y, input->linear.z;
     angularVel << input->angular.x, input->angular.y, input->angular.z;

@@ -25,12 +25,12 @@
 #include "planner/qr_com_planner.h"
 namespace Quadruped {
 
-    QrComPlanner::QrComPlanner(QrGaitGenerator *gaitGeneratorIn):gaitGenerator(gaitGeneratorIn),delta(1.0f)
+    qrComPlanner::qrComPlanner(qrGaitGenerator *gaitGeneratorIn):gaitGenerator(gaitGeneratorIn),delta(1.0f)
     {
         Reset(0.f);
     }
 
-    void QrComPlanner::Reset(float currentTime) 
+    void qrComPlanner::Reset(float currentTime) 
     {
         // update the pose in world frame by estimator
         // basePosition = robot->GetBasePosition();
@@ -49,7 +49,7 @@ namespace Quadruped {
         comPosInWorldFrame << basePosition[0], basePosition[1], 0.f;
     }
 
-    Eigen::Matrix<float, 3, 1> QrComPlanner::Update(float currentTime) 
+    Eigen::Matrix<float, 3, 1> qrComPlanner::Update(float currentTime) 
     {
         legState = gaitGenerator->legState;
         normalizedPhase = gaitGenerator->normalizedPhase;
@@ -99,7 +99,7 @@ namespace Quadruped {
         return comPosInBaseFrame;
     }
 
-    Eigen::Matrix<float,3,1> QrComPlanner::GetComPosInBaseFrame() 
+    Eigen::Matrix<float,3,1> qrComPlanner::GetComPosInBaseFrame() 
     {
         return comPosInBaseFrame;
     }

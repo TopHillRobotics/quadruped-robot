@@ -24,46 +24,46 @@
 
 #include "ros/qr_gait_param_receiver.h"
 
-QrGaitParamReceiver::QrGaitParamReceiver(ros::NodeHandle &nhIn)
+qrGaitParamReceiver::qrGaitParamReceiver(ros::NodeHandle &nhIn)
     : nh(nhIn)
 {
     ROS_INFO("gait param topic: %s", gaitParamTopic.c_str());
-    gaitParamSub = nh.subscribe(gaitParamTopic, 10, &QrGaitParamReceiver::GaitParamCallback, this);
+    gaitParamSub = nh.subscribe(gaitParamTopic, 10, &qrGaitParamReceiver::GaitParamCallback, this);
 }
 
-Eigen::Matrix<float, 4, 1> QrGaitParamReceiver::GetStanceDuration() {
+Eigen::Matrix<float, 4, 1> qrGaitParamReceiver::GetStanceDuration() {
     return stanceDuration;
 }
 
-Eigen::Matrix<float, 4, 1> QrGaitParamReceiver::GetDutyFactor() {
+Eigen::Matrix<float, 4, 1> qrGaitParamReceiver::GetDutyFactor() {
     return dutyFactor;
 }
 
-Eigen::Matrix<int, 4, 1> QrGaitParamReceiver::GetInitialLegState() {
+Eigen::Matrix<int, 4, 1> qrGaitParamReceiver::GetInitialLegState() {
     return initialLegState;
 }
 
-Eigen::Matrix<float, 4, 1> QrGaitParamReceiver::GetInitialLegPhase() {
+Eigen::Matrix<float, 4, 1> qrGaitParamReceiver::GetInitialLegPhase() {
     return initialLegPhase;
 }
 
-float QrGaitParamReceiver::GetContactDetectionPhaseThreshold() {
+float qrGaitParamReceiver::GetContactDetectionPhaseThreshold() {
     return contactDetectionPhaseThreshold;
 }
 
-bool QrGaitParamReceiver::GetFlag() {
+bool qrGaitParamReceiver::GetFlag() {
     return flag;
 }
 
-std::string QrGaitParamReceiver::GetGaitName() {
+std::string qrGaitParamReceiver::GetGaitName() {
     return gaitName;
 }
 
-void QrGaitParamReceiver::SetFlag() {
+void qrGaitParamReceiver::SetFlag() {
     flag = false;
 }
 
-void QrGaitParamReceiver::GaitParamCallback(const unitree_legged_msgs::GaitParameter::ConstPtr &input)
+void qrGaitParamReceiver::GaitParamCallback(const unitree_legged_msgs::GaitParameter::ConstPtr &input)
 {
     this->gaitName = input->gaitName;
     this->stanceDuration << input->stanceDuration[0],

@@ -34,11 +34,11 @@
 #include "qr_gait_generator.h"
 #include "common/qr_se3.h"
 namespace Quadruped {
-    class QrComPlanner {
+    class qrComPlanner {
         public:
             // TODO:add robot module and estimator module for constructor function
-            QrComPlanner(QrGaitGenerator *gaitGeneratorIn);
-            virtual ~QrComPlanner() = default;
+            qrComPlanner(qrGaitGenerator *gaitGeneratorIn);
+            virtual ~qrComPlanner() = default;
 
             /**
              * @brief Called during the start of a controller.
@@ -62,7 +62,7 @@ namespace Quadruped {
             };
             // Robot *robot;
 
-            QrGaitGenerator *gaitGenerator;
+            qrGaitGenerator *gaitGenerator;
             // RobotEstimator *robotEstimator;
 
             Eigen::Vector3f basePosition;
