@@ -26,45 +26,90 @@
 #ifndef QR_GAIT_GENERATOR_H
 #define QR_GAIT_GENERATOR_H
 
-#include <eigen3/Eigen/Dense>
-#include <yaml-cpp/yaml.h>
 #include <math.h>
 #include <string>
 #include <vector>
+
+#include <eigen3/Eigen/Dense>
+#include <yaml-cpp/yaml.h>
+
 #include "common/qr_types.h"
 #include "common/qr_cpp_types.h"
 #include "common/qr_algebra.h"
+
+
 namespace Quadruped {
-    class qrGaitGenerator {
+    
+    /// The qrGaitGenerator class manages all gait genration, including stance 
+    /// and swing durations. The world also contains efficient memory
+    /// management facilities.
+    class qrGaitGenerator 
+    {
         public:
+            /// Default constructor that constructs a qrGaitGenerator object.
+            /// @param gravity the world gravity vector.
             qrGaitGenerator();
-            //TODO: add robot param
+        
+            /// Construct a qrGaitGenerator object using a given config file.
+            /// @param configFilePath the given config file.
             qrGaitGenerator(std::string configFilePath);
 
+            /// Construct a qrGaitGenerator object using a given config file.
+            /// @param stanceDuration the amount of stance time  in a gait.
+            /// @param dutyFactor the percent of the total cycle which a given foot is on the ground.
+            /// @param initialLegState the initial leg state (STANCE or SWING).
+            /// @param initialLegPhase the given config file.
+            /// @param contactDetectionPhaseThreshold the given config file.
             qrGaitGenerator(Eigen::Matrix<float, 4, 1> stanceDuration,
                             Eigen::Matrix<float, 4, 1> dutyFactor,
                             Eigen::Matrix<int, 4, 1> initialLegState,
                             Eigen::Matrix<float, 4, 1> initialLegPhase,
                             float contactDetectionPhaseThreshold = 0.1f);
 
+            /// Deconstruct a qrGaitGenerator.
             virtual ~qrGaitGenerator() = default;
+
+
+            // 
             virtual void Reset(float currentTime);
+
+            // 
             virtual void Update(float currentTime);
+
         private:
+            /// The loaded gait config file name.
             std::string configFilePath;
-            // load from config file
+            
+            /// load from config file
             YAML::Node config; 
             // Robot *robot;
+
+            /// The period of time that the foot is in contact with the ground.
             Eigen::Matrix<float, 4, 1> stanceDuration;
+
+            /// The period of time that the foot is not in contact with the ground. 
             Eigen::Matrix<float, 4, 1> swingDuration;
-            // the time period ratio for stance stage, i.e. stanceDur/(stanceDur+swingDur)
+            
+            /// The percent of the total cycle which a given foot is on the ground.
+            /// i.e. stanceDuration / (stanceDuration + swingDuration)
             Eigen::Matrix<float, 4, 1> dutyFactor;
+
+            /// The percent of the total cycle which a given foot is on the ground. 
             Eigen::Matrix<float, 4, 1> initialLegPhase;
+            
+            /// The initial leg state (STANCE or SWING).
             Eigen::Matrix<int, 4, 1> initialLegState;
+
+            /// The next leg state (STANCE or SWING).
             Eigen::Matrix<int, 4, 1> nextLegState;
+
+            /// The current leg state (STANCE or SWING).
             Eigen::Matrix<int, 4, 1> legState;
-            // the phase w.r.t a certain stage, NOT the total periodic/cyclic duration.
+
+
+            // The phase w.r.t a certain stage, NOT the total periodic/cyclic duration.
             Eigen::Matrix<float, 4, 1> normalizedPhase; // the phase for the desired state.
+            
             Eigen::Matrix<int, 4, 1> desiredLegState;  // stance/swing/early stane/lost stance
             Eigen::Matrix<int, 4, 1> lastLegState;
             Eigen::Matrix<int, 4, 1> curLegState; // curLegState is the planned current state, while legState is the state actually detected via senros.
