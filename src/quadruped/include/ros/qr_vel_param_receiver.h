@@ -33,18 +33,36 @@
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Pose.h>
 
-// get velocity param from topic for velocity update
+/**
+ * @brief the qrVelocityParamReceiver class is used to get velocity param from topic for velocity update
+ * 
+ */
 class qrVelocityParamReceiver {
     public:
+        /**
+         * @brief Construct a qrVelocityParamReceiver object using ros nodeHandle.
+         * @param nhIn ros nodeHandle
+         */
         qrVelocityParamReceiver(ros::NodeHandle &nhIn);
 
         ~qrVelocityParamReceiver() = default;
 
+        /**
+        * @brief accept updated information in topic
+        * @param input the refences of gait msg
+        */
         void VelocityParamCallback(const geometry_msgs::Twist::ConstPtr &input);
 
+        /**
+        * @brief get line velocity
+        * @return Eigen::Matrix<float, 3, 1>: linearVel  
+        */
         Eigen::Matrix<float, 3, 1> GetLinearVelocity();
 
-        // z component
+        /**
+        * @brief get angular velocity
+        * @return float: angularVel  
+        */
         float GetAngularVelocity();
         
         geometry_msgs::Twist velParam;

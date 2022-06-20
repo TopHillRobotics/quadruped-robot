@@ -32,29 +32,70 @@
 #include <ros/ros.h>
 #include <unitree_legged_msgs/GaitParameter.h>
 
-// get gait param from topic for gait update
+/**
+ * @brief  the qrGaitParamReceiver class is used to get gait param from topic for gait update
+ */
 class qrGaitParamReceiver {
     public:
+        /**
+         * @brief Construct a qrGaitParamReceiver object using ros nodeHandle.
+         * @param nhIn ros nodeHandle
+         */
         qrGaitParamReceiver(ros::NodeHandle &nhIn);
 
         ~qrGaitParamReceiver() = default;
 
+        /**
+         * @brief accept updated information in topic
+         * @param input the refences of gait msg
+         */
         void GaitParamCallback(const unitree_legged_msgs::GaitParameter::ConstPtr &input);
-
+        
+        /**
+         * @brief get stance duration
+         * @return Eigen::Matrix<float, 4, 1>: stanceDuration   
+         */
         Eigen::Matrix<float, 4, 1> GetStanceDuration();
-       
+
+        /**
+         * @brief get duty factor
+         * @return Eigen::Matrix<float, 4, 1>: dutyFactor  
+         */
         Eigen::Matrix<float, 4, 1> GetDutyFactor();
 
+        /**
+        * @brief get initial leg state
+        * @return Eigen::Matrix<float, 4, 1>: initialLegState  
+        */
         Eigen::Matrix<int, 4, 1> GetInitialLegState();
 
+        /**
+        * @brief get initial leg phase
+        * @return Eigen::Matrix<float, 4, 1>: initialLegPhase  
+        */
         Eigen::Matrix<float, 4, 1> GetInitialLegPhase();
-
+        
+        /**
+        * @brief get threshold for contact detection phase
+        * @return float: contactDetectionPhaseThreshold  
+        */
         float GetContactDetectionPhaseThreshold();
 
+        /**
+        * @brief get flag
+        * @return bool: flag  
+        */
         bool GetFlag();
 
+        /**
+        * @brief get gait name
+        * @return string: gaitName  
+        */
         std::string GetGaitName();
 
+        /**
+        * @brief set flag
+        */
         void SetFlag();
 
 
@@ -63,8 +104,11 @@ class qrGaitParamReceiver {
         std::string gaitParamTopic = "/gaitParam";
 
     private:
-        // Whether the flag parameter has changed
+        /**
+         * @brief Whether the flag parameter has changed
+         */
         bool flag = false;
+
         std::string gaitName;
         Eigen::Matrix<float, 4, 1> stanceDuration;
         Eigen::Matrix<float, 4, 1> dutyFactor;
