@@ -36,16 +36,16 @@ class qrSwingLegController{
 public:
     /**
      * @brief Construct function of qrSwingLegController
-     * @param robot
-     * @param gaitGenerator
-     * @param stateEstimator
-     * @param groundEstimator
-     * @param FootholdPlanner
-     * @param desiredSpeed
-     * @param desiredTwistingSpeed
-     * @param desiredHeight
-     * @param footClearance
-     * @param configPath
+     * @param robot The qrRobot object pointer.
+     * @param gaitGenerator The qrGaitGenerator object pointer.
+     * @param stateEstimator The qrRobotEstimator object pointer.
+     * @param groundEstimator The qrGroundSurfaceEstimator object pointer.
+     * @param FootholdPlanner The qrFootholdPlanner object pointer.
+     * @param desiredSpeed  Desired robot's body height. 
+     * @param desiredTwistingSpeed Desired speed of twist command.
+     * @param desiredHeight Desired robot's body height.
+     * @param footClearance 
+     * @param configPath File path of swing_leg_controller.yaml.
      */
     qrSwingLegController(qrRobot *robot,
                          qrGaitGenerator *gaitGenerator,
@@ -103,67 +103,78 @@ private:
      * @brief The robot object pointer.
      */
     qrRobot *robot;
+
     /**
      * @brief Gait Generator object pointer.
      */
     qrGaitGenerator *gaitGenerator;
+
     /**
      * @brief Robot estimator pointre.
      */
     qrRobotEstimator *robotEstimator;
+
     /**
      * @brief Ground estimator pointer.
      */
     qrGroundSurfaceEstimator *groundEstimator;
+
     /**
      * @brief Robot's foothold planner. Get desired COM pose when in walk locomotion.
      */
     qrFootholdPlanner *footholdPlanner;
-    /**
-     * @brief The state of each leg.
-     */
-    qrEigen::Matrix<int, 4, 1> lastLegState;
+
     /**
      * @brief Desired robot's body height. 
      */
     Eigen::Matrix<float, 3, 1> desiredHeight;
+
     /**
      * @brief Desired speed. This param usually appears in velocity mode.
      */
     Eigen::Matrix<float, 3, 1> desiredSpeed;
+
     /**
      * @brief Desired speed of twist command. This param usually appears in velocity mode.
      */
     float desiredTwistingSpeed;
+
     /**
      * @brief The joint's angles and motor velocities data structure. The first data is joint angle,
      *        the second data is motor velocity and the third data is the index of leg.
      */ 
     std::map<int, std::tuple<float, float, int>> swingJointAnglesVelocities;
+
     /**
      * @brief Foot positions in base frame when switch leg state.
      */
     Eigen::Matrix<float, 3, 4> phaseSwitchFootLocalPos;
+
     /**
      * @brief Foot positions in world frame when switch leg state.
      */
     Eigen::Matrix<float, 3, 4> phaseSwitchFootGlobalPos;
+
     /**
      * @brief Footholds in world frame.
      */
     Eigen::Matrix<float, 3, 4> footHoldInWorldFrame;
+
     /**
      * @brief The trajectories of each leg.
      */
     qrSwingFootTrajectory swingFootTrajectories[4];
+
     /**
      * @brief File path of swing_leg_controller.yaml.
      */
     std::string configFilepath;
+
     /**
      * @brief Init pose in position mode.
      */
     std::vector<std::vector<float>> footInitPose;
+    
     /**
      * @brief The time when call Reset().
      */
