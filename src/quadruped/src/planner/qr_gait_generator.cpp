@@ -40,13 +40,14 @@ namespace Quadruped {
             this->initialLegPhase = initialLegPhase;
             this->contactDetectionPhaseThreshold = contactDetectionPhaseThreshold;
             this->swingDuration = stanceDuration.cwiseQuotient(dutyFactor) - stanceDuration;
-
+            this->lastLegState = initialLegState;
+            
             for (int legId = 0; legId < initialLegState.size(); legId++) {
                 if (initialLegState[legId] == LegState::SWING) {
-                    initStateRadioInCycle[legId] = 1 - dutyFactor[legId];
+                    initStateRatioInCycle[legId] = 1 - dutyFactor[legId];
                     nextLegState[legId] = LegState::STANCE;
                 } else {
-                    initStateRadioInCycle[legId] = dutyFactor[legId];
+                    initStateRatioInCycle[legId] = dutyFactor[legId];
                     nextLegState[legId] = LegState::SWING;
                 }
             }
@@ -86,10 +87,10 @@ namespace Quadruped {
                     swingDuration[legId] = stanceDuration[legId]/dutyFactor[legId] - stanceDuration[legId];
                     lastLegState = initialLegState;
                     if (initialLegState[legId] == LegState::SWING) {
-                        initStateRadioInCycle[legId] = 1 - dutyFactor[legId];
+                        initStateRatioInCycle[legId] = 1 - dutyFactor[legId];
                         nextLegState[legId] = LegState::STANCE;
                     } else {
-                        initStateRadioInCycle[legId] = dutyFactor[legId];
+                        initStateRatioInCycle[legId] = dutyFactor[legId];
                         nextLegState[legId] = LegState::SWING;
                     }
                 }
@@ -129,7 +130,7 @@ namespace Quadruped {
             augmentedTime = initialLegPhase[legId] * fullCyclePeriod + currentTime;
             phaseInFullCycle = fmod(augmentedTime, fullCyclePeriod) / fullCyclePeriod;
             
-            ratio = initStateRadioInCycle[legId];
+            ratio = initStateRatioInCycle[legId];
             if (phaseInFullCycle < ratio) {
                 desiredLegState[legId] = initialLegState[legId];
                 normalizedPhase[legId] = phaseInFullCycle / ratio;
@@ -141,6 +142,7 @@ namespace Quadruped {
             
             legState[legId] = desiredLegState[legId];
 
+            // No contact detection at the beginning of each SWING/STANCE phase.
             if (normalizedPhase[legId] < contactDetectionPhaseThreshold) {
                 continue;
             }

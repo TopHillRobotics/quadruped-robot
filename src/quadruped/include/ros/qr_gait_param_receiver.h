@@ -110,10 +110,30 @@ class qrGaitParamReceiver {
         bool flag = false;
 
         std::string gaitName;
+
+        /**
+         * @brief define the amount of stance time in a gait cycle.
+         */
         Eigen::Matrix<float, 4, 1> stanceDuration;
+
+        /**
+         * @brief the time period ratio for stance stage, i.e. dutyFactor = stanceDuration/(stanceDuration+swingDuration).
+         */
         Eigen::Matrix<float, 4, 1> dutyFactor;
+
+        /**
+         * @brief define the state of the leg at initialization e.g. SWING/STAND.
+         */
         Eigen::Matrix<int, 4, 1> initialLegState;
+
+        /**
+         * @brief define the control order between legs by phase difference 
+         */
         Eigen::Matrix<float, 4, 1> initialLegPhase;
+
+        /**
+         * @brief when the leg status is swing, used for identifying effectiveness of the contact dection judgement
+         */
         float contactDetectionPhaseThreshold=0.1f;
 };
 #endif //QR_GAIT_PARAM_RECEIVER_H

@@ -68,10 +68,17 @@ class qrVelocityParamReceiver {
         geometry_msgs::Twist velParam;
         ros::NodeHandle &nh;
         ros::Subscriber velParamSub;
-        std::string velParamTopic = "/velocity_param";
+        std::string velParamTopic = "/velocityParam";
 
     private:
+        /**
+         * @brief the linearVel of com
+         */
         Eigen::Matrix<float, 3, 1> linearVel = Eigen::Matrix<float, 3, 1>::Zero();
+
+        /**
+         * @brief the angularVel of com
+         */
         Eigen::Matrix<float, 3, 1> angularVel = Eigen::Matrix<float, 3, 1>::Zero();
 
 };

@@ -108,7 +108,7 @@ namespace Quadruped {
             Eigen::Matrix<float, 4, 1> swingDuration;
 
             /**
-             * @brief the time period ratio for stance stage, i.e. dutyFactor = stanceDurtion/(stanceDurtion+swingDurtion).
+             * @brief the time period ratio for stance stage, i.e. dutyFactor = stanceDuration/(stanceDuration+swingDuration).
              */
             Eigen::Matrix<float, 4, 1> dutyFactor;
 
@@ -162,7 +162,7 @@ namespace Quadruped {
              * @brief define stand duration or swing duration as a proportion of the whole gait cycle
              * e.g. if legState = STAND, value is dutyfactor else value is 1 - dutyfactor.
              */
-            Eigen::Matrix<float, 4, 1> initStateRadioInCycle;
+            Eigen::Matrix<float, 4, 1> initStateRatioInCycle;
 
             /**
              * @brief duration of a gait cycle
@@ -171,7 +171,6 @@ namespace Quadruped {
             
             /**
              * @brief when the leg status is swing, used for identifying effectiveness of the contact dection judgement
-             * 
              */
             float contactDetectionPhaseThreshold; 
     };
