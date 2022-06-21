@@ -174,7 +174,7 @@ namespace Quadruped {
             Eigen::Matrix<float, 4, 1> initStateRatioInCycle;
 
             /**
-             * @brief the duration of a gait cycle. fullCyclePeriod = stanceDuration + swingDuration
+             * @brief the duration of a gait cycle. fullCyclePeriod = stanceDuration + swingDuration.
              */
             Vec4<float> fullCyclePeriod;
             
