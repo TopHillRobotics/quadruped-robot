@@ -2,7 +2,7 @@
 
 // Copyright (c) 2022 
 // Robot Motion and Vision Laboratory at East China Normal University
-// Contact: Xinyu Zhang   email: tophill.robotics@gmail.com
+// Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@
 #define QR_SWING_LEG_CONTROLLER_H
 
 #include "robot/qr_motor_cmd.h"
-#include "planner/qr_openloop_gait_generator.h"
+#include "planner/qr_gait_generator.h"
 #include "estimator/qr_robot_estimator.h"
 #include "estimator/qr_ground_estimator.h"
 #include "planner/qr_foothold_planner.h"
@@ -69,6 +69,27 @@ public:
      * @brief Update the parameters of the qrSwingLegController.
      */
     virtual void Update();
+
+    /**
+     * @brief Quadratic interpolation function, used to generate polygon curve.
+     * @param phase
+     * @param start
+     * @param mid
+     * @param end
+     * @return a float value with phase
+     */
+    float GenParabola(float phase, float start, float mid, float end);
+
+    /**
+     * @brief Generating the trajectory of the swing leg
+     * @param inputPhase
+     * @param startPos
+     * @param endPos
+     * @return foot position like (x,y,z)
+     */
+    Eigen::Matrix<float, 3, 1> GenSwingFootTrajectory(float inputPhase,
+                                                        Eigen::Matrix<float, 3, 1> startPos,
+                                                        Eigen::Matrix<float, 3, 1> endPos);
 
     /** @brief Compute all motors' commands via controllers.
      *  @return tuple<map, Matrix<3,4>> : 
@@ -132,25 +153,9 @@ private:
      */
     Eigen::Matrix<float, 3, 4> footHoldInWorldFrame;
     /**
-     * @brief Orientation in control frame.(not use)
-     */
-    Quat<float> controlFrameOrientationSource;
-    /**
-     * @brief Robot position.(not use)
-     */
-    Vec3<float> controlFrameOriginSource;
-    /**
-     * @brief (not use)
-     */
-    Eigen::Matrix<float, 3, 4> phaseSwitchFootControlPos;
-    /**
-     * @brief (not use)
-     */
-    Eigen::Matrix<float, 3, 4> footHoldInControlFrame;
-    /**
      * @brief The trajectories of each leg.
      */
-    SwingFootTrajectory swingFootTrajectories[4];
+    qrSwingFootTrajectory swingFootTrajectories[4];
     /**
      * @brief File path of swing_leg_controller.yaml.
      */
@@ -159,6 +164,10 @@ private:
      * @brief Init pose in position mode.
      */
     std::vector<std::vector<float>> footInitPose;
+    /**
+     * @brief The time when call Reset().
+     */
+    float resetTime;
     
 };
 

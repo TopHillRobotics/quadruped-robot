@@ -2,7 +2,7 @@
 
 // Copyright (c) 2022 
 // Robot Motion and Vision Laboratory at East China Normal University
-// Contact: Xinyu Zhang   email: tophill.robotics@gmail.com
+// Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -82,7 +82,7 @@ void qrStanceLegController::Reset(float currentTime)
     this->resetTime = this->robot->GetTimeSinceReset();
     this->gaitGenerator->Reset(timeSinceReset);
     this->stateEstimator->Reset(timeSinceReset);
-    this->groundEstimator->Reset(timeSinceReset);
+    this->groundEstimator->Reset();
     this->comPlanner->Reset(timeSinceReset);
     this->posePlanner->Reset(timeSinceReset);
 }
@@ -93,14 +93,29 @@ void qrStanceLegController::Update(float currentTime)
         this->timeSinceReset = this->robot->GetTimeSinceReset() - this->resetTime;
     }
     this->gaitGenerator->Update(this->timeSinceReset);
-    this->groundEstimator->Update(this->timeSinceReset);
+
+    bool switchToSwing = false;
+    if (this->robot->controlParams["mode"]==LocomotionMode::WALK_LOCOMOTION) {
+        // for walk mode
+        const Vec4<int>& newLegState = this->gaitGenerator->legState;
+        const Vec4<int>& curLegState = this->gaitGenerator->curLegState;
+        for(int legId =0; legId<4; legId++) {
+            if((newLegState(legId) == LegState::SWING && curLegState(legId) == LegState::STANCE)
+                || newLegState(legId) == LegState::USERDEFINED_SWING) {
+                switchToSwing=true;
+                break;
+            }
+        }
+    }
+
+    this->groundEstimator->Update();
     this->stateEstimator->Update(this->timeSinceReset);
     switch (robot->controlParams["mode"]) {
         case LocomotionMode::POSITION_LOCOMOTION: {
             this->comPlanner->Update(this->timeSinceReset);
         } break; 
         case LocomotionMode::WALK_LOCOMOTION: {
-            if (switchToSwing && swingSemaphore >=0) {
+            if (switchToSwing) {
                 this->posePlanner->Update(this->timeSinceReset);
                 printf("update pose plan finish\n");
             }
