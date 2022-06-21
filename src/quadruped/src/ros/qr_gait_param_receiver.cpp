@@ -63,30 +63,32 @@ void qrGaitParamReceiver::SetFlag() {
     flag = false;
 }
 
-void qrGaitParamReceiver::GaitParamCallback(const unitree_legged_msgs::GaitParameter::ConstPtr &input)
+void qrGaitParamReceiver::GaitParamCallback(const unitree_legged_msgs::GaitParameter::ConstPtr &msg)
 {
-    this->gaitName = input->gaitName;
-    this->stanceDuration << input->stanceDuration[0],
-                            input->stanceDuration[1],
-                            input->stanceDuration[2],
-                            input->stanceDuration[3];
+    this->gaitName = msg->gaitName;
+
+    this->stanceDuration << msg->stanceDuration[0],
+                            msg->stanceDuration[1],
+                            msg->stanceDuration[2],
+                            msg->stanceDuration[3];
                             
-    this->dutyFactor << input->dutyFactor[0],
-                        input->dutyFactor[1],
-                        input->dutyFactor[2],
-                        input->dutyFactor[3];
+    this->dutyFactor << msg->dutyFactor[0],
+                        msg->dutyFactor[1],
+                        msg->dutyFactor[2],
+                        msg->dutyFactor[3];
 
-    this->initialLegState << input->initLegState[0],
-                            input->initLegState[1],
-                            input->initLegState[2],
-                            input->initLegState[3];
+    this->initialLegState << msg->initLegState[0],
+                            msg->initLegState[1],
+                            msg->initLegState[2],
+                            msg->initLegState[3];
 
-    this->initialLegPhase << input->initFullCycle[0],
-                            input->initFullCycle[1],
-                            input->initFullCycle[2],
-                            input->initFullCycle[3];
+    this->initialLegPhase << msg->initFullCycle[0],
+                            msg->initFullCycle[1],
+                            msg->initFullCycle[2],
+                            msg->initFullCycle[3];
 
-    this->contactDetectionPhaseThreshold = input->contactDetectionPhaseThreshold;
+    this->contactDetectionPhaseThreshold = msg->contactDetectionPhaseThreshold;
+    
     this->flag = true;
 }
 

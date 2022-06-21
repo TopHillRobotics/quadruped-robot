@@ -34,34 +34,43 @@
 #include <geometry_msgs/Pose.h>
 
 /**
- * @brief the qrVelocityParamReceiver class is used to get velocity param from topic for velocity update
+ * @brief A qrVelocityParamReceiver object recieves the velocity parameters from a ROS topic when a gait updates
  * 
  */
 class qrVelocityParamReceiver {
     public:
         /**
-         * @brief Construct a qrVelocityParamReceiver object using ros nodeHandle.
-         * @param nhIn ros nodeHandle
+         * @brief Construct a qrVelocityParamReceiver object using a givne ROS nodeHandle.
+         * @param nhIn specifies the ROS node to communicate
          */
         qrVelocityParamReceiver(ros::NodeHandle &nhIn);
 
+        /**
+         * @brief Deconstruct a qrVelocityParamReceiver object.
+         */
         ~qrVelocityParamReceiver() = default;
 
         /**
-        * @brief accept updated information in topic
-        * @param input the refences of gait msg
+        * @brief Receive the updated information from a ROS topic
+        * @param msg the gait msg from a ROS topic
         */
-        void VelocityParamCallback(const geometry_msgs::Twist::ConstPtr &input);
+        void VelocityParamCallback(const geometry_msgs::Twist::ConstPtr &msg);
 
         /**
-        * @brief get line velocity
+        * @brief Get the linear velocity.
         * @return Eigen::Matrix<float, 3, 1>: linearVel  
         */
         Eigen::Matrix<float, 3, 1> GetLinearVelocity();
 
+       /**
+        * @brief Get the angular velocity.
+        * @return Eigen::Matrix<float, 3, 1>: angularVel  
+        */
+        Eigen::Matrix<float, 3, 1> GetAngularVelocity();
+
         /**
-        * @brief get angular velocity
-        * @return float: angularVel  
+        * @brief Get the angular velocity.
+        * @return float: the z coordinate of the angularVel  
         */
         float GetAngularVelocity();
         
