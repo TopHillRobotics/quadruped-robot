@@ -3,7 +3,8 @@
 
 #include <vector>
 
-#include "qr_cpp_types.h"
+#include "qr_eigen_types.h"
+#include "qr_c_types.h"
 
 template<typename T>
 struct MatCSC {
