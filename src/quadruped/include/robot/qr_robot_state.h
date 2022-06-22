@@ -22,8 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef QR_ROBOTSTATE_H
-#define QR_ROBOTSTATE_H
+#ifndef QR_ROBOT_STATE_H
+#define QR_ROBOT_STATE_H
 
 #include <iostream>
 #include <array>
@@ -68,7 +68,7 @@ struct qrIMU
    * @brief calibrate the yaw when out [-PI, PI]
    * @return rpy with calibrated yaw
    */
-  Eigen::Matrix<float, 3, 1> calibratedYawRpy(){
+  Eigen::Matrix<float, 3, 1> CalibratedYawRpy(){
     Eigen::Matrix<float, 3, 1> rpyCalibrate = rpy;
     if(rpyCalibrate(2, 0) >= float(M_PI)){
       rpyCalibrate(2, 0) -= float(2 * M_PI);
@@ -122,4 +122,4 @@ struct qrRobotState
   std::array<qrMotor, 12> motors;
 };
 
-#endif // QR_ROBOTSTATE_H
+#endif // QR_ROBOT_STATE_H

@@ -67,21 +67,21 @@ void qrRobot::setCmd(const Eigen::MatrixXf &motorCmdValues, MotorMode mode)
 void qrRobot::setAngleCmd(const Eigen::Matrix<float, 12, 1> &qValues)
 {
   for (unsigned int i = 0; i < qrRobotConfig::numMotor; i++) {
-    cmds[i].setCmd(qValues[i], config->motorKps[i], 0.0f, config->motorKds[i], 0);
+    cmds[i].SetCmd(qValues[i], config->motorKps[i], 0.0f, config->motorKds[i], 0);
   }
 }
 
 void qrRobot::setTorqueCmd(const Eigen::Matrix<float, 12, 1> &tauValues)
 {
   for (unsigned int i = 0; i < qrRobotConfig::numMotor; i++) {
-    cmds[i].setCmd(0.0f, 0.0f, 0.0f, 0.0f, tauValues[i]);
+    cmds[i].SetCmd(0.0f, 0.0f, 0.0f, 0.0f, tauValues[i]);
   }
 }
 
 void qrRobot::setHybridCmd(const Eigen::Matrix<float, 5, 12> &cmdValues)
 {
   for (unsigned int i = 0; i < qrRobotConfig::numMotor; i++) {
-    cmds[i].setCmd(cmdValues(0, i), cmdValues(1, i), cmdValues(2, i), cmdValues(3, i), cmdValues(4, i));
+    cmds[i].SetCmd(cmdValues(0, i), cmdValues(1, i), cmdValues(2, i), cmdValues(3, i), cmdValues(4, i));
   }
 }
 

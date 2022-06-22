@@ -59,7 +59,7 @@ public:
    * @brief convert result to eigen vector
    * @return eigen vector
    */
-  Eigen::Matrix<float, 5, 1> toEigenVector();
+  Eigen::Matrix<float, 5, 1> ToEigenVector();
 
   /**
    * @brief setCmd
@@ -69,7 +69,7 @@ public:
    * @param Kd: velocity stiffness (unit: N.m/(rad/s) )
    * @param tau: torque (unit: N.m)
    */
-  void setCmd(float q, float Kp, float dq, float Kd, float tau);
+  void SetCmd(float q, float Kp, float dq, float Kd, float tau);
 private:
 
   /**

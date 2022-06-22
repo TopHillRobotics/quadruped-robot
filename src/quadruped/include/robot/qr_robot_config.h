@@ -59,7 +59,7 @@ public:
    * @brief load parameter of the robot
    * @param path: the path to the YAML config file
    */
-  void load(std::string path);
+  void Load(std::string path);
 
   /**
    * @brief calculate Jacobian of a leg with leg ID and angles
@@ -67,14 +67,14 @@ public:
    * @param legId: which leg to calculate
    * @return
    */
-  Eigen::Matrix<float, 3, 3> analyticalLegJacobian(Eigen::Matrix<float, 3, 1> &q, int legId);
+  Eigen::Matrix<float, 3, 3> AnalyticalLegJacobian(Eigen::Matrix<float, 3, 1> &q, int legId);
 
   /**
    * @brief calculate foot position in base frame of robot
    * @param q: joint angles
    * @return foot position in base frame
    */
-  Eigen::Matrix<float, 3, 4> jointAngles2FootPositionInBaseFrame(Eigen::Matrix<float, 12, 1> q);
+  Eigen::Matrix<float, 3, 4> JointAngles2FootPositionInBaseFrame(Eigen::Matrix<float, 12, 1> q);
 
 
   /**
@@ -170,14 +170,14 @@ private:
    * @brief load kps parameter from YAML file
    * @param node: node that load YAML file
    */
-  Eigen::Matrix<float, 12, 1> loadKps(YAML::Node &node);
+  Eigen::Matrix<float, 12, 1> LoadKps(YAML::Node &node);
 
 
   /**
    * @brief load kps parameter from YAML file
    * @param path: file path
    */
-  Eigen::Matrix<float, 12, 1> loadKds(YAML::Node &node);
+  Eigen::Matrix<float, 12, 1> LoadKds(YAML::Node &node);
 
   /**
    * @brief convert foot position in hip frame to joint angles
@@ -185,7 +185,7 @@ private:
    * @param hipSign: FR & RR: 1, FL & RL: -1
    * @return joint angles
    */
-  Eigen::Matrix<float, 3, 1> footPositionInHipFrame2JointAngle(Eigen::Matrix<float, 3, 1> &footPosition, int hipSign);
+  Eigen::Matrix<float, 3, 1> FootPositionInHipFrame2JointAngle(Eigen::Matrix<float, 3, 1> &footPosition, int hipSign);
 
   // TODO: discuss this. world frame?
   /**
@@ -194,7 +194,7 @@ private:
    * @param hipSign: FR & RR: 1, FL & RL: -1
    * @return
    */
-  Eigen::Matrix<float, 3, 1> jointAngles2FootPositionInHipFrame(Eigen::Matrix<float, 3, 1> q, int hipSign);
+  Eigen::Matrix<float, 3, 1> JointAngles2FootPositionInHipFrame(Eigen::Matrix<float, 3, 1> q, int hipSign);
 
   /**
    * @brief mapping of different control modes

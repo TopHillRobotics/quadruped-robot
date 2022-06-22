@@ -3,3 +3,4 @@ install/*
 devel/*
 *.user
 .vscode
+*.autosave

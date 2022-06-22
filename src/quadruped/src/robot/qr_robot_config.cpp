@@ -42,10 +42,10 @@ qrRobotConfig::qrRobotConfig()
 
 qrRobotConfig::qrRobotConfig(std::string path)
 {
-  load(path);
+  Load(path);
 }
 
-void qrRobotConfig::load(std::string path)
+void qrRobotConfig::Load(std::string path)
 {
   YAML::Node node = YAML::LoadFile(path);
   bodyMass    = node["body_mass"].as<float>();
@@ -53,14 +53,14 @@ void qrRobotConfig::load(std::string path)
   hipLength   = node["hip_length"].as<float>();
   upperLength = node["upper_length"].as<float>();
   lowerLength = node["lower_length"].as<float>();
-  motorKps    = loadKps(node);
-  motorKds    = loadKds(node);
+  motorKps    = LoadKps(node);
+  motorKds    = LoadKds(node);
 
   std::vector<float> bodyInertiaList = node["body_inertia"].as<std::vector<float >>();
   bodyInertia = Eigen::MatrixXf::Map(&bodyInertiaList[0], 3, 3);
 }
 
-Eigen::Matrix<float, 12, 1> qrRobotConfig::loadKps(YAML::Node &n)
+Eigen::Matrix<float, 12, 1> qrRobotConfig::LoadKps(YAML::Node &n)
 {
   float abadKp = n["abad_kp"].as<float>();
   float hipKp = n ["hip_kp"].as<float>();
@@ -71,7 +71,7 @@ Eigen::Matrix<float, 12, 1> qrRobotConfig::loadKps(YAML::Node &n)
   return kps;
 }
 
-Eigen::Matrix<float, 12, 1> qrRobotConfig::loadKds(YAML::Node &n)
+Eigen::Matrix<float, 12, 1> qrRobotConfig::LoadKds(YAML::Node &n)
 {
   float abadKd = n["abad_kp"].as<float>();
   float hipKd = n ["hip_kp"].as<float>();
@@ -82,7 +82,7 @@ Eigen::Matrix<float, 12, 1> qrRobotConfig::loadKds(YAML::Node &n)
   return kds;
 }
 
-Eigen::Matrix<float, 3, 3> qrRobotConfig::analyticalLegJacobian(Eigen::Matrix<float, 3, 1> &q, int legId)
+Eigen::Matrix<float, 3, 3> qrRobotConfig::AnalyticalLegJacobian(Eigen::Matrix<float, 3, 1> &q, int legId)
 {
   float signedHipLength = hipLength * float(pow(-1, legId + 1));
   Eigen::Matrix<float, 3, 1> t = q;
@@ -107,7 +107,7 @@ Eigen::Matrix<float, 3, 3> qrRobotConfig::analyticalLegJacobian(Eigen::Matrix<fl
   return J;
 }
 
-Eigen::Matrix<float, 3, 1> qrRobotConfig::footPositionInHipFrame2JointAngle(
+Eigen::Matrix<float, 3, 1> qrRobotConfig::FootPositionInHipFrame2JointAngle(
     Eigen::Matrix<float, 3, 1> &footPosition, int hipSign)
 {
   float signedHipLength = hipLength * hipSign;
@@ -130,16 +130,16 @@ Eigen::Matrix<float, 3, 1> qrRobotConfig::FootPosition2JointAngles(Eigen::Matrix
 {
   Eigen::Matrix<float, 3, 1> legHipOffset = hipOffset.col(legId);
   Eigen::Matrix<float, 3, 1> footPositionWithOffset = footPosition - legHipOffset;
-  return footPositionInHipFrame2JointAngle(footPositionWithOffset, int(powf(-1, legId + 1)));
+  return FootPositionInHipFrame2JointAngle(footPositionWithOffset, int(powf(-1, legId + 1)));
 }
 
 Eigen::Matrix<float, 3, 1> qrRobotConfig::FootVelocity2JointVelocity(
     Eigen::Matrix<float, 3, 1> q, Eigen::Matrix<float, 3, 1> v, int legId)
 {
-  return analyticalLegJacobian(q, legId).inverse() * v;
+  return AnalyticalLegJacobian(q, legId).inverse() * v;
 }
 
-Eigen::Matrix<float, 3, 1> qrRobotConfig::jointAngles2FootPositionInHipFrame(Eigen::Matrix<float, 3, 1> q, int hipSign)
+Eigen::Matrix<float, 3, 1> qrRobotConfig::JointAngles2FootPositionInHipFrame(Eigen::Matrix<float, 3, 1> q, int hipSign)
 {
   float thetaAB = q[0], thetaHip = q[1], thetaKnee = q[2];
   float signedHipLength = hipLength * hipSign;
@@ -158,7 +158,7 @@ Eigen::Matrix<float, 3, 1> qrRobotConfig::jointAngles2FootPositionInHipFrame(Eig
   return Eigen::Matrix<float, 3, 1>(offX, offY, offZ);
 }
 
-Eigen::Matrix<float, 3, 4> qrRobotConfig::jointAngles2FootPositionInBaseFrame(Eigen::Matrix<float, 12, 1> q)
+Eigen::Matrix<float, 3, 4> qrRobotConfig::JointAngles2FootPositionInBaseFrame(Eigen::Matrix<float, 12, 1> q)
 {
   Eigen::Map<Eigen::MatrixXf> reshapedFootAngles(q.data(), 3, 4);
 
@@ -166,7 +166,7 @@ Eigen::Matrix<float, 3, 4> qrRobotConfig::jointAngles2FootPositionInBaseFrame(Ei
   for (unsigned int legId = 0; legId < numLegs; legId++) {
       Eigen::Matrix<float, 3, 1> singleFootAngles;
       singleFootAngles << reshapedFootAngles.col(legId);
-      footPositions.col(legId) = jointAngles2FootPositionInHipFrame(
+      footPositions.col(legId) = JointAngles2FootPositionInHipFrame(
             singleFootAngles, int(powf(-1, legId + 1)));
   }
   return footPositions + hipOffset;

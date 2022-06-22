@@ -30,7 +30,7 @@
 
 #include "qr_robot_config.h"
 #include "qr_motor_cmd.h"
-#include "qr_robotState.h"
+#include "qr_robot_state.h"
 #include "common/qr_types.h"
 /**
  *  @brief a base class for all robot classes.It stores runtime status and data of the robot.
@@ -46,57 +46,64 @@ public:
 
   qrRobot(std::string path);
 
-  void loadConfig(std::string path);
   /**
    *  @brief Destructor of the class
    */
   virtual ~qrRobot();
 
+
+  /**
+   * @brief load config from path
+   * @param path to config file
+   * @see qrRobotConfig
+   */
+  void LoadConfig(std::string path);
+
   /**
    *  @brief Update the state of the robot.
    */
-  virtual void update();
+  virtual void Update();
 
   /**
    *  @brief Receive robot state and store information to robotState
    */
-  virtual void observation()=0;
+  virtual void Observation()=0;
 
   /**
    * @brief send command to motors according to vector qrMotorCmd. Depends on type of robot
    */
-  virtual void sendCmd()=0;
+  virtual void SendCmd()=0;
 
   /**
    * @brief get the motor command to be executed
    * @return result of motor command
    */
-  std::array<qrMotorCmd, 12> getCmd();
+  std::array<qrMotorCmd, 12> GetCmd();
 
   /**
    * @brief setCmd config the cmds
    * @param motorCmdValues: values needed to config cmds
    * @param mode: control mode the the motorCmdValues
    */
-  void setCmd(const Eigen::MatrixXf &motorCmdValues, MotorMode mode);
+  void SetCmd(const Eigen::MatrixXf &motorCmdValues, MotorMode mode);
 
   /**
    * @brief set target angle values to cmds
    * @param qValues: target value matrix
    */
-  void setAngleCmd(const Eigen::Matrix<float, 12, 1> &qValues);
+  void SetAngleCmd(const Eigen::Matrix<float, 12, 1> &qValues);
 
   /**
    * @brief set target torque values to cmds
    * @param cmdValues: target value matrix
    */
-  void setTorqueCmd(const Eigen::Matrix<float, 12, 1> &tauValues);
+  void SetTorqueCmd(const Eigen::Matrix<float, 12, 1> &tauValues);
 
   /**
    * @brief set target torque values to cmds
    * @param cmdValues: target value matrix
    */
-  void setHybridCmd(const Eigen::Matrix<float, 5, 12> &cmdValues);
+  void SetHybridCmd(const Eigen::Matrix<float, 5, 12> &cmdValues);
 
 protected:
 
