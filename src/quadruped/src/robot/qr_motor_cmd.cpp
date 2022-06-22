@@ -24,3 +24,19 @@
 
 #include "robot/qr_motor_cmd.h"
 
+
+Eigen::Matrix<float, 5, 1> qrMotorCmd::ToEigenVector()
+{
+  Eigen::Matrix<float, 5, 1> cmd;
+  cmd << q, Kp, dq, Kd, tau;
+  return cmd;
+}
+
+void qrMotorCmd::SetCmd(float q, float Kp, float dq, float Kd, float tau)
+{
+  this->q   = q;
+  this->Kp  = Kp;
+  this->dq  = dq;
+  this->Kd  = Kd;
+  this->tau = tau;
+}
