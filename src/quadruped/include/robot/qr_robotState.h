@@ -26,7 +26,16 @@
 #define QR_ROBOTSTATE_H
 
 #include <iostream>
+#include <array>
 #include <Eigen/Dense>
+
+
+enum Joint{
+  FRhip, FRthigh, FRcalf, \
+  FLhip, FLthigh, FLcalf, \
+  RRhip, RRthigh, RRcalf, \
+  RLhip, RLthigh, RLcalf
+};
 
 /**
  * @brief The qrIMU struct saves data from imu
@@ -44,6 +53,7 @@ struct qrIMU
    */
   Eigen::Matrix<float, 3, 1> q;
 
+  // TODO: discuss
   /**
    * @brief acceleration  (unit: m/(s2) )
    */
@@ -102,24 +112,14 @@ struct qrRobotState
   qrIMU imu;
 
   /**
-   * @brief motorFRhip: front right hip; motorFRthigh: front right thigh: motorFRcalf: front right calt
+   * @brief force on foot
    */
-  qrMotor motorFRhip, motorFRthigh, motorFRcalf;
+  Eigen::Matrix<float, 4, 1> footForce;
 
   /**
-   * @brief motorFRhip: front left hip; motorFRthigh: front left thigh: motorFRcalf: front left calt
+   * @brief states of 12 motors
    */
-  qrMotor motorFLhip, motorFLthigh, motorFLcalf;
-
-  /**
-   * @brief motorFRhip: rear right hip; motorFRthigh: rear right thigh: motorFRcalf: rear right calt
-   */
-  qrMotor motorRRhip, motorRRthigh, motorRRcalf;
-
-  /**
-   * @brief motorFRhip: rear left hip; motorFRthigh: rear left thigh: motorFRcalf: rear left calt
-   */
-  qrMotor motorRLhip, motorRLthigh, motorRLcalf;
+  std::array<qrMotor, 12> motors;
 };
 
 #endif // QR_ROBOTSTATE_H

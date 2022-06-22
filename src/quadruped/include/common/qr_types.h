@@ -4,3 +4,9 @@ enum LegState {
     EARLY_CONTACT,
     LOSE_CONTACT
 };
+
+enum MotorMode {
+    POSITION,
+    TORQUE,
+    HYBRID
+};

@@ -25,11 +25,16 @@
 #include "robot/qr_robot_config.h"
 #include "robot/qr_robot.h"
 
+std::unordered_map<int, std::string> qrRobotConfig::modeMap =
+  {{0, "velocity"}, {1, "position"}, {2, "walk"}};
+
+
 qrRobotConfig::qrRobotConfig()
 {
   bodyMass    = -1.0;
   bodyHeight  = -1.0;
   hipLength   = upperLength = lowerLength = -1.0;
+  hipOffset   = Eigen::Matrix<float, 3, 4>::Zero();
   bodyInertia = Eigen::Matrix<float, 3, 3>::Zero();
   motorKps    = Eigen::Matrix<float, 12, 1>::Zero();
   motorKds    = Eigen::Matrix<float, 12, 1>::Zero();
@@ -50,6 +55,7 @@ void qrRobotConfig::load(std::string path)
   lowerLength = node["lower_length"].as<float>();
   motorKps    = loadKps(node);
   motorKds    = loadKds(node);
+
   std::vector<float> bodyInertiaList = node["body_inertia"].as<std::vector<float >>();
   bodyInertia = Eigen::MatrixXf::Map(&bodyInertiaList[0], 3, 3);
 }
@@ -75,3 +81,94 @@ Eigen::Matrix<float, 12, 1> qrRobotConfig::loadKds(YAML::Node &n)
   kds << kd, kd, kd, kd;
   return kds;
 }
+
+Eigen::Matrix<float, 3, 3> qrRobotConfig::analyticalLegJacobian(Eigen::Matrix<float, 3, 1> &q, int legId)
+{
+  float signedHipLength = hipLength * float(pow(-1, legId + 1));
+  Eigen::Matrix<float, 3, 1> t = q;
+
+  float lEff = sqrtf(upperLength * upperLength + lowerLength * lowerLength +
+      2 * upperLength * lowerLength * cosf(t[2]));
+  float tEff = t[1] + t[2] / 2;
+
+  Eigen::Matrix3f J = Eigen::Matrix3f::Zero();
+  J(0, 0) = 0;
+  J(0, 1) = -lEff * cosf(tEff);
+  J(0, 2) = lowerLength * upperLength * sinf(t[2]) * sinf(tEff) / lEff - lEff * cosf(
+      tEff) / 2;
+  J(1, 0) = -signedHipLength * sinf(t[0]) + lEff * cosf(t(0)) * cosf(tEff);
+  J(1, 1) = -lEff * sinf(t(0)) * sinf(tEff);
+  J(1, 2) = -lowerLength * upperLength * sinf(t(0)) * sinf(t(2)) * cosf(
+      tEff) / lEff - lEff * sinf(t(0)) * sinf(tEff) / 2;
+  J(2, 0) = signedHipLength * cosf(t(0)) + lEff * sinf(t(0)) * cosf(tEff);
+  J(2, 1) = lEff * sinf(tEff) * cosf(t(0));
+  J(2, 2) = lowerLength * upperLength * sinf(t(2)) * cosf(t(0)) * cosf(
+      tEff) / lEff + lEff * sinf(tEff) * cosf(t(0)) / 2;
+  return J;
+}
+
+Eigen::Matrix<float, 3, 1> qrRobotConfig::footPositionInHipFrame2JointAngle(
+    Eigen::Matrix<float, 3, 1> &footPosition, int hipSign)
+{
+  float signedHipLength = hipLength * hipSign;
+  Eigen::Matrix<float, 3, 1> xyz(footPosition[0], footPosition[1], footPosition[2]);
+  Eigen::Matrix<float, 3, 1> legLength(signedHipLength, upperLength, lowerLength);
+
+  float thetaAB, thetaHip, thetaKnee;
+  thetaKnee = -acosf((xyz.squaredNorm() - legLength.squaredNorm()) / (2 * lowerLength * upperLength));
+  float l = sqrtf(upperLength * upperLength + lowerLength * lowerLength +
+      2 * upperLength * lowerLength * cosf(thetaKnee));
+  thetaHip = asinf(-xyz.x() / l) - thetaKnee / 2;
+  float c1 = signedHipLength * xyz.y() - l * cosf(thetaHip + thetaKnee / 2) * xyz.z();
+  float s1 = l * cosf(thetaHip + thetaKnee / 2) * xyz.y() + signedHipLength * xyz.z();
+  thetaAB = atan2f(s1, c1);
+
+  return Eigen::Matrix<float, 3, 1>(thetaAB, thetaHip, thetaKnee);
+}
+
+Eigen::Matrix<float, 3, 1> qrRobotConfig::FootPosition2JointAngles(Eigen::Matrix<float, 3, 1> footPosition, int legId)
+{
+  Eigen::Matrix<float, 3, 1> legHipOffset = hipOffset.col(legId);
+  Eigen::Matrix<float, 3, 1> footPositionWithOffset = footPosition - legHipOffset;
+  return footPositionInHipFrame2JointAngle(footPositionWithOffset, int(powf(-1, legId + 1)));
+}
+
+Eigen::Matrix<float, 3, 1> qrRobotConfig::FootVelocity2JointVelocity(
+    Eigen::Matrix<float, 3, 1> q, Eigen::Matrix<float, 3, 1> v, int legId)
+{
+  return analyticalLegJacobian(q, legId).inverse() * v;
+}
+
+Eigen::Matrix<float, 3, 1> qrRobotConfig::jointAngles2FootPositionInHipFrame(Eigen::Matrix<float, 3, 1> q, int hipSign)
+{
+  float thetaAB = q[0], thetaHip = q[1], thetaKnee = q[2];
+  float signedHipLength = hipLength * hipSign;
+  float legDistance = sqrtf(upperLength * upperLength + lowerLength * lowerLength +
+      2 * upperLength * lowerLength * cosf(thetaKnee));
+  float effSwing = thetaHip + thetaKnee / 2;
+  float offXHip, offZHip, offYHip, offX, offY, offZ;
+  offXHip = -legDistance * sinf(effSwing);
+  offZHip = -legDistance * cosf(effSwing);
+  offYHip = signedHipLength;
+
+  offX = offXHip;
+  offY = cosf(thetaAB) * offYHip - sinf(thetaAB) * offZHip;
+  offZ = sinf(thetaAB) * offYHip + cosf(thetaAB) * offZHip;
+
+  return Eigen::Matrix<float, 3, 1>(offX, offY, offZ);
+}
+
+Eigen::Matrix<float, 3, 4> qrRobotConfig::jointAngles2FootPositionInBaseFrame(Eigen::Matrix<float, 12, 1> q)
+{
+  Eigen::Map<Eigen::MatrixXf> reshapedFootAngles(q.data(), 3, 4);
+
+  Eigen::MatrixXf footPositions = Eigen::Matrix<float, 3, 4>::Zero();
+  for (unsigned int legId = 0; legId < numLegs; legId++) {
+      Eigen::Matrix<float, 3, 1> singleFootAngles;
+      singleFootAngles << reshapedFootAngles.col(legId);
+      footPositions.col(legId) = jointAngles2FootPositionInHipFrame(
+            singleFootAngles, int(powf(-1, legId + 1)));
+  }
+  return footPositions + hipOffset;
+}
+
