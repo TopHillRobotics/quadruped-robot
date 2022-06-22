@@ -35,72 +35,77 @@
 class qrSwingLegController{
 public:
     /**
-     * @brief Construct function of qrSwingLegController
-     * @param robot The qrRobot object pointer.
-     * @param gaitGenerator The qrGaitGenerator object pointer.
-     * @param stateEstimator The qrRobotEstimator object pointer.
-     * @param groundEstimator The qrGroundSurfaceEstimator object pointer.
-     * @param FootholdPlanner The qrFootholdPlanner object pointer.
-     * @param desiredSpeed  Desired robot's body height. 
-     * @param desiredTwistingSpeed Desired speed of twist command.
-     * @param desiredHeight Desired robot's body height.
+     * @brief Construct a qrSwingLegController object using the given parameters.
+     * @param robot The robot to which the controller is associated.
+     * @param gaitGenerator The gait generator 
+     * @param stateEstimator The gait estimator
+     * @param groundEstimator The ground estimator
+     * @param FootholdPlanner The foothold planner
+     * @param desiredLinearVelocity The desired linear velocity
+     * @param desiredTwistingVelocity The desired angular velocity
+     * @param desiredHeight The desired body height of the robot.
      * @param footClearance 
-     * @param configPath File path of swing_leg_controller.yaml.
+     * @param configPath The config file path
      */
     qrSwingLegController(qrRobot *robot,
                          qrGaitGenerator *gaitGenerator,
                          qrRobotEstimator *stateEstimator,
                          qrGroundSurfaceEstimator *groundEstimator,
                          qrFootholdPlanner *footholdPlanner,
-                         Eigen::Matrix<float, 3, 1> desiredSpeed,
-                         float desiredTwistingSpeed,
+                         Eigen::Matrix<float, 3, 1> desiredLinearVelocity,
+                         float desiredTwistingVelocity,
                          float desiredHeight,
                          float footClearance,
                          std::string configPath);
 
+
+    /**
+     * @brief Deconstruct a qrSwingLegController object.
+     */
     virtual ~qrSwingLegController();
 
     /**
-     * @brief Reset the parameters of the qrSwingLegController.
+     * @brief Reset the controller parameters.
      */
     virtual void Reset();
 
     /**
-     * @brief Update the parameters of the qrSwingLegController.
+     * @brief Update the controller parameters.
      */
     virtual void Update();
 
     /**
-     * @brief Quadratic interpolation function, used to generate polygon curve.
-     * @param phase
-     * @param start
-     * @param mid
-     * @param end
-     * @return a float value with phase
+     * @brief Generate a quadratic curve using three given points: start, mid and end.
+     * f = at^2 + bt + c
+     * @param phase specifies the given phase to compute the quadratic value.
+     * @param start specifies the start point at t=0.
+     * @param mid specifies some middle point between start and end. 
+     * @param end specifies the end point at t=1. 
+     * @return The quadratic value for a given phase.
      */
-    float GenParabola(float phase, float start, float mid, float end);
+    float GenerateParabola(float phase, float start, float mid, float end);
 
     /**
      * @brief Generating the trajectory of the swing leg
-     * @param inputPhase
-     * @param startPos
-     * @param endPos
+     * @param phase specifies the given phase to compute the quadratic value.
+     * @param startPos specifies the start point at t=0.
+     * @param endPos specifies the end point at t=1.
      * @return foot position like (x,y,z)
      */
-    Eigen::Matrix<float, 3, 1> GenSwingFootTrajectory(float inputPhase,
+    Eigen::Matrix<float, 3, 1> GenerateSwingFootTrajectory(float phase,
                                                         Eigen::Matrix<float, 3, 1> startPos,
                                                         Eigen::Matrix<float, 3, 1> endPos);
 
-    /** @brief Compute all motors' commands via controllers.
+    /** @brief Compute all motors' commands using this controller.
      *  @return tuple<map, Matrix<3,4>> : 
-     *          return control ouputs (e.g. positions/torques) for all (12) motors.
+     *          return control ouputs (e.g. positions/torques) for all 12 motors.
      */
     virtual std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
 
 private:
     
     /**
-     * @brief The robot object pointer.
+     * @brief the robot object to which the controller is associated.
      */
     qrRobot *robot;
 
@@ -108,21 +113,27 @@ private:
      * @brief Gait Generator object pointer.
      */
     qrGaitGenerator *gaitGenerator;
-
+    
     /**
      * @brief Robot estimator pointre.
      */
+    
     qrRobotEstimator *robotEstimator;
-
     /**
      * @brief Ground estimator pointer.
      */
+    
     qrGroundSurfaceEstimator *groundEstimator;
-
     /**
      * @brief Robot's foothold planner. Get desired COM pose when in walk locomotion.
      */
+   
     qrFootholdPlanner *footholdPlanner;
+
+    /**
+     * @brief The state of each leg.
+     */
+    qrEigen::Matrix<int, 4, 1> lastLegState;
 
     /**
      * @brief Desired robot's body height. 
@@ -130,33 +141,33 @@ private:
     Eigen::Matrix<float, 3, 1> desiredHeight;
 
     /**
-     * @brief Desired speed. This param usually appears in velocity mode.
+     * @brief The desired linear velocity. This memeber variable appears in velocity mode.
      */
-    Eigen::Matrix<float, 3, 1> desiredSpeed;
+    Eigen::Matrix<float, 3, 1> desiredLinearVelocity;
 
     /**
-     * @brief Desired speed of twist command. This param usually appears in velocity mode.
+     * @brief The desired angular velocity. This memeber variable appears in velocity mode.
      */
-    float desiredTwistingSpeed;
+    float desiredTwistingVelocity;
 
     /**
-     * @brief The joint's angles and motor velocities data structure. The first data is joint angle,
-     *        the second data is motor velocity and the third data is the index of leg.
+     * @brief The joint's angles and motor velocities data structure. The first is joint angle,
+     *        the second is motor velocity and the third is the leg index.
      */ 
     std::map<int, std::tuple<float, float, int>> swingJointAnglesVelocities;
 
     /**
-     * @brief Foot positions in base frame when switch leg state.
+     * @brief Foot positions in the base frame when the leg state changes.
      */
     Eigen::Matrix<float, 3, 4> phaseSwitchFootLocalPos;
 
     /**
-     * @brief Foot positions in world frame when switch leg state.
+     * @brief Foot positions in the world frame when the leg state changes.
      */
     Eigen::Matrix<float, 3, 4> phaseSwitchFootGlobalPos;
 
     /**
-     * @brief Footholds in world frame.
+     * @brief the footholds in the world frame.
      */
     Eigen::Matrix<float, 3, 4> footHoldInWorldFrame;
 
@@ -166,17 +177,17 @@ private:
     qrSwingFootTrajectory swingFootTrajectories[4];
 
     /**
-     * @brief File path of swing_leg_controller.yaml.
+     * @brief The config file path of swing_leg_controller.yaml.
      */
     std::string configFilepath;
 
     /**
-     * @brief Init pose in position mode.
+     * @brief the initial foot pose in position mode.
      */
     std::vector<std::vector<float>> footInitPose;
     
     /**
-     * @brief The time when call Reset().
+     * @brief The time when executing Reset().
      */
     float resetTime;
     

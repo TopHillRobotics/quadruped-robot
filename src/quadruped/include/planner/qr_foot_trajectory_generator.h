@@ -90,12 +90,12 @@ struct qrSplineInfo {
 
     /**
      * @brief The type of spline.
-     * e.g. "cubicPolygon", "BSpline"
+     * e.g. "cubicPolygon", "BSpline","Normal"
      */
     std::string splineTye = "cubicPolygon";
 
     /**
-     * @brief 
+     * @brief params of Bspline
      */
     std::vector<glm::vec3> controlPoints;
 
@@ -105,6 +105,9 @@ struct qrSplineInfo {
     std::vector<float> knots;
 };
 
+/**
+ * @brief qrFootSplinePatternGenerator is a base class of foot spline generator
+ */
 class qrFootSplinePatternGenerator {
 public:
 
@@ -152,12 +155,12 @@ protected:
     /** 
      * @brief Initial time of the swing trajectory 
      */
-    float initial_time_;
+    float initial_time;
 
     /** 
      * @brief Duration of the swing trajectory 
      */
-    float duration_;
+    float duration;
 
     /** 
      * @brief Duration of the swing trajectory 
@@ -183,9 +186,8 @@ class qrFootBSplinePatternGenerator : public qrFootSplinePatternGenerator {
 public:
     /** 
      * @brief Constructor function of qrFootBSplinePatternGenerator.
-     * @param SplineInfo SplineInfo object.
      */
-    qrFootBSplinePatternGenerator(SplineInfo &splineInfo);
+    qrFootBSplinePatternGenerator();
 
     /** 
      * @brief Destructor function.
@@ -231,6 +233,9 @@ public:
                               const Eigen::Vector3f &target_pos);
 
 private:
+    /** 
+     * @brief curve information
+     */
     tinynurbs::Curve3f crv;
 };
 
@@ -253,7 +258,7 @@ public:
      * @param end
      * @return a float value with phase
      */
-    float qrSwingLegController::GenParabola(float phase, float start, float mid, float end);
+    float GenParabola(float phase, float start, float mid, float end);
 
     /**
      * @brief Generating the trajectory of the swing leg
@@ -262,9 +267,9 @@ public:
      * @param endPos
      * @return foot position like (x,y,z)
      */
-    Matrix<float, 3, 1> qrSwingLegController::GenerateTrajectory(float inputPhase,
-                                                                 Matrix<float, 3, 1> startPos,
-                                                                 Matrix<float, 3, 1> endPos);
+    Matrix<float, 3, 1> GenerateTrajectory(float inputPhase,
+                                           Matrix<float, 3, 1> startPos,
+                                           Matrix<float, 3, 1> endPos);
 };
 
 class qrSwingFootTrajectory {

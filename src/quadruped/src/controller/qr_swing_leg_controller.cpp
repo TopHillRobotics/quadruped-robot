@@ -24,24 +24,24 @@
 
 #include "controller/qr_swing_leg_controller.h"
 
-qrSwingLegController::
-    qrSwingLegController(qrRobot *robot,
-                         qrOpenloopGaitGenerator *gaitGenerator,
-                         qrRobotEstimator *stateEstimator,
-                         qrGroundSurfaceEstimator *groundEstimator,
-                         qrFootholdPlanner *footholdPlanner,
-                         Eigen::Matrix<float, 3, 1> desiredSpeed,
-                         float desiredTwistingSpeed,
-                         float desiredHeight,
-                         float footClearance,
-                         std::string configPath):robot(robot),
-                                                 gaitGenerator(gaitGenerator),
-                                                 robotEstimator(stateEstimator),
-                                                 groundEstimator(groundEstimator),
-                                                 footholdPlanner(footholdPlanner),
-                                                 desiredSpeed(desiredSpeed),
-                                                 desiredTwistingSpeed(desiredTwistingSpeed),
-                                                 configFilepath(configPath)
+qrSwingLegController::qrSwingLegController(qrRobot *robot,
+                                           qrOpenloopGaitGenerator *gaitGenerator,
+                                           qrRobotEstimator *stateEstimator,
+                                           qrGroundSurfaceEstimator *groundEstimator,
+                                           qrFootholdPlanner *footholdPlanner,
+                                           Eigen::Matrix<float, 3, 1> desiredSpeed,
+                                           float desiredTwistingSpeed,
+                                           float desiredHeight,
+                                           float footClearance,
+                                           std::string configPath)
+    : robot(robot),
+      gaitGenerator(gaitGenerator),
+      robotEstimator(stateEstimator),
+      groundEstimator(groundEstimator),
+      footholdPlanner(footholdPlanner),
+      desiredSpeed(desiredSpeed),
+      desiredTwistingSpeed(desiredTwistingSpeed),
+      configFilepath(configPath)
 {
     this->desiredHeight = Matrix<float, 3, 1>(0, 0, desiredHeight - footClearance);
     YAML::Node swingLegConfig = YAML::LoadFile(configPath);
@@ -69,7 +69,9 @@ qrSwingLegController::Reset()
             std::cout << "[SwingLegController Reset] phaseSwitchFootGlobalPos: \n" << this->phaseSwitchFootGlobalPos
                     << std::endl;
             std::cout << "[SwingLegController Reset] footHoldInWorldFrame: \n" << this->footHoldInWorldFrame << std::endl;
-        } break;
+        } 
+        break;
+
         case LocomotionMode::WALK_LOCOMOTION: {
             this->footHoldInWorldFrame = this->phaseSwitchFootGlobalPos; //todo reset by default foot pose setting
             std::cout << "[SwingLegController Reset] phaseSwitchFootLocalPos: \n" << this->phaseSwitchFootLocalPos
@@ -77,9 +79,12 @@ qrSwingLegController::Reset()
             std::cout << "[SwingLegController Reset] phaseSwitchFootGlobalPos: \n" << this->phaseSwitchFootGlobalPos
                     << std::endl;
             std::cout << "[SwingLegController Reset] footHoldInWorldFrame: \n" << this->footHoldInWorldFrame << std::endl;
-        } break;
+        } 
+        break;
+
         default: break;  
     }
+
     resetTime = this->robot->GetTimeSinceReset();
     this->gaitGenerator->Reset(0.f);
     this->robotEstimator->Reset(0.f);
@@ -169,7 +174,7 @@ qrSwingLegController::Update()
     }
 }
 
-float qrSwingLegController::GenParabola(float phase, float start, float mid, float end)
+float qrSwingLegController::GenerateParabola(float phase, float start, float mid, float end)
 {
     float mid_phase = 0.5;
     float deltaOne, deltaTwo, deltaThree, coefa, coefb, coefc;
@@ -182,7 +187,7 @@ float qrSwingLegController::GenParabola(float phase, float start, float mid, flo
     return coefa * pow(phase, 2) + coefb * phase + coefc;
 }
 
-Matrix<float, 3, 1> qrSwingLegController::GenSwingFootTrajectory(float inputPhase,
+Matrix<float, 3, 1> qrSwingLegController::GenerateSwingFootTrajectory(float inputPhase,
                                                                  Matrix<float, 3, 1> startPos,
                                                                  Matrix<float, 3, 1> endPos)
 {
@@ -197,7 +202,7 @@ Matrix<float, 3, 1> qrSwingLegController::GenSwingFootTrajectory(float inputPhas
     y = (1 - phase) * startPos(1, 0) + phase * endPos(1, 0);
     maxClearance = 0.1;
     mid = max(endPos(2, 0), startPos(2, 0)) + maxClearance;
-    z = GenParabola(phase, startPos(2, 0), mid, endPos(2, 0));
+    z = GenerateParabola(phase, startPos(2, 0), mid, endPos(2, 0));
     return Matrix<float, 3, 1>(x, y, z);
 }
 
