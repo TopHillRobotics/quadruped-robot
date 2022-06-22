@@ -36,16 +36,16 @@ class qrSwingLegController{
 public:
     /**
      * @brief Construct a qrSwingLegController object using the given parameters.
-     * @param robot the robot to which the controller is associated.
-     * @param gaitGenerator the gait generator 
-     * @param stateEstimator the gait estimator
-     * @param groundEstimator the ground estimator
-     * @param FootholdPlanner
-     * @param desiredLinearVelocity the desired linear velocity
-     * @param desiredTwistingVelocity the desired angular velocity
-     * @param desiredHeight
-     * @param footClearance
-     * @param configPath the config file path
+     * @param robot The robot to which the controller is associated.
+     * @param gaitGenerator The gait generator 
+     * @param stateEstimator The gait estimator
+     * @param groundEstimator The ground estimator
+     * @param FootholdPlanner The foothold planner
+     * @param desiredLinearVelocity The desired linear velocity
+     * @param desiredTwistingVelocity The desired angular velocity
+     * @param desiredHeight The desired body height of the robot.
+     * @param footClearance 
+     * @param configPath The config file path
      */
     qrSwingLegController(qrRobot *robot,
                          qrGaitGenerator *gaitGenerator,
@@ -57,7 +57,6 @@ public:
                          float desiredHeight,
                          float footClearance,
                          std::string configPath);
-
 
     /**
      * @brief Deconstruct a qrSwingLegController object.
@@ -94,9 +93,9 @@ public:
      * @return the desired foot position (x,y,z) at the current swing phase. 
      */
     Eigen::Matrix<float, 3, 1> GenerateSwingFootTrajectory(float phase,
-                                                        Eigen::Matrix<float, 3, 1> startPos,
-                                                        Eigen::Matrix<float, 3, 1> endPos,
-                                                        float clearance=0.1);
+                                                           Eigen::Matrix<float, 3, 1> startPos,
+                                                           Eigen::Matrix<float, 3, 1> endPos,
+                                                           float clearance=0.1);
 
     /** @brief Compute all motors' commands using this controller.
      *  @return tuple<map, Matrix<3,4>> : 

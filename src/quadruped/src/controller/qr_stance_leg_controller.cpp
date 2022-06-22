@@ -35,17 +35,18 @@ qrStanceLegController::
                          Eigen::Matrix<float, 3, 1> desired_speed,
                          float desiredTwistingSpeed,
                          float desiredBodyHeight,
-                         std::string configFilepath):robot(robot),
-                                                     gaitGenerator(gaitGenerator),
-                                                     robotEstimator(robotVelocityEstimator),
-                                                     groundEstimator(groundEstimator),
-                                                     comPlanner(comPlanner),
-                                                     posePlanner(posePlanner),
-                                                     footholdPlanner(footholdPlanner),
-                                                     desiredSpeed(desired_speed),
-                                                     desiredTwistingSpeed(desiredTwistingSpeed),
-                                                     desiredBodyHeight(desiredBodyHeight),
-                                                     configFilepath(configFilepath)
+                         std::string configFilepath)
+    : robot(robot),
+      gaitGenerator(gaitGenerator),
+      robotEstimator(robotVelocityEstimator),
+      groundEstimator(groundEstimator),
+      comPlanner(comPlanner),
+      posePlanner(posePlanner),
+      footholdPlanner(footholdPlanner),
+      desiredSpeed(desired_speed),
+      desiredTwistingSpeed(desiredTwistingSpeed),
+      desiredBodyHeight(desiredBodyHeight),
+      configFilepath(configFilepath)
 {
     this->Reset(0.f);
 }

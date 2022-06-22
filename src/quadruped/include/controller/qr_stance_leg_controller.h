@@ -92,6 +92,7 @@ public:
      * @param moveBasePhase 
      */
     void UpdateFRatio(Vec4<bool> &contacts, int &N, float &moveBasePhase);
+
     /** @brief Compute all motors' commands via controllers.
      *  @return tuple<map, Matrix<3,4>> : 
      *          return control ouputs (e.g. positions/torques) for all (12) motors.
@@ -99,87 +100,108 @@ public:
     virtual std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
 
 private:
+
     /**
      * @brief The robot object pointer.
      */
     qrRobot *robot;
+
     /**
      * @brief Gait Generator object pointer.
      */
     qrOpenloopGaitGenerator *gaitGenerator;
+
     /**
      * @brief Robot estimator pointre. Get the estimated velocity.
      */
     qrRobotEstimator *robotEstimator;
+
     /**
      * @brief Ground estimator pointer.
      */
     qrGroundSurfaceEstimator *groundEstimator;
+
     /**
      * @brief The center of mass adjuster pointer. Get the position of COM in base frame
      *        in position locomotion.
      */
     qrComPlanner *comPlanner;
+
     /**
      * @brief Robot pose planner obejct pointer. Get the intermediate base pose.
      */
-    qrPosePlanner *posePlanner;                          
+    qrPosePlanner *posePlanner;
+
     /**
      * @brief Robot's foothold planner. Get desired COM pose when in walk locomotion.
      */
     qrFootholdPlanner *footholdPlanner;
+
     /**
      * @brief Desired speed of the robot in walk or position locomotion.
      */
     Eigen::Matrix<float, 3, 1> desiredSpeed = {0., 0., 0.};
+
     /**
      * @brief The speed message of twist command given by gamepad.
      */
     float desiredTwistingSpeed = 0.;
+
     /**
      * @brief Desired robot's body height. Overwrite in the class constructor by robot->bodyHeight
      */
     float desiredBodyHeight = 0.45;
+
     /**
      * @brief File path of stance_leg_controller.yaml.
      */
     std::string configFilepath;
+
     /**
      * @brief The parameter KP in stance_leg_controller.yaml.
      */
     Eigen::Matrix<float, 6, 1> KP;
+
     /**
      * @brief The parameter KD in stance_leg_controller.yaml.
      */
     Eigen::Matrix<float, 6, 1> KD;
+
     /**
      * @brief The parameter maxDdq in stance_leg_controller.yaml.
      */
     Eigen::Matrix<float, 6, 1> maxDdq;
+
     /**
      * @brief The parameter minDdq in stance_leg_controller.yaml.
      */
     Eigen::Matrix<float, 6, 1> minDdq;
+
     /**
      * @brief The parameter accWeight in stance_leg_controller.yaml.
      */
     Eigen::Matrix<float, 6, 1> accWeight;
+
     /**
      * @brief The minimum ratio.
      */
     Vec4<float> fMinRatio;
+
     /**
      * @brief The maximum ratio.
      */
     Vec4<float> fMaxRatio;
+
     /**
      * @brief Current time.
      */
     float currentTime;
+
     /**
      * @brief The time when running Reset().
      */
     float resetTime;
+    
     /**
      * @brief The time after running Reset().
      */

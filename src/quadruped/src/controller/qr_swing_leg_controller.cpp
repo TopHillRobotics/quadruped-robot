@@ -25,22 +25,23 @@
 #include "controller/qr_swing_leg_controller.h"
 
 qrSwingLegController::qrSwingLegController(qrRobot *robot,
-                         qrOpenloopGaitGenerator *gaitGenerator,
-                         qrRobotEstimator *stateEstimator,
-                         qrGroundSurfaceEstimator *groundEstimator,
-                         qrFootholdPlanner *footholdPlanner,
-                         Eigen::Matrix<float, 3, 1> desiredSpeed,
-                         float desiredTwistingSpeed,
-                         float desiredHeight,
-                         float footClearance,
-                         std::string configPath):robot(robot),
-                                                 gaitGenerator(gaitGenerator),
-                                                 robotEstimator(stateEstimator),
-                                                 groundEstimator(groundEstimator),
-                                                 footholdPlanner(footholdPlanner),
-                                                 desiredSpeed(desiredSpeed),
-                                                 desiredTwistingSpeed(desiredTwistingSpeed),
-                                                 configFilepath(configPath)
+                                           qrOpenloopGaitGenerator *gaitGenerator,
+                                           qrRobotEstimator *stateEstimator,
+                                           qrGroundSurfaceEstimator *groundEstimator,
+                                           qrFootholdPlanner *footholdPlanner,
+                                           Eigen::Matrix<float, 3, 1> desiredSpeed,
+                                           float desiredTwistingSpeed,
+                                           float desiredHeight,
+                                           float footClearance,
+                                           std::string configPath)
+    : robot(robot),
+      gaitGenerator(gaitGenerator),
+      robotEstimator(stateEstimator),
+      groundEstimator(groundEstimator),
+      footholdPlanner(footholdPlanner),
+      desiredSpeed(desiredSpeed),
+      desiredTwistingSpeed(desiredTwistingSpeed),
+      configFilepath(configPath)
 {
     this->desiredHeight = Matrix<float, 3, 1>(0, 0, desiredHeight - footClearance);
     YAML::Node swingLegConfig = YAML::LoadFile(configPath);
@@ -144,9 +145,9 @@ qrSwingLegController::Update()
                         // swing in base frame
                         footSourcePosition = this->phaseSwitchFootLocalPos.col(legId);
                         footTargetPosition = footSourcePosition + constOffset;
+                        // TODO :: question
                         if (legId<=1) {
                             footTargetPosition[0] = 0.30f;
-                            
                         }
                         else {
                             footTargetPosition[0] = -0.17f;
@@ -194,13 +195,12 @@ float qrSwingLegController::GenerateParabola(float x, float y0, float ym, float 
     c = y0;
     
     return a * x * x + b * x + c;
-
 }
 
 Matrix<float, 3, 1> qrSwingLegController::GenerateSwingFootTrajectory(float inputPhase,
-                                                                 Matrix<float, 3, 1> startPos,
-                                                                 Matrix<float, 3, 1> endPos,
-                                                                 float clearance)
+                                                                      Matrix<float, 3, 1> startPos,
+                                                                      Matrix<float, 3, 1> endPos,
+                                                                      float clearance)
 {
     // refer to google's motion_imitation code (Python)
     // For the first half of the swing cycle, the swing leg moves faster and finishes 
@@ -223,7 +223,6 @@ Matrix<float, 3, 1> qrSwingLegController::GenerateSwingFootTrajectory(float inpu
     } else {
         phase = 0.8 + (inputPhase - 0.5) * 0.4;
     }
-
     
     clearance = 0.1;
     
@@ -300,12 +299,12 @@ std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrSwingLegCont
                     swingKp.cwiseProduct(targetHipHorizontalVelocity - hipHorizontalVelocity))
                         + Matrix<float, 3, 1>(hipOffset[0], hipOffset[1], 0)
                         - robotics::math::TransformVecByQuat(robotics::math::quatInverse(robot->baseOrientation), desiredHeight);
-                footPositionInBaseFrame = GenSwingFootTrajectory(gaitGenerator->normalizedPhase[legId],
+                footPositionInBaseFrame = GenerateSwingFootTrajectory(gaitGenerator->normalizedPhase[legId],
                                                                  phaseSwitchFootLocalPos.col(legId),
                                                                  footTargetPosition);
             } break;
             case LocomotionMode::POSITION_LOCOMOTION: {
-                footPositionInWorldFrame = GenSwingFootTrajectory(gaitGenerator->normalizedPhase[legId],
+                footPositionInWorldFrame = GenerateSwingFootTrajectory(gaitGenerator->normalizedPhase[legId],
                                                                   phaseSwitchFootGlobalPos.col(legId),
                                                                   footHoldInWorldFrame.col(legId)); // interpolation in world frame
                 footPositionInBaseFrame = robotics::math::RigidTransform(robot->basePosition,
