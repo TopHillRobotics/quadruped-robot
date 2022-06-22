@@ -25,12 +25,13 @@
 #ifndef QR_ROBOT_H
 #define QR_ROBOT_H
 
-#include <vector>
+#include <array>
 #include <unordered_map>
+
 #include "qr_robot_config.h"
 #include "qr_motor_cmd.h"
-#include "qr_robotState.h"
-
+#include "qr_robot_state.h"
+#include "common/qr_types.h"
 /**
  *  @brief a base class for all robot classes.It stores runtime status and data of the robot.
  */
@@ -45,32 +46,64 @@ public:
 
   qrRobot(std::string path);
 
-  void loadConfig(std::string path);
   /**
    *  @brief Destructor of the class
    */
   virtual ~qrRobot();
 
+
   /**
-   *  @brief Receive robot state and store information to robotState
+   * @brief load config from path
+   * @param path to config file
+   * @see qrRobotConfig
    */
-  virtual void observation()=0;
+  void LoadConfig(std::string path);
 
   /**
    *  @brief Update the state of the robot.
    */
-  virtual void update();
+  virtual void Update();
+
+  /**
+   *  @brief Receive robot state and store information to robotState
+   */
+  virtual void Observation()=0;
 
   /**
    * @brief send command to motors according to vector qrMotorCmd. Depends on type of robot
    */
-  virtual void sendCmd()=0;
+  virtual void SendCmd()=0;
 
   /**
    * @brief get the motor command to be executed
    * @return result of motor command
    */
-  std::vector<qrMotorCmd> getCmd();
+  std::array<qrMotorCmd, 12> GetCmd();
+
+  /**
+   * @brief setCmd config the cmds
+   * @param motorCmdValues: values needed to config cmds
+   * @param mode: control mode the the motorCmdValues
+   */
+  void SetCmd(const Eigen::MatrixXf &motorCmdValues, MotorMode mode);
+
+  /**
+   * @brief set target angle values to cmds
+   * @param qValues: target value matrix
+   */
+  void SetAngleCmd(const Eigen::Matrix<float, 12, 1> &qValues);
+
+  /**
+   * @brief set target torque values to cmds
+   * @param cmdValues: target value matrix
+   */
+  void SetTorqueCmd(const Eigen::Matrix<float, 12, 1> &tauValues);
+
+  /**
+   * @brief set target torque values to cmds
+   * @param cmdValues: target value matrix
+   */
+  void SetHybridCmd(const Eigen::Matrix<float, 5, 12> &cmdValues);
 
 protected:
 
@@ -82,27 +115,12 @@ protected:
   /**
    * @brief stores the command that will execute at each motor
    */
-  std::vector<qrMotorCmd> *cmds;
+  std::array<qrMotorCmd, 12> cmds;
 
   /**
    * @brief robot state from observation
    */
   qrRobotState robotState;
-
-  /**
-   * @brief number of motors
-   */
-  static const int numMotor  = 12;
-
-  /**
-   * @brief number of legs
-   */
-  static const int numLegs   = 4;
-
-  /**
-   * @brief DOF of each leg
-   */
-  static const int dofPerLeg = 3;
 
   /**
    * @brief robot base position in world frame
@@ -115,15 +133,15 @@ protected:
   Eigen::Matrix<float, 4, 1> orientation;
 
   /**
-   * @brief robot rpy in world frame
+   * @brief robot calibrated rpy in world frame
    */
-  Eigen::Matrix<float, 3, 1> rpy; //yaw calibrated robot rpy in world frame
+  Eigen::Matrix<float, 3, 1> rpy;
 
   // TODO: check what it is
   /**
-   * @brief change rate of rpy
+   * @brief acceleration of robot
    */
-  Eigen::Matrix<float, 3, 1> drpy; //robot rpy rate in base frame
+  Eigen::Matrix<float, 3, 1> drpy;
 
   // TODO: check what it is
   /**
@@ -146,10 +164,6 @@ protected:
    */
   Eigen::Matrix<bool, 4, 1> footContact;
 
-  /**
-   * @brief mapping of different control modes
-   */
-  std::unordered_map<int, std::string> modeMap = {{0, "velocity"}, {1, "position"}, {2, "walk"}};
 };
 
 #endif // QR_ROBOT_H

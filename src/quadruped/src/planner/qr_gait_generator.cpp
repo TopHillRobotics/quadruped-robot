@@ -34,6 +34,7 @@ namespace Quadruped {
                                         float contactDetectionPhaseThreshold)
         {
             // this->robot = robot;
+
             this->stanceDuration = stanceDuration;
             this->dutyFactor = dutyFactor;
             this->initialLegState = initialLegState;
@@ -41,12 +42,14 @@ namespace Quadruped {
             this->contactDetectionPhaseThreshold = contactDetectionPhaseThreshold;
             this->swingDuration = stanceDuration.cwiseQuotient(dutyFactor) - stanceDuration;
 
+            this->lastLegState = initialLegState;
+
             for (int legId = 0; legId < initialLegState.size(); legId++) {
                 if (initialLegState[legId] == LegState::SWING) {
-                    initStateRadioInCycle[legId] = 1 - dutyFactor[legId];
+                    initStateRatioInCycle[legId] = 1 - dutyFactor[legId];
                     nextLegState[legId] = LegState::STANCE;
                 } else {
-                    initStateRadioInCycle[legId] = dutyFactor[legId];
+                    initStateRatioInCycle[legId] = dutyFactor[legId];
                     nextLegState[legId] = LegState::SWING;
                 }
             }
@@ -75,7 +78,7 @@ namespace Quadruped {
             contactDetectionPhaseThreshold = config["gait_params"][gaitName]["contact_detection_phase_threshold"].as<float>();
             
             for (int legId = 0; legId < initialLegState.size(); legId++) {
-                // when dutyFactor is about 0, this leg stay in air.
+                // when dutyFactor is close 0, the leg stay in air.
                 if (robotics::math::almostEqual(dutyFactor[legId],0.f, 0.001f)) {
                     swingDuration[legId] = 1e3;
                     initialLegState[legId] = LegState::USERDEFINED_SWING;
@@ -86,20 +89,21 @@ namespace Quadruped {
                     swingDuration[legId] = stanceDuration[legId]/dutyFactor[legId] - stanceDuration[legId];
                     lastLegState = initialLegState;
                     if (initialLegState[legId] == LegState::SWING) {
-                        initStateRadioInCycle[legId] = 1 - dutyFactor[legId];
+                        initStateRatioInCycle[legId] = 1 - dutyFactor[legId];
                         nextLegState[legId] = LegState::STANCE;
                     } else {
-                        initStateRadioInCycle[legId] = dutyFactor[legId];
+                        initStateRatioInCycle[legId] = dutyFactor[legId];
                         nextLegState[legId] = LegState::SWING;
                     }
                 }
             }
+
             Reset(0);
         }
 
     void qrGaitGenerator::Reset(float currentTime) 
     {
-        normalizedPhase = Eigen::Matrix<float, 4, 1>::Zero();
+        normalizedLegPhase = Eigen::Matrix<float, 4, 1>::Zero();
         lastLegState = initialLegState;
         curLegState = lastLegState;
         legState = initialLegState;
@@ -129,24 +133,28 @@ namespace Quadruped {
             augmentedTime = initialLegPhase[legId] * fullCyclePeriod + currentTime;
             phaseInFullCycle = fmod(augmentedTime, fullCyclePeriod) / fullCyclePeriod;
             
-            ratio = initStateRadioInCycle[legId];
+            ratio = initStateRatioInCycle[legId];
+
             if (phaseInFullCycle < ratio) {
                 desiredLegState[legId] = initialLegState[legId];
-                normalizedPhase[legId] = phaseInFullCycle / ratio;
+                normalizedLegPhase[legId] = phaseInFullCycle / ratio;
                 
             } else {
                 desiredLegState[legId] = nextLegState[legId];
-                normalizedPhase[legId] = (phaseInFullCycle - ratio) / (1 - ratio);
+                normalizedLegPhase[legId] = (phaseInFullCycle - ratio) / (1 - ratio);
             }
             
             legState[legId] = desiredLegState[legId];
 
-            if (normalizedPhase[legId] < contactDetectionPhaseThreshold) {
+            // No contact detection at the beginning of each SWING/STANCE phase.
+            if (normalizedLegPhase[legId] < contactDetectionPhaseThreshold) {
                 continue;
             }
+            
             if (legState[legId] == LegState::SWING && contactState[legId]) {
                 legState[legId] = LegState::EARLY_CONTACT;
             }
+
             if (legState[legId] == LegState::STANCE && !contactState[legId]) {
                 legState[legId] = LegState::LOSE_CONTACT;
             }

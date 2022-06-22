@@ -29,3 +29,9 @@ enum LegState {
     LOSE_CONTACT,
     USERDEFINED_SWING
 };
+
+enum MotorMode {
+    POSITION,
+    TORQUE,
+    HYBRID
+};

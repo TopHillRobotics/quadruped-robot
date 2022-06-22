@@ -176,6 +176,16 @@ qrSwingLegController::Update()
 
 float qrSwingLegController::GenerateParabola(float x, float y0, float ym, float y1)
 {
+    // float mid_phase = 0.5;
+    // float deltaOne, deltaTwo, deltaThree, coefa, coefb, coefc;
+    // deltaOne = mid - start;
+    // deltaTwo = end - start;
+    // deltaThree = pow(mid_phase, 2) - mid_phase;
+    // coefa = (deltaOne - deltaTwo * mid_phase) / deltaThree;
+    // coefb = (deltaTwo * pow(mid_phase, 2) - deltaOne) / deltaThree;
+    // coefc = start;
+    // return coefa * pow(phase, 2) + coefb * phase + coefc;
+    
     float a;
     float b;
     float c;

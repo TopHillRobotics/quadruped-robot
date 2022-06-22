@@ -59,8 +59,17 @@ public:
    * @brief convert result to eigen vector
    * @return eigen vector
    */
-  Eigen::Matrix<float, 5, 1> toEigenVector();
+  Eigen::Matrix<float, 5, 1> ToEigenVector();
 
+  /**
+   * @brief setCmd
+   * @param q: joint angle (unit: radian)
+   * @param Kp: position stiffness (unit: N.m/rad )
+   * @param dq: joint velocity ( unit: radian/second)
+   * @param Kd: velocity stiffness (unit: N.m/(rad/s) )
+   * @param tau: torque (unit: N.m)
+   */
+  void SetCmd(float q, float Kp, float dq, float Kd, float tau);
 private:
 
   /**
