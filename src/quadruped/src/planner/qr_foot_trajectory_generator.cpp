@@ -1,7 +1,7 @@
 // The MIT License
 
 // Copyright (c) 2022 
-// Robot Motion and Vision Laboratory at East China Normal University
+// Robot Motion and Vision Laboratory at East China Parabola University
 // Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -218,7 +218,55 @@ bool qrFootBSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
     return true;
 }
 
-float qrSwingLegController::GenParabola(float phase, float start, float mid, float end)
+float qrFootParabolaSplinePatternGenerator::GenParabola(float phase, float start, float mid, float end)
+{
+    float a;
+    float b;
+    float c;
+   
+    a = 2*(y0 - 2*ym + y1);
+    b = -3*y0 + 4*ym - y1;
+    c = y0;
+    
+    return a * x * x + b * x + c;
+}
+
+Eigen::Matrix<float, 3, 1> qrFootParabolaSplinePatternGenerator::GenerateSwingFootTrajectory(float phase,
+                                                                                             Eigen::Matrix<float, 3, 1> startPos,
+                                                                                             Eigen::Matrix<float, 3, 1> endPos,
+                                                                                             float clearance=0.1)
+{
+    // refer to google's motion_imitation code (Python)
+    // For the first half of the swing cycle, the swing leg moves faster and finishes 
+    // 80% of the full swing trajectory. The rest 20% of trajectory takes another half swing cycle. 
+    // Intuitely, we want to move the swing foot quickly to the target landing location and 
+    // stay above the ground. In this way the control is more robust to perturbations to the body
+    // that may cause the swing foot to drop onto the ground earlier than expected.
+    // This is a common practice similar to the MIT cheetah and Marc Raibert's original controllers.
+    float phase;
+    float x;
+    float y;
+    float z;
+    float mid;
+    float clearance;
+
+    phase = inputPhase;
+
+    if (inputPhase <= 0.5) {
+        phase = 0.8 * sin(inputPhase * M_PI);
+    } else {
+        phase = 0.8 + (inputPhase - 0.5) * 0.4;
+    }
+    
+    clearance = 0.1;
+    
+    x = (1 - phase) * startPos(0, 0) + phase * endPos(0, 0);
+    y = (1 - phase) * startPos(1, 0) + phase * endPos(1, 0);
+    mid = max(endPos(2, 0), startPos(2, 0)) + maxClearance;
+    z = GenerateParabola(phase, startPos(2, 0), mid, endPos(2, 0));
+
+    return Matrix<float, 3, 1>(x, y, z);
+}
 
 qrSwingFootTrajectory::qrSwingFootTrajectory(SplineInfo splineInfoIn,
                                              Vec3<float> startPosIn,
@@ -237,10 +285,12 @@ qrSwingFootTrajectory::qrSwingFootTrajectory(SplineInfo splineInfoIn,
         // stepParams.height = maxClearance;  // todo
         this->stepParams = qrStepParameters(duration, mid, 0.);
         this->footTarjGen = new qrFootSplinePatternGenerator();
-    } else if(this->splineInfo.splineType=="Normal") {
-        std::cout << "swing Normal\n";
-        this->footTarjGen = new qrFootNoramalSplinePatternGenerator();
-    }
+    } 
+    // TODO : add Parabola spline generator. - gk
+    // else if(this->splineInfo.splineType=="Parabola") {
+    //     std::cout << "swing Parabola\n";
+    //     this->footTarjGen = new qrFootNoramalSplinePatternGenerator();
+    // }
     this->footTarjGen->SetParameters(0., this->startPos, this->endPos, this->stepParams);
 }
 
@@ -269,6 +319,10 @@ bool qrSwingFootTrajectory::GenerateTrajectoryPoint(Vec3<float> &footPos,
         phase = inputPhase;
     }
     bool flag;
+    // TODO : add Parabola spline process - gk.
+    // if(this->splineInfo.splineType == "Parabola"){
+
+    // }
     flag = this->footTarjGen->GenerateTrajectory(footPos, footV, footA, phase);
     return flag; // return # p,v,a
 }

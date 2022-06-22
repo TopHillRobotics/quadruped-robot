@@ -58,7 +58,6 @@ public:
                          float footClearance,
                          std::string configPath);
 
-
     /**
      * @brief Deconstruct a qrSwingLegController object.
      */
@@ -75,26 +74,28 @@ public:
     virtual void Update();
 
     /**
-     * @brief Generate a quadratic curve using three given points: start, mid and end.
-     * f = at^2 + bt + c
-     * @param phase specifies the given phase to compute the quadratic value.
-     * @param start specifies the start point at t=0.
-     * @param mid specifies some middle point between start and end. 
-     * @param end specifies the end point at t=1. 
-     * @return The quadratic value for a given phase.
+     * @brief Generate a parabola curve using three given points: (0, y0), (0.5, ym) and (1, y1).
+     * y = ax^2 + bx + c
+     * @param x specifies the given x coordiate (phase) to compute the parabola value. x is normalized to [0,1].
+     * @param y0 specifies the y coordinate of the start point at t=0.
+     * @param ym specifies the y coordinate of the middle point at x=0.5. 
+     * @param y1 specifies the y coordinate of the end point at x=1.
+     * @return the y coordinate of the parabola curve for a given x (phase).
      */
-    float GenerateParabola(float phase, float start, float mid, float end);
+    float GenerateParabola(float x, float y0, float ym, float y1);
 
     /**
-     * @brief Generating the trajectory of the swing leg
-     * @param phase specifies the given phase to compute the quadratic value.
-     * @param startPos specifies the start point at t=0.
-     * @param endPos specifies the end point at t=1.
-     * @return foot position like (x,y,z)
+     * @brief Generate the 3D trajectory of the swing leg
+     * @param phase specifies the given phase in [0, 1] to compute the trajectory.
+     * @param startPos specifies the foot's position at the beginning of swing cycle.
+     * @param endPos specifies the foot's desired position at the end of swing cycle.
+     * @param clearance specifies the height over the ground.
+     * @return the desired foot position (x,y,z) at the current swing phase. 
      */
     Eigen::Matrix<float, 3, 1> GenerateSwingFootTrajectory(float phase,
-                                                        Eigen::Matrix<float, 3, 1> startPos,
-                                                        Eigen::Matrix<float, 3, 1> endPos);
+                                                           Eigen::Matrix<float, 3, 1> startPos,
+                                                           Eigen::Matrix<float, 3, 1> endPos,
+                                                           float clearance=0.1);
 
     /** @brief Compute all motors' commands using this controller.
      *  @return tuple<map, Matrix<3,4>> : 

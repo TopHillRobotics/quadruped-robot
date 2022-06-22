@@ -145,9 +145,9 @@ qrSwingLegController::Update()
                         // swing in base frame
                         footSourcePosition = this->phaseSwitchFootLocalPos.col(legId);
                         footTargetPosition = footSourcePosition + constOffset;
+                        // TODO :: question
                         if (legId<=1) {
                             footTargetPosition[0] = 0.30f;
-                            
                         }
                         else {
                             footTargetPosition[0] = -0.17f;
@@ -174,35 +174,53 @@ qrSwingLegController::Update()
     }
 }
 
-float qrSwingLegController::GenerateParabola(float phase, float start, float mid, float end)
+float qrSwingLegController::GenerateParabola(float x, float y0, float ym, float y1)
 {
-    float mid_phase = 0.5;
-    float deltaOne, deltaTwo, deltaThree, coefa, coefb, coefc;
-    deltaOne = mid - start;
-    deltaTwo = end - start;
-    deltaThree = pow(mid_phase, 2) - mid_phase;
-    coefa = (deltaOne - deltaTwo * mid_phase) / deltaThree;
-    coefb = (deltaTwo * pow(mid_phase, 2) - deltaOne) / deltaThree;
-    coefc = start;
-    return coefa * pow(phase, 2) + coefb * phase + coefc;
+    float a;
+    float b;
+    float c;
+   
+    a = 2*(y0 - 2*ym + y1);
+    b = -3*y0 + 4*ym - y1;
+    c = y0;
+    
+    return a * x * x + b * x + c;
 }
 
 Matrix<float, 3, 1> qrSwingLegController::GenerateSwingFootTrajectory(float inputPhase,
-                                                                 Matrix<float, 3, 1> startPos,
-                                                                 Matrix<float, 3, 1> endPos)
+                                                                      Matrix<float, 3, 1> startPos,
+                                                                      Matrix<float, 3, 1> endPos,
+                                                                      float clearance)
 {
-    float phase = inputPhase;
+    // refer to google's motion_imitation code (Python)
+    // For the first half of the swing cycle, the swing leg moves faster and finishes 
+    // 80% of the full swing trajectory. The rest 20% of trajectory takes another half swing cycle. 
+    // Intuitely, we want to move the swing foot quickly to the target landing location and 
+    // stay above the ground. In this way the control is more robust to perturbations to the body
+    // that may cause the swing foot to drop onto the ground earlier than expected.
+    // This is a common practice similar to the MIT cheetah and Marc Raibert's original controllers.
+    float phase;
+    float x;
+    float y;
+    float z;
+    float mid;
+    float clearance;
+
+    phase = inputPhase;
+
     if (inputPhase <= 0.5) {
         phase = 0.8 * sin(inputPhase * M_PI);
     } else {
         phase = 0.8 + (inputPhase - 0.5) * 0.4;
     }
-    float x, y, maxClearance, mid, z;
+    
+    clearance = 0.1;
+    
     x = (1 - phase) * startPos(0, 0) + phase * endPos(0, 0);
     y = (1 - phase) * startPos(1, 0) + phase * endPos(1, 0);
-    maxClearance = 0.1;
     mid = max(endPos(2, 0), startPos(2, 0)) + maxClearance;
     z = GenerateParabola(phase, startPos(2, 0), mid, endPos(2, 0));
+
     return Matrix<float, 3, 1>(x, y, z);
 }
 
@@ -271,12 +289,12 @@ std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrSwingLegCont
                     swingKp.cwiseProduct(targetHipHorizontalVelocity - hipHorizontalVelocity))
                         + Matrix<float, 3, 1>(hipOffset[0], hipOffset[1], 0)
                         - robotics::math::TransformVecByQuat(robotics::math::quatInverse(robot->baseOrientation), desiredHeight);
-                footPositionInBaseFrame = GenSwingFootTrajectory(gaitGenerator->normalizedPhase[legId],
+                footPositionInBaseFrame = GenerateSwingFootTrajectory(gaitGenerator->normalizedPhase[legId],
                                                                  phaseSwitchFootLocalPos.col(legId),
                                                                  footTargetPosition);
             } break;
             case LocomotionMode::POSITION_LOCOMOTION: {
-                footPositionInWorldFrame = GenSwingFootTrajectory(gaitGenerator->normalizedPhase[legId],
+                footPositionInWorldFrame = GenerateSwingFootTrajectory(gaitGenerator->normalizedPhase[legId],
                                                                   phaseSwitchFootGlobalPos.col(legId),
                                                                   footHoldInWorldFrame.col(legId)); // interpolation in world frame
                 footPositionInBaseFrame = robotics::math::RigidTransform(robot->basePosition,

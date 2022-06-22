@@ -90,7 +90,7 @@ struct qrSplineInfo {
 
     /**
      * @brief The type of spline.
-     * e.g. "cubicPolygon", "BSpline","Normal"
+     * e.g. "cubicPolynomial", "BSpline", "bizer","Parabola"
      */
     std::string splineTye = "cubicPolygon";
 
@@ -163,12 +163,12 @@ protected:
     float duration;
 
     /** 
-     * @brief Duration of the swing trajectory 
+     * @brief  
      */
     Vec3<float> startPos;
 
     /** 
-     * @brief Duration of the swing trajectory 
+     * @brief  
      */
     Vec3<float> endPos;
 
@@ -239,37 +239,40 @@ private:
     tinynurbs::Curve3f crv;
 };
 
-class qrFootNoramalSplinePatternGenerator : public qrFootSplinePatternGenerator {
+class qrFootParabolaSplinePatternGenerator : public qrFootSplinePatternGenerator {
 
 public:
 
     /**
-     * @brief Default qrFootNoramalSplinePatternGenerator constructor.
+     * @brief Default qrFootParabolaSplinePatternGenerator constructor.
      */
-    qrFootNoramalSplinePatternGenerator();
+    qrFootParabolaSplinePatternGenerator();
 
-    virtual ~qrFootNoramalSplinePatternGenerator() = default;
-
-    /**
-     * @brief Quadratic interpolation function, used to generate polygon curve.
-     * @param phase
-     * @param start
-     * @param mid
-     * @param end
-     * @return a float value with phase
-     */
-    float GenParabola(float phase, float start, float mid, float end);
+    virtual ~qrFootParabolaSplinePatternGenerator() = default;
 
     /**
-     * @brief Generating the trajectory of the swing leg
-     * @param inputPhase
-     * @param startPos
-     * @param endPos
-     * @return foot position like (x,y,z)
+     * @brief Generate a parabola curve using three given points: (0, y0), (0.5, ym) and (1, y1).
+     * y = ax^2 + bx + c
+     * @param x specifies the given x coordiate (phase) to compute the parabola value. x is normalized to [0,1].
+     * @param y0 specifies the y coordinate of the start point at t=0.
+     * @param ym specifies the y coordinate of the middle point at x=0.5. 
+     * @param y1 specifies the y coordinate of the end point at x=1.
+     * @return the y coordinate of the parabola curve for a given x (phase).
      */
-    Matrix<float, 3, 1> GenerateTrajectory(float inputPhase,
-                                           Matrix<float, 3, 1> startPos,
-                                           Matrix<float, 3, 1> endPos);
+    float GenerateParabola(float x, float y0, float ym, float y1);
+
+    /**
+     * @brief Generate the 3D trajectory of the swing leg
+     * @param phase specifies the given phase in [0, 1] to compute the trajectory.
+     * @param startPos specifies the foot's position at the beginning of swing cycle.
+     * @param endPos specifies the foot's desired position at the end of swing cycle.
+     * @param clearance specifies the height over the ground.
+     * @return the desired foot position (x,y,z) at the current swing phase. 
+     */
+    Eigen::Matrix<float, 3, 1> GenerateSwingFootTrajectory(float phase,
+                                                           Eigen::Matrix<float, 3, 1> startPos,
+                                                           Eigen::Matrix<float, 3, 1> endPos,
+                                                           float clearance=0.1);
 };
 
 class qrSwingFootTrajectory {
@@ -281,17 +284,17 @@ public:
 
     /** 
      * @brief init func
-     * @param splineInfoIn
-     * @param startPosIn
-     * @param endPosIn
+     * @param splineInfoIn spline information.
+     * @param startPosIn foot start position.
+     * @param endPosIn foot end position.
      * @param duration Duration of the swing trajectory. default value=1.f
      * @param maxClearance Max clearance of the trajectory. default value = 0.1f
      */
     qrSwingFootTrajectory(SplineInfo splineInfoIn,
-                        Vec3<float> startPosIn = {0.f, 0.f, 0.f},
-                        Vec3<float> endPosIn = {0.f, 0.f, 0.f},
-                        float duration = 1.f,
-                        float maxClearance = 0.1f);
+                          Vec3<float> startPosIn = {0.f, 0.f, 0.f},
+                          Vec3<float> endPosIn = {0.f, 0.f, 0.f},
+                          float duration = 1.f,
+                          float maxClearance = 0.1f);
 
     /**
      * @brief Copy constructor of qrSwingFootTrajectory.
@@ -374,9 +377,9 @@ private:
     qrFootSplinePatternGenerator *footTarjGen;
 
     /** 
-     * @brief qrFootNoramalSplinePatternGenerator object pointer.
+     * @brief qrFootParabolaSplinePatternGenerator object pointer.
      */
-    qrFootNoramalSplinePatternGenerator *footNormalTrajGen;
+    // qrFootParabolaSplinePatternGenerator *footNormalTrajGen;
 
     /** 
      * @brief SplineInfo object pointer.
