@@ -32,10 +32,10 @@
 
 #include "robot/timer.h"
 #include "common/qr_types.h"
+#include "common/qr_qp_torque_optimizer.h"
 #include "robot/qr_robot.h"
 #include "robot/qr_motor_cmd.h"
 #include "planner/qr_gait_generator.h"
-#include "planner/qr_walk_gaitGenerator.h"
 #include "planner/qr_com_planner.h"
 #include "planner/qr_pose_planner.h"
 #include "estimator/qr_robot_estimator.h"
