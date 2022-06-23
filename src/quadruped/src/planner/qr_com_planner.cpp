@@ -37,7 +37,7 @@ namespace Quadruped {
         // baseOrientation = robot->GetBaseOrientation();
         
         legState = gaitGenerator->legState;
-        normalizedPhase = gaitGenerator->normalizedPhase;
+        normalizedLegPhase = gaitGenerator->normalizedLegPhase;
         // footPosition = robot->GetFootPositionsInBaseFrame();
         for (int i = 0; i < 4; ++i) {
             contactK[i] = 0.f;
@@ -52,19 +52,19 @@ namespace Quadruped {
     Eigen::Matrix<float, 3, 1> qrComPlanner::Update(float currentTime) 
     {
         legState = gaitGenerator->legState;
-        normalizedPhase = gaitGenerator->normalizedPhase;
+        normalizedLegPhase = gaitGenerator->normalizedLegPhase;
         // footPosition = robot->GetFootPositionsInBaseFrame();
 
         // Compute prior contact probility and stance probility
         for (int legId = 0; legId < legState.rows(); ++legId) {
             if (legState[legId] == LegState::STANCE || legState[legId] == LegState::LOSE_CONTACT) {
-                contactK[legId] = 0.5 * (std::erf(normalizedPhase[legId] / (delta * sqrt(2)))
-                    + std::erf((1.0 - normalizedPhase[legId]) / (delta * sqrt(2)))
+                contactK[legId] = 0.5 * (std::erf(normalizedLegPhase[legId] / (delta * sqrt(2)))
+                    + std::erf((1.0 - normalizedLegPhase[legId]) / (delta * sqrt(2)))
                 );
                 swingK[legId] = 0.f;
             } else {
-                swingK[legId] = 0.5 * (2.0 + std::erf(-normalizedPhase[legId] / (delta * sqrt(2)))
-                    + std::erf((normalizedPhase[legId] - 1.0) / (delta * sqrt(2)))
+                swingK[legId] = 0.5 * (2.0 + std::erf(-normalizedLegPhase[legId] / (delta * sqrt(2)))
+                    + std::erf((normalizedLegPhase[legId] - 1.0) / (delta * sqrt(2)))
                 );
                 contactK[legId] = 0.f;
             }

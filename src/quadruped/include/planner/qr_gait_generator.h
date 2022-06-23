@@ -22,7 +22,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #ifndef QR_GAIT_GENERATOR_H
 #define QR_GAIT_GENERATOR_H
 
@@ -49,7 +48,7 @@ namespace Quadruped {
              * 
              */
             qrGaitGenerator();
-            //TODO: add robot param
+            // TODO: add robot param
 
             /**
              * @brief Construct a qrGaitGenerator object using a given config file.
