@@ -29,11 +29,11 @@
 #include <string>
 #include <vector>
 
-#include <eigen3/Eigen/Dense>
+#include <Eigen/Dense>
 #include <yaml-cpp/yaml.h>
 
 #include "common/qr_types.h"
-#include "common/qr_cpp_types.h"
+#include "common/qr_eigen_types.h"
 #include "common/qr_algebra.h"
 
 /**
