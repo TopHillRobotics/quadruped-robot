@@ -55,9 +55,9 @@ namespace Quadruped {
         }
         
         defaultFootholdDelta = defaultFootholdOffset; // only alone to the X axis.
-        meetGpa = false;
-        lastFootholdsOffset = Eigen::Matrix<float, 3, 4>::Zero();
-        lastFootholdsOffset = Eigen::Matrix<float, 3, 4>::Zero();
+        meetGap = false;
+        // lastFootholdsOffset = Eigen::Matrix<float, 3, 4>::Zero();
+        // lastFootholdsOffset = Eigen::Matrix<float, 3, 4>::Zero();
         nextFootholdsOffset = Eigen::Matrix<float, 3, 4>::Zero();
         nextFootholdsOffset.row(0)
             << defaultFootholdOffset, defaultFootholdOffset, defaultFootholdOffset, defaultFootholdOffset; // x DIRECTION
@@ -322,7 +322,7 @@ namespace Quadruped {
         return {nextFootholds, nextFootholdsOffset};
     }
 
-        Eigen::Matrix<float, 3, 4> FootStepper::GetOptimalFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds)
+    Eigen::Matrix<float, 3, 4> FootStepper::GetOptimalFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds)
     {
         Eigen::Matrix<float, 1, 4> currentFootholdsX = currentFootholds.row(0);
         nextFootholdsOffset.row(0) << defaultFootholdDelta, defaultFootholdDelta, defaultFootholdDelta, defaultFootholdDelta;

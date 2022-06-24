@@ -37,6 +37,7 @@
 
 #include "robot/qr_robot.h"
 #include "common/qr_se3.h"
+#include "common/qr_eigen_types.h"
 #include "estimator/qr_ground_estimator.h"
 
 namespace Quadruped {
@@ -66,7 +67,13 @@ namespace Quadruped {
          */
         Eigen::Matrix<float, 3, 4> GetOptimalFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds);
 
-        
+        /**
+         * @brief compute desired foot-end position in walk mode
+         * @param currentFootholds current foot-end position of all the leg
+         * @param currentComPose current com postion and pose
+         * @param desiredComPose desired com postion and pose
+         * @param legIds the order of legs
+         */
         std::tuple<Eigen::Matrix<float,3,4>, Eigen::Matrix<float,3,4>> GetFootholdsInWorldFrame(
                                                         Eigen::Matrix<float, 3, 4>& currentFootholds,
                                                         Eigen::Matrix<float, 6, 1>& currentComPose,
@@ -90,18 +97,54 @@ namespace Quadruped {
         int StepGenerator(Eigen::Matrix<float, 1, 4>& currentFootholds, Eigen::Matrix<float, 1, 4>& desiredFootholdsOffset);
 
     protected:
+        /**
+         * @brief the size of gaps
+         */
         std::vector<Gap> gaps;
+
+        /**
+         * @brief describe stair information of the map
+         */
         Stair stairUp, stairDown;
-        std::queue<Eigen::Matrix<float, 1, 4>> steps; // contains the step offset alone x-axis for legs in future to pass the plum piles.
-        bool generatorFlag = false; // if false means has not generate the step
-        bool gaitFlag = false; // if true means has changed the gait
-        bool meetGpa; // are any feet meet gap?
+
+        /**
+         * @brief contains the step offset alone x-axis for legs in future to pass the plum piles. 
+         */
+        std::queue<Eigen::Matrix<float, 1, 4>> steps; 
+
+        /**
+         * @brief if false means has not generate the step
+         */
+        bool generatorFlag = false;
+
+        /**
+         * @brief if true means has changed the gait
+         */
+        bool gaitFlag = false;
+
+        /**
+         * @brief are any feet meet gap
+         */
+        bool meetGap;
+
+        /**
+         * @brief default foot-end position delta
+         */
         float defaultFootholdDelta;
+
+        /**
+         * @brief the foot-end position delta for the next step
+         */
         Eigen::Matrix<float, 3, 4> nextFootholdsOffset;
-        Eigen::Matrix<float, 3, 4> lastFootholdsOffset;
-        Vec4<float> dZ; // offset along Z-axis
-        Vec4<int> count = Vec4<int>::Zero();
-        // for QP param
+
+        /**
+         * @brief offset along Z-axis
+         */
+        Vec4<float> dZ;
+
+        /**
+         * @brief params for Qp solve 
+         */
         quadprogpp::Matrix<double> G;
         quadprogpp::Vector<double> a;
         quadprogpp::Matrix<double> CE;
