@@ -24,6 +24,7 @@
 // SOFTWARE.
 
 #include "planner/qr_gait_generator.h"
+
 namespace Quadruped {
     qrGaitGenerator::qrGaitGenerator() {}
 
