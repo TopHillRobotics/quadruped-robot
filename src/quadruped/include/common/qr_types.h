@@ -35,3 +35,9 @@ enum MotorMode {
     TORQUE,
     HYBRID
 };
+
+enum LocomotionMode {
+    VELOCITY_LOCOMOTION,
+    POSITION_LOCOMOTION,
+    WALK_LOCOMOTION
+};

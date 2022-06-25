@@ -27,7 +27,6 @@
 
 #include "planner/qr_foot_stepper.h"
 
-namespace Quadruped {
     class qrFootholdPlanner {
     public:
         // TODO:add robot module
@@ -147,5 +146,4 @@ namespace Quadruped {
          */
         Eigen::Matrix<float, 3, 4> desiredFootholds;
     };
-} // namespace Quadruped
 #endif // QR_FOOTHOLD_PLANNER_H_

@@ -22,39 +22,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+
 #include "controller/qr_swing_leg_controller.h"
+#include "common/qr_types.h"
 
 qrSwingLegController::qrSwingLegController(qrRobot *robot,
-                                           qrOpenloopGaitGenerator *gaitGenerator,
-                                           qrRobotEstimator *stateEstimator,
+                                           qrGaitGenerator *gaitGenerator,
                                            qrGroundSurfaceEstimator *groundEstimator,
-                                           qrFootholdPlanner *footholdPlanner,
                                            Eigen::Matrix<float, 3, 1> desiredSpeed,
                                            float desiredTwistingSpeed,
                                            float desiredHeight,
                                            float footClearance,
                                            std::string configPath)
-    : robot(robot),
-      gaitGenerator(gaitGenerator),
-      robotEstimator(stateEstimator),
+    : gaitGenerator(gaitGenerator),
       groundEstimator(groundEstimator),
-      footholdPlanner(footholdPlanner),
       desiredSpeed(desiredSpeed),
       desiredTwistingSpeed(desiredTwistingSpeed),
       configFilepath(configPath)
 {
-    this->desiredHeight = Matrix<float, 3, 1>(0, 0, desiredHeight - footClearance);
+    this->robotState = robot->getRobotState();
+    this->robotConfig = robot->getRobotConfig();
+    this->desiredHeight = Eigen::Matrix<float, 3, 1>(0, 0, desiredHeight - footClearance);
     YAML::Node swingLegConfig = YAML::LoadFile(configPath);
     this->footInitPose = swingLegConfig["swing_leg_params"]["foot_in_world"].as<std::vector<std::vector<float>>>();
 }
 
 qrSwingLegController::Reset()
 {
+    // TODO: interface
     this->phaseSwitchFootLocalPos = this->robot->GetFootPositionsInBaseFrame();
     this->phaseSwitchFootGlobalPos = this->robot->GetFootPositionsInWorldFrame();
-    Matrix<float, 1, 4> footX = MatrixXf::Map(&this->footInitPose[0][0], 1, 4);
-    Matrix<float, 1, 4> footY = MatrixXf::Map(&this->footInitPose[1][0], 1, 4);
-    Matrix<float, 1, 4> footZ = MatrixXf::Map(&this->footInitPose[2][0], 1, 4);      
+    Eigen::Matrix<float, 1, 4> footX = Eigen::MatrixXf::Map(&this->footInitPose[0][0], 1, 4);
+    Eigen::Matrix<float, 1, 4> footY = Eigen::MatrixXf::Map(&this->footInitPose[1][0], 1, 4);
+    Eigen::Matrix<float, 1, 4> footZ = Eigen::MatrixXf::Map(&this->footInitPose[2][0], 1, 4);
     
     this->footHoldInWorldFrame.row(0) << 0.185f, 0.185f, -0.175f, -0.175f;
     this->footHoldInWorldFrame.row(1) << -0.145f, 0.145f, -0.145f, 0.145f;
@@ -62,116 +62,118 @@ qrSwingLegController::Reset()
     this->footHoldInWorldFrame(0, 0) -= 0.05;
     this->footHoldInWorldFrame(0, 3) -= 0.05;
     
-    switch (this->robot->controlParams["mode"]) {
-        case LocomotionMode::POSITION_LOCOMOTION: {
-            std::cout << "[SwingLegController Reset] phaseSwitchFootLocalPos: \n" << this->phaseSwitchFootLocalPos
-                    << std::endl;
-            std::cout << "[SwingLegController Reset] phaseSwitchFootGlobalPos: \n" << this->phaseSwitchFootGlobalPos
-                    << std::endl;
-            std::cout << "[SwingLegController Reset] footHoldInWorldFrame: \n" << this->footHoldInWorldFrame << std::endl;
-        } 
-        break;
+//    switch (this->robotConfig->controlMode) {
+//        case LocomotionMode::POSITION_LOCOMOTION: {
+//            std::cout << "[SwingLegController Reset] phaseSwitchFootLocalPos: \n" << this->phaseSwitchFootLocalPos
+//                    << std::endl;
+//            std::cout << "[SwingLegController Reset] phaseSwitchFootGlobalPos: \n" << this->phaseSwitchFootGlobalPos
+//                    << std::endl;
+//            std::cout << "[SwingLegController Reset] footHoldInWorldFrame: \n" << this->footHoldInWorldFrame << std::endl;
+//        }
+//        break;
 
-        case LocomotionMode::WALK_LOCOMOTION: {
-            this->footHoldInWorldFrame = this->phaseSwitchFootGlobalPos; //todo reset by default foot pose setting
-            std::cout << "[SwingLegController Reset] phaseSwitchFootLocalPos: \n" << this->phaseSwitchFootLocalPos
-                    << std::endl;
-            std::cout << "[SwingLegController Reset] phaseSwitchFootGlobalPos: \n" << this->phaseSwitchFootGlobalPos
-                    << std::endl;
-            std::cout << "[SwingLegController Reset] footHoldInWorldFrame: \n" << this->footHoldInWorldFrame << std::endl;
-        } 
-        break;
+//        case LocomotionMode::WALK_LOCOMOTION: {
+//            this->footHoldInWorldFrame = this->phaseSwitchFootGlobalPos; //todo reset by default foot pose setting
+//            std::cout << "[SwingLegController Reset] phaseSwitchFootLocalPos: \n" << this->phaseSwitchFootLocalPos
+//                    << std::endl;
+//            std::cout << "[SwingLegController Reset] phaseSwitchFootGlobalPos: \n" << this->phaseSwitchFootGlobalPos
+//                    << std::endl;
+//            std::cout << "[SwingLegController Reset] footHoldInWorldFrame: \n" << this->footHoldInWorldFrame << std::endl;
+//        }
+//        break;
 
-        default: break;  
-    }
+//        default: break;
+//    }
 
+    // TODO: check this
     resetTime = this->robot->GetTimeSinceReset();
     this->gaitGenerator->Reset(0.f);
-    this->robotEstimator->Reset(0.f);
     this->groundEstimator->Reset(0.f);
     swingJointAnglesVelocities.clear();
 }
 
 qrSwingLegController::Update()
 {
-    if(!this->robot->stop){
-        float timeSinceReset = this->robot->timeSinceReset() - this->resetTime;
-    }
+//    if(!this->robot->stop){
+//        float timeSinceReset = this->robot->timeSinceReset() - this->resetTime;
+//    }
+
+    // TODO: check timer
     this->gaitGenerator->Update(timeSinceReset);
     this->groundEstimator->Update();
     this->robotEstimator->Update(timeSinceReset);
     const Vec4<int>& newLegState = this->gaitGenerator->desiredLegState;
     const Vec4<int>& curLegState = this->gaitGenerator->curLegState;
     // the footHoldOffset is first init at robot.h, then update it at groundEstimator.cpp 
-    Eigen::Matrix<float, 3, 1> constOffset = {this->robot->footHoldOffset, 0.f, 0.f};
+    Eigen::Matrix<float, 3, 1> constOffset = {qrRobotConfig::footHoldOffset, 0.f, 0.f};
     
     // Detects phase switch for each leg so we can remember the feet position at
     // the beginning of the swing phase.
-    switch (this->robot->controlParams["mode"]) {
-        case LocomotionMode::POSITION_LOCOMOTION: {
-            for (int legId = 0; legId < 4; ++legId) {
-                if ((newLegState(legId) == LegState::SWING || newLegState(legId) == LegState::USERDEFINED_SWING)
-                    && curLegState(legId) == LegState::STANCE 
-                    && !this->robot->stop) {
+//    switch (this->robotConfig->controlMode) {
+//        case LocomotionMode::POSITION_LOCOMOTION: {
+//            for (int legId = 0; legId < 4; ++legId) {
+//                if ((newLegState(legId) == LegState::SWING || newLegState(legId) == LegState::USERDEFINED_SWING)
+//                    && curLegState(legId) == LegState::STANCE
+//                    && !this->robot->stop) {
         
-                    this->phaseSwitchFootLocalPos.col(legId) = this->robot->GetFootPositionsInBaseFrame().col(legId);
-                    this->phaseSwitchFootGlobalPos.col(legId) = this->robot->GetFootPositionsInWorldFrame().col(legId);
-                    if (legId == 0) { //update four leg footholds
-                        this->footholdPlanner->UpdateOnce(footHoldInWorldFrame); // based on the last foothold position
-                    }
-                    this->footHoldInWorldFrame.col(legId) += this->footholdPlanner->GetFootholdsOffset().col(legId);
-                }
-            }
-        } break;
-        case LocomotionMode::WALK_LOCOMOTION: {
-            for (int legId = 0; legId < 4; ++legId) {
-                if ((newLegState(legId) == SubLegState::TRUE_SWING || newLegState(legId) == LegState::USERDEFINED_SWING)
-                    && curLegState(legId) == SubLegState::UNLOAD_FORCE 
-                    && !this->robot->stop) {
-                    this->phaseSwitchFootLocalPos.col(legId) = this->robot->GetFootPositionsInBaseFrame().col(legId);
-                    this->phaseSwitchFootGlobalPos.col(legId) = this->robot->GetFootPositionsInWorldFrame().col(legId);
-                    // case 1:
-                    this->footholdPlanner->UpdateOnce(footHoldInWorldFrame, {legId});
-                    this->footHoldInWorldFrame.col(legId) = this->footholdPlanner->GetFootholdInWorldFrame(legId);
-                    // case 2:
-                    Vec3<float> footSourcePosition;
-                    Vec3<float> footTargetPosition;
-                    if (this->robot->robotConfig["is_sim"]) {
-                        // running in simulation
-                        footSourcePosition = this->phaseSwitchFootGlobalPos.col(legId);
-                        footTargetPosition = this->footHoldInWorldFrame.col(legId);
-                        footTargetPosition[2] = footSourcePosition[2] + this->footholdPlanner->desiredFootholdsOffset(2, legId);                      
-                    } else {
-                        // swing in base frame
-                        footSourcePosition = this->phaseSwitchFootLocalPos.col(legId);
-                        footTargetPosition = footSourcePosition + constOffset;
-                        // TODO :: question
-                        if (legId<=1) {
-                            footTargetPosition[0] = 0.30f;
-                        }
-                        else {
-                            footTargetPosition[0] = -0.17f;
-                        }
-                        footTargetPosition[1] = -0.145 * pow(-1, legId);
-                        footTargetPosition[2] = -0.32f;
-                    }                        
+//                    this->phaseSwitchFootLocalPos.col(legId) = this->robot->GetFootPositionsInBaseFrame().col(legId);
+//                    this->phaseSwitchFootGlobalPos.col(legId) = this->robot->GetFootPositionsInWorldFrame().col(legId);
+//                    if (legId == 0) { //update four leg footholds
+//                        this->footholdPlanner->UpdateOnce(footHoldInWorldFrame); // based on the last foothold position
+//                    }
+//                    this->footHoldInWorldFrame.col(legId) += this->footholdPlanner->GetFootholdsOffset().col(legId);
+//                }
+//            }
+//        } break;
+//        case LocomotionMode::WALK_LOCOMOTION: {
+//            for (int legId = 0; legId < 4; ++legId) {
+//                if ((newLegState(legId) == SubLegState::TRUE_SWING || newLegState(legId) == LegState::USERDEFINED_SWING)
+//                    && curLegState(legId) == SubLegState::UNLOAD_FORCE
+//                    && !this->robot->stop) {
+//                    this->phaseSwitchFootLocalPos.col(legId) = this->robot->GetFootPositionsInBaseFrame().col(legId);
+//                    this->phaseSwitchFootGlobalPos.col(legId) = this->robot->GetFootPositionsInWorldFrame().col(legId);
+//                    // case 1:
+//                    this->footholdPlanner->UpdateOnce(footHoldInWorldFrame, {legId});
+//                    this->footHoldInWorldFrame.col(legId) = this->footholdPlanner->GetFootholdInWorldFrame(legId);
+//                    // case 2:
+//                    Vec3<float> footSourcePosition;
+//                    Vec3<float> footTargetPosition;
+//                    if (this->robot->robotConfig["is_sim"]) {
+//                        // running in simulation
+//                        footSourcePosition = this->phaseSwitchFootGlobalPos.col(legId);
+//                        footTargetPosition = this->footHoldInWorldFrame.col(legId);
+//                        footTargetPosition[2] = footSourcePosition[2] + this->footholdPlanner->desiredFootholdsOffset(2, legId);
+//                    } else {
+//                        // swing in base frame
+//                        footSourcePosition = this->phaseSwitchFootLocalPos.col(legId);
+//                        footTargetPosition = footSourcePosition + constOffset;
+//                        // TODO :: question
+//                        if (legId<=1) {
+//                            footTargetPosition[0] = 0.30f;
+//                        }
+//                        else {
+//                            footTargetPosition[0] = -0.17f;
+//                        }
+//                        footTargetPosition[1] = -0.145 * pow(-1, legId);
+//                        footTargetPosition[2] = -0.32f;
+//                    }
                     
-                    SplineInfo splineInfo;
-                    splineInfo.splineType = "BSpline";
-                    this->swingFootTrajectories[legId] = SwingFootTrajectory(splineInfo, footSourcePosition, footTargetPosition, 1.f, 0.15);
-                    cout << "[SwingLegController::Update leg " << legId << "  update footHoldInWorldFrame: \n"
-                        << this->footHoldInWorldFrame.col(legId) << endl;
-                }
-            }
-        } break;
-        default : {
+//                    SplineInfo splineInfo;
+//                    splineInfo.splineType = "BSpline";
+//                    this->swingFootTrajectories[legId] = SwingFootTrajectory(splineInfo, footSourcePosition, footTargetPosition, 1.f, 0.15);
+//                    cout << "[SwingLegController::Update leg " << legId << "  update footHoldInWorldFrame: \n"
+//                        << this->footHoldInWorldFrame.col(legId) << endl;
+//                }
+//            }
+//        } break;
+//        default : {
             for (int legId = 0; legId < 4; ++legId) {
                 if (newLegState(legId) == LegState::SWING && newLegState(legId) != this->gaitGenerator->lastLegState(legId)) {
                     this->phaseSwitchFootLocalPos.col(legId) = this->robot->GetFootPositionsInBaseFrame().col(legId);
                 }
             }
-        } break;
-    }
+//        } break;
+//    }
 }
 
 float qrSwingLegController::GenerateParabola(float x, float y0, float ym, float y1)
@@ -197,9 +199,9 @@ float qrSwingLegController::GenerateParabola(float x, float y0, float ym, float 
     return a * x * x + b * x + c;
 }
 
-Matrix<float, 3, 1> qrSwingLegController::GenerateSwingFootTrajectory(float inputPhase,
-                                                                      Matrix<float, 3, 1> startPos,
-                                                                      Matrix<float, 3, 1> endPos,
+Eigen::Matrix<float, 3, 1> qrSwingLegController::GenerateSwingFootTrajectory(float inputPhase,
+                                                                      Eigen::Matrix<float, 3, 1> startPos,
+                                                                      Eigen::Matrix<float, 3, 1> endPos,
                                                                       float clearance)
 {
     // refer to google's motion_imitation code (Python)
@@ -214,26 +216,27 @@ Matrix<float, 3, 1> qrSwingLegController::GenerateSwingFootTrajectory(float inpu
     float y;
     float z;
     float mid;
-    float clearance;
 
     phase = inputPhase;
 
-    if (inputPhase <= 0.5) {
-        phase = 0.8 * sin(inputPhase * M_PI);
+    if (inputPhase <= 0.5f) {
+        phase = 0.8f * sinf(inputPhase * M_PI);
     } else {
-        phase = 0.8 + (inputPhase - 0.5) * 0.4;
+        phase = 0.8f + (inputPhase - 0.5f) * 0.4f;
     }
     
-    clearance = 0.1;
+    clearance = 0.1f;
     
     x = (1 - phase) * startPos(0, 0) + phase * endPos(0, 0);
     y = (1 - phase) * startPos(1, 0) + phase * endPos(1, 0);
-    mid = max(endPos(2, 0), startPos(2, 0)) + maxClearance;
+    mid = std::max(endPos(2, 0), startPos(2, 0)) + clearance;
     z = GenerateParabola(phase, startPos(2, 0), mid, endPos(2, 0));
 
-    return Matrix<float, 3, 1>(x, y, z);
+    return Eigen::Matrix<float, 3, 1>(x, y, z);
 }
 
+
+// TODO: check this
 std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrSwingLegController::GetAction()
 {
     Matrix<float, 3, 1> comVelocity;

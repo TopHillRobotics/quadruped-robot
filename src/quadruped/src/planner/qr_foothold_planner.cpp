@@ -24,7 +24,6 @@
 
 #include "planner/qr_foothold_planner.h"
 
-namespace Quadruped {
     // TODO: add robot module
     qrFootholdPlanner::qrFootholdPlanner(GroundSurfaceEstimator *groundEsitmatorIn)
     : groundEsitmator(groundEsitmatorIn), terrain(groundEsitmator->terrain),
@@ -78,4 +77,3 @@ namespace Quadruped {
         desiredFootholdsOffset = std::get<1>(res);
         return desiredFootholdsOffset;
     }
-}

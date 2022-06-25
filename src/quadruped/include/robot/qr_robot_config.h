@@ -121,6 +121,12 @@ public:
    */
   static const unsigned int dofPerLeg = 3;
 
+  // TODO: explain
+  static constexpr float footHoldOffset = 0.1f;
+
+  // TODO: check this. Add read configuration in Load
+  int controlMode;
+
 private:
 
   /**
@@ -210,6 +216,8 @@ private:
    * @brief mapping of different control modes
    */
   static std::unordered_map<int, std::string> modeMap;
+
+
 };
 
 #endif // QR_ROBOT_CONFIG_H

@@ -25,7 +25,6 @@
 
 #include "planner/qr_gait_generator.h"
 
-namespace Quadruped {
     qrGaitGenerator::qrGaitGenerator() {}
 
     qrGaitGenerator::qrGaitGenerator(Eigen::Matrix<float, 4, 1> stanceDuration,
@@ -161,4 +160,3 @@ namespace Quadruped {
             }
         }
     }
-}

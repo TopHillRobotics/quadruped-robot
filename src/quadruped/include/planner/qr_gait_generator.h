@@ -40,9 +40,11 @@
  * @brief The qrGaitGenerator class generates the corresponding gait 
  * uisng the defined gait parameters. This class also resets and updates these parameters regularly.
  */
-namespace Quadruped {
     class qrGaitGenerator {
         public:
+
+            friend class qrSwingLegController;
+
             /**
              * @brief Default constructor that constructs a qrGaitGenerator object.
              * 
@@ -183,5 +185,4 @@ namespace Quadruped {
              */
             float contactDetectionPhaseThreshold; 
     };
-} // namespace Quadruped
 #endif //QR_GAIT_GENERATOR_H

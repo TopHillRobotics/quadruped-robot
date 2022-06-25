@@ -25,9 +25,13 @@
 #ifndef QR_SWING_LEG_CONTROLLER_H
 #define QR_SWING_LEG_CONTROLLER_H
 
+#include <Eigen/Dense>
+
+#include "robot/qr_robot.h"
+#include "robot/qr_robot_config.h"
+#include "robot/qr_robot_state.h"
 #include "robot/qr_motor_cmd.h"
 #include "planner/qr_gait_generator.h"
-#include "estimator/qr_robot_estimator.h"
 #include "estimator/qr_ground_estimator.h"
 #include "planner/qr_foothold_planner.h"
 #include "planner/qr_foot_trajectory_generator.h"
@@ -49,9 +53,7 @@ public:
      */
     qrSwingLegController(qrRobot *robot,
                          qrGaitGenerator *gaitGenerator,
-                         qrRobotEstimator *stateEstimator,
                          qrGroundSurfaceEstimator *groundEstimator,
-                         qrFootholdPlanner *footholdPlanner,
                          Eigen::Matrix<float, 3, 1> desiredLinearVelocity,
                          float desiredTwistingVelocity,
                          float desiredHeight,
@@ -110,6 +112,13 @@ private:
      */
     qrRobot *robot;
 
+    /**
+     * @see robotState
+     */
+    qrRobotState* robotState;
+
+
+    qrRobotConfig* robotConfig;
     /**
      * @brief Gait Generator object pointer.
      */
