@@ -31,7 +31,7 @@
 
 #include <cmath>
 #include <iostream>
-#include "common/qr_eigentypes.h"
+#include "common/qr_eigen_types.h"
 
 #include <Eigen/Dense>
 namespace Math {

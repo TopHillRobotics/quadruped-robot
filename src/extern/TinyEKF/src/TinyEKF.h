@@ -26,11 +26,9 @@ extern "C" {
  */
 class TinyEKF {
 
-    private:
+    protected:
 
         ekf_t ekf;
-
-    protected:
 
         /**
           * The current state.
