@@ -105,6 +105,18 @@ public:
    */
   void SetHybridCmd(const Eigen::Matrix<float, 5, 12> &cmdValues);
 
+  /**
+   * @brief get config of the robot
+   * @return config of the robot
+   */
+  qrRobotConfig* getRobotConfig();
+
+  /**
+   * @brief get state of the robot
+   * @return state of the robot
+   */
+  qrRobotState* getRobotState();
+
 protected:
 
   /**
@@ -120,7 +132,7 @@ protected:
   /**
    * @brief robot state from observation
    */
-  qrRobotState robotState;
+  qrRobotState* robotState;
 
   /**
    * @brief robot base position in world frame
