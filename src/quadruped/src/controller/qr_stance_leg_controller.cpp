@@ -353,17 +353,15 @@ std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLegCon
     /// Compute Contact Force  ///
     Mat3<float> directionVectors = Mat3<float>::Identity(); // friction cone direction in xyz axises
     if (computeForceInWorldFrame) {
-        // TODO: import qp_torque_optimer.h     -gk
-        // contactForces << ComputeContactForce(robot, desiredDdq,  // all in world frame
-        //                                     contacts, accWeight,
-        //                                     directionVectors.col(2), 
-        //                                     directionVectors.col(0),
-        //                                     directionVectors.col(1),
-        //                                     fMinRatio,
-        //                                     fMaxRatio);
+        contactForces << ComputeContactForce(robot, desiredDdq,  // all in world frame
+                                            contacts, accWeight,
+                                            directionVectors.col(2), 
+                                            directionVectors.col(0),
+                                            directionVectors.col(1),
+                                            fMinRatio,
+                                            fMaxRatio);
     } else {
-        // TODO: import qp_torque_optimer.h     -gk
-        // contactForces << ComputeContactForce(robot, groundEstimator, desiredDdq, contacts, accWeight); // compute the force in control/base frame        
+        contactForces << ComputeContactForce(robot, groundEstimator, desiredDdq, contacts, accWeight); // compute the force in control/base frame        
     }
     
     map<int, MotorCommand> action;

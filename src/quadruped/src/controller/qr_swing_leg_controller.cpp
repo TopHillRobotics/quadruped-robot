@@ -145,7 +145,6 @@ qrSwingLegController::Update()
                         // swing in base frame
                         footSourcePosition = this->phaseSwitchFootLocalPos.col(legId);
                         footTargetPosition = footSourcePosition + constOffset;
-                        // TODO :: question
                         if (legId<=1) {
                             footTargetPosition[0] = 0.30f;
                         }

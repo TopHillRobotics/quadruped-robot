@@ -113,9 +113,9 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
  * @param desiredAcc desired acceleration.
  * @param contacts 4-length array indicating whether feet is contact with ground.
  * @param accWeight the weight of acceleration.
- * @param normal
- * @param tangent1
- * @param tangent2
+ * @param normal z axis vector.
+ * @param tangent1 x axis vector.
+ * @param tangent2 y axis vector.
  * @param fMinRatio min force that applys. Each leg might be different.
  * @param fMaxRatio max force that applys. Each leg might be different.
  * @param regWeight 
@@ -147,7 +147,7 @@ Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,
                                               Eigen::Matrix<float, 3, 3> robotInertia,
                                               Eigen::Matrix<float, 4, 3> footPositions,
                                               Mat3<float> rotMat);
-// TODO : question : what is normal, tangent1 and tangent2?
+
 /** 
  * @brief Compute constraint matrix. Writen by Zhu Yijie, in world frame. 
  * Used for climbing stairs or slopes.
@@ -156,9 +156,9 @@ Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,
  * @param frictionCoef frictionCoef defines the interaction force effect between foot and env.
  * @param fMinRatio min force that applys 
  * @param fMaxRatio max force that applys
- * @param normal
- * @param tangent1
- * @param tangent2
+ * @param normal z axis vector.
+ * @param tangent1 x axis vector.
+ * @param tangent2 y axis vector.
  * @return Constraint matrix.
  */
 std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> ComputeConstraintMatrix(
