@@ -96,7 +96,15 @@ public:
   Eigen::Matrix<float, 3, 1> FootVelocity2JointVelocity(
       Eigen::Matrix<float, 3, 1> q, Eigen::Matrix<float, 3, 1> v, int legId);
 
-private:
+  /**
+   * @brief convert foot velocity2JointVelocity
+   * @param q: joint angles
+   * @param v: fothold velocity
+   * @param legId: which leg to convert
+   * @return joint velocity of the leg
+   */
+  Eigen::Matrix<float, 3, 1> JointVelocity2FootVelocity(
+      Eigen::Matrix<float, 3, 1> q, Eigen::Matrix<float, 3, 1> v, int legId);
 
   /**
    * @brief number of motors
@@ -112,6 +120,8 @@ private:
    * @brief DOF of each leg
    */
   static const unsigned int dofPerLeg = 3;
+
+private:
 
   /**
    * @brief the weight of the main body

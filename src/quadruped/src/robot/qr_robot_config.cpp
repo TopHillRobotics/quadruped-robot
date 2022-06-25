@@ -134,9 +134,15 @@ Eigen::Matrix<float, 3, 1> qrRobotConfig::FootPosition2JointAngles(Eigen::Matrix
 }
 
 Eigen::Matrix<float, 3, 1> qrRobotConfig::FootVelocity2JointVelocity(
-    Eigen::Matrix<float, 3, 1> q, Eigen::Matrix<float, 3, 1> v, int legId)
+    Eigen::Matrix<float, 3, 1> q, Eigen::Matrix<float, 3, 1> dq, int legId)
 {
-  return AnalyticalLegJacobian(q, legId).inverse() * v;
+  return AnalyticalLegJacobian(q, legId).inverse() * dq;
+}
+
+Eigen::Matrix<float, 3, 1> qrRobotConfig::JointVelocity2FootVelocity(
+    Eigen::Matrix<float, 3, 1> q, Eigen::Matrix<float, 3, 1> dq, int legId)
+{
+  return AnalyticalLegJacobian(q, legId) * dq;
 }
 
 Eigen::Matrix<float, 3, 1> qrRobotConfig::JointAngles2FootPositionInHipFrame(Eigen::Matrix<float, 3, 1> q, int hipSign)

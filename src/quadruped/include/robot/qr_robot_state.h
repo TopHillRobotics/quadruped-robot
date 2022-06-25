@@ -29,7 +29,6 @@
 #include <array>
 #include <Eigen/Dense>
 
-
 enum Joint{
   FRhip, FRthigh, FRcalf, \
   FLhip, FLthigh, FLcalf, \
@@ -37,6 +36,7 @@ enum Joint{
   RLhip, RLthigh, RLcalf
 };
 
+// TODO: check initialization
 /**
  * @brief The qrIMU struct saves data from imu
  */
@@ -106,6 +106,10 @@ struct qrMotor
  */
 struct qrRobotState
 {
+
+  qrRobotState(){
+    deltaTime = 0.001f;
+  }
   /**
    * @brief imu related date
    */
@@ -116,10 +120,68 @@ struct qrRobotState
    */
   Eigen::Matrix<float, 4, 1> footForce;
 
+  // TODO: get and set
+  /**
+   * @brief the contact status of 4 foot
+   */
+  Eigen::Matrix<bool, 4, 1> footContact;
+
   /**
    * @brief states of 12 motors
    */
   std::array<qrMotor, 12> motors;
+
+  /**
+   * @brief time between this currentStamp and last stamp;
+   *        at the first time, delta time will set 0.001 as default
+   */
+  float deltaTime;
+
+  /**
+   * @brief set current time stamp from hardware
+   * @param tick: time stamp
+   */
+  void setTimeStamp(uint32_t tick){
+    if(lastStamp != 0){
+      deltaTime = (tick - lastStamp) / 1000.0f;
+    }
+    lastStamp = tick;
+  }
+
+  /**
+   * @brief get a vector of motor velocities
+   * @param legId: which leg's velocity
+   * @return vector of motor velocities
+   */
+  Eigen::Matrix<float, 3, 1> getDq(unsigned int legId){
+    Eigen::Matrix<float, 3, 1> dq;
+    dq << motors[legId * 3].dq, motors[legId * 3 + 1].dq, motors[legId * 3 + 2].dq;
+    return dq;
+  }
+
+
+  /**
+   * @brief get a vector of motor velocities
+   * @param legId: which leg's velocity
+   * @return vector of motor velocities
+   */
+  Eigen::Matrix<float, 3, 1> getQ(unsigned int legId){
+    Eigen::Matrix<float, 3, 1> dq;
+    dq << motors[legId * 3].q, motors[legId * 3 + 1].q, motors[legId * 3 + 2].q;
+    return dq;
+  }
+
+private:
+
+  /**
+   * @brief the smallest time interval of each loop, which means max frequence is 1000HZ
+   */
+  static constexpr float leastDeltaTime = 0.001f;
+
+  /**
+   * @brief last time stamp
+   */
+  uint32_t lastStamp = 0;
 };
 
 #endif // QR_ROBOT_STATE_H
