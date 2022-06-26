@@ -32,6 +32,7 @@
 #include "qr_motor_cmd.h"
 #include "qr_robot_state.h"
 #include "common/qr_types.h"
+
 /**
  *  @brief a base class for all robot classes.It stores runtime status and data of the robot.
  */

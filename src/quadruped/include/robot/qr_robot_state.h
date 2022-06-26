@@ -29,6 +29,8 @@
 #include <array>
 #include <Eigen/Dense>
 
+#include "robot/qr_robot_config.h"
+
 enum Joint{
   FRhip, FRthigh, FRcalf, \
   FLhip, FLthigh, FLcalf, \
@@ -81,35 +83,24 @@ struct qrIMU
 };
 
 /**
- * @brief The qrMotor struct saves data from motor
- */
-struct qrMotor
-{
-  /**
-   * @brief current angle (unit: radian)
-   */
-  float q;
-
-  /**
-   * @brief current velocity (unit: radian/second)
-   */
-  float dq;
-
-  /**
-   * @brief current estimated output torque (unit: N.m)
-   */
-  float tau;
-};
-
-/**
  * @brief The qrLegState struct stores observed data every iteration
  */
 struct qrRobotState
 {
 
-  qrRobotState(){
-    deltaTime = 0.001f;
-  }
+public:
+
+  /**
+   * @brief constructor of qrRobotState
+   */
+  qrRobotState();
+
+  /**
+   * @brief constructor of qrRobotState
+   * @param robotConfig used to calculate current state
+   */
+  qrRobotState(qrRobotConfig* robotConfig);
+
   /**
    * @brief imu related date
    */
@@ -126,11 +117,25 @@ struct qrRobotState
    */
   Eigen::Matrix<bool, 4, 1> footContact;
 
-  /**
-   * @brief states of 12 motors
-   */
-  std::array<qrMotor, 12> motors;
+//  /**
+//   * @brief states of 12 motors
+//   */
+//  std::array<qrMotor, 12> motors;
 
+  /**
+   * @brief current angle (unit: radian)
+   */
+  Eigen::Matrix<float, 12, 1> q;
+
+  /**
+   * @brief current velocity (unit: radian/second)
+   */
+  Eigen::Matrix<float, 12, 1> dq;
+
+  /**
+   * @brief current estimated output torque (unit: N.m)
+   */
+  Eigen::Matrix<float, 12, 1> tau;
   /**
    * @brief time between this currentStamp and last stamp;
    *        at the first time, delta time will set 0.001 as default
@@ -141,23 +146,14 @@ struct qrRobotState
    * @brief set current time stamp from hardware
    * @param tick: time stamp
    */
-  void setTimeStamp(uint32_t tick){
-    if(lastStamp != 0){
-      deltaTime = (tick - lastStamp) / 1000.0f;
-    }
-    lastStamp = tick;
-  }
+  void setTimeStamp(uint32_t tick);
 
   /**
    * @brief get a vector of motor velocities
    * @param legId: which leg's velocity
    * @return vector of motor velocities
    */
-  Eigen::Matrix<float, 3, 1> getDq(unsigned int legId){
-    Eigen::Matrix<float, 3, 1> dq;
-    dq << motors[legId * 3].dq, motors[legId * 3 + 1].dq, motors[legId * 3 + 2].dq;
-    return dq;
-  }
+  Eigen::Matrix<float, 3, 1> getDq(unsigned int legId);
 
 
   /**
@@ -165,11 +161,7 @@ struct qrRobotState
    * @param legId: which leg's velocity
    * @return vector of motor velocities
    */
-  Eigen::Matrix<float, 3, 1> getQ(unsigned int legId){
-    Eigen::Matrix<float, 3, 1> dq;
-    dq << motors[legId * 3].q, motors[legId * 3 + 1].q, motors[legId * 3 + 2].q;
-    return dq;
-  }
+  Eigen::Matrix<float, 3, 1> getQ(unsigned int legId);
 
 private:
 
@@ -177,6 +169,11 @@ private:
    * @brief the smallest time interval of each loop, which means max frequence is 1000HZ
    */
   static constexpr float leastDeltaTime = 0.001f;
+
+  /**
+   * @see robotConfig
+   */
+  qrRobotConfig* robotConfig;
 
   /**
    * @brief last time stamp
