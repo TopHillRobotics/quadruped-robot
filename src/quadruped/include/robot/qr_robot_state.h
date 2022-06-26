@@ -117,11 +117,6 @@ public:
    */
   Eigen::Matrix<bool, 4, 1> footContact;
 
-//  /**
-//   * @brief states of 12 motors
-//   */
-//  std::array<qrMotor, 12> motors;
-
   /**
    * @brief current angle (unit: radian)
    */
