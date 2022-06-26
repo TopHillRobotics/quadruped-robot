@@ -12,13 +12,13 @@ void qrRobotState::setTimeStamp(uint32_t tick){
 }
 
 Eigen::Matrix<float, 3, 1> qrRobotState::getDq(unsigned int legId){
-  Eigen::Matrix<float, 3, 1> dq;
-  dq << motors[legId * 3].dq, motors[legId * 3 + 1].dq, motors[legId * 3 + 2].dq;
-  return dq;
+  Eigen::Matrix<float, 3, 1> result;
+  result << dq[legId * 3], dq[legId * 3 + 1], dq[legId * 3 + 2];
+  return result;
 }
 
 Eigen::Matrix<float, 3, 1> qrRobotState::getQ(unsigned int legId){
-  Eigen::Matrix<float, 3, 1> dq;
-  dq << motors[legId * 3].q, motors[legId * 3 + 1].q, motors[legId * 3 + 2].q;
-  return dq;
+  Eigen::Matrix<float, 3, 1> result;
+  result << q[legId * 3], q[legId * 3 + 1], q[legId * 3 + 2];
+  return result;
 }

@@ -76,7 +76,6 @@ public:
    */
   Eigen::Matrix<float, 3, 4> JointAngles2FootPositionInBaseFrame(Eigen::Matrix<float, 12, 1> q);
 
-
   /**
    * @brief convert foot position to joint angles
    * @param legId: which leg to calculate
