@@ -32,7 +32,6 @@
 #include "robot/qr_robot.h"
 #include "robot/qr_robot_state.h"
 
-
 /**
  * @brief The RobotVelocityEstimator class estimate the velocity of the robot
  */
