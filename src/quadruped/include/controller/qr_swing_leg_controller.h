@@ -58,6 +58,7 @@ public:
                          float footClearance,
                          std::string configPath);
 
+
     /**
      * @brief Deconstruct a qrSwingLegController object.
      */

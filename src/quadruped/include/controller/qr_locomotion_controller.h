@@ -121,21 +121,70 @@ public:
         return robot->GetTimeSinceReset();
     }
 
-    // let robot walk one step more.
+    /** 
+     * @brief let robot walk one step more.
+     */
     void ForwardOne();
 
-    RaibertSwingLegController *swingLegController;
-    TorqueStanceLegController *stanceLegController;
+    /** 
+     * @brief qrSwingLegController object.
+     */
+    qrSwingLegController *swingLegController;
+
+    /** 
+     * @brief qrStanceLegController object.
+     */
+    qrStanceLegController *stanceLegController;
+
+    /** 
+     * @brief mark if the robot has stopped. True is stop, false is running.
+     */
     bool stop=false;
-    int swingSemaphore = 10000000; // total steps 
+
+    /** 
+     * @brief total steps.
+     */
+    int swingSemaphore = 10000000; 
+
+    /** 
+     * @brief the time when robot stopped.
+     */
     float stopTick = 0;
 private:
+
+    /** 
+     * @brief qrRobot object.
+     */
     qrRobot *robot;
+
+    /** 
+     * @brief qrGaitGenerator object.
+     */
     qrGaitGenerator *gaitGenerator;
+
+    /** 
+     * @brief qrGroundSurfaceEstimator object.
+     */
     qrGroundSurfaceEstimator *groundEstimator;
-    qrComAdjuster *comAdjuster;
+
+    /** 
+     * @brief qrComPlanner object.
+     */
+    qrComPlanner *comPlanner;
+
+    /** 
+     * @brief joint command list.
+     */
     std::vector<qrMotorCommand> action;
+    
+    /** 
+     * @brief the time when last call Reset() function.
+     */
     double resetTime;
+    
+    /** 
+     * @brief the time has passed after last call Reset() function.
+     */
     double timeSinceReset;
 };
 

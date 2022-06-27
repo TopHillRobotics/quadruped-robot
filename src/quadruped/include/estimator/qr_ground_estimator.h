@@ -25,8 +25,8 @@
 #ifndef QR_GROUND_ESTIMATOR_H
 #define QR_GROUND_ESTIMATOR_H
 
-#include "utils/se3.h"
-#include "robots/robot.h"
+#include "common/qr_se3.h"
+#include "robot/qr_robot.h"
 
 /**
  * @brief Describe a gap in the map.
