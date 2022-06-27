@@ -53,7 +53,7 @@ struct qrIMU
   /**
    * @brief angular velocity （unit: rad/s)
    */
-  Eigen::Matrix<float, 3, 1> q;
+  Eigen::Matrix<float, 3, 1> gyroscope;
 
   // TODO: discuss
   /**
@@ -85,7 +85,7 @@ struct qrIMU
 /**
  * @brief The qrLegState struct stores observed data every iteration
  */
-struct qrRobotState
+class qrRobotState
 {
 
 public:
@@ -105,17 +105,6 @@ public:
    * @brief imu related date
    */
   qrIMU imu;
-
-  /**
-   * @brief force on foot
-   */
-  Eigen::Matrix<float, 4, 1> footForce;
-
-  // TODO: get and set
-  /**
-   * @brief the contact status of 4 foot
-   */
-  Eigen::Matrix<bool, 4, 1> footContact;
 
   /**
    * @brief current angle (unit: radian)
@@ -148,7 +137,7 @@ public:
    * @param legId: which leg's velocity
    * @return vector of motor velocities
    */
-  Eigen::Matrix<float, 3, 1> getDq(unsigned int legId);
+  Eigen::Matrix<float, 3, 1> GetDq(unsigned int legId);
 
 
   /**
@@ -156,7 +145,51 @@ public:
    * @param legId: which leg's velocity
    * @return vector of motor velocities
    */
-  Eigen::Matrix<float, 3, 1> getQ(unsigned int legId);
+  Eigen::Matrix<float, 3, 1> GetQ(unsigned int legId);
+
+  /**
+   * @brief return foot position accroding to base frame
+   * @return foot position in base frame
+   */
+  Eigen::Matrix<float, 3, 4> GetFootPositionInBaseFrame();
+
+  /**
+   * @brief get roll pitch yall of robot body
+   * @return roll, pitch, yaw
+   */
+  Eigen::Matrix<float, 3, 1> GetRpy();
+
+  /**
+   * @brief get velocity of roll, pitch, yaw
+   * @return velocity of roll, pitch, yaw
+   */
+  Eigen::Matrix<float, 3, 1> GetDrpy();
+
+  /**
+   * @brief return orientation of robot body
+   * @return orientation of robot body
+   */
+  Eigen::Matrix<float, 3, 1> GetBaseOrientation();
+
+  /**
+   * @brief get current jacobian of leg legId
+   * @param legId: which leg to calculate
+   * @return current Jacobian
+   */
+  Eigen::Matrix<float, 3, 3> GetJacobian(int legId);
+
+  /**
+   * @brief convert contact force of one leg to joint torque
+   * @param contractForce: contact force of the leg
+   * @param legId: which leg to convert
+   * @return joint torques, totally 3 joints
+   */
+  Eigen::Matrix<float, 3, 1> ContactForce2JointTorque(Eigen::Matrix<float, 3, 1> contractForce, int legId);
+
+  inline Eigen::Matrix<bool, 4, 1> GetFootContacts() const
+  {
+      return footContact;
+  }
 
 private:
 
@@ -174,6 +207,17 @@ private:
    * @brief last time stamp
    */
   uint32_t lastStamp = 0;
+
+  /**
+   * @brief force on foot
+   */
+  Eigen::Matrix<float, 4, 1> footForce;
+
+  // TODO: get and set
+  /**
+   * @brief the contact status of 4 foot
+   */
+  Eigen::Matrix<bool, 4, 1> footContact;
 };
 
 #endif // QR_ROBOT_STATE_H

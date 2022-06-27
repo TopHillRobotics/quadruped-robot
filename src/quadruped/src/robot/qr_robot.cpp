@@ -3,12 +3,14 @@
 
 qrRobot::qrRobot()
 {
+  stop = false;
   config = nullptr;
   robotState = new qrRobotState();
 }
 
 qrRobot::qrRobot(std::string path)
 {
+  stop = false;
   config = new qrRobotConfig(path);
   robotState = new qrRobotState();
 }
@@ -25,25 +27,6 @@ void qrRobot::LoadConfig(std::string path)
 qrRobot::~qrRobot()
 {
   delete config;
-}
-
-void qrRobot::Update()
-{
-  rpy         = robotState->imu.CalibratedYawRpy();
-  orientation = Math::rpy2Quat(rpy);
-  drpy        = robotState->imu.acc;
-  for(unsigned int i = 0; i < qrRobotConfig::numMotor; i++){
-    motorq[i]  = robotState->q[i];
-    motordq[i] = robotState->dq[i];
-  }
-
-  for(unsigned i = 0; i < qrRobotConfig::numLegs; i++){
-    if(robotState->footForce[i] > 5.0f){
-      footContact[i] = true;
-    } else {
-      footContact[i] = false;
-    }
-  }
 }
 
 std::array<qrMotorCmd, 12> qrRobot::GetCmd()

@@ -46,7 +46,7 @@ namespace Math {
    * @param rpy: reference to vector of roll ptch yaw
    */
   template<typename MT>
-  Mat3<typename MT::Scalar> rpy2RotMat(const Eigen::MatrixBase<MT> &rpy);
+  Mat3<typename MT::Scalar> Rpy2RotMat(const Eigen::MatrixBase<MT> &rpy);
 
   /**
    * @brief convert raw pitch yaw to quaterion
@@ -54,7 +54,7 @@ namespace Math {
    * @return quaterion
    */
   template<typename MT>
-  Quat<typename MT::Scalar> rpy2Quat(const Eigen::MatrixBase<MT> &rpy);
+  Quat<typename MT::Scalar> Rpy2Quat(const Eigen::MatrixBase<MT> &rpy);
 
   /**
    * @brief convert rotation matrix to quaterion
@@ -62,7 +62,7 @@ namespace Math {
    * @return quaterion
    */
   template<typename MT>
-  Quat<typename MT::Scalar> rotMat2Quat(const Eigen::MatrixBase<MT> &R);
+  Quat<typename MT::Scalar> RotMat2Quat(const Eigen::MatrixBase<MT> &R);
 
   /**
    * @param axis: the rotation axis
@@ -70,7 +70,7 @@ namespace Math {
    * @return basic rotation matrix
    */
   template<typename T>
-  Mat3<T> basicRotMat(Axis axis, T theta);
+  Mat3<T> BasicRotMat(Axis axis, T theta);
 
   /**
    * @brief the rotation order is X axis, Y axis and Z axis, all fixed coordinate
@@ -79,11 +79,11 @@ namespace Math {
    * @param zTheta: rotation around z axis
    */
   template<typename T>
-  Mat3<T> genericRotMat(T xTheta, T yTheta, T zTheta);
+  Mat3<T> GenericRotMat(T xTheta, T yTheta, T zTheta);
 }
 
 template<typename MT>
-Quat<typename MT::Scalar> Math::rpy2Quat(const Eigen::MatrixBase<MT> &rpy)
+Quat<typename MT::Scalar> Math::Rpy2Quat(const Eigen::MatrixBase<MT> &rpy)
 {
   Mat3<typename MT::Scalar> R = rpy2RotMat(rpy);
   Quat<typename MT::Scalar> q = rotMat2Quat(R);
@@ -91,7 +91,7 @@ Quat<typename MT::Scalar> Math::rpy2Quat(const Eigen::MatrixBase<MT> &rpy)
 }
 
 template<typename MT>
-Mat3<typename MT::Scalar> Math::rpy2RotMat(const Eigen::MatrixBase<MT> &rpy)
+Mat3<typename MT::Scalar> Math::Rpy2RotMat(const Eigen::MatrixBase<MT> &rpy)
 {
   static_assert(MT::ColsAtCompileTime == 1 && MT::RowsAtCompileTime == 3,
                 "must have 3x1 vector");
@@ -99,7 +99,7 @@ Mat3<typename MT::Scalar> Math::rpy2RotMat(const Eigen::MatrixBase<MT> &rpy)
 }
 
 template<typename MT>
-Quat<typename MT::Scalar> Math::rotMat2Quat(const Eigen::MatrixBase<MT> &R)
+Quat<typename MT::Scalar> Math::RotMat2Quat(const Eigen::MatrixBase<MT> &R)
 {
   static_assert(MT::ColsAtCompileTime == 3 && MT::RowsAtCompileTime == 3,
                 "Must have 3x3 matrix");
@@ -136,14 +136,14 @@ Quat<typename MT::Scalar> Math::rotMat2Quat(const Eigen::MatrixBase<MT> &R)
 }
 
 template<typename T>
-inline Mat3<T> Math::genericRotMat(T xTheta, T yTheta, T zTheta)
+inline Mat3<T> Math::GenericRotMat(T xTheta, T yTheta, T zTheta)
 {
   return basicRotMat(Axis::Z, zTheta) * basicRotMat(Axis::Y, yTheta) * basicRotMat(Axis::X, xTheta);
 }
 
 // TODO: discuss this
 template<typename T>
-Mat3<T> Math::basicRotMat(Axis axis, T theta)
+Mat3<T> Math::BasicRotMat(Axis axis, T theta)
 {
   static_assert(std::is_floating_point<T>::value,
                   "must use floating point value");
