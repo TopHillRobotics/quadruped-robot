@@ -34,7 +34,7 @@
     }
 
     void qrFootholdPlanner::Reset() {
-        // resetTime = robot->GetTimeSinceReset();
+        resetTime = robot->GetTimeSinceReset();
         timeSinceReset = 0.f;
         footstepper->Reset(timeSinceReset);
         comPose << robot->GetBasePosition(), robot->GetRpy();
