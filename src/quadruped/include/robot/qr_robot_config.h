@@ -140,8 +140,13 @@ public:
   // TODO: explain
   static constexpr float footHoldOffset = 0.1f;
 
-  // TODO: check this. Add read configuration in Load
+  /**
+   * @brief control mode of the robot
+   */
   int controlMode;
+
+
+  bool isSim;
 
 private:
 
@@ -160,30 +165,23 @@ private:
    */
   float hipLength, upperLength, lowerLength;
 
-  // TODO: initialize this
   // check difference of these two;
   Eigen::Matrix<float, 3, 4> defaultHipPosition;
 
-  // TODO: initialize this
   /**
    * @brief offset of hip
    */
   Eigen::Matrix<float, 3, 4> hipOffset;
 
-  // TODO: initialize this
   /**
    * @brief offset of center of mass
    */
   Eigen::Matrix<float, 3, 1> comOffset;
 
-  float footHoldOffset = 0.1f;
   /**
    * @brief the tensor of inertia of the body
    */
   Eigen::Matrix<float, 3, 3> bodyInertia;
-
-  //TODO: check this
-  // Eigen::Matrix<float, 3, 4> defaultHipPosition;
 
   /**
    * @brief motor position stiffness (unit: N.m/rad )
@@ -195,7 +193,6 @@ private:
    * @brief velocity stiffness (unit: N.m/(rad/s) )
    */
   Eigen::Matrix<float, 12, 1> motorKds;
-
 
   // TODO: check this
   Eigen::Matrix<float, 12, 1> basePosition;
@@ -211,15 +208,20 @@ private:
    * @brief load kps parameter from YAML file
    * @param node: node that load YAML file
    */
-  Eigen::Matrix<float, 12, 1> LoadKps(YAML::Node &node);
-
+  void LoadKps(YAML::Node &node);
 
   /**
    * @brief load kps parameter from YAML file
    * @param path: file path
    */
-  Eigen::Matrix<float, 12, 1> LoadKds(YAML::Node &node);
+  void LoadKds(YAML::Node &node);
 
+
+  void LoadComOffset(YAML::Node &node);
+
+  void LoadHipOffset(YAML::Node &node);
+
+  void LoadHipPosition(YAML::Node &node);
   /**
    * @brief convert foot position in hip frame to joint angles
    * @param footPosition: the position(x, y, z) of foot point

@@ -58,7 +58,7 @@ Eigen::Matrix<float, 3, 3> qrRobotState::GetJacobian(int legId)
 }
 
 
-Eigen::Matrix<float, 3, 1> qrRobotState::ContactForce2JointTorques(Eigen::Matrix<float, 3, 1> contractForce, int legId)
+Eigen::Matrix<float, 3, 1> qrRobotState::ContactForce2JointTorque(Eigen::Matrix<float, 3, 1> contractForce, int legId)
 {
   Eigen::Matrix<float, 3, 3> j = GetJacobian(legId);
   return j.transpose() * contractForce;

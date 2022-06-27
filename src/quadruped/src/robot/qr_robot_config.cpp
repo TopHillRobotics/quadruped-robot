@@ -53,33 +53,61 @@ void qrRobotConfig::Load(std::string path)
   hipLength   = node["hip_length"].as<float>();
   upperLength = node["upper_length"].as<float>();
   lowerLength = node["lower_length"].as<float>();
-  motorKps    = LoadKps(node);
-  motorKds    = LoadKds(node);
-
+  controlMode = node["controlMode"].as<int>();
+  isSim = node["is simulation"].as<bool>();
+  LoadKps(node);
+  LoadKds(node);
+  LoadComOffset(node);
+  LoadHipOffset(node);
+  LoadHipPosition(node);
   std::vector<float> bodyInertiaList = node["body_inertia"].as<std::vector<float >>();
   bodyInertia = Eigen::MatrixXf::Map(&bodyInertiaList[0], 3, 3);
+  basePosition = {0.f, 0.f, bodyHeight};
 }
 
-Eigen::Matrix<float, 12, 1> qrRobotConfig::LoadKps(YAML::Node &n)
+void qrRobotConfig::LoadKps(YAML::Node &n)
 {
   float abadKp = n["abad_kp"].as<float>();
-  float hipKp = n ["hip_kp"].as<float>();
+  float hipKp  = n["hip_kp"].as<float>();
   float kneeKp = n["knee_kp"].as<float>();
   Eigen::Matrix<float, 3, 1> kp(abadKp, hipKp, kneeKp);
-  Eigen::Matrix<float, 12, 1> kps;
-  kps << kp, kp, kp, kp;
-  return kps;
+  motorKps << kp, kp, kp, kp;
 }
 
-Eigen::Matrix<float, 12, 1> qrRobotConfig::LoadKds(YAML::Node &n)
+void qrRobotConfig::LoadKds(YAML::Node &n)
 {
   float abadKd = n["abad_kp"].as<float>();
-  float hipKd = n ["hip_kp"].as<float>();
+  float hipKd  = n["hip_kp"].as<float>();
   float kneeKd = n["knee_kp"].as<float>();
   Eigen::Matrix<float, 3, 1> kd(abadKd, hipKd, kneeKd);
-  Eigen::Matrix<float, 12, 1> kds;
-  kds << kd, kd, kd, kd;
-  return kds;
+  motorKds << kd, kd, kd, kd;
+}
+
+void qrRobotConfig::LoadComOffset(YAML::Node &n)
+{
+  std::vector<float> comOffsetList = n["robot_params"][modeMap[controlMode]]["com_offset"].as<std::vector<float >>();
+  comOffset = Eigen::MatrixXf::Map(&comOffsetList[0], 3, 1);
+}
+
+void qrRobotConfig::LoadHipOffset(YAML::Node &n)
+{
+  std::vector<std::vector<float >>
+              hipOffsetList = n["hip_offset"].as<std::vector<std::vector<float>>>();
+  Eigen::Matrix<float, 3, 1> hipOffsetFR = Eigen::MatrixXf::Map(&hipOffsetList[0][0], 3, 1) + comOffset;
+  Eigen::Matrix<float, 3, 1> hipOffsetFL = Eigen::MatrixXf::Map(&hipOffsetList[1][0], 3, 1) + comOffset;
+  Eigen::Matrix<float, 3, 1> hipOffsetRL = Eigen::MatrixXf::Map(&hipOffsetList[2][0], 3, 1) + comOffset;
+  Eigen::Matrix<float, 3, 1> hipOffsetRR = Eigen::MatrixXf::Map(&hipOffsetList[3][0], 3, 1) + comOffset;
+  hipOffset << hipOffsetFR, hipOffsetFL, hipOffsetRL, hipOffsetRR;
+}
+
+void qrRobotConfig::LoadHipPosition(YAML::Node &n)
+{
+  std::vector<std::vector<float>> defaultHipPositionList = n["default_hip_positions"].as<std::vector<std::vector<float>>>();
+  Eigen::Matrix<float, 3, 1> defaultHipPositionFR = Eigen::MatrixXf::Map(&defaultHipPositionList[0][0], 3, 1);
+  Eigen::Matrix<float, 3, 1> defaultHipPositionFL = Eigen::MatrixXf::Map(&defaultHipPositionList[1][0], 3, 1);
+  Eigen::Matrix<float, 3, 1> defaultHipPositionRL = Eigen::MatrixXf::Map(&defaultHipPositionList[2][0], 3, 1);
+  Eigen::Matrix<float, 3, 1> defaultHipPositionRR = Eigen::MatrixXf::Map(&defaultHipPositionList[3][0], 3, 1);
+  defaultHipPosition << defaultHipPositionFR, defaultHipPositionFL, defaultHipPositionRL, defaultHipPositionRR;
 }
 
 Eigen::Matrix<float, 3, 3> qrRobotConfig::AnalyticalLegJacobian(Eigen::Matrix<float, 3, 1> &q, int legId)
