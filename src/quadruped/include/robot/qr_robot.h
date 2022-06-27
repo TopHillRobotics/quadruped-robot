@@ -32,6 +32,7 @@
 #include "qr_motor_cmd.h"
 #include "qr_robot_state.h"
 #include "common/qr_types.h"
+#include "common/qr_timer.h"
 
 /**
  *  @brief a base class for all robot classes.It stores runtime status and data of the robot.
@@ -113,12 +114,21 @@ public:
    */
   qrRobotState* getRobotState();
 
+  inline double GetTimeSinceReset(){
+    return timer.GetTimeSinceReset();
+  }
+
+  inline void ResetStartTime(){
+    timer.ResetStartTime();
+  }
 protected:
 
   /**
    * @brief whether robot is running
    */
   bool stop;
+
+  Timer timer;
 
   /**
    * @brief stores the static config of the robot
