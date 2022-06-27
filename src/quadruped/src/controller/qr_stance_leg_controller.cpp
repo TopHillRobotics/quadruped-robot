@@ -27,10 +27,10 @@
 qrStanceLegController::
     qrSwingLegController(qrRobot *robot,
                          qrGaitGenerator *gaitGenerator,
-                         qrRobotEstimator *robotVelocityEstimator,
+                         RobotVelocityEstimator *robotVelocityEstimator,
                          qrGroundSurfaceEstimator *groundEstimator,
                          qrComPlanner *comPlanner,
-                         qrPosePlanner *posePlanner,
+                        //  qrPosePlanner *posePlanner,
                          qrFootholdPlanner *footholdPlanner,
                          Eigen::Matrix<float, 3, 1> desired_speed,
                          float desiredTwistingSpeed,
@@ -41,7 +41,7 @@ qrStanceLegController::
       robotEstimator(robotVelocityEstimator),
       groundEstimator(groundEstimator),
       comPlanner(comPlanner),
-      posePlanner(posePlanner),
+    //   posePlanner(posePlanner),
       footholdPlanner(footholdPlanner),
       desiredSpeed(desired_speed),
       desiredTwistingSpeed(desiredTwistingSpeed),
@@ -49,12 +49,14 @@ qrStanceLegController::
       configFilepath(configFilepath)
 {
     this->Reset(0.f);
+    this->robotConfig = this->robot->getRobotConfig();
+    this->robotState = this->robot->getRobotState();
 }
 
 void qrStanceLegController::Reset(float currentTime)
 {
     string controlModeStr;        
-    switch (robot->controlParams["mode"])
+    switch (this->robotConfig->controlMode)
     {
         case LocomotionMode::VELOCITY_LOCOMOTION:
             controlModeStr = "velocity";
@@ -80,49 +82,50 @@ void qrStanceLegController::Reset(float currentTime)
     v = param["stance_leg_params"][controlModeStr]["acc_weight"].as<vector<float>>();
     this->accWeight = Eigen::MatrixXf::Map(&v[0], 6, 1);        
     this->currentTime = currentTime;
-    this->resetTime = this->robot->GetTimeSinceReset();
-    this->gaitGenerator->Reset(timeSinceReset);
-    this->stateEstimator->Reset(timeSinceReset);
-    this->groundEstimator->Reset();
-    this->comPlanner->Reset(timeSinceReset);
-    this->posePlanner->Reset(timeSinceReset);
+    // this->resetTime = this->robot->GetTimeSinceReset();
+    // this->gaitGenerator->Reset(timeSinceReset);
+    // this->stateEstimator->Reset(timeSinceReset);
+    // this->groundEstimator->Reset();
+    // this->comPlanner->Reset(timeSinceReset);
+    // this->posePlanner->Reset(timeSinceReset);
 }
 
 void qrStanceLegController::Update(float currentTime)
 {
-    if(!this->robot->stop){
-        this->timeSinceReset = this->robot->GetTimeSinceReset() - this->resetTime;
-    }
-    this->gaitGenerator->Update(this->timeSinceReset);
+    // if(!this->robot->stop){
+    //     this->timeSinceReset = this->robot->GetTimeSinceReset() - this->resetTime;
+    // }
+    // this->gaitGenerator->Update(this->timeSinceReset);
 
-    bool switchToSwing = false;
-    if (this->robot->controlParams["mode"]==LocomotionMode::WALK_LOCOMOTION) {
-        // for walk mode
-        const Vec4<int>& newLegState = this->gaitGenerator->legState;
-        const Vec4<int>& curLegState = this->gaitGenerator->curLegState;
-        for(int legId =0; legId<4; legId++) {
-            if((newLegState(legId) == LegState::SWING && curLegState(legId) == LegState::STANCE)
-                || newLegState(legId) == LegState::USERDEFINED_SWING) {
-                switchToSwing=true;
-                break;
-            }
-        }
-    }
+    // bool switchToSwing = false;
+    // if (this->robotConfig->controlMode == LocomotionMode::WALK_LOCOMOTION) {
+    //     // for walk mode
+    //     const Vec4<int>& newLegState = this->gaitGenerator->legState;
+    //     const Vec4<int>& curLegState = this->gaitGenerator->curLegState;
+    //     for(int legId =0; legId<4; legId++) {
+    //         if((newLegState(legId) == LegState::SWING && curLegState(legId) == LegState::STANCE)
+    //             || newLegState(legId) == LegState::USERDEFINED_SWING) {
+    //             switchToSwing=true;
+    //             break;
+    //         }
+    //     }
+    // }
 
-    this->groundEstimator->Update();
-    this->stateEstimator->Update(this->timeSinceReset);
-    switch (robot->controlParams["mode"]) {
-        case LocomotionMode::POSITION_LOCOMOTION: {
-            this->comPlanner->Update(this->timeSinceReset);
-        } break; 
-        case LocomotionMode::WALK_LOCOMOTION: {
-            if (switchToSwing) {
-                this->posePlanner->Update(this->timeSinceReset);
-                printf("update pose plan finish\n");
-            }
-        } break;
-        default: break;
-    }
+    // this->groundEstimator->Update();
+    // this->stateEstimator->Update(this->timeSinceReset);
+    // switch (this->robotConfig->controlMode) {
+    //     case LocomotionMode::POSITION_LOCOMOTION: {
+    //         this->comPlanner->Update(this->timeSinceReset);
+    //     } break; 
+    //     case LocomotionMode::WALK_LOCOMOTION: {
+    //         if (switchToSwing) {
+    //             this->posePlanner->Update(this->timeSinceReset);
+    //             printf("update pose plan finish\n");
+    //         }
+    //     } break;
+    //     default: break;
+    // }
+    this->currentTime = currentTime;
 }
 
 void qrStanceLegController::UpdateFRatio(Vec4<bool> &contacts, int &N, float &moveBasePhase)
@@ -135,7 +138,7 @@ void qrStanceLegController::UpdateFRatio(Vec4<bool> &contacts, int &N, float &mo
         contacts << true, true, true, true;
         N = 4; 
         return;
-    } else if (robot->controlParams["mode"] != LocomotionMode::WALK_LOCOMOTION) {
+    } else if (this->robotConfig->controlMode != LocomotionMode::WALK_LOCOMOTION) {
         this->fMaxRatio << 10., 10., 10., 10.;
         this->fMinRatio << 0.01, 0.01, 0.01, 0.01;
         for (int legId=0; legId<4; ++legId){
@@ -194,7 +197,7 @@ void qrStanceLegController::UpdateFRatio(Vec4<bool> &contacts, int &N, float &mo
     }
 }
 
-std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLegController::GetAction()
+std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrStanceLegController::GetAction()
 {
     Eigen::Matrix<float, 3, 1> robotComPosition;
     Eigen::Matrix<float, 3, 1> robotComVelocity;
@@ -217,43 +220,43 @@ std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLegCon
     int N=0;
 
     UpdateFRatio(contacts, N, moveBasePhase);
-    Eigen::Matrix<float, 3, 4> footPoseWorld = robot->GetFootPositionsInWorldFrame();
+    // Eigen::Matrix<float, 3, 4> footPoseWorld = robot->GetFootPositionsInWorldFrame();
     
     Vec6<float> pose;
     Vec6<float> twist; // v, wb
     bool computeForceInWorldFrame = false;       
-    if (robot->controlParams["mode"]==LocomotionMode::WALK_LOCOMOTION) {
-        computeForceInWorldFrame = true;
-        if (!robot->stop) {
-            auto res = posePlanner->GetIntermediateBasePose(moveBasePhase, currentTime); //todo  in world frame;
-            pose = std::get<0>(res);
-            twist = std::get<1>(res);
-        } else {
-            auto res = posePlanner->GetIntermediateBasePose(currentTime);
-            pose = std::get<0>(res);
-            twist = std::get<1>(res);  
-        }
-    }
-    Eigen::Matrix<float, 3, 4> com2FootInWorld = footPoseWorld.colwise() - pose.head(3);
+    // if (this->robotConfig->controlMode == LocomotionMode::WALK_LOCOMOTION) {
+    //     computeForceInWorldFrame = true;
+    //     if (!robot->stop) {
+    //         auto res = posePlanner->GetIntermediateBasePose(moveBasePhase, currentTime); //todo  in world frame;
+    //         pose = std::get<0>(res);
+    //         twist = std::get<1>(res);
+    //     } else {
+    //         auto res = posePlanner->GetIntermediateBasePose(currentTime);
+    //         pose = std::get<0>(res);
+    //         twist = std::get<1>(res);  
+    //     }
+    // }
+    // Eigen::Matrix<float, 3, 4> com2FootInWorld = footPoseWorld.colwise() - pose.head(3);
     Eigen::Matrix<float, 3, 4> footJointAngles = Eigen::Matrix<float,3,4>::Zero();
     Eigen::Matrix<int, 3, 4> jointIdxs;
     Eigen::Matrix<int, 3, 1> jointIdx;
     Eigen::Matrix<float, 3, 1> jointAngles;
     
-    Quat<float> robotComOrientation = robot->GetBaseOrientation();
+    Quat<float> robotComOrientation = this->robotConfig->GetBaseOrientation();
     Mat3<float> Rb = robotics::math::quaternionToRotationMatrix(robotComOrientation).transpose();
-    Quat<float> controlFrameOrientation = groundEstimator->GetControlFrameOrientation();
+    Quat<float> controlFrameOrientation = this->groundEstimator->GetControlFrameOrientation();
     Mat3<float> Rc = robotics::math::quaternionToRotationMatrix(controlFrameOrientation).transpose();
-    Vec3<float> groundRPY = groundEstimator->GetControlFrameRPY();
+    Vec3<float> groundRPY = this->groundEstimator->GetControlFrameRPY();
     Mat3<float> Rcb = Rc.transpose() * Rb;
     
     /// current robot status  ///
-    robotComVelocity = robotEstimator->GetEstimatedVelocity();  // base frame
-    robotComRpy = robot->GetBaseRollPitchYaw(); // world frame
-    robotComRpyRate = robot->GetBaseRollPitchYawRate();  // base frame
-    switch (robot->controlParams["mode"]) {
-        case LocomotionMode::VELOCITY_LOCOMOTION: {
-            robotComPosition = {0., 0., robot->basePosition[2]}; // vel mode in base frame, height is in world frame.
+    robotComVelocity = this->robotEstimator->GetEstimatedVelocity();  // base frame
+    robotComRpy = this->robotState->GetRpy(); // world frame
+    robotComRpyRate = this->robotState->GetDrpy();  // base frame
+    // switch (this->robotConfig->controlMode) {
+    //     case LocomotionMode::VELOCITY_LOCOMOTION: {
+            robotComPosition = {0., 0., this->robotConfig->GetBasePosition()[2]}; // vel mode in base frame, height is in world frame.
             robotComRpy[2] = 0.f;
             if (groundEstimator->terrain.terrainType>=2) { // not horizontal plane
                 robotComPosition = robotics::math::TransformVecByQuat(robotics::math::quatInverse(controlFrameOrientation), robotComPosition);      
@@ -265,65 +268,65 @@ std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLegCon
                 robotComRpyRate = robotics::math::invertRigidTransform({0,0,0}, robotComOrientation, robotComRpyRate); // in world frame
                 robotComRpyRate = robotics::math::RigidTransform({0,0,0}, controlFrameOrientation, robotComRpyRate); // in control frame
             }
-        } break;
-        case LocomotionMode::WALK_LOCOMOTION: {
-            robotComPosition = robot->GetBasePosition(); // in world frame, walk mode
-            robotComVelocity = robotics::math::invertRigidTransform({0,0,0}, robotComOrientation, robotComVelocity); // in world frame
-            robotComRpyRate = robotics::math::invertRigidTransform({0,0,0}, robotComOrientation, robotComRpyRate); // in world frame   
-        } break;
-        default: {  // pos mode
-            robotComPosition = {0., 0., robot->basePosition[2]};
-        }
+    //     } break;
+    //     case LocomotionMode::WALK_LOCOMOTION: {
+    //         robotComPosition = robotConfig->GetBasePosition(); // in world frame, walk mode
+    //         robotComVelocity = robotics::math::invertRigidTransform({0,0,0}, robotComOrientation, robotComVelocity); // in world frame
+    //         robotComRpyRate = robotics::math::invertRigidTransform({0,0,0}, robotComOrientation, robotComRpyRate); // in world frame   
+    //     } break;
+    //     default: {  // pos mode
+    //         robotComPosition = {0., 0., robotConfig->GetBasePosition()[2]};
+    //     }
         
-    }
+    // }
     
     robotQ << robotComPosition, robotComRpy;
     robotDq << robotComVelocity, robotComRpyRate;
             
     /// desired robot status  ///
     
-    switch (robot->controlParams["mode"]) {
-        case LocomotionMode::VELOCITY_LOCOMOTION: {
+    // switch (this->robotConfig->controlMode) {
+    //     case LocomotionMode::VELOCITY_LOCOMOTION: {
             desiredComPosition << 0.f, 0.f, desiredBodyHeight;
             desiredComRpy << -groundRPY[0], 0, -groundRPY[2]; // not control roll/yaw
-            desiredComVelocity = {desiredSpeed[0], desiredSpeed[1], 0.f}; // in base/control frame
+            desiredComVelocity = {this->desiredSpeed[0], this->desiredSpeed[1], 0.f}; // in base/control frame
             desiredComAngularVelocity = {0.f, 0.f, desiredTwistingSpeed};        
-        } break;
-        case LocomotionMode::WALK_LOCOMOTION: {
-            for (int i=0; i<NumLeg; ++i) {
-                float phase = gaitGenerator->normalizedPhase[i];
+    //     } break;
+    //     case LocomotionMode::WALK_LOCOMOTION: {
+    //         for (int i=0; i<NumLeg; ++i) {
+    //             float phase = gaitGenerator->normalizedPhase[i];
                     
-                if ((contacts[i] && gaitGenerator->desiredLegState[i]==SubLegState::UNLOAD_FORCE && phase > 3.0/4) 
-                    || robot->stop) {
-                    Quat<float> intermediateQuat = robotics::math::rpyToQuat(Vec3<float>(pose.tail(3)));
-                    Vec3<float> dr = Vec3<float>(0.f,0.f,0.01f) / 2000;
-                    Vec3<float> r = robot->GetFootPositionsInBaseFrame().col(i) + dr;
-                    robot->ComputeMotorAnglesFromFootLocalPosition(i, r, jointIdx, jointAngles);
-                    footJointAngles.block<3,1>(0, i) = jointAngles;
-                    jointIdxs.block<3,1>(0,i) = jointIdx;
-                } else {
-                    for(int j=0;j<3;j++) {
-                        jointIdxs(j,i) = 3*i+j;
-                    }
-                }
-            }
-            // pose in world frame
-            desiredComPosition = pose.head(3);  // world frame
-            desiredComRpy = pose.tail(3); // world frame
-            desiredComRpy[1] = std::max(-0.35f, std::min(desiredComRpy[1], 0.35f));
-            desiredComVelocity = twist.head(3); // world
-            desiredComAngularVelocity = twist.tail(3); // world
-        } break;
-        case LocomotionMode::POSITION_LOCOMOTION: {
-            auto &comAdjPosInBaseFrame = comPlanner->GetComPosInBaseFrame();
-            desiredComPosition = {comAdjPosInBaseFrame[0], comAdjPosInBaseFrame[1],
-                                desiredBodyHeight}; // get goal com position from comPlanner, base frame
-            desiredComVelocity = {desiredSpeed[0], desiredSpeed[1], 0.f};
-            // get goal rpy from footholdPlanner, in world frame
-            desiredComRpy = footholdPlanner->GetDesiredComPose().tail(3);
-            desiredComAngularVelocity = {0.f, 0.f, 0.f};
-        } break;
-    }
+    //             if ((contacts[i] && gaitGenerator->desiredLegState[i]==SubLegState::UNLOAD_FORCE && phase > 3.0/4) 
+    //                 || robot->stop) {
+    //                 Quat<float> intermediateQuat = robotics::math::rpyToQuat(Vec3<float>(pose.tail(3)));
+    //                 Vec3<float> dr = Vec3<float>(0.f,0.f,0.01f) / 2000;
+    //                 Vec3<float> r = this->robotState->GetFootPositionsInBaseFrame().col(i) + dr;
+    //                 robotConfig->FootPosition2JointAngles(i, r, jointIdx, jointAngles);
+    //                 footJointAngles.block<3,1>(0, i) = jointAngles;
+    //                 jointIdxs.block<3,1>(0,i) = jointIdx;
+    //             } else {
+    //                 for(int j=0;j<3;j++) {
+    //                     jointIdxs(j,i) = 3*i+j;
+    //                 }
+    //             }
+    //         }
+    //         // pose in world frame
+    //         desiredComPosition = pose.head(3);  // world frame
+    //         desiredComRpy = pose.tail(3); // world frame
+    //         desiredComRpy[1] = std::max(-0.35f, std::min(desiredComRpy[1], 0.35f));
+    //         desiredComVelocity = twist.head(3); // world
+    //         desiredComAngularVelocity = twist.tail(3); // world
+    //     } break;
+    //     case LocomotionMode::POSITION_LOCOMOTION: {
+    //         auto &comAdjPosInBaseFrame = comPlanner->GetComPosInBaseFrame();
+    //         desiredComPosition = {comAdjPosInBaseFrame[0], comAdjPosInBaseFrame[1],
+    //                             desiredBodyHeight}; // get goal com position from comPlanner, base frame
+    //         desiredComVelocity = {this->desiredSpeed[0], this->desiredSpeed[1], 0.f};
+    //         // get goal rpy from footholdPlanner, in world frame
+    //         desiredComRpy = footholdPlanner->GetDesiredComPose().tail(3);
+    //         desiredComAngularVelocity = {0.f, 0.f, 0.f};
+    //     } break;
+    // }
     desiredQ << desiredComPosition, desiredComRpy;
     Vec6<float> dq = desiredQ - robotQ;
     desiredDq << desiredComVelocity, desiredComAngularVelocity;
@@ -347,7 +350,7 @@ std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLegCon
     }   
 
     //
-    desiredDdq = KP.cwiseProduct(dq) + KD.cwiseProduct(ddq);
+    desiredDdq = this->KP.cwiseProduct(dq) + this->KD.cwiseProduct(ddq);
     desiredDdq = desiredDdq.cwiseMin(maxDdq).cwiseMax(minDdq); // Clip
         
     /// Compute Contact Force  ///
@@ -361,39 +364,43 @@ std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLegCon
                                             fMinRatio,
                                             fMaxRatio);
     } else {
-        contactForces << ComputeContactForce(robot, groundEstimator, desiredDdq, contacts, accWeight); // compute the force in control/base frame        
+        contactForces << ComputeContactForce(this->robot, 
+                                             this->groundEstimator, 
+                                             desiredDdq, 
+                                             contacts, 
+                                             accWeight); // compute the force in control/base frame        
     }
     
-    map<int, MotorCommand> action;
+    map<int, qrMotorCmd> action;
     map<int, float> motorTorques;
-    Eigen::Matrix<float, 12, 1> kps = robot->GetMotorPositionGains();
-    Eigen::Matrix<float, 12, 1> kds = robot->GetMotorVelocityGains();
+    Eigen::Matrix<float, 12, 1> kps = this->robotConfig->GetKps();
+    Eigen::Matrix<float, 12, 1> kds = this->robotConfig->GetKds();
     
     for (int legId = 0; legId < NumLeg; ++legId) {
-        motorTorques = robot->MapContactForceToJointTorques(legId, contactForces.col(legId));    
-        MotorCommand temp;
-        switch (robot->controlParams["mode"]) {
-            case LocomotionMode::WALK_LOCOMOTION: {
-                for (int motorId=0; motorId<3; motorId++) {    
-                    if (contacts[legId]) {
-                        temp = {0*footJointAngles(motorId, legId), 0*kps(3*legId+motorId), 0., 0.5*kds(3*legId+motorId), motorTorques[3*legId+motorId]};
-                    } else if ((N<4 && moveBasePhase<0.7) || robot->stop) {
-                        temp = {0, 0, 0., kds(3*legId+motorId)*0, motorTorques[3*legId+motorId]};
-                    } else { // moveBasePhase > 0.7
-                        temp = {0., 0., 0., 0., 0.};
-                    }       
-                    action[jointIdxs(motorId,legId)] = temp;
-                }   
-            } break;
-            default:
+        motorTorques = this->robotState->ContactForce2JointTorques(legId, contactForces.col(legId));    
+        qrMotorCmd temp;
+        // switch (this->robotConfig->controlMode) {
+        //     case LocomotionMode::WALK_LOCOMOTION: {
+        //         for (int motorId=0; motorId<3; motorId++) {    
+        //             if (contacts[legId]) {
+        //                 temp = {0*footJointAngles(motorId, legId), 0*kps(3*legId+motorId), 0., 0.5*kds(3*legId+motorId), motorTorques[3*legId+motorId]};
+        //             } else if ((N<4 && moveBasePhase<0.7) || robot->stop) {
+        //                 temp = {0, 0, 0., kds(3*legId+motorId)*0, motorTorques[3*legId+motorId]};
+        //             } else { // moveBasePhase > 0.7
+        //                 temp = {0., 0., 0., 0., 0.};
+        //             }       
+        //             action[jointIdxs(motorId,legId)] = temp;
+        //         }   
+        //     } break;
+        //     default:
                 for (map<int, float>::iterator it = motorTorques.begin(); it != motorTorques.end(); ++it) {
-                    temp = {0., 0., 0., 0., it->second};
+                    temp.SetCmd(0.f, 0.f, 0.f, 0.f, it->second)
                     action[it->first] = temp;
                 }
-                break;
-        }
+        //         break;
+        // }
     }
 
-    std::tuple<std::map<int, MotorCommand>, Eigen::Matrix<float, 3, 4>> actionContactForce(action, contactForces);
+    std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> actionContactForce(action, contactForces);
     return actionContactForce;
 }

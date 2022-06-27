@@ -28,12 +28,14 @@ qrGroundSurfaceEstimator::qrGroundSurfaceEstimator(qrRobot* robot, std::string t
     robot(robot)
 {
     terrainConfig = YAML::LoadFile(terrainConfigPath);
+    this->robotState = robot->getRobotState();
+    this->robotConfig = robot->getRobotConfig();
     Reset();
 }
 
 void qrGroundSurfaceEstimator::Update()
 {
-    Eigen::Matrix<bool, 4, 1> contactState = this->robot->GetFootContacts();
+    Eigen::Matrix<bool, 4, 1> contactState = this->robotState->GetFootContacts();
     bool shouldUpdate = false;
     int N = 0;
     int i = 0;
@@ -49,7 +51,7 @@ void qrGroundSurfaceEstimator::Update()
     if (N <= 3 || !shouldUpdate) {
         return ;
     }
-    Eigen::Matrix<double, 3, 4> footPositionsInBaseFrame = this->robot->GetFootPositionsInBaseFrame().cast<double>();
+    Eigen::Matrix<double, 3, 4> footPositionsInBaseFrame = this->robotState->GetFootPositionsInBaseFrame().cast<double>();
     this->pZ = footPositionsInBaseFrame.row(2);
     this->W.col(1) = footPositionsInBaseFrame.row(0);
     this->W.col(2) = footPositionsInBaseFrame.row(1);
@@ -63,14 +65,14 @@ void qrGroundSurfaceEstimator::Update()
 void qrGroundSurfaceEstimator::Reset()
 {
     this->terrain.terrainType = static_cast<TerrainType>(this->terrainConfig["terrain_type"].as<int>());
-    if (this->robot->controlParams["mode"] == LocomotionMode::POSITION_LOCOMOTION) {
+    if (this->robotConfig->controlMode == LocomotionMode::POSITION_LOCOMOTION) {
         this->terrain.terrainType = TerrainType::PLUM_PILES;
-    } else if (this->robot->controlParams["mode"] == LocomotionMode::VELOCITY_LOCOMOTION) {
+    } else if (this->robotConfig->controlMode == LocomotionMode::VELOCITY_LOCOMOTION) {
         this->terrain.terrainType = TerrainType::PLANE;
     }
 
     this->terrain.footHoldOffset = this->terrainConfig["foothold_offset"].as<float>();
-    this->robot->footHoldOffset = this->terrain.footHoldOffset;
+    this->robotConfig->footHoldOffset = this->terrain.footHoldOffset;
     switch (terrain.terrainType) {
         case TerrainType::PLANE: {
         } break;
@@ -119,7 +121,7 @@ Eigen::Matrix<double, 3, 1> qrGroundSurfaceEstimator::GetNormalVector(bool updat
 
 Eigen::Matrix<double, 4, 4> qrGroundSurfaceEstimator::ComputeControlFrame()
 {
-    Quat<double> quat = this->robot->GetBaseOrientation().cast<double>();
+    Quat<double> quat = this->robotState->GetBaseOrientation().cast<double>();
     Vec3<double> nInWorldFrame = robotics::math::invertRigidTransform<double>({0,0,0},quat, n);
     Vec3<double> xAxis = robotics::math::quaternionToRotationMatrix(quat).transpose().col(0);
     Vec3<double> yAxis = nInWorldFrame.cross(xAxis);
@@ -135,7 +137,7 @@ Eigen::Matrix<double, 4, 4> qrGroundSurfaceEstimator::ComputeControlFrame()
     this->controlFrameRPY = (1 - ratio) * this->controlFrameRPY + ratio * robotics::math::rotationMatrixToRPY(R.transpose());
     this->controlFrameOrientation = robotics::math::rpyToQuat(this->controlFrameRPY);
     this->controlFrame.block<3,3>(0,0) = R;
-    this->controlFrame.block<3,1>(0,3) = this->robot->GetBasePosition().cast<double>();
+    this->controlFrame.block<3,1>(0,3) = this->robotConfig->GetBasePosition().cast<double>();
     return controlFrame;
 }
 

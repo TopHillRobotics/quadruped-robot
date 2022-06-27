@@ -65,16 +65,22 @@ public:
 
     ~qrLocomotionController() = default;
 
+    /** 
+     * @brief Reset the planners, estimatiors and controllers.
+     */
     void Reset();
 
+    /** 
+     * @brief Update the planners, estimatiors and controllers.
+     */
     void Update();
 
     /** 
      * @brief Compute all motors' commands via subcontrollers.
      *  @return tuple<map, Matrix<3,4>> : return control ouputs (e.g. positions/torques) for all (12) motors.
      */
-    std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
-    std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetFakeAction();
+    std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> GetAction();
+    std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> GetFakeAction();
 
     /** 
      * @brief Get gait generator object.
@@ -157,6 +163,16 @@ private:
      */
     qrRobot *robot;
 
+    /**
+     * @brief qrRobotState object pointer.
+     */
+    qrRobotState* robotState;
+
+    /**
+     * @brief qrRobotConfig object pointer.
+     */
+    qrRobotConfig* robotConfig;
+    
     /** 
      * @brief qrGaitGenerator object.
      */

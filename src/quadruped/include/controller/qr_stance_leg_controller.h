@@ -97,7 +97,7 @@ public:
      *  @return tuple<map, Matrix<3,4>> : 
      *          return control ouputs (e.g. positions/torques) for all (12) motors.
      */
-    virtual std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
+    std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> GetAction();
 
 private:
 
@@ -107,9 +107,19 @@ private:
     qrRobot *robot;
 
     /**
+     * @brief qrRobotState object pointer.
+     */
+    qrRobotState* robotState;
+
+    /**
+     * @brief qrRobotConfig object pointer.
+     */
+    qrRobotConfig* robotConfig;
+
+    /**
      * @brief Gait Generator object pointer.
      */
-    qrOpenloopGaitGenerator *gaitGenerator;
+    qrGaitGenerator *gaitGenerator;
 
     /**
      * @brief Robot estimator pointre. Get the estimated velocity.

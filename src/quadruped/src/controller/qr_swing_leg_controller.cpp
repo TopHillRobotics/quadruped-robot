@@ -28,6 +28,7 @@
 
 qrSwingLegController::qrSwingLegController(qrRobot *robot,
                                            qrGaitGenerator *gaitGenerator,
+                                           qrRobotEstimator* robotEstimator,
                                            qrGroundSurfaceEstimator *groundEstimator,
                                            Eigen::Matrix<float, 3, 1> desiredSpeed,
                                            float desiredTwistingSpeed,
@@ -36,6 +37,7 @@ qrSwingLegController::qrSwingLegController(qrRobot *robot,
                                            std::string configPath)
     : gaitGenerator(gaitGenerator),
       groundEstimator(groundEstimator),
+      robotEstimator(robotEstimator),
       desiredSpeed(desiredSpeed),
       desiredTwistingSpeed(desiredTwistingSpeed),
       configFilepath(configPath)
@@ -50,8 +52,8 @@ qrSwingLegController::qrSwingLegController(qrRobot *robot,
 qrSwingLegController::Reset()
 {
     // TODO: interface
-    this->phaseSwitchFootLocalPos = this->robot->GetFootPositionsInBaseFrame();
-    this->phaseSwitchFootGlobalPos = this->robot->GetFootPositionsInWorldFrame();
+    this->phaseSwitchFootLocalPos = this->robotState->GetFootPositionsInBaseFrame();
+    // this->phaseSwitchFootGlobalPos = this->robot->GetFootPositionsInWorldFrame();
     Eigen::Matrix<float, 1, 4> footX = Eigen::MatrixXf::Map(&this->footInitPose[0][0], 1, 4);
     Eigen::Matrix<float, 1, 4> footY = Eigen::MatrixXf::Map(&this->footInitPose[1][0], 1, 4);
     Eigen::Matrix<float, 1, 4> footZ = Eigen::MatrixXf::Map(&this->footInitPose[2][0], 1, 4);
@@ -169,7 +171,7 @@ qrSwingLegController::Update()
 //        default : {
             for (int legId = 0; legId < 4; ++legId) {
                 if (newLegState(legId) == LegState::SWING && newLegState(legId) != this->gaitGenerator->lastLegState(legId)) {
-                    this->phaseSwitchFootLocalPos.col(legId) = this->robot->GetFootPositionsInBaseFrame().col(legId);
+                    this->phaseSwitchFootLocalPos.col(legId) = this->robotState->GetFootPositionsInBaseFrame().col(legId);
                 }
             }
 //        } break;
@@ -236,8 +238,8 @@ Eigen::Matrix<float, 3, 1> qrSwingLegController::GenerateSwingFootTrajectory(flo
 }
 
 
-// TODO: check this
-std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrSwingLegController::GetAction()
+// std::map<int, Eigen::Matrix<float, 5, 1>> qrSwingLegController::GetAction()
+std::map<int, qrMotorCmd> qrSwingLegController::GetAction()
 {
     Matrix<float, 3, 1> comVelocity;
     Matrix<float, 3, 1> hipOffset;
@@ -254,43 +256,43 @@ std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrSwingLegCont
     // The position correction coefficients in Raibert's formula.
     const Matrix<float, 3, 1> swingKp(0.03, 0.03, 0.03);
     float yawDot;
-    Matrix<float, 12, 1> currentJointAngles = robot->GetMotorAngles();
-    comVelocity = stateEstimator->GetEstimatedVelocity(); // in base frame
-    yawDot = robot->GetBaseRollPitchYawRate()(2, 0); // in base frame
-    hipPositions = robot->GetHipPositionsInBaseFrame();
+    Matrix<float, 12, 1> currentJointAngles = this->robotState->GetQ();
+    comVelocity = this->robotEstimator->GetEstimatedVelocity(); // in base frame
+    yawDot = this->robotState->GetDrpy()(2, 0); // in base frame
+    hipPositions = this->robotConfig->GetHipPositionsInBaseFrame();
     for (int legId = 0; legId < NumLeg; ++legId) { 
-        switch (robot->controlParams["mode"]) {
-            case LocomotionMode::WALK_LOCOMOTION: {
-                int tempState = gaitGenerator->detectedLegState[legId];
-                if (tempState == LegState::STANCE || tempState == LegState::EARLY_CONTACT
-                    || gaitGenerator->desiredLegState[legId] != SubLegState::TRUE_SWING
-                    || robot->stop
-                ) {
-                    continue;
-                }
-            } break;
-            default: { // velocity or position mode
-                int tempState = gaitGenerator->legState[legId];
+        // switch (robotConfig->controlMode) {
+        //     case LocomotionMode::WALK_LOCOMOTION: {
+        //         int tempState = this->gaitGenerator->detectedLegState[legId];
+        //         if (tempState == LegState::STANCE || tempState == LegState::EARLY_CONTACT
+        //             || this->gaitGenerator->desiredLegState[legId] != SubLegState::TRUE_SWING
+        //             || robot->stop
+        //         ) {
+        //             continue;
+        //         }
+        //     } break;
+        //     default: { // velocity or position mode
+                int tempState = this->gaitGenerator->legState[legId];
                 if (tempState == LegState::STANCE || tempState == LegState::EARLY_CONTACT) {
                     continue;
                 }
-            } break;
-        }
+        //     } break;
+        // }
         footVelocityInBaseFrame = Vec3<float>::Zero();
         footVelocityInWorldFrame = Vec3<float>::Zero();
         footVelocityInControlFrame = Vec3<float>::Zero();
-        Quat<float> robotComOrientation = robot->GetBaseOrientation();
-        Mat3<float> robotBaseR = robotics::math::quaternionToRotationMatrix(robotComOrientation).transpose();
-        Quat<float> controlFrameOrientation = groundEstimator->GetControlFrameOrientation();
+        Quat<float> robotComOrientation = this->robotState->GetBaseOrientation();
+        Mat3<float> robotBaseR = Math::quaternionToRotationMatrix(robotComOrientation).transpose();
+        Quat<float> controlFrameOrientation = this->groundEstimator->GetControlFrameOrientation();
         Mat3<float> dR; // represent base frame in control frame
-        if (groundEstimator->terrain.terrainType < 2) {
+        if (this->groundEstimator->terrain.terrainType < 2) {
             dR = Mat3<float>::Identity();
             robotBaseR = Mat3<float>::Identity();
         } else {
-            dR = robotics::math::quaternionToRotationMatrix(controlFrameOrientation) * robotBaseR;
+            dR = Math::quaternionToRotationMatrix(controlFrameOrientation) * robotBaseR;
         }
-        switch (robot->controlParams["mode"]) {
-            case LocomotionMode::VELOCITY_LOCOMOTION: {
+        // switch (this->robotConfig->controlMode) {
+        //     case LocomotionMode::VELOCITY_LOCOMOTION: {
                 hipOffset = hipPositions.col(legId);
                 twistingVector = Matrix<float, 3, 1>(-hipOffset[1], hipOffset[0], 0);
                 hipHorizontalVelocity = comVelocity + yawDot * twistingVector; // in base frame
@@ -298,53 +300,53 @@ std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrSwingLegCont
                 hipHorizontalVelocity[2] = 0.f;
                 targetHipHorizontalVelocity = desiredSpeed + desiredTwistingSpeed * twistingVector; // in control frame
                     
-                footTargetPosition = dR.transpose() * (hipHorizontalVelocity * gaitGenerator->stanceDuration[legId] / 2.0 -
+                footTargetPosition = dR.transpose() * (hipHorizontalVelocity * this->gaitGenerator->stanceDuration[legId] / 2.0 -
                     swingKp.cwiseProduct(targetHipHorizontalVelocity - hipHorizontalVelocity))
                         + Matrix<float, 3, 1>(hipOffset[0], hipOffset[1], 0)
-                        - robotics::math::TransformVecByQuat(robotics::math::quatInverse(robot->baseOrientation), desiredHeight);
-                footPositionInBaseFrame = GenerateSwingFootTrajectory(gaitGenerator->normalizedPhase[legId],
-                                                                 phaseSwitchFootLocalPos.col(legId),
+                        - Math::TransformVecByQuat(Math::quatInverse(this->robotState->GetBaseOrientation()), desiredHeight);
+                footPositionInBaseFrame = GenerateSwingFootTrajectory(this->gaitGenerator->normalizedPhase[legId],
+                                                                 this->phaseSwitchFootLocalPos.col(legId),
                                                                  footTargetPosition);
-            } break;
-            case LocomotionMode::POSITION_LOCOMOTION: {
-                footPositionInWorldFrame = GenerateSwingFootTrajectory(gaitGenerator->normalizedPhase[legId],
-                                                                  phaseSwitchFootGlobalPos.col(legId),
-                                                                  footHoldInWorldFrame.col(legId)); // interpolation in world frame
-                footPositionInBaseFrame = robotics::math::RigidTransform(robot->basePosition,
-                                                                         robot->baseOrientation,
-                                                                         footPositionInWorldFrame); // transfer to base frame
-            } break;
-            case LocomotionMode::WALK_LOCOMOTION: {
-                bool flag;
-                if (robot->robotConfig["is_sim"]) {
-                    flag = swingFootTrajectories[legId].GenerateTrajectoryPoint(footPositionInWorldFrame,
-                                                                                footVelocityInWorldFrame,
-                                                                                footAccInWorldFrame, 
-                                                                                gaitGenerator->normalizedPhase[legId],
-                                                                                false);
-                    footPositionInBaseFrame = robotics::math::RigidTransform(robot->basePosition,
-                                                                             robot->baseOrientation,
-                                                                             footPositionInWorldFrame); // transfer to base frame
-                    footVelocityInBaseFrame = robotics::math::RigidTransform({0.f, 0.f, 0.f},
-                                                                             robot->baseOrientation,
-                                                                             footVelocityInWorldFrame); // transfer to base frame                                                                                        
-                } else {
-                    flag = swingFootTrajectories[legId].GenerateTrajectoryPoint(footPositionInBaseFrame, //footPositionInControlFrame
-                                                                                footVelocityInBaseFrame, //footVelocityInControlFrame,
-                                                                                footAccInBaseFrame, //footAccInControlFrame
-                                                                                gaitGenerator->normalizedPhase[legId],
-                                                                                false);                        
-                }
+        //     } break;
+        //     case LocomotionMode::POSITION_LOCOMOTION: {
+        //         footPositionInWorldFrame = GenerateSwingFootTrajectory(this->gaitGenerator->normalizedPhase[legId],
+        //                                                           this->phaseSwitchFootGlobalPos.col(legId),
+        //                                                           this->footHoldInWorldFrame.col(legId)); // interpolation in world frame
+        //         footPositionInBaseFrame = Math::RigidTransform(this->robotConfig->GetBasePosition(),
+        //                                                        this->robotState->GetBaseOrientation(),
+        //                                                        footPositionInWorldFrame); // transfer to base frame
+        //     } break;
+        //     case LocomotionMode::WALK_LOCOMOTION: {
+        //         bool flag;
+        //         if (robotConfig->isSim) {
+        //             flag = this->swingFootTrajectories[legId].GenerateTrajectoryPoint(footPositionInWorldFrame,
+        //                                                                               footVelocityInWorldFrame,
+        //                                                                               footAccInWorldFrame, 
+        //                                                                               this->gaitGenerator->normalizedPhase[legId],
+        //                                                                               false);
+        //             footPositionInBaseFrame = Math::RigidTransform(this->robotConfig->GetBasePosition(),
+        //                                                            this->robotState->GetBaseOrientation(),
+        //                                                            footPositionInWorldFrame); // transfer to base frame
+        //             footVelocityInBaseFrame = Math::RigidTransform({0.f, 0.f, 0.f},
+        //                                                            this->robotState->GetBaseOrientation(),
+        //                                                            footVelocityInWorldFrame); // transfer to base frame                                                                                        
+        //         } else {
+        //             flag = this->swingFootTrajectories[legId].GenerateTrajectoryPoint(footPositionInBaseFrame, //footPositionInControlFrame
+        //                                                                               footVelocityInBaseFrame, //footVelocityInControlFrame,
+        //                                                                               footAccInBaseFrame, //footAccInControlFrame
+        //                                                                               this->gaitGenerator->normalizedPhase[legId],
+        //                                                                               false);                        
+        //         }
 
-                if (!flag) {
-                    throw std::logic_error("error flag!\n");
-                }                 
-            } break;
-            default: {throw std::domain_error("controlParams[mode] is not correct!\n");}
-        }
+        //         if (!flag) {
+        //             throw std::logic_error("error flag!\n");
+        //         }                 
+        //     } break;
+        //     default: {throw std::domain_error("controlParams[mode] is not correct!\n");}
+        // }
         // compute joint position & joint velocity
-        robot->ComputeMotorAnglesFromFootLocalPosition(legId, footPositionInBaseFrame, jointIdx, jointAngles);
-        Vec3<float> motorVelocity = robot->ComputeMotorVelocityFromFootLocalVelocity(
+        this->robotConfig->FootPosition2JointAngles(legId, footPositionInBaseFrame, jointIdx, jointAngles);
+        Vec3<float> motorVelocity = this->robotConfig->FootVelocity2JointVelocity(
             legId, jointAngles, footVelocityInBaseFrame);
         // check nan value
         int invalidAngleNum = 0;
@@ -353,30 +355,34 @@ std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrSwingLegCont
                 invalidAngleNum++;
                 jointAngles[i] = currentJointAngles[numMotorOfOneLeg* legId + i];
             }
-            swingJointAnglesVelocities[jointIdx[i]] = {jointAngles[i], motorVelocity[i], legId};
+            this->swingJointAnglesVelocities[jointIdx[i]] = {jointAngles[i], motorVelocity[i], legId};
         }
     }
     count++;
     auto RLAngles = currentJointAngles.tail(3);
-    map<int, Matrix<float, 5, 1>> actions;
+    // map<int, Matrix<float, 5, 1>> actions;
+    map<int, qrMotorCmd> actions;
     Matrix<float, 12, 1> kps, kds;
-    kps = robot->GetMotorPositionGains();
-    kds = robot->GetMotorVelocityGains();
-    for (auto it = swingJointAnglesVelocities.begin(); it != swingJointAnglesVelocities.end(); ++it) {
+    kps = robotConfig->GetKps();
+    kds = robotConfig->GetKds();
+    for (auto it = this->swingJointAnglesVelocities.begin(); it != this->swingJointAnglesVelocities.end(); ++it) {
         const std::tuple<float, float, int> &posVelId = it->second;
         const int singleLegId = std::get<2>(posVelId);
         
         bool flag;
-        if (robot->controlParams["mode"] == LocomotionMode::WALK_LOCOMOTION) {
-            flag = (gaitGenerator->desiredLegState[singleLegId] == SubLegState::TRUE_SWING
-                    && gaitGenerator->detectedLegState[singleLegId] != LegState::EARLY_CONTACT
+        if (this->robotConfig->controlMode == LocomotionMode::WALK_LOCOMOTION) {
+            flag = (this->gaitGenerator->desiredLegState[singleLegId] == SubLegState::TRUE_SWING
+                    && this->gaitGenerator->detectedLegState[singleLegId] != LegState::EARLY_CONTACT
                     );
         } else {
-            flag = (gaitGenerator->desiredLegState[singleLegId] == LegState::SWING); // pos mode
+            flag = (this->gaitGenerator->desiredLegState[singleLegId] == LegState::SWING); // pos mode
         }
         
         if (flag) {
-            actions[it->first] << std::get<0>(posVelId), kps[it->first], std::get<1>(posVelId), kds[it->first], 0.f;
+            qrMotorCmd temp(std::get<0>(posVelId), kps[it->first], std::get<1>(posVelId), kds[it->first], 0.f);
+            // temp.setCmd(std::get<0>(posVelId), kps[it->first], std::get<1>(posVelId), kds[it->first], 0.f);
+            // actions[it->first] << std::get<0>(posVelId), kps[it->first], std::get<1>(posVelId), kds[it->first], 0.f;
+            actions[it->first] = temp;
         }
     }
     return actions;
