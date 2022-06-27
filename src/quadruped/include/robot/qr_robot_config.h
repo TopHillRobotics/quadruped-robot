@@ -106,8 +106,25 @@ public:
       Eigen::Matrix<float, 3, 1> q, Eigen::Matrix<float, 3, 1> v, int legId);
 
   /**
-   * @brief number of motors
+   * @brief get hip positions
+   * @return hip positions of 4 legs
    */
+  inline Eigen::Matrix<float, 3, 4> GetHipPositionsInBaseFrame(){
+    return defaultHipPosition;
+  }
+
+  inline Eigen::Matrix<float, 3, 1> GetBasePosition() const{
+      return basePosition;
+  }
+
+  inline Eigen::Matrix<float, 12, 1> GetKps() const{
+      return motorKps;
+  }
+
+  inline Eigen::Matrix<float, 12, 1> GetKds() const{
+      return motorKds;
+  }
+
   static const unsigned int numMotor  = 12;
 
   /**
@@ -144,6 +161,10 @@ private:
   float hipLength, upperLength, lowerLength;
 
   // TODO: initialize this
+  // check difference of these two;
+  Eigen::Matrix<float, 3, 4> defaultHipPosition;
+
+  // TODO: initialize this
   /**
    * @brief offset of hip
    */
@@ -155,6 +176,7 @@ private:
    */
   Eigen::Matrix<float, 3, 1> comOffset;
 
+  float footHoldOffset = 0.1f;
   /**
    * @brief the tensor of inertia of the body
    */
@@ -173,6 +195,10 @@ private:
    * @brief velocity stiffness (unit: N.m/(rad/s) )
    */
   Eigen::Matrix<float, 12, 1> motorKds;
+
+
+  // TODO: check this
+  Eigen::Matrix<float, 12, 1> basePosition;
 
   // TODO: check these variables
   // Eigen::Matrix<float, 12, 1> jointDirection; this is not used

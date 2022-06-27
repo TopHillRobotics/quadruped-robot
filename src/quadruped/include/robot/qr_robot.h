@@ -61,11 +61,6 @@ public:
   void LoadConfig(std::string path);
 
   /**
-   *  @brief Update the state of the robot.
-   */
-  virtual void Update();
-
-  /**
    *  @brief Receive robot state and store information to robotState
    */
   virtual void Observation()=0;
@@ -121,6 +116,11 @@ public:
 protected:
 
   /**
+   * @brief whether robot is running
+   */
+  bool stop;
+
+  /**
    * @brief stores the static config of the robot
    */
   qrRobotConfig* config;
@@ -135,48 +135,12 @@ protected:
    */
   qrRobotState* robotState;
 
-  /**
-   * @brief robot base position in world frame
-   */
-  Eigen::Matrix<float, 3, 1> position;
-
-  /**
-   * @brief robot base orientation in world frame
-   */
-  Eigen::Matrix<float, 4, 1> orientation;
-
-  /**
-   * @brief robot calibrated rpy in world frame
-   */
-  Eigen::Matrix<float, 3, 1> rpy;
-
-  // TODO: check what it is
-  /**
-   * @brief acceleration of robot
-   */
-  Eigen::Matrix<float, 3, 1> drpy;
 
   // TODO: check what it is
   /**
    * @brief linear acceleration of robot
    */
   Eigen::Matrix<float, 3, 1> linearAcc;
-
-  /**
-   * @brief angles of 12 motors
-   */
-  Eigen::Matrix<float, 12, 1> motorq;
-
-  /**
-   * @brief velocity of 12 motors
-   */
-  Eigen::Matrix<float, 12, 1> motordq;
-
-  /**
-   * @brief the contact status of 4 foot
-   */
-  Eigen::Matrix<bool, 4, 1> footContact;
-
 };
 
 #endif // QR_ROBOT_H
