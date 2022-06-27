@@ -35,4 +35,10 @@ using Vec4 = typename Eigen::Matrix<T, 4, 1>;
 template<typename T>
 using DMat = typename Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
 
+/**
+ * @brief a 4x4 vector with type T
+ */
+template<typename T>
+using Mat4 = typename Eigen::Matrix<T, 4, 4>;
+
 #endif // QR_EIGEN_TYPES_H

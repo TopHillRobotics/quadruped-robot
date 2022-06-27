@@ -30,11 +30,11 @@
 
 #include <Eigen/Dense>
 
-#include "robots/timer.h"
+#include "common/qr_timer.h"
 #include "common/qr_c_types.h"
 #include "robot/qr_robot.h"
 #include "robot/qr_motor_cmd.h"
-#include "controller/qr_gait_generator.h"
+#include "planner/qr_gait_generator.h"
 #include "controller/qr_swing_leg_controller.h"
 #include "controller/qr_stance_leg_controller.h"
 #include "planner/qr_com_planner.h"

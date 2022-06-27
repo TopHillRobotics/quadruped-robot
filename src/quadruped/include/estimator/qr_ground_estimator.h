@@ -101,6 +101,7 @@ struct Terrain {
      * @brief The type of the terrain.(Gaps or stair)
      */
     TerrainType terrainType;
+
     /**
      * @brief The offset of foothold each step.
      */
@@ -179,7 +180,7 @@ public:
      * @brief Get the orientation in control frame.
      * @return A 4 * 1 Quad vector which descirbes the orientation in control frame.
      */
-    Quat<float> GetControlFrameOrientation()const
+    Eigen::Matrix<float, 4, 1> GetControlFrameOrientation()const
     {
         return controlFrameOrientation.cast<float>();
     }
@@ -248,7 +249,7 @@ private:
     /**
      * @brief Quad vector which descirbes the orientation in control frame.
      */
-    Quad<double> controlFrameOrientation;
+    Eigen::Matrix<double, 4, 1> controlFrameOrientation;
 
     /**
      * @brief Last Contact states of each leg. 0 represents not contact and 1 represents contact.

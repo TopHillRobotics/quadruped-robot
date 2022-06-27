@@ -25,7 +25,7 @@
 #include <QuadProg++.hh>
 #include <Array.hh>
 
-#include "common/qr_qp_torque_optimer.h"
+#include "common/qr_qp_torque_optimizer.h"
 
 Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,
                                               Eigen::Matrix<float, 3, 3> robotInertia,

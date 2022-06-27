@@ -41,3 +41,9 @@ enum LocomotionMode {
     POSITION_LOCOMOTION,
     WALK_LOCOMOTION
 };
+
+enum TerrainType {
+    PLANE=0,
+    PLUM_PILES,
+    STAIRS
+};
