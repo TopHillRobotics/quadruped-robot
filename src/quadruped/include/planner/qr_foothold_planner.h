@@ -26,11 +26,12 @@
 #define QR_FOOTHOLD_PLANNER_H_
 
 #include "planner/qr_foot_stepper.h"
+#include "robot/qr_robot.h"
 
     class qrFootholdPlanner {
     public:
         // TODO:add robot module
-        qrFootholdPlanner(qrGroundSurfaceEstimator *groundSurfaceEstimatorIn);
+        qrFootholdPlanner(qrRobot *robotIn, qrGroundSurfaceEstimator *groundSurfaceEstimatorIn);
         virtual ~qrFootholdPlanner() = default;
 
         void Reset();
@@ -89,8 +90,11 @@
         inline Vec3<float> GetFootholdInWorldFrame(int legId) {
             return desiredFootholds.col(legId);
         }
-
-        // Robot *robot;
+        
+        /**
+         * @brief the class of robot state
+         */
+        qrRobot *robot;
 
         /**
          * @brief the class of ground info

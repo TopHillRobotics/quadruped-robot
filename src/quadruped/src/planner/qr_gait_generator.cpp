@@ -27,14 +27,14 @@
 
     qrGaitGenerator::qrGaitGenerator() {}
 
-    qrGaitGenerator::qrGaitGenerator(Eigen::Matrix<float, 4, 1> stanceDuration,
-                                        Eigen::Matrix<float, 4, 1> dutyFactor,
-                                        Eigen::Matrix<int, 4, 1> initialLegState,
-                                        Eigen::Matrix<float, 4, 1> initialLegPhase,
-                                        float contactDetectionPhaseThreshold)
+    qrGaitGenerator::qrGaitGenerator(qrRobot *robot,
+                                     Eigen::Matrix<float, 4, 1> stanceDuration,
+                                     Eigen::Matrix<float, 4, 1> dutyFactor,
+                                     Eigen::Matrix<int, 4, 1> initialLegState,
+                                     Eigen::Matrix<float, 4, 1> initialLegPhase,
+                                     float contactDetectionPhaseThreshold)
         {
-            // this->robot = robot;
-
+            this->robot = robot;
             this->stanceDuration = stanceDuration;
             this->dutyFactor = dutyFactor;
             this->initialLegState = initialLegState;
@@ -58,13 +58,13 @@
         }
 
 
-    qrGaitGenerator::qrGaitGenerator(std::string configFilePath)
+    qrGaitGenerator::qrGaitGenerator(qrRobot *robot,std::string configFilePath)
         {
 
             this->configFilePath = configFilePath;
             config = YAML::LoadFile(configFilePath);
 
-            // this->robot = robot;
+            this->robot = robot;
             std::string gaitName = config["gait_params"]["gaitName"].as<std::string>();
 
             std::vector<float> stanceDurationList = config["gait_params"][gaitName]["stance_duration"].as<std::vector<float>>();
@@ -112,7 +112,7 @@
 
     void qrGaitGenerator::Update(float currentTime) 
     {
-        // Eigen::Matrix<bool, 4, 1> contactState = robot->GetFootContacts();
+        Eigen::Matrix<bool, 4, 1> contactState = robot->GetFootContacts();
         Eigen::Matrix<bool, 4, 1> contactState = {true,true,true,true};
         float fullCyclePeriod, augmentedTime, phaseInFullCycle, ratio;
         

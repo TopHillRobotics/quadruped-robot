@@ -33,12 +33,12 @@
 
 #include "qr_gait_generator.h"
 #include "common/qr_se3.h"
+#include "robot/qr_robot.h"
 
 namespace Quadruped {
     class qrComPlanner {
     public:
-        // TODO:add robot module and estimator module for constructor function
-        qrComPlanner(qrGaitGenerator *gaitGeneratorIn);
+        qrComPlanner(qrRobot *robotIn, qrGaitGenerator *gaitGeneratorIn);
         virtual ~qrComPlanner() = default;
 
         /**
@@ -64,7 +64,7 @@ namespace Quadruped {
                                                                  std::map<std::string, int>{{"cw", 0}, {"ccw", 3}},
                                                                  std::map<std::string, int>{{"cw", 3}, {"ccw", 0}},
                                                                  std::map<std::string, int>{{"cw", 1}, {"ccw", 2}}};
-        // Robot *robot;
+        qrRobot *robot;
 
         qrGaitGenerator *gaitGenerator;
 

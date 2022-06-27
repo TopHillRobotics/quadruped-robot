@@ -151,7 +151,7 @@ public:
    * @brief return foot position accroding to base frame
    * @return foot position in base frame
    */
-  Eigen::Matrix<float, 3, 4> GetFootPositionInBaseFrame();
+  Eigen::Matrix<float, 3, 4> GetFootPositionsInBaseFrame();
 
   /**
    * @brief get roll pitch yall of robot body

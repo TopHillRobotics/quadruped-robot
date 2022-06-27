@@ -35,6 +35,7 @@
 #include "common/qr_types.h"
 #include "common/qr_eigen_types.h"
 #include "common/qr_algebra.h"
+#include "robot/qr_robot.h"
 
 /**
  * @brief The qrGaitGenerator class generates the corresponding gait 
@@ -43,30 +44,31 @@
     class qrGaitGenerator {
         public:
 
-            friend class qrSwingLegController;
-
             /**
              * @brief Default constructor that constructs a qrGaitGenerator object.
              * 
              */
             qrGaitGenerator();
-            // TODO: add robot param
+            
 
             /**
              * @brief Construct a qrGaitGenerator object using a given config file.
+             * @param robot the class of robot state
              * @param configFilePath the given config file.
              */
-            qrGaitGenerator(std::string configFilePath);
+            qrGaitGenerator(qrRobot *robot, std::string configFilePath);
 
             /**
              * @brief Construct a qrGaitGenerator object using the given parameters.
+             * @param robot the class of robot state
              * @param stanceDuration specifies the amount of stance time for each leg in a gait cycle.
              * @param dutyFactor specifies the duty factor for each leg. dutyFactor represents the fraction of stance phase in the gait cycle.
              * @param initialLegState specifies the state (SWING or STANCE) of each leg at the initialization of generating a gait.
              * @param initialLegPhase specifies the relative phase for each leg at the initialization of generating a gait.
              * @param contactDetectionPhaseThreshold specifies the contact threshold when the leg state switches from SWING to STANCE.
             */
-            qrGaitGenerator(Eigen::Matrix<float, 4, 1> stanceDuration,
+            qrGaitGenerator(Robot *robot,
+                            Eigen::Matrix<float, 4, 1> stanceDuration,
                             Eigen::Matrix<float, 4, 1> dutyFactor,
                             Eigen::Matrix<int, 4, 1> initialLegState,
                             Eigen::Matrix<float, 4, 1> initialLegPhase,
@@ -89,10 +91,7 @@
              */
             virtual void Update(float currentTime);
         
-        private:
-
-            // to add
-            // Robot *robot;
+            Robot *robot;
 
             /**
              * @brief the config file for loading the gait parameters.

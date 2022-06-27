@@ -25,7 +25,7 @@
 #include "planner/qr_com_planner.h"
 namespace Quadruped {
 
-    qrComPlanner::qrComPlanner(qrGaitGenerator *gaitGeneratorIn):gaitGenerator(gaitGeneratorIn),delta(1.0f)
+    qrComPlanner::qrComPlanner(qrRobot *robotIn, qrGaitGenerator *gaitGeneratorIn):robot(robotIn),gaitGenerator(gaitGeneratorIn),delta(1.0f)
     {
         Reset(0.f);
     }
@@ -33,12 +33,12 @@ namespace Quadruped {
     void qrComPlanner::Reset(float currentTime) 
     {
         // update the pose in world frame by estimator
-        // basePosition = robot->GetBasePosition();
-        // baseOrientation = robot->GetBaseOrientation();
+        basePosition = robot->GetBasePosition();
+        baseOrientation = robot->GetBaseOrientation();
         
         legState = gaitGenerator->legState;
         normalizedLegPhase = gaitGenerator->normalizedLegPhase;
-        // footPosition = robot->GetFootPositionsInBaseFrame();
+        footPosition = robot->GetFootPositionsInBaseFrame();
         for (int i = 0; i < 4; ++i) {
             contactK[i] = 0.f;
             swingK[i] = 0.f;
@@ -53,7 +53,7 @@ namespace Quadruped {
     {
         legState = gaitGenerator->legState;
         normalizedLegPhase = gaitGenerator->normalizedLegPhase;
-        // footPosition = robot->GetFootPositionsInBaseFrame();
+        footPosition = robot->GetFootPositionsInBaseFrame();
 
         // Compute prior contact probility and stance probility
         for (int legId = 0; legId < legState.rows(); ++legId) {

@@ -25,8 +25,8 @@
 #include "planner/qr_foothold_planner.h"
 
     // TODO: add robot module
-    qrFootholdPlanner::qrFootholdPlanner(GroundSurfaceEstimator *groundEsitmatorIn)
-    : groundEsitmator(groundEsitmatorIn), terrain(groundEsitmator->terrain),
+    qrFootholdPlanner::qrFootholdPlanner(qrRobot *robotIn, qrGroundSurfaceEstimator *groundEsitmatorIn)
+    : robot(robotIn), groundEsitmator(groundEsitmatorIn), terrain(groundEsitmator->terrain),
         timeSinceReset(0.f)
     {
         footstepper = new FootStepper(terrain, 0.10f, "optimal");
@@ -37,13 +37,13 @@
         // resetTime = robot->GetTimeSinceReset();
         timeSinceReset = 0.f;
         footstepper->Reset(timeSinceReset);
-        // comPose << robot->GetBasePosition(), robot->GetBaseRollPitchYaw();
+        comPose << robot->GetBasePosition(), robot->GetRpy();
         desiredComPose = Eigen::Matrix<float, 6, 1>::Zero();
         desiredFootholdsOffset = Eigen::Matrix<float, 3, 4>::Zero();
     }
 
     void qrFootholdPlanner::UpdateOnce(Eigen::Matrix<float, 3, 4> currentFootholds, std::vector<int> legIds) {
-        // comPose << robot->GetBasePosition(), robot->GetBaseRollPitchYaw();
+        comPose << robot->GetBasePosition(), robot->GetRpy();
         desiredComPose << 0.f,0.f,0.f,0.f,0.f,0.f; //comPose;
         desiredFootholds = currentFootholds;
         if (legIds.empty()) { // if is empty, update all legs.
