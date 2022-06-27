@@ -122,7 +122,7 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
  * @param frictionCoef frictionCoef defines the interaction force effect between foot and env.
  * @return Four legs contact force matrix.
  */
-Eigen::Matrix<float, 3, 4> ComputeContactForce(Robot *robot,
+Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
                                                Eigen::Matrix<float, 6, 1> desiredAcc,
                                                Eigen::Matrix<bool, 4, 1> contacts,
                                                Eigen::Matrix<float, 6, 1> accWeight,

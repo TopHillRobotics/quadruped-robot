@@ -63,3 +63,12 @@ Eigen::Matrix<float, 3, 1> qrRobotState::ContactForce2JointTorque(Eigen::Matrix<
   Eigen::Matrix<float, 3, 3> j = GetJacobian(legId);
   return j.transpose() * contractForce;
 }
+
+void qrRobotState::operator=(const qrRobotState &robotState)
+{
+  this->imu       = robotState.imu;
+  this->footForce = robotState.footForce;
+  this->q         = robotState.q;
+  this->dq        = robotState.dq;
+  this->tau       = robotState.tau;
+}

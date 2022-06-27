@@ -85,6 +85,12 @@ public:
   void SetCmd(const Eigen::MatrixXf &motorCmdValues, MotorMode mode);
 
   /**
+   * @brief setCmd config the cmds
+   * @param cmd: command vector
+   */
+  void SetCmd(const std::array<qrMotorCmd, 12> cmd);
+
+  /**
    * @brief set target angle values to cmds
    * @param qValues: target value matrix
    */
@@ -121,6 +127,7 @@ public:
   inline void ResetStartTime(){
     timer.ResetStartTime();
   }
+
 protected:
 
   /**
@@ -143,14 +150,7 @@ protected:
   /**
    * @brief robot state from observation
    */
-  qrRobotState* robotState;
-
-
-  // TODO: check what it is
-  /**
-   * @brief linear acceleration of robot
-   */
-  Eigen::Matrix<float, 3, 1> linearAcc;
+  qrRobotState robotState;
 };
 
 #endif // QR_ROBOT_H
