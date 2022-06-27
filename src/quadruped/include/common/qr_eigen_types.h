@@ -30,6 +30,12 @@ template<typename T>
 using Vec4 = typename Eigen::Matrix<T, 4, 1>;
 
 /**
+ * @brief a 6x1 vector with type T
+ */
+template<typename T>
+using Vec6 = typename Eigen::Matrix<T, 6, 1>;
+
+/**
  * @brief a dynamic size matrix with type T
  */
 template<typename T>

@@ -86,24 +86,10 @@ qrSwingLegController::Reset()
 
 //        default: break;
 //    }
-
-    // TODO: check this
-    resetTime = this->robot->GetTimeSinceReset();
-    this->gaitGenerator->Reset(0.f);
-    this->groundEstimator->Reset(0.f);
-    swingJointAnglesVelocities.clear();
 }
 
 qrSwingLegController::Update()
 {
-//    if(!this->robot->stop){
-//        float timeSinceReset = this->robot->timeSinceReset() - this->resetTime;
-//    }
-
-    // TODO: check timer
-    this->gaitGenerator->Update(timeSinceReset);
-    this->groundEstimator->Update();
-    this->robotEstimator->Update(timeSinceReset);
     const Vec4<int>& newLegState = this->gaitGenerator->desiredLegState;
     const Vec4<int>& curLegState = this->gaitGenerator->curLegState;
     // the footHoldOffset is first init at robot.h, then update it at groundEstimator.cpp 
@@ -162,7 +148,7 @@ qrSwingLegController::Update()
                     
 //                    SplineInfo splineInfo;
 //                    splineInfo.splineType = "BSpline";
-//                    this->swingFootTrajectories[legId] = SwingFootTrajectory(splineInfo, footSourcePosition, footTargetPosition, 1.f, 0.15);
+//                    this->swingFootTrajectories[legId] = qrSwingFootTrajectory(splineInfo, footSourcePosition, footTargetPosition, 1.f, 0.15);
 //                    cout << "[SwingLegController::Update leg " << legId << "  update footHoldInWorldFrame: \n"
 //                        << this->footHoldInWorldFrame.col(legId) << endl;
 //                }
@@ -241,22 +227,22 @@ Eigen::Matrix<float, 3, 1> qrSwingLegController::GenerateSwingFootTrajectory(flo
 // std::map<int, Eigen::Matrix<float, 5, 1>> qrSwingLegController::GetAction()
 std::map<int, qrMotorCmd> qrSwingLegController::GetAction()
 {
-    Matrix<float, 3, 1> comVelocity;
-    Matrix<float, 3, 1> hipOffset;
-    Matrix<float, 3, 1> twistingVector;
-    Matrix<float, 3, 1> hipHorizontalVelocity;
-    Matrix<float, 3, 1> targetHipHorizontalVelocity;
-    Matrix<float, 3, 1> footTargetPosition;
-    Matrix<float, 3, 1> footPositionInBaseFrame, footVelocityInBaseFrame, footAccInBaseFrame;
-    Matrix<float, 3, 1> footPositionInWorldFrame, footVelocityInWorldFrame, footAccInWorldFrame;
-    Matrix<float, 3, 1> footPositionInControlFrame, footVelocityInControlFrame, footAccInControlFrame;
-    Matrix<int, 3, 1> jointIdx;
-    Matrix<float, 3, 1> jointAngles;
-    Matrix<float, 3, 4> hipPositions;
+    Eigen::Matrix<float, 3, 1> comVelocity;
+    Eigen::Matrix<float, 3, 1> hipOffset;
+    Eigen::Matrix<float, 3, 1> twistingVector;
+    Eigen::Matrix<float, 3, 1> hipHorizontalVelocity;
+    Eigen::Matrix<float, 3, 1> targetHipHorizontalVelocity;
+    Eigen::Matrix<float, 3, 1> footTargetPosition;
+    Eigen::Matrix<float, 3, 1> footPositionInBaseFrame, footVelocityInBaseFrame, footAccInBaseFrame;
+    Eigen::Matrix<float, 3, 1> footPositionInWorldFrame, footVelocityInWorldFrame, footAccInWorldFrame;
+    Eigen::Matrix<float, 3, 1> footPositionInControlFrame, footVelocityInControlFrame, footAccInControlFrame;
+    Eigen::Matrix<int, 3, 1> jointIdx;
+    Eigen::Matrix<float, 3, 1> jointAngles;
+    Eigen::Matrix<float, 3, 4> hipPositions;
     // The position correction coefficients in Raibert's formula.
-    const Matrix<float, 3, 1> swingKp(0.03, 0.03, 0.03);
+    const Eigen::Matrix<float, 3, 1> swingKp(0.03, 0.03, 0.03);
     float yawDot;
-    Matrix<float, 12, 1> currentJointAngles = this->robotState->GetQ();
+    Eigen::Matrix<float, 12, 1> currentJointAngles = this->robotState->GetQ();
     comVelocity = this->robotEstimator->GetEstimatedVelocity(); // in base frame
     yawDot = this->robotState->GetDrpy()(2, 0); // in base frame
     hipPositions = this->robotConfig->GetHipPositionsInBaseFrame();
@@ -294,7 +280,7 @@ std::map<int, qrMotorCmd> qrSwingLegController::GetAction()
         // switch (this->robotConfig->controlMode) {
         //     case LocomotionMode::VELOCITY_LOCOMOTION: {
                 hipOffset = hipPositions.col(legId);
-                twistingVector = Matrix<float, 3, 1>(-hipOffset[1], hipOffset[0], 0);
+                twistingVector = Eigen::Matrix<float, 3, 1>(-hipOffset[1], hipOffset[0], 0);
                 hipHorizontalVelocity = comVelocity + yawDot * twistingVector; // in base frame
                 hipHorizontalVelocity = dR * hipHorizontalVelocity; // in control frame
                 hipHorizontalVelocity[2] = 0.f;
@@ -302,7 +288,7 @@ std::map<int, qrMotorCmd> qrSwingLegController::GetAction()
                     
                 footTargetPosition = dR.transpose() * (hipHorizontalVelocity * this->gaitGenerator->stanceDuration[legId] / 2.0 -
                     swingKp.cwiseProduct(targetHipHorizontalVelocity - hipHorizontalVelocity))
-                        + Matrix<float, 3, 1>(hipOffset[0], hipOffset[1], 0)
+                        + Eigen::Matrix<float, 3, 1>(hipOffset[0], hipOffset[1], 0)
                         - Math::TransformVecByQuat(Math::quatInverse(this->robotState->GetBaseOrientation()), desiredHeight);
                 footPositionInBaseFrame = GenerateSwingFootTrajectory(this->gaitGenerator->normalizedPhase[legId],
                                                                  this->phaseSwitchFootLocalPos.col(legId),
@@ -360,9 +346,9 @@ std::map<int, qrMotorCmd> qrSwingLegController::GetAction()
     }
     count++;
     auto RLAngles = currentJointAngles.tail(3);
-    // map<int, Matrix<float, 5, 1>> actions;
+    // map<int, Eigen::Matrix<float, 5, 1>> actions;
     map<int, qrMotorCmd> actions;
-    Matrix<float, 12, 1> kps, kds;
+    Eigen::Matrix<float, 12, 1> kps, kds;
     kps = robotConfig->GetKps();
     kds = robotConfig->GetKds();
     for (auto it = this->swingJointAnglesVelocities.begin(); it != this->swingJointAnglesVelocities.end(); ++it) {

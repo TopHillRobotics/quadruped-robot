@@ -83,7 +83,7 @@ bool qrFootSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
         return false; // duration it's always positive, and makes sense when
     // is bigger than the sample time
     // Computing the time that allows us to discriminate the swing-up or swing-down phase
-    robotics::math::Spline::Point swing_traj_x, swing_traj_y, swing_traj_z;
+    robotics::math::qrSpline::qrPoint swing_traj_x, swing_traj_y, swing_traj_z;
     float dt = time - initial_time_;
     foot_spliner_x_.getPoint(time, swing_traj_x);
     foot_spliner_y_.getPoint(time, swing_traj_y);
@@ -265,10 +265,10 @@ Eigen::Matrix<float, 3, 1> qrFootParabolaSplinePatternGenerator::GenerateSwingFo
     mid = max(endPos(2, 0), startPos(2, 0)) + maxClearance;
     z = GenerateParabola(phase, startPos(2, 0), mid, endPos(2, 0));
 
-    return Matrix<float, 3, 1>(x, y, z);
+    return Eigen::Matrix<float, 3, 1>(x, y, z);
 }
 
-qrSwingFootTrajectory::qrSwingFootTrajectory(SplineInfo splineInfoIn,
+qrSwingFootTrajectory::qrSwingFootTrajectory(qrSplineInfo splineInfoIn,
                                              Vec3<float> startPosIn,
                                              Vec3<float> endPosIn,
                                              float duration,
