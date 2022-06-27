@@ -61,61 +61,61 @@ void qrLocomotionController::Update()
     // std::cout << "-------locomotion time -------- " << timeSinceReset << std::endl;
     this->gaitGenerator->Update(this->timeSinceReset);
     
-    bool switchToSwing = false;
-    if (this->robot->controlParams["mode"]==LocomotionMode::WALK_LOCOMOTION) {
-        // for walk mode
-        const Vec4<int>& newLegState = this->gaitGenerator->legState;
-        const Vec4<int>& curLegState = this->gaitGenerator->curLegState;
-        for(int legId =0; legId<4; legId++) {
-            if((newLegState(legId) == LegState::SWING && curLegState(legId) == LegState::STANCE)
-                || newLegState(legId) == LegState::USERDEFINED_SWING) {
-                    switchToSwing=true;
-                    break;
-                }
-        }    
-        if (switchToSwing) {
-            if (this->swingSemaphore > 0) {
-                this->swingSemaphore--;
-            } else if (this->swingSemaphore == 0) 
-            {
-                this->swingSemaphore--;
-                this->stopTick = this->robot->GetTimeSinceReset();
-                this->robot->stop = true; // when stop, all legs must stay stance if phase gap=0.25.
-                printf("stop robot!============\n");
-                // posePlanner->ResetBasePose(this->timeSinceReset);
-            } else { // swingSemaphore == -1
-                ;
-            }
-        }
-    }
+    // bool switchToSwing = false;
+    // if (this->robotConfig->controlMode==LocomotionMode::WALK_LOCOMOTION) {
+    //     // for walk mode
+    //     const Vec4<int>& newLegState = this->gaitGenerator->legState;
+    //     const Vec4<int>& curLegState = this->gaitGenerator->curLegState;
+    //     for(int legId =0; legId<4; legId++) {
+    //         if((newLegState(legId) == LegState::SWING && curLegState(legId) == LegState::STANCE)
+    //             || newLegState(legId) == LegState::USERDEFINED_SWING) {
+    //                 switchToSwing=true;
+    //                 break;
+    //             }
+    //     }    
+    //     if (switchToSwing) {
+    //         if (this->swingSemaphore > 0) {
+    //             this->swingSemaphore--;
+    //         } else if (this->swingSemaphore == 0) 
+    //         {
+    //             this->swingSemaphore--;
+    //             this->stopTick = this->robot->GetTimeSinceReset();
+    //             this->robot->stop = true; // when stop, all legs must stay stance if phase gap=0.25.
+    //             printf("stop robot!============\n");
+    //             posePlanner->ResetBasePose(this->timeSinceReset);
+    //         } else { // swingSemaphore == -1
+    //             ;
+    //         }
+    //     }
+    // }
     
     //
-    this->groundEstimator->Update(this->timeSinceReset);
-    switch (this->robot->controlParams["mode"]) {
-        case LocomotionMode::POSITION_LOCOMOTION: {
-            this->comPlanner->Update(this->timeSinceReset);
-        } break; 
-        case LocomotionMode::WALK_LOCOMOTION: {
-            if (switchToSwing && this->swingSemaphore >=0) {
-                // posePlanner->Update(this->timeSinceReset);
-                printf("update pose plan finish\n");
-            }
-        } break;
-        default: break;
-    }
+    this->groundEstimator->Update();
+    // switch (this->robotConfig->controlMode) {
+    //     case LocomotionMode::POSITION_LOCOMOTION: {
+    //         this->comPlanner->Update(this->timeSinceReset);
+    //     } break; 
+    //     case LocomotionMode::WALK_LOCOMOTION: {
+    //         if (switchToSwing && this->swingSemaphore >=0) {
+    //             // posePlanner->Update(this->timeSinceReset);
+    //             printf("update pose plan finish\n");
+    //         }
+    //     } break;
+    //     default: break;
+    // }
     this->swingLegController->Update(this->timeSinceReset);
     this->stanceLegController->Update(this->robot->GetTimeSinceReset() - this->resetTime);
 }
 
-std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrLocomotionController::GetAction()
+std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrLocomotionController::GetAction()
 {
     this->action.clear();
     // Returns the control ouputs (e.g. positions/torques) for all motors. type: map
     auto swingAction = this->swingLegController->GetAction();
     auto [stanceAction, qpSol] = this->stanceLegController->GetAction(); // map<int, MotorCommand>
-    std::vector<MotorCommand> action;
+    std::vector<qrMotorCmd> action;
     // copy motors' actions from subcontrollers to output variable.         
-    for (int joint_id = 0; joint_id < this->robot->numMotors; ++joint_id) {
+    for (int joint_id = 0; joint_id < this->robotConfig->numMotors; ++joint_id) {
         auto it = swingAction.find(joint_id);
         if (it != swingAction.end()) {
             this->action.push_back(it->second);
@@ -126,13 +126,13 @@ std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrLocomotionCo
     return {action, qpSol};
 }
 
-std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrLocomotionController::GetFakeAction()
+std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrLocomotionController::GetFakeAction()
 {
     this->action.clear();
     Eigen::Matrix<float, 3, 4> qpSol = Eigen::Matrix<float, 3, 4>::Zero();
-    std::vector<MotorCommand> action;
+    std::vector<qrMotorCmd> action;
     // copy motors' actions from subcontrollers to output variable.         
-    for (int joint_id = 0; joint_id < this->robot->numMotors; ++joint_id) {
+    for (int joint_id = 0; joint_id < this->robotConfig->numMotors; ++joint_id) {
         this->action.push_back({0,0,0,0,0});
     }
     return {action, qpSol};

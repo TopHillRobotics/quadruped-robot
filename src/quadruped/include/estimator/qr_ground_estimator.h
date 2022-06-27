@@ -199,42 +199,62 @@ private:
      * @brief The qrRobot object pointer.
      */
     qrRobot *robot;
+
+    /**
+     * @brief qrRobotState object pointer.
+     */
+    qrRobotState* robotState;
+
+    /**
+     * @brief qrRobotConfig object pointer.
+     */
+    qrRobotConfig* robotConfig;
+    
     /**
      * @brief The Terrain object.
      */
     Terrain terrain;
+
     /**
      * @brief coeffcient of plane equation
      */
     Vec3<double> a;
+
     /**
      * @brief 
      */
     Eigen::Matrix<double, 4, 3> W;
+
     /**
      * @brief The z(height) information of the foot.
      */
     Vec4<double> pZ;
+
     /**
      * @brief Normal vector of plane equation.
      */
     Vec3<double> n;
+
     /**
      * @brief Control Frame;
      */
     Mat4<double> controlFrame;
+
     /**
      * @brief The vector which contains roll, pitch and yaw.
      */
     Vec3<double> controlFrameRPY;
+
     /**
      * @brief Quad vector which descirbes the orientation in control frame.
      */
     Quad<double> controlFrameOrientation;
+
     /**
      * @brief Last Contact states of each leg. 0 represents not contact and 1 represents contact.
      */
     Eigen::Matrix<bool, 4, 1> lastContactStates;
+
     /**
      * @brief YAML node of terrain config.
      */

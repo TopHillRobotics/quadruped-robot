@@ -104,42 +104,51 @@ public:
      *  @return tuple<map, Matrix<3,4>> : 
      *          return control ouputs (e.g. positions/torques) for all 12 motors.
      */
-    virtual std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
+    // std::map<int, Eigen::Matrix<float, 5, 1>> GetAction();
+
+    /** @brief Compute all motors' commands using this controller.
+     *  @return tuple<map, Matrix<3,4>> : 
+     *          return control ouputs (e.g. positions/torques) for all 12 motors.
+     */
+    std::map<int, qrMotorCmd> GetAction();
 
 private:
     
     /**
      * @brief the robot object to which the controller is associated.
      */
-    qrRobot *robot;
+    qrRobot* robot;
 
     /**
-     * @see robotState
+     * @brief qrRobotState object pointer.
      */
     qrRobotState* robotState;
 
-
+    /**
+     * @brief qrRobotConfig object pointer.
+     */
     qrRobotConfig* robotConfig;
+
     /**
      * @brief Gait Generator object pointer.
      */
-    qrGaitGenerator *gaitGenerator;
+    qrGaitGenerator* gaitGenerator;
     
     /**
      * @brief Robot estimator pointre.
      */
     
-    qrRobotEstimator *robotEstimator;
+    qrRobotEstimator* robotEstimator;
     /**
      * @brief Ground estimator pointer.
      */
     
-    qrGroundSurfaceEstimator *groundEstimator;
+    qrGroundSurfaceEstimator* groundEstimator;
     /**
      * @brief Robot's foothold planner. Get desired COM pose when in walk locomotion.
      */
    
-    qrFootholdPlanner *footholdPlanner;
+    qrFootholdPlanner* footholdPlanner;
 
     /**
      * @brief The state of each leg.
