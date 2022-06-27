@@ -27,9 +27,8 @@
 
 #include <Eigen/Dense>
 
-#include "common/geometry.h"
-#include "common/BSpline.h"
-#include "config.h"
+#include "common/qr_geometry.h"
+#include "common/qr_BSpline.h"
 
 /**
  * @brief 
