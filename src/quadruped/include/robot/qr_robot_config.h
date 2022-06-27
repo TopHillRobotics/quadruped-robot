@@ -203,6 +203,7 @@ private:
   // Eigen::Matrix<float, 12, 1> standUpMotorAngles; should not used here
   // Eigen::Matrix<float, 12, 1> sitDownMotorAngles; should not used here
 
+  float yawOffset = 0.f;
 
   /**
    * @brief load kps parameter from YAML file

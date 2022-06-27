@@ -80,6 +80,14 @@ struct qrIMU
     }
     return rpyCalibrate;
   }
+
+  void operator=(const qrIMU &imu){
+    this->quaternion = imu.quaternion;
+    this->rpy        = imu.quaternion;
+    this->gyroscope  = imu.gyroscope;
+    this->acc        = imu.acc;
+  }
+
 };
 
 /**
@@ -120,6 +128,12 @@ public:
    * @brief current estimated output torque (unit: N.m)
    */
   Eigen::Matrix<float, 12, 1> tau;
+
+  /**
+   * @brief force on foot
+   */
+  Eigen::Matrix<float, 4, 1> footForce;
+
   /**
    * @brief time between this currentStamp and last stamp;
    *        at the first time, delta time will set 0.001 as default
@@ -151,7 +165,7 @@ public:
    * @brief return foot position accroding to base frame
    * @return foot position in base frame
    */
-  Eigen::Matrix<float, 3, 4> GetFootPositionsInBaseFrame();
+  Eigen::Matrix<float, 3, 4> GetFootPositionInBaseFrame();
 
   /**
    * @brief get roll pitch yall of robot body
@@ -191,6 +205,8 @@ public:
       return footContact;
   }
 
+  void operator=(const qrRobotState &robotState);
+
 private:
 
   /**
@@ -207,11 +223,6 @@ private:
    * @brief last time stamp
    */
   uint32_t lastStamp = 0;
-
-  /**
-   * @brief force on foot
-   */
-  Eigen::Matrix<float, 4, 1> footForce;
 
   // TODO: get and set
   /**

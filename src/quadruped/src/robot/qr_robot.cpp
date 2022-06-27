@@ -1,18 +1,16 @@
-#include "robot/qr_robot.h"
+﻿#include "robot/qr_robot.h"
 #include "common/qr_se3.h"
 
 qrRobot::qrRobot()
 {
   stop = false;
   config = nullptr;
-  robotState = new qrRobotState();
 }
 
 qrRobot::qrRobot(std::string path)
 {
   stop = false;
   config = new qrRobotConfig(path);
-  robotState = new qrRobotState();
 }
 
 void qrRobot::LoadConfig(std::string path)
@@ -46,6 +44,13 @@ void qrRobot::SetCmd(const Eigen::MatrixXf &motorCmdValues, MotorMode mode)
   case HYBRID:
     SetHybridCmd(motorCmdValues);
     break;
+  }
+}
+
+void qrRobot::SetCmd(const std::array<qrMotorCmd, 12> cmd)
+{
+  for(unsigned int i = 0; i < 12; i++){
+    this->cmds[i] = cmd[i];
   }
 }
 

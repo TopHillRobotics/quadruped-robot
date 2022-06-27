@@ -62,6 +62,12 @@ public:
   Eigen::Matrix<float, 5, 1> ToEigenVector();
 
   /**
+   * @brief convert result to array
+   * @return array of motor command
+   */
+  std::array<float, 5> ToArray() const;
+
+  /**
    * @brief setCmd
    * @param q: joint angle (unit: radian)
    * @param Kp: position stiffness (unit: N.m/rad )
@@ -70,6 +76,13 @@ public:
    * @param tau: torque (unit: N.m)
    */
   void SetCmd(float q, float Kp, float dq, float Kd, float tau);
+
+  /**
+   * @brief overload  operator =
+   * @param cmd: command that need to be equal
+   */
+  void operator=(const qrMotorCmd &cmd);
+
 private:
 
   /**
