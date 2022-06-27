@@ -93,7 +93,7 @@ find_package(catkin REQUIRED)
 ## catkin specific configuration ##
 ###################################
 set(TinyEKF_DIR ${PROJECT_SOURCE_DIR}/TinyEKF)
-
+set(QuadProgpp_DIR ${PROJECT_SOURCE_DIR}/QuadProgpp)
 ## The catkin_package macro generates cmake config files for your package
 ## Declare things to be passed to dependent projects
 ## INCLUDE_DIRS: uncomment this if your package contains header files
@@ -101,7 +101,7 @@ set(TinyEKF_DIR ${PROJECT_SOURCE_DIR}/TinyEKF)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-   INCLUDE_DIRS "${TinyEKF_DIR}/src"
+   INCLUDE_DIRS "${TinyEKF_DIR}/src" "${QuadProgpp_DIR}/src"
    LIBRARIES TinyEKF
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
@@ -181,6 +181,8 @@ add_library(TinyEKF INTERFACE)
    PATTERN ".svn" EXCLUDE
  )
 
+ add_subdirectory(${QuadProgpp_DIR})
+ link_directories(${CMAKE_CURRENT_BINARY_DIR}/QuadProgpp)
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES
 #   # myfile1
