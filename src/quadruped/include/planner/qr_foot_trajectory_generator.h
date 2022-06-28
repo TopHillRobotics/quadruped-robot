@@ -28,7 +28,6 @@
 #include <Eigen/Dense>
 
 #include "common/qr_geometry.h"
-#include "common/qr_BSpline.h"
 
 /**
  * @brief 

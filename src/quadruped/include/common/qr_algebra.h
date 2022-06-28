@@ -30,7 +30,7 @@
 
 #include "qr_sparse_matrix.hpp"
 
-namespace Math {
+namespace math {
 
     /** @brief Square a number */
     template<typename T>

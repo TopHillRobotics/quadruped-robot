@@ -115,7 +115,7 @@ std::tuple<Eigen::Matrix<float, 12, 12>, Eigen::Matrix<float, 12, 1>> ComputeObj
     return quadLinear;
 }
 
-Eigen::Matrix<float,12,12> ComputeWeightMatrix(Robot *robot, const Eigen::Matrix<bool, 4, 1>& contacts)
+Eigen::Matrix<float,12,12> ComputeWeightMatrix(qRobot *robot, const Eigen::Matrix<bool, 4, 1>& contacts)
 {
     Eigen::Matrix<float,12,12> W = 1e-4 * Eigen::Matrix<float,12,12>::Identity(); // 1e-4
     return W;

@@ -74,6 +74,7 @@ std::tuple<Eigen::Matrix<float, 12, 12>, Eigen::Matrix<float, 12, 1>> ComputeObj
     float regWeight,
     Eigen::Matrix<float, 6, 1> g);
 
+// TODO: check this
 /** 
  * @brief Compute weight matrix.
  * @param robot the robot which we want to compute weight matrix.

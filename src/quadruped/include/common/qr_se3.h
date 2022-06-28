@@ -34,7 +34,7 @@
 #include "common/qr_eigen_types.h"
 
 #include <Eigen/Dense>
-namespace Math {
+namespace math {
 
   /**
    * @brief The Axis enum specifies axis in coordinate. 0: X axis; 1: Y axis; 2: Z Axis
@@ -80,10 +80,16 @@ namespace Math {
    */
   template<typename T>
   Mat3<T> GenericRotMat(T xTheta, T yTheta, T zTheta);
+
+  /**
+   * @brief Put the skew-symmetric component of 3x3 matrix m into a 3x1 vector
+   */
+  template<typename T>
+  Vec3<typename T::Scalar> Mat2SkewVec(const Eigen::MatrixBase<T> &m);
 }
 
 template<typename MT>
-Quat<typename MT::Scalar> Math::Rpy2Quat(const Eigen::MatrixBase<MT> &rpy)
+Quat<typename MT::Scalar> math::Rpy2Quat(const Eigen::MatrixBase<MT> &rpy)
 {
   Mat3<typename MT::Scalar> R = rpy2RotMat(rpy);
   Quat<typename MT::Scalar> q = rotMat2Quat(R);
@@ -91,7 +97,7 @@ Quat<typename MT::Scalar> Math::Rpy2Quat(const Eigen::MatrixBase<MT> &rpy)
 }
 
 template<typename MT>
-Mat3<typename MT::Scalar> Math::Rpy2RotMat(const Eigen::MatrixBase<MT> &rpy)
+Mat3<typename MT::Scalar> math::Rpy2RotMat(const Eigen::MatrixBase<MT> &rpy)
 {
   static_assert(MT::ColsAtCompileTime == 1 && MT::RowsAtCompileTime == 3,
                 "must have 3x1 vector");
@@ -99,7 +105,7 @@ Mat3<typename MT::Scalar> Math::Rpy2RotMat(const Eigen::MatrixBase<MT> &rpy)
 }
 
 template<typename MT>
-Quat<typename MT::Scalar> Math::RotMat2Quat(const Eigen::MatrixBase<MT> &R)
+Quat<typename MT::Scalar> math::RotMat2Quat(const Eigen::MatrixBase<MT> &R)
 {
   static_assert(MT::ColsAtCompileTime == 3 && MT::RowsAtCompileTime == 3,
                 "Must have 3x3 matrix");
@@ -136,14 +142,14 @@ Quat<typename MT::Scalar> Math::RotMat2Quat(const Eigen::MatrixBase<MT> &R)
 }
 
 template<typename T>
-inline Mat3<T> Math::GenericRotMat(T xTheta, T yTheta, T zTheta)
+inline Mat3<T> math::GenericRotMat(T xTheta, T yTheta, T zTheta)
 {
   return basicRotMat(Axis::Z, zTheta) * basicRotMat(Axis::Y, yTheta) * basicRotMat(Axis::X, xTheta);
 }
 
 // TODO: discuss this
 template<typename T>
-Mat3<T> Math::BasicRotMat(Axis axis, T theta)
+Mat3<T> math::BasicRotMat(Axis axis, T theta)
 {
   static_assert(std::is_floating_point<T>::value,
                   "must use floating point value");
@@ -170,5 +176,13 @@ Mat3<T> Math::BasicRotMat(Axis axis, T theta)
   }
   return R;
 }
+
+template<typename T>
+Vec3<typename T::Scalar> Mat2SkewVec(const Eigen::MatrixBase<T> &m){
+  static_assert(T::ColsAtCompileTime == 3 && T::RowsAtCompileTime == 3,
+                            "Must have 3x3 matrix");
+  return 0.5 * Vec3<typename T::Scalar>(m(2, 1) - m(1, 2), m(0, 2) - m(2, 0), (m(1, 0) - m(0, 1)));
+}
+
 
 #endif // QR_SE3_H

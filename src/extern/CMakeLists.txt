@@ -102,7 +102,7 @@ set(QuadProgpp_DIR ${PROJECT_SOURCE_DIR}/QuadProgpp)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
    INCLUDE_DIRS "${TinyEKF_DIR}/src" "${QuadProgpp_DIR}/src"
-   LIBRARIES TinyEKF
+   LIBRARIES TinyEKF quadprog
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 )

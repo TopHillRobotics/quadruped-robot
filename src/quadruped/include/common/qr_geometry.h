@@ -30,11 +30,10 @@
 
 #include <type_traits>
 
-#include "common/qr_algebra.h"
-#include "common/qr_c_types.h"
-#include "common/qr_se3.h"
+#include "qr_algebra.h"
+#include "qr_c_types.h"
+#include "qr_se3.h"
 
-namespace robotics{
     namespace math {
 
         /** 
@@ -226,12 +225,12 @@ namespace robotics{
             /** 
              * @brief Start point of the spline 
              */
-            Point start_;
+            qrPoint start_;
 
             /** 
              * @brief End point of the spline 
              */
-            Point end_;
+            qrPoint end_;
         };
 
         /** 
@@ -388,5 +387,4 @@ namespace robotics{
             bool getPoint(const float &current_time, float &p);
         };
     } //  namespace math
-} // namespace robotics
 #endif // QR_GEOMETRY_H
