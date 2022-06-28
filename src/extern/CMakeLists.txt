@@ -115,6 +115,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
  "${TinyEKF_DIR}/src"
+ "${QuadProgpp_DIR}/src"
  #${catkin_INCLUDE_DIRS}
 )
 
@@ -181,8 +182,23 @@ add_library(TinyEKF INTERFACE)
    PATTERN ".svn" EXCLUDE
  )
 
- add_subdirectory(${QuadProgpp_DIR})
- link_directories(${CMAKE_CURRENT_BINARY_DIR}/QuadProgpp)
+ file(GLOB_RECURSE sources ${QuadProgpp_DIR}/*.cc)
+ file(GLOB_RECURSE headers ${QuadProgpp_DIR}/*.hh)
+ set(library_sources ${sources})
+ list(REMOVE_ITEM library_sources ${QuadProgpp_DIR}/main.cc)
+ add_library(quadprog STATIC ${library_sources} ${headers})
+ set_property(TARGET quadprog PROPERTY POSITION_INDEPENDENT_CODE 1)
+ set_property(TARGET quadprog PROPERTY PUBLIC_HEADER ${headers})
+
+ install(TARGETS quadprog
+   EXPORT quadprog-targets
+   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
+
+ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+         DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+         FILES_MATCHING PATTERN "*.hh")
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES
 #   # myfile1

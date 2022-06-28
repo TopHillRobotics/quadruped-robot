@@ -27,7 +27,7 @@
 qrStanceLegController::
     qrSwingLegController(qrRobot *robot,
                          qrGaitGenerator *gaitGenerator,
-                         RobotVelocityEstimator *robotVelocityEstimator,
+                         qrRobotVelocityEstimator *robotVelocityEstimator,
                          qrGroundSurfaceEstimator *groundEstimator,
                          qrComPlanner *comPlanner,
                         //  qrPosePlanner *posePlanner,
@@ -38,7 +38,7 @@ qrStanceLegController::
                          std::string configFilepath)
     : robot(robot),
       gaitGenerator(gaitGenerator),
-      robotEstimator(robotVelocityEstimator),
+      robotVelocityEstimator(robotVelocityEstimator),
       groundEstimator(groundEstimator),
       comPlanner(comPlanner),
     //   posePlanner(posePlanner),
@@ -55,7 +55,7 @@ qrStanceLegController::
 
 void qrStanceLegController::Reset(float currentTime)
 {
-    string controlModeStr;        
+    std::string controlModeStr;
     switch (this->robotConfig->controlMode)
     {
         case LocomotionMode::VELOCITY_LOCOMOTION:

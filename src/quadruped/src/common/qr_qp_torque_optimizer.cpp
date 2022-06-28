@@ -115,14 +115,14 @@ std::tuple<Eigen::Matrix<float, 12, 12>, Eigen::Matrix<float, 12, 1>> ComputeObj
     return quadLinear;
 }
 
-Eigen::Matrix<float,12,12> ComputeWeightMatrix(qRobot *robot, const Eigen::Matrix<bool, 4, 1>& contacts)
+Eigen::Matrix<float,12,12> ComputeWeightMatrix(qrRobot *robot, const Eigen::Matrix<bool, 4, 1>& contacts)
 {
     Eigen::Matrix<float,12,12> W = 1e-4 * Eigen::Matrix<float,12,12>::Identity(); // 1e-4
     return W;
 }
 
-Eigen::Matrix<float, 3, 4> ComputeContactForce(Robot *robot,
-                                               GroundSurfaceEstimator* groundEstimator,
+Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
+                                               qrGroundSurfaceEstimator* groundEstimator,
                                                Eigen::Matrix<float, 6, 1> desiredAcc,
                                                Eigen::Matrix<bool, 4, 1> contacts,
                                                Eigen::Matrix<float, 6, 1> accWeight,
@@ -216,7 +216,7 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(Robot *robot,
     return (X*rotMat).transpose(); // convert force to current base frame
 }
 
-Eigen::Matrix<float, 3, 4> ComputeContactForce(Robot *robot,
+Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
                                                Eigen::Matrix<float, 6, 1> desiredAcc,
                                                Eigen::Matrix<bool, 4, 1> contacts,
                                                Eigen::Matrix<float, 6, 1> accWeight,
