@@ -35,6 +35,7 @@
                                      float contactDetectionPhaseThreshold)
         {
             this->robot = robot;
+            this->robotState = robot->GetRobotState();
             this->stanceDuration = stanceDuration;
             this->dutyFactor = dutyFactor;
             this->initialLegState = initialLegState;
@@ -79,7 +80,7 @@
             
             for (int legId = 0; legId < initialLegState.size(); legId++) {
                 // when dutyFactor is close 0, the leg stay in air.
-                if (robotics::math::almostEqual(dutyFactor[legId],0.f, 0.001f)) {
+                if (math::almostEqual(dutyFactor[legId],0.f, 0.001f)) {
                     swingDuration[legId] = 1e3;
                     initialLegState[legId] = LegState::USERDEFINED_SWING;
                     curLegState[legId] =  LegState::USERDEFINED_SWING;
@@ -112,8 +113,7 @@
 
     void qrGaitGenerator::Update(float currentTime) 
     {
-        Eigen::Matrix<bool, 4, 1> contactState = robot->GetFootContacts();
-        Eigen::Matrix<bool, 4, 1> contactState = {true,true,true,true};
+        Eigen::Matrix<bool, 4, 1> contactState = robotState->GetFootContact();
         float fullCyclePeriod, augmentedTime, phaseInFullCycle, ratio;
         
 

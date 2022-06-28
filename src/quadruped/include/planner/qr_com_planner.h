@@ -35,7 +35,6 @@
 #include "common/qr_se3.h"
 #include "robot/qr_robot.h"
 
-namespace Quadruped {
     class qrComPlanner {
     public:
         qrComPlanner(qrRobot *robotIn, qrGaitGenerator *gaitGeneratorIn);
@@ -64,7 +63,11 @@ namespace Quadruped {
                                                                  std::map<std::string, int>{{"cw", 0}, {"ccw", 3}},
                                                                  std::map<std::string, int>{{"cw", 3}, {"ccw", 0}},
                                                                  std::map<std::string, int>{{"cw", 1}, {"ccw", 2}}};
-        qrRobot *robot;
+
+
+        qrRobotState *robotState;
+
+        qrRobotConfig *robotConfig;
 
         qrGaitGenerator *gaitGenerator;
 
@@ -132,6 +135,5 @@ namespace Quadruped {
          */
         float delta;
     };
-} // namespace Qudruped
 
 #endif // QR_COM_PLANNER_H

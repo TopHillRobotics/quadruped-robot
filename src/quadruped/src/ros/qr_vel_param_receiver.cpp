@@ -40,8 +40,8 @@ Eigen::Matrix<float, 3, 1> qrVelocityParamReceiver::GetAngularVelocity() {
     return angularVel;
 }
 
-float qrVelocityParamReceiver::GetAngularVelocity() {
-    return angularVel[2];
+float qrVelocityParamReceiver::GetAngularVelocity(int axis) {
+    return angularVel[axis];
 }
 
 void qrVelocityParamReceiver::VelocityParamCallback(const geometry_msgs::Twist::ConstPtr &msg)

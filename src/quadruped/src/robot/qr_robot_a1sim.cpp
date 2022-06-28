@@ -1,7 +1,7 @@
-#include "robot/qr_robot_qrRobotA1Sim.h"
+#include "robot/qr_robot_a1sim.h"
 #include "common/qr_se3.h"
 
-qrRobotqrRobotA1Sim::qrRobotqrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath):qrRobot(configFilePath)
+qrRobotA1Sim::qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath):qrRobot(configFilePath), nh(nhIn)
 {
   imuSub = nh.subscribe("/trunk_imu", 1, &qrRobotA1Sim::ImuCallback, this);
   jointStateSub[0]  = nh.subscribe("a1_gazebo/FR_hip_controller/state", 1, &qrRobotA1Sim::FRhipCallback, this);
@@ -36,130 +36,130 @@ qrRobotqrRobotA1Sim::qrRobotqrRobotA1Sim(ros::NodeHandle &nhIn, std::string conf
 
   usleep(300000); // must wait 300ms, to get first state
 
-  robotConfig->yawOffset = robotStateBuffer.imu.rpy[2]; // todo
+  robotConfig->SetYawOffset(robotStateBuffer.imu.rpy[2]);
 
-  this->ResetTimer();
+  ResetStartTime();
 
   std::cout << "-------A1Sim init Complete-------" << std::endl;
 }
 
 void qrRobotA1Sim::ImuCallback(const sensor_msgs::Imu &msg)
 {
-  qrRobotStateBuffer.imu.quaternion[0] = msg.orientation.w;
-  qrRobotStateBuffer.imu.quaternion[1] = msg.orientation.x;
-  qrRobotStateBuffer.imu.quaternion[2] = msg.orientation.y;
-  qrRobotStateBuffer.imu.quaternion[3] = msg.orientation.z;
+  robotStateBuffer.imu.quaternion[0] = msg.orientation.w;
+  robotStateBuffer.imu.quaternion[1] = msg.orientation.x;
+  robotStateBuffer.imu.quaternion[2] = msg.orientation.y;
+  robotStateBuffer.imu.quaternion[3] = msg.orientation.z;
 
-  Eigen::Matrix<float, 4, 1> quaternion = {qrRobotStateBuffer.imu.quaternion[0],
-                                           qrRobotStateBuffer.imu.quaternion[1],
-                                           qrRobotStateBuffer.imu.quaternion[2],
-                                           qrRobotStateBuffer.imu.quaternion[3]};
+  Eigen::Matrix<float, 4, 1> quaternion = {robotStateBuffer.imu.quaternion[0],
+                                           robotStateBuffer.imu.quaternion[1],
+                                           robotStateBuffer.imu.quaternion[2],
+                                           robotStateBuffer.imu.quaternion[3]};
 
-  Eigen::Matrix<float, 3, 1> rpy = robotics::math::quatToRPY(quaternion);
+  Eigen::Matrix<float, 3, 1> rpy = math::Quat2Rpy(quaternion);
 
-  qrRobotStateBuffer.imu.rpy[0] = rpy[0];
-  qrRobotStateBuffer.imu.rpy[1] = rpy[1];
-  qrRobotStateBuffer.imu.rpy[2] = rpy[2];
+  robotStateBuffer.imu.rpy[0] = rpy[0];
+  robotStateBuffer.imu.rpy[1] = rpy[1];
+  robotStateBuffer.imu.rpy[2] = rpy[2];
 
-  qrRobotStateBuffer.imu.gyroscope[0] = msg.angular_velocity.x;
-  qrRobotStateBuffer.imu.gyroscope[1] = msg.angular_velocity.y;
-  qrRobotStateBuffer.imu.gyroscope[2] = msg.angular_velocity.z;
+  robotStateBuffer.imu.gyroscope[0] = msg.angular_velocity.x;
+  robotStateBuffer.imu.gyroscope[1] = msg.angular_velocity.y;
+  robotStateBuffer.imu.gyroscope[2] = msg.angular_velocity.z;
 
-  qrRobotStateBuffer.imu.acc[0] = msg.linear_acceleration.x;
-  qrRobotStateBuffer.imu.acc[1] = msg.linear_acceleration.y;
-  qrRobotStateBuffer.imu.acc[2] = msg.linear_acceleration.z;
+  robotStateBuffer.imu.acc[0] = msg.linear_acceleration.x;
+  robotStateBuffer.imu.acc[1] = msg.linear_acceleration.y;
+  robotStateBuffer.imu.acc[2] = msg.linear_acceleration.z;
 }
 
 void qrRobotA1Sim::FRhipCallback(const unitree_legged_msgs::MotorState &msg)
 {
-    qrRobotStateBuffer.motorState[0].q = msg.q;
-    qrRobotStateBuffer.motorState[0].dq = msg.dq;
+    robotStateBuffer.q[0] = msg.q;
+    robotStateBuffer.dq[0] = msg.dq;
 }
 
 void qrRobotA1Sim::FRthighCallback(const unitree_legged_msgs::MotorState &msg)
 {
-    qrRobotStateBuffer.motorState[1].q = msg.q;
-    qrRobotStateBuffer.motorState[1].dq = msg.dq;
+    robotStateBuffer.q[1] = msg.q;
+    robotStateBuffer.dq[1] = msg.dq;
 }
 
 void qrRobotA1Sim::FRcalfCallback(const unitree_legged_msgs::MotorState &msg)
 {
-    qrRobotStateBuffer.motorState[2].q = msg.q;
-    qrRobotStateBuffer.motorState[2].dq = msg.dq;
+    robotStateBuffer.q[2] = msg.q;
+    robotStateBuffer.dq[2] = msg.dq;
 }
 
 void qrRobotA1Sim::FLhipCallback(const unitree_legged_msgs::MotorState &msg)
 {
-    qrRobotStateBuffer.motorState[3].q = msg.q;
-    qrRobotStateBuffer.motorState[3].dq = msg.dq;
+    robotStateBuffer.q[3] = msg.q;
+    robotStateBuffer.dq[3] = msg.dq;
 }
 
 void qrRobotA1Sim::FLthighCallback(const unitree_legged_msgs::MotorState &msg)
 {
-    qrRobotStateBuffer.motorState[4].q = msg.q;
-    qrRobotStateBuffer.motorState[4].dq = msg.dq;
+    robotStateBuffer.q[4]= msg.q;
+    robotStateBuffer.dq[4] = msg.dq;
 }
 
 void qrRobotA1Sim::FLcalfCallback(const unitree_legged_msgs::MotorState &msg)
 {
-    qrRobotStateBuffer.motorState[5].q = msg.q;
-    qrRobotStateBuffer.motorState[5].dq = msg.dq;
+    robotStateBuffer.q[5] = msg.q;
+    robotStateBuffer.dq[5] = msg.dq;
 }
 
 void qrRobotA1Sim::RRhipCallback(const unitree_legged_msgs::MotorState &msg)
 {
-    qrRobotStateBuffer.motorState[6].q = msg.q;
-    qrRobotStateBuffer.motorState[6].dq = msg.dq;
+    robotStateBuffer.q[6] = msg.q;
+    robotStateBuffer.dq[6] = msg.dq;
 }
 
 void qrRobotA1Sim::RRthighCallback(const unitree_legged_msgs::MotorState &msg)
 {
-    qrRobotStateBuffer.motorState[7].q = msg.q;
-    qrRobotStateBuffer.motorState[7].dq = msg.dq;
+    robotStateBuffer.q[7]= msg.q;
+    robotStateBuffer.dq[7] = msg.dq;
 }
 
 void qrRobotA1Sim::RRcalfCallback(const unitree_legged_msgs::MotorState &msg)
 {
-    qrRobotStateBuffer.motorState[8].q = msg.q;
-    qrRobotStateBuffer.motorState[8].dq = msg.dq;
+    robotStateBuffer.q[8] = msg.q;
+    robotStateBuffer.dq[8] = msg.dq;
 }
 
 void qrRobotA1Sim::RLhipCallback(const unitree_legged_msgs::MotorState &msg)
 {
-    qrRobotStateBuffer.motorState[9].q = msg.q;
-    qrRobotStateBuffer.motorState[9].dq = msg.dq;
+    robotStateBuffer.q[9]= msg.q;
+    robotStateBuffer.dq[9] = msg.dq;
 }
 
 void qrRobotA1Sim::RLthighCallback(const unitree_legged_msgs::MotorState &msg)
 {
-    qrRobotStateBuffer.motorState[10].q = msg.q;
-    qrRobotStateBuffer.motorState[10].dq = msg.dq;
+    robotStateBuffer.q[10]= msg.q;
+    robotStateBuffer.dq[10]= msg.dq;
 }
 
 void qrRobotA1Sim::RLcalfCallback(const unitree_legged_msgs::MotorState &msg)
 {
-    qrRobotStateBuffer.motorState[11].q = msg.q;
-    qrRobotStateBuffer.motorState[11].dq = msg.dq;
+    robotStateBuffer.q[11] = msg.q;
+    robotStateBuffer.dq[11] = msg.dq;
 }
 
 void qrRobotA1Sim::FRfootCallback(const geometry_msgs::WrenchStamped &msg)
 {
-    qrRobotStateBuffer.footForce[0] = msg.wrench.force.z;
+    robotStateBuffer.footForce[0] = msg.wrench.force.z;
 }
 
 void qrRobotA1Sim::FLfootCallback(const geometry_msgs::WrenchStamped &msg)
 {
-    qrRobotStateBuffer.footForce[1] = msg.wrench.force.z;
+    robotStateBuffer.footForce[1] = msg.wrench.force.z;
 }
 
 void qrRobotA1Sim::RRfootCallback(const geometry_msgs::WrenchStamped &msg)
 {
-    qrRobotStateBuffer.footForce[2] = msg.wrench.force.z;
+    robotStateBuffer.footForce[2] = msg.wrench.force.z;
 }
 
 void qrRobotA1Sim::RLfootCallback(const geometry_msgs::WrenchStamped &msg)
 {
-    qrRobotStateBuffer.footForce[3] = msg.wrench.force.z;
+    robotStateBuffer.footForce[3] = msg.wrench.force.z;
 }
 
 void qrRobotA1Sim::Observation()

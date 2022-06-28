@@ -28,8 +28,8 @@ qrLocomotionController::qrLocomotionController(qrRobot *robotIn,
                                            qrGaitGenerator *gaitGeneratorIn,
                                            qrGroundSurfaceEstimator *groundEstimatorIn,
                                            qrComPlanner *comPlannerIn,
-                                           RaibertSwingLegController *swingLegControllerIn,
-                                           TorqueStanceLegController *stanceLegControllerIn)
+                                           qrSwingLegController *swingLegControllerIn,
+                                           qrStanceLegController *stanceLegControllerIn)
     : robot(robotIn), 
       gaitGenerator(gaitGeneratorIn),
       groundEstimator(groundEstimatorIn), 
@@ -46,15 +46,15 @@ void qrLocomotionController::Reset()
     this->resetTime = robot->GetTimeSinceReset();
     this->timeSinceReset = 0.;
     this->gaitGenerator->Reset(this->timeSinceReset);
-    this->groundEstimator->Reset(this->timeSinceReset);
+    this->groundEstimator->Reset();
     this->comPlanner->Reset(this->timeSinceReset);
-    this->swingLegController->Reset(this->timeSinceReset);
+    this->swingLegController->Reset();
     this->stanceLegController->Reset(this->timeSinceReset);
 }
 
 void qrLocomotionController::Update()
 {
-    if (!this->robot->stop) { // not stop = (swingSemaphore > 0) or  (swingSemaphore=0 but not switchToSwing)
+    if (!this->robot->IsStop()) { // not stop = (swingSemaphore > 0) or  (swingSemaphore=0 but not switchToSwing)
         this->timeSinceReset = this->robot->GetTimeSinceReset() - resetTime;
     }
     
@@ -103,8 +103,8 @@ void qrLocomotionController::Update()
     //     } break;
     //     default: break;
     // }
-    this->swingLegController->Update(this->timeSinceReset);
-    this->stanceLegController->Update(this->robot->GetTimeSinceReset() - this->resetTime);
+    this->swingLegController->Update();
+    this->stanceLegController->Update();
 }
 
 std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrLocomotionController::GetAction()
@@ -115,7 +115,7 @@ std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrLocomotionCont
     auto [stanceAction, qpSol] = this->stanceLegController->GetAction(); // map<int, MotorCommand>
     std::vector<qrMotorCmd> action;
     // copy motors' actions from subcontrollers to output variable.         
-    for (int joint_id = 0; joint_id < this->robotConfig->numMotors; ++joint_id) {
+    for (int joint_id = 0; joint_id < qrRobotConfig::dofPerLeg; ++joint_id) {
         auto it = swingAction.find(joint_id);
         if (it != swingAction.end()) {
             this->action.push_back(it->second);
@@ -132,7 +132,7 @@ std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrLocomotionCont
     Eigen::Matrix<float, 3, 4> qpSol = Eigen::Matrix<float, 3, 4>::Zero();
     std::vector<qrMotorCmd> action;
     // copy motors' actions from subcontrollers to output variable.         
-    for (int joint_id = 0; joint_id < this->robotConfig->numMotors; ++joint_id) {
+    for (int joint_id = 0; joint_id < qrRobotConfig::dofPerLeg; ++joint_id) {
         this->action.push_back({0,0,0,0,0});
     }
     return {action, qpSol};
@@ -140,7 +140,7 @@ std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrLocomotionCont
 
 void qrLocomotionController::ForwardOne()
 {
-    this->robot->stop = false;
+    this->robot->SetStop(false);
     this->stop = false; 
     this->swingSemaphore++;
     if (this->swingSemaphore==0) {

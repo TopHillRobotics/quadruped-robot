@@ -35,7 +35,7 @@
 /**
  * @brief The RobotVelocityEstimator class estimate the velocity of the robot
  */
-class RobotVelocityEstimator {
+class qrRobotVelocityEstimator {
 
 public:
 
@@ -47,7 +47,7 @@ public:
    * @param initialVariance: covariance estimation of initial state.
    * @param filerWindowSize: window size of filter
    */
-  RobotVelocityEstimator(qrRobot *robot,
+  qrRobotVelocityEstimator(qrRobot *robot,
                          float accelerometerVariance = 0.1f,
                          float sensorVariance = 0.1f,
                          unsigned int filerWindowSize = 120);

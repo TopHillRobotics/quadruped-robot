@@ -40,7 +40,6 @@
 #include "common/qr_eigen_types.h"
 #include "estimator/qr_ground_estimator.h"
 
-namespace Quadruped {
     class qrFootStepper {
     public:
         qrFootStepper(Terrain& terrain, float defaultFootholdOffset, std::string level);
@@ -153,5 +152,4 @@ namespace Quadruped {
         quadprogpp::Vector<double> b;
         quadprogpp::Vector<double> x;
     };
-} // namespace Quadruped
 #endif //QR_FOOT_STEPPER_H_

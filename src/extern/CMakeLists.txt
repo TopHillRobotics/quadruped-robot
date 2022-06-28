@@ -121,11 +121,14 @@ include_directories(
  #${catkin_INCLUDE_DIRS}
 )
 
-add_subdirectory(tinynurbs)
+add_library(TinyEKF INTERFACE)
 
 add_subdirectory(QuadProgpp)
+add_subdirectory(tinynurbs)
+
+
 ## Declare a C++ library
-add_library(TinyEKF INTERFACE)
+
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -174,22 +177,9 @@ add_library(TinyEKF INTERFACE)
 
 ## Mark libraries for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_libraries.html
- install(TARGETS TinyEKF
-   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
- )
 
 ### Mark cpp header files for installation
-
- install(TARGETS quadprog
-   EXPORT quadprog-targets
-   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
-   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
-
- install(TARGETS tinynurbs
-   EXPORT quadprog-targets
+ install(TARGETS quadprog TinyEKF tinynurbs
    RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})

@@ -9,6 +9,7 @@ qrRobotState::qrRobotState(qrRobotConfig *robotConfig)
 {
   deltaTime = 0.001f;
   this->robotConfig = robotConfig;
+  basePosition = {0.f, 0.f, robotConfig->bodyHeight};
 }
 
 void qrRobotState::setTimeStamp(uint32_t tick){
@@ -45,9 +46,9 @@ Eigen::Matrix<float, 3, 1> qrRobotState::GetDrpy()
   return this->imu.gyroscope;
 }
 
-Eigen::Matrix<float, 3, 1> qrRobotState::GetBaseOrientation()
+Eigen::Matrix<float, 4, 1> qrRobotState::GetBaseOrientation()
 {
-  return Math::Rpy2Quat(this->imu.CalibratedYawRpy());
+  return math::Rpy2Quat(this->imu.CalibratedYawRpy());
 }
 
 Eigen::Matrix<float, 3, 3> qrRobotState::GetJacobian(int legId)

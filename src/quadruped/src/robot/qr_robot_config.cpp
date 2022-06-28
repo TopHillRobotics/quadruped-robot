@@ -62,7 +62,6 @@ void qrRobotConfig::Load(std::string path)
   LoadHipPosition(node);
   std::vector<float> bodyInertiaList = node["body_inertia"].as<std::vector<float >>();
   bodyInertia = Eigen::MatrixXf::Map(&bodyInertiaList[0], 3, 3);
-  basePosition = {0.f, 0.f, bodyHeight};
 }
 
 void qrRobotConfig::LoadKps(YAML::Node &n)

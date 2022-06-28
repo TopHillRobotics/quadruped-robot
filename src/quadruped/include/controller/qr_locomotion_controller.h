@@ -191,7 +191,7 @@ private:
     /** 
      * @brief joint command list.
      */
-    std::vector<qrMotorCommand> action;
+    std::vector<qrMotorCmd> action;
     
     /** 
      * @brief the time when last call Reset() function.

@@ -24,7 +24,7 @@
 
 #include "planner/qr_foot_trajectory_generator.h"
 
-qrFootSplinePatternGenerator::qrFootSplinePatternGenerator() : initial_time(0.f), duartion(0.f)
+qrFootSplinePatternGenerator::qrFootSplinePatternGenerator() : initial_time(0.f), duration(0.f)
 {
 
 }
@@ -79,16 +79,16 @@ bool qrFootSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
                                                       Vec3<float> &foot_acc,
                                                       float time)
 {
-    if (time < initial_time_ - 1e-3)  // the float number is not exactly representation, so add 1e-3.
+    if (time < initial_time - 1e-3)  // the float number is not exactly representation, so add 1e-3.
         return false; // duration it's always positive, and makes sense when
     // is bigger than the sample time
     // Computing the time that allows us to discriminate the swing-up or swing-down phase
     math::qrSpline::qrPoint swing_traj_x, swing_traj_y, swing_traj_z;
-    float dt = time - initial_time_;
+    float dt = time - initial_time;
     foot_spliner_x_.getPoint(time, swing_traj_x);
     foot_spliner_y_.getPoint(time, swing_traj_y);
 
-    if (dt <= (duration_ / 2.0f))
+    if (dt <= (duration / 2.0f))
         foot_spliner_up_z_.getPoint(time, swing_traj_z);
     else
         foot_spliner_down_z_.getPoint(time, swing_traj_z);
@@ -98,7 +98,7 @@ bool qrFootSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
     foot_vel << swing_traj_x.xd, swing_traj_y.xd, swing_traj_z.xd;
     foot_acc << swing_traj_x.xdd, swing_traj_y.xdd, swing_traj_z.xdd;
 
-    if (time >= initial_time_ + duration_ + 1e-3)
+    if (time >= initial_time + duration + 1e-3)
         return false;
 
     return true;
@@ -204,8 +204,8 @@ bool qrFootBSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
                                                        Vec3<float> &foot_acc,
                                                        float time)
 {
-    float dt = time - initial_time_;
-    if (dt < - 1e-3 || dt >= duration_ + 1e-3){  // the float number is not exactly representation, so add 1e-3.
+    float dt = time - initial_time;
+    if (dt < - 1e-3 || dt >= duration + 1e-3){  // the float number is not exactly representation, so add 1e-3.
         return false; // duration it's always positive, and makes sense when
     }
     // Setting the foot state

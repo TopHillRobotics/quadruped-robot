@@ -23,22 +23,23 @@
 // SOFTWARE.
 
 #include "planner/qr_com_planner.h"
-namespace Quadruped {
 
-    qrComPlanner::qrComPlanner(qrRobot *robotIn, qrGaitGenerator *gaitGeneratorIn):robot(robotIn),gaitGenerator(gaitGeneratorIn),delta(1.0f)
+    qrComPlanner::qrComPlanner(qrRobot *robot, qrGaitGenerator *gaitGeneratorIn):gaitGenerator(gaitGeneratorIn),delta(1.0f)
     {
+        robotConfig = robot->GetRobotConfig();
+        robotState  = robot->GetRobotState();
         Reset(0.f);
     }
 
     void qrComPlanner::Reset(float currentTime) 
     {
         // update the pose in world frame by estimator
-        basePosition = robot->GetBasePosition();
-        baseOrientation = robot->GetBaseOrientation();
+        basePosition = robotState->GetBasePosition();
+        baseOrientation = robotState->GetBaseOrientation();
         
         legState = gaitGenerator->legState;
         normalizedLegPhase = gaitGenerator->normalizedLegPhase;
-        footPosition = robot->GetFootPositionsInBaseFrame();
+        footPosition = robotState->GetFootPositionInBaseFrame();
         for (int i = 0; i < 4; ++i) {
             contactK[i] = 0.f;
             swingK[i] = 0.f;
@@ -53,7 +54,7 @@ namespace Quadruped {
     {
         legState = gaitGenerator->legState;
         normalizedLegPhase = gaitGenerator->normalizedLegPhase;
-        footPosition = robot->GetFootPositionsInBaseFrame();
+        footPosition = robotState->GetFootPositionInBaseFrame();
 
         // Compute prior contact probility and stance probility
         for (int legId = 0; legId < legState.rows(); ++legId) {
@@ -103,4 +104,3 @@ namespace Quadruped {
     {
         return comPosInBaseFrame;
     }
-}

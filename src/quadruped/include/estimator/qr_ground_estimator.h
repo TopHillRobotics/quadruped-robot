@@ -198,7 +198,7 @@ public:
      * @brief Get the roll, pitch and yaw in control frame.
      * @return A 3*1 vector which contains roll, pitch and yaw.
      */
-    Terrain GetTerrain()
+    Terrain &GetTerrain()
     {
         return terrain;
     }

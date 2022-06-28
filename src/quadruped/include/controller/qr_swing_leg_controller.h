@@ -54,7 +54,7 @@ public:
      */
     qrSwingLegController(qrRobot *robot,
                          qrGaitGenerator *gaitGenerator,
-                         RobotVelocityEstimator *robotVelocityEstimator,
+                         qrRobotVelocityEstimator *robotVelocityEstimator,
                          qrGroundSurfaceEstimator *groundEstimator,
                          Eigen::Matrix<float, 3, 1> desiredLinearVelocity,
                          float desiredTwistingVelocity,
@@ -140,7 +140,7 @@ private:
      * @brief Robot estimator pointre.
      */
     
-    RobotVelocityEstimator* robotEstimator;
+    qrRobotVelocityEstimator* robotEstimator;
     /**
      * @brief Ground estimator pointer.
      */
@@ -155,7 +155,7 @@ private:
     /**
      * @brief The state of each leg.
      */
-    qrEigen::Matrix<int, 4, 1> lastLegState;
+    Eigen::Matrix<int, 4, 1> lastLegState;
 
     /**
      * @brief Desired robot's body height. 

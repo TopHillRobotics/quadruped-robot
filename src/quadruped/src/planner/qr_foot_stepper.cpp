@@ -27,8 +27,9 @@
 
 #include "planner/qr_foot_stepper.h"
 
-namespace Quadruped {
-    FootStepper::FootStepper(Terrain& terrain, float defaultFootholdOffset, std::string level)
+    const float MAXIMUM_STEP = 0.3001f;
+
+    qrFootStepper::qrFootStepper(Terrain& terrain, float defaultFootholdOffset, std::string level)
     {
         // terrainType
         switch (terrain.terrainType)
@@ -83,7 +84,7 @@ namespace Quadruped {
         x[0] = 0.0;
     }
     
-    double  FootStepper::CheckSolution(Eigen::Matrix<float, 1, 4> currentFootholdsX, double front, double back, Gap frontGap, Gap backGap) {
+    double  qrFootStepper::CheckSolution(Eigen::Matrix<float, 1, 4> currentFootholdsX, double front, double back, Gap frontGap, Gap backGap) {
         for (int i = 1; i < 5; ++i) {
             if (i <= 2) {
                 CI[0][i] = front;
@@ -116,7 +117,7 @@ namespace Quadruped {
     }
 
 
-    int FootStepper::StepGenerator(Eigen::Matrix<float, 1, 4>& currentFootholdsX, Eigen::Matrix<float, 1, 4>& desiredFootholdsOffset) {
+    int qrFootStepper::StepGenerator(Eigen::Matrix<float, 1, 4>& currentFootholdsX, Eigen::Matrix<float, 1, 4>& desiredFootholdsOffset) {
         Eigen::Matrix<float, 1, 4> defaultNextFootholdsX = currentFootholdsX.array() + defaultFootholdDelta;
         desiredFootholdsOffset << defaultFootholdDelta, defaultFootholdDelta, defaultFootholdDelta, defaultFootholdDelta;
         
@@ -178,7 +179,7 @@ namespace Quadruped {
         return 0;
     }
 
-    std::tuple<Eigen::Matrix<float,3,4>, Eigen::Matrix<float,3,4>> FootStepper::GetFootholdsInWorldFrame(
+    std::tuple<Eigen::Matrix<float,3,4>, Eigen::Matrix<float,3,4>> qrFootStepper::GetFootholdsInWorldFrame(
                                                                     Eigen::Matrix<float, 3, 4>& currentFootholds,
                                                                     Eigen::Matrix<float, 6, 1>& currentComPose,
                                                                     Eigen::Matrix<float, 6, 1>& desiredComPose,
@@ -197,7 +198,7 @@ namespace Quadruped {
             for (int i=0;i < stairUp.k; i++) {
                 Vec2<float> stairFramePoint = {stairUp.startPoint[0] + i * stairUp.width, 0.f + i*stairUp.height};
                 stairFrames.push_back(stairFramePoint);
-                for(int legId=0; legId<NumLeg;++legId) {
+                for(int legId=0; legId<qrRobotConfig::numLegs;++legId) {
                     if (currentFootholds(0, legId) >= stairFramePoint[0]) {
                         fourFootOnWhichStairK[legId]++;
                     }
@@ -255,13 +256,13 @@ namespace Quadruped {
             
         } else { // down
             // todo
-            for (int legId=0; legId< NumLeg; ++legId) {
+            for (int legId=0; legId<qrRobotConfig::numLegs; ++legId) {
                 fourFootOnWhichStairK[legId] = 0; // ground is 3=k
             }
             for (int i=0;i < stairDown.k; i++) {
                 Vec2<float> stairFramePoint = {stairDown.startPoint[0] + i * stairUp.width, stairDown.startPoint[0] - i*stairUp.height};
                 stairFrames.push_back(stairFramePoint);
-                for(int legId=0; legId<NumLeg;++legId) {
+                for(int legId=0; legId<qrRobotConfig::numLegs;++legId) {
                     if (currentFootholds(0, legId) >= stairFramePoint[0]) {
                         fourFootOnWhichStairK[legId]++;
                     }
@@ -322,7 +323,7 @@ namespace Quadruped {
         return {nextFootholds, nextFootholdsOffset};
     }
 
-    Eigen::Matrix<float, 3, 4> FootStepper::GetOptimalFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds)
+    Eigen::Matrix<float, 3, 4> qrFootStepper::GetOptimalFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds)
     {
         Eigen::Matrix<float, 1, 4> currentFootholdsX = currentFootholds.row(0);
         nextFootholdsOffset.row(0) << defaultFootholdDelta, defaultFootholdDelta, defaultFootholdDelta, defaultFootholdDelta;
@@ -365,5 +366,3 @@ namespace Quadruped {
         }
         return nextFootholdsOffset;
     }
-
-} // namespace Quadruped

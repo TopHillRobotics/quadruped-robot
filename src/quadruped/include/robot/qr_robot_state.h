@@ -83,7 +83,7 @@ struct qrIMU
 
   void operator=(const qrIMU &imu){
     this->quaternion = imu.quaternion;
-    this->rpy        = imu.quaternion;
+    this->rpy        = imu.rpy;
     this->gyroscope  = imu.gyroscope;
     this->acc        = imu.acc;
   }
@@ -183,7 +183,7 @@ public:
    * @brief return orientation of robot body
    * @return orientation of robot body
    */
-  Eigen::Matrix<float, 3, 1> GetBaseOrientation();
+  Eigen::Matrix<float, 4, 1> GetBaseOrientation();
 
   /**
    * @brief get current jacobian of leg legId
@@ -200,9 +200,13 @@ public:
    */
   Eigen::Matrix<float, 3, 1> ContactForce2JointTorque(Eigen::Matrix<float, 3, 1> contractForce, int legId);
 
-  inline Eigen::Matrix<bool, 4, 1> GetFootContacts() const
+  inline Eigen::Matrix<bool, 4, 1> GetFootContact() const
   {
       return footContact;
+  }
+
+  inline Eigen::Matrix<float, 3, 1> GetBasePosition() const{
+      return basePosition;
   }
 
   void operator=(const qrRobotState &robotState);
@@ -229,6 +233,9 @@ private:
    * @brief the contact status of 4 foot
    */
   Eigen::Matrix<bool, 4, 1> footContact;
+
+  // TODO: check this
+  Eigen::Matrix<float, 3, 1> basePosition;
 };
 
 #endif // QR_ROBOT_STATE_H

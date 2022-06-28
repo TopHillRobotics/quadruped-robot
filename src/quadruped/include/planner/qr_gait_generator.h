@@ -67,7 +67,7 @@
              * @param initialLegPhase specifies the relative phase for each leg at the initialization of generating a gait.
              * @param contactDetectionPhaseThreshold specifies the contact threshold when the leg state switches from SWING to STANCE.
             */
-            qrGaitGenerator(Robot *robot,
+            qrGaitGenerator(qrRobot *robot,
                             Eigen::Matrix<float, 4, 1> stanceDuration,
                             Eigen::Matrix<float, 4, 1> dutyFactor,
                             Eigen::Matrix<int, 4, 1> initialLegState,
@@ -91,7 +91,9 @@
              */
             virtual void Update(float currentTime);
         
-            Robot *robot;
+            qrRobot *robot;
+
+            qrRobotState *robotState;
 
             /**
              * @brief the config file for loading the gait parameters.

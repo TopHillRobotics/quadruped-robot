@@ -90,11 +90,13 @@
         inline Vec3<float> GetFootholdInWorldFrame(int legId) {
             return desiredFootholds.col(legId);
         }
-        
+
         /**
          * @brief the class of robot state
          */
         qrRobot *robot;
+
+        qrRobotState *robotState;
 
         /**
          * @brief the class of ground info

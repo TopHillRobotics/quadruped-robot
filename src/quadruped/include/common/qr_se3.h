@@ -25,12 +25,9 @@
 #ifndef QR_SE3_H
 #define QR_SE3_H
 
-
-
-
-
 #include <cmath>
 #include <iostream>
+#include "common/qr_algebra.h"
 #include "common/qr_eigen_types.h"
 
 #include <Eigen/Dense>
@@ -86,13 +83,45 @@ namespace math {
    */
   template<typename T>
   Vec3<typename T::Scalar> Mat2SkewVec(const Eigen::MatrixBase<T> &m);
+
+  template<typename T>
+  Mat3<typename T::Scalar> Quat2RotMat(const Eigen::MatrixBase<T> &q);
+
+  template<typename T, int N = 1>
+  Eigen::Matrix<T, 3, N> InvertRigidTransform(Vec3<T> t, Quat<T> R, Eigen::Matrix<T, 3, N> points);
+
+  template<typename T, int N = 1>
+  Eigen::Matrix<T, 3, N> RigidTransform(Vec3<T> t, Quat<T> R, Eigen::Matrix<T, 3, N> points);
+
+  /**
+   * @brief Transform Vector r in B frame to A frame By Quaternion conventions
+   * @param quat Quat<float> wxyz;
+   * @param r_b Vec3<float>, the vector/position presented in B frame; ;
+   */
+  template<typename T>
+  Vec3<T> TransformVecByQuat(Quat<T> quat, Vec3<T> r_b);
+
+  template<typename T>
+  Quat<typename T::Scalar> QuatInverse(const Eigen::MatrixBase<T> &q);
+
+  template<typename T>
+  Vec3<typename T::Scalar> RotMat2Rpy(const Eigen::MatrixBase<T> &R);
+
+  template<typename T>
+  Vec3<typename T::Scalar> Quat2Rpy(const Eigen::MatrixBase<T> &q);
+
+  template<typename T>
+  Mat3<typename T::Scalar> Vector2SkewMat(const Eigen::MatrixBase<T> &v);
+
+  template<typename T>
+  Vec3<typename T::Scalar> Mat2SkewVec(const Eigen::MatrixBase<T> &m);
 }
 
 template<typename MT>
 Quat<typename MT::Scalar> math::Rpy2Quat(const Eigen::MatrixBase<MT> &rpy)
 {
-  Mat3<typename MT::Scalar> R = rpy2RotMat(rpy);
-  Quat<typename MT::Scalar> q = rotMat2Quat(R);
+  Mat3<typename MT::Scalar> R = Rpy2RotMat(rpy);
+  Quat<typename MT::Scalar> q = RotMat2Quat(R);
   return q;
 }
 
@@ -101,7 +130,7 @@ Mat3<typename MT::Scalar> math::Rpy2RotMat(const Eigen::MatrixBase<MT> &rpy)
 {
   static_assert(MT::ColsAtCompileTime == 1 && MT::RowsAtCompileTime == 3,
                 "must have 3x1 vector");
-  return genericRotMat(rpy[0], rpy[1], rpy[2]);
+  return GenericRotMat(rpy[0], rpy[1], rpy[2]);
 }
 
 template<typename MT>
@@ -144,7 +173,7 @@ Quat<typename MT::Scalar> math::RotMat2Quat(const Eigen::MatrixBase<MT> &R)
 template<typename T>
 inline Mat3<T> math::GenericRotMat(T xTheta, T yTheta, T zTheta)
 {
-  return basicRotMat(Axis::Z, zTheta) * basicRotMat(Axis::Y, yTheta) * basicRotMat(Axis::X, xTheta);
+  return BasicRotMat(Axis::Z, zTheta) * BasicRotMat(Axis::Y, yTheta) * BasicRotMat(Axis::X, xTheta);
 }
 
 // TODO: discuss this
@@ -184,5 +213,113 @@ Vec3<typename T::Scalar> math::Mat2SkewVec(const Eigen::MatrixBase<T> &m){
   return 0.5 * Vec3<typename T::Scalar>(m(2, 1) - m(1, 2), m(0, 2) - m(2, 0), (m(1, 0) - m(0, 1)));
 }
 
+template<typename T>
+Mat3<typename T::Scalar> math::Quat2RotMat(
+    const Eigen::MatrixBase<T> &q)
+{
+    static_assert(T::ColsAtCompileTime == 1 && T::RowsAtCompileTime == 4,
+                  "Must have 4x1 quat");
+    typename T::Scalar e0 = q(0);
+    typename T::Scalar e1 = q(1);
+    typename T::Scalar e2 = q(2);
+    typename T::Scalar e3 = q(3);
+
+    Mat3<typename T::Scalar> R;
+
+    R << 1 - 2 * (e2 * e2 + e3 * e3), 2 * (e1 * e2 - e0 * e3),
+        2 * (e1 * e3 + e0 * e2), 2 * (e1 * e2 + e0 * e3),
+        1 - 2 * (e1 * e1 + e3 * e3), 2 * (e2 * e3 - e0 * e1),
+        2 * (e1 * e3 - e0 * e2), 2 * (e2 * e3 + e0 * e1),
+        1 - 2 * (e1 * e1 + e2 * e2);
+    return R;
+}
+
+template<typename T, int N>
+Eigen::Matrix<T, 3, N> math::InvertRigidTransform(Vec3<T> t, Quat<T> R, Eigen::Matrix<T, 3, N> points)
+{
+    // Eigen::Isometry3f transform; or Eigen::Transform<T,3,Eigen::Isometry>
+    Isometry3<T> transform = Isometry3<T>::Identity();
+    transform.translate(t);
+    Eigen::Quaternion<T> r{R(0), R(1), R(2), R(3)};
+    transform.rotate(r);
+    return transform * points;
+}
+
+template<typename T, int N>
+Eigen::Matrix<T, 3, N> math::RigidTransform(Vec3<T> t, Quat<T> R, Eigen::Matrix<T, 3, N> points)
+{
+    Isometry3<T> transform = Isometry3<T>::Identity();
+
+    Eigen::Quaternion<T> r{R(0), R(1), R(2), R(3)};
+    transform.rotate(r.inverse());
+    transform.translate(-t);
+    return transform * points;
+}
+
+template<typename T>
+Vec3<T> math::TransformVecByQuat(Quat<T> quat, Vec3<T> r_b)
+{
+    T q0 = quat[0];
+    Vec3<T> q_ = quat.tail(3);
+    Vec3<T> r_a = (2*q0*q0-1)*r_b + 2*q0*Vector2SkewMat(q_)*r_b + 2*q_*q_.dot(r_b);
+    return r_a;
+}
+
+template<typename T>
+Quat<typename T::Scalar> math::QuatInverse(const Eigen::MatrixBase<T> &q)
+{
+    Quat<typename T::Scalar> qInverse;
+    qInverse << q[0], -q.tail(3);
+    qInverse /= q.dot(q);
+    return qInverse;
+}
+
+template<typename T>
+Vec3<typename T::Scalar> math::RotMat2Rpy(const Eigen::MatrixBase<T> &R)
+{
+    static_assert(T::ColsAtCompileTime == 3 && T::RowsAtCompileTime == 3,
+                  "Must have 3x3 matrix");
+    Quat<typename T::Scalar> q = RotMat2Quat(R);
+    Vec3<typename T::Scalar> rpy = Quat2Rpy(q);
+    return rpy;
+}
+
+
+template<typename T>
+Vec3<typename T::Scalar> math::Quat2Rpy(const Eigen::MatrixBase<T> &q)
+{
+    static_assert(T::ColsAtCompileTime == 1 && T::RowsAtCompileTime == 4,
+                  "Must have 4x1 quat");
+    Vec3<typename T::Scalar> rpy;
+    typename T::Scalar as = std::min(-2. * (q[1] * q[3] - q[0] * q[2]), .99999);
+    rpy(2) =
+        std::atan2(2 * (q[1] * q[2] + q[0] * q[3]),
+                   square(q[0]) + square(q[1]) - square(q[2]) - square(q[3]));
+    rpy(1) = std::asin(as);
+    rpy(0) =
+        std::atan2(2 * (q[2] * q[3] + q[0] * q[1]),
+                   square(q[0]) - square(q[1]) - square(q[2]) + square(q[3]));
+    return rpy;
+}
+
+template<typename T>
+Mat3<typename T::Scalar> math::Vector2SkewMat(const Eigen::MatrixBase<T> &v)
+{
+    static_assert(T::ColsAtCompileTime == 1 && T::RowsAtCompileTime == 3,
+                  "Must have 3x1 matrix");
+    Mat3<typename T::Scalar> m;
+    m << 0, -v[2], v[1],
+        v[2], 0, -v[0],
+        -v[1], v[0], 0;
+    return m;
+}
+
+template<typename T>
+Vec3<typename T::Scalar> Mat2SkewVec(const Eigen::MatrixBase<T> &m)
+{
+    static_assert(T::ColsAtCompileTime == 3 && T::RowsAtCompileTime == 3,
+                  "Must have 3x3 matrix");
+    return 0.5 * Vec3<typename T::Scalar>(m(2, 1) - m(1, 2), m(0, 2) - m(2, 0), (m(1, 0) - m(0, 1)));
+}
 
 #endif // QR_SE3_H

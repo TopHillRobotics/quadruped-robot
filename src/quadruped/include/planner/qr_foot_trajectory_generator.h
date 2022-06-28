@@ -93,7 +93,7 @@ struct qrSplineInfo {
      * @brief The type of spline.
      * e.g. "cubicPolynomial", "BSpline", "bizer","Parabola"
      */
-    std::string splineTye = "cubicPolygon";
+    std::string splineType = "cubicPolygon";
 
     /**
      * @brief params of Bspline
@@ -189,6 +189,12 @@ public:
      * @brief Constructor function of qrFootBSplinePatternGenerator.
      */
     qrFootBSplinePatternGenerator();
+
+    /**
+     * @brief Constructor function of qrFootBSplinePatternGenerator.
+     * @param splineInfo: structure of spline information
+     */
+    qrFootBSplinePatternGenerator(qrSplineInfo &splineInfo);
 
     /** 
      * @brief Destructor function.
@@ -291,7 +297,7 @@ public:
      * @param duration Duration of the swing trajectory. default value=1.f
      * @param maxClearance Max clearance of the trajectory. default value = 0.1f
      */
-    qrSwingFootTrajectory(SplineInfo splineInfoIn,
+    qrSwingFootTrajectory(qrSplineInfo splineInfoIn,
                           Vec3<float> startPosIn = {0.f, 0.f, 0.f},
                           Vec3<float> endPosIn = {0.f, 0.f, 0.f},
                           float duration = 1.f,

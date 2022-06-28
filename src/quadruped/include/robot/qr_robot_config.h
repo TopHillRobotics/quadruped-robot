@@ -38,7 +38,7 @@ class qrRobotConfig
 public:
 
   friend class qrRobot;
-
+  friend class qrRobotState;
   /**
    * @brief Construction of qrRobotConfig
    */
@@ -113,10 +113,6 @@ public:
     return defaultHipPosition;
   }
 
-  inline Eigen::Matrix<float, 3, 1> GetBasePosition() const{
-      return basePosition;
-  }
-
   inline Eigen::Matrix<float, 12, 1> GetKps() const{
       return motorKps;
   }
@@ -147,6 +143,19 @@ public:
 
 
   bool isSim;
+
+
+  inline Eigen::Matrix<float, 3, 3> GetBodyInertia() const{
+    return bodyInertia;
+  }
+
+  inline float GetBodyMass() const{
+    return bodyMass;
+  }
+
+  inline void SetYawOffset(float yawOffset){
+    this->yawOffset = yawOffset;
+  }
 
 private:
 
@@ -193,9 +202,6 @@ private:
    * @brief velocity stiffness (unit: N.m/(rad/s) )
    */
   Eigen::Matrix<float, 12, 1> motorKds;
-
-  // TODO: check this
-  Eigen::Matrix<float, 12, 1> basePosition;
 
   // TODO: check these variables
   // Eigen::Matrix<float, 12, 1> jointDirection; this is not used

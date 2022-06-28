@@ -6,7 +6,6 @@
 #define Mobs 3 // dimension of observation
 
 #include <Eigen/Dense>
-
 #include <TinyEKF.h>
 
 class qrTinyEKF: public TinyEKF {
@@ -48,7 +47,7 @@ protected:
   /**
    * @see TinyEKF
    */
-  void model(double fx[Nsta], double F[Nsta][Nsta], double hx[Mobs], double H[Mobs][Nsta]) override;
+  void model(double fx[Nsta], double F[Nsta][Nsta], double hx[Mobs], double H[Mobs][Nsta]);
 
   /**
    * @see TinyEKF

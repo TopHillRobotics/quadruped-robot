@@ -33,6 +33,8 @@
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Pose.h>
 
+#include "common/qr_types.h"
+
 /**
  * @brief A qrVelocityParamReceiver object recieves the velocity parameters from a ROS topic when a gait updates
  * 
@@ -70,9 +72,10 @@ class qrVelocityParamReceiver {
 
         /**
         * @brief Get the angular velocity.
-        * @return float: the z coordinate of the angularVel  
+        * @param axis: 0: x, 1: y, 2: z
+        * @return float: the z coordinate of the angular Vel
         */
-        float GetAngularVelocity();
+        float GetAngularVelocity(int axis);
         
         geometry_msgs::Twist velParam;
         ros::NodeHandle &nh;

@@ -26,10 +26,12 @@
 
     // TODO: add robot module
     qrFootholdPlanner::qrFootholdPlanner(qrRobot *robotIn, qrGroundSurfaceEstimator *groundEsitmatorIn)
-    : robot(robotIn), groundEsitmator(groundEsitmatorIn), terrain(groundEsitmator->terrain),
+    : robot(robotIn), groundEstimator(groundEsitmatorIn), terrain(groundEstimator->GetTerrain()),
         timeSinceReset(0.f)
     {
-        footstepper = new FootStepper(terrain, 0.10f, "optimal");
+        robotState = robot->GetRobotState();
+        footstepper = new qrFootStepper(terrain, 0.10f, "optimal");
+        terrain = groundEstimator->GetTerrain();
         Reset();
     }
 
@@ -37,13 +39,13 @@
         resetTime = robot->GetTimeSinceReset();
         timeSinceReset = 0.f;
         footstepper->Reset(timeSinceReset);
-        comPose << robot->GetBasePosition(), robot->GetRpy();
+        comPose << robotState->GetBasePosition(), robotState->GetRpy();
         desiredComPose = Eigen::Matrix<float, 6, 1>::Zero();
         desiredFootholdsOffset = Eigen::Matrix<float, 3, 4>::Zero();
     }
 
     void qrFootholdPlanner::UpdateOnce(Eigen::Matrix<float, 3, 4> currentFootholds, std::vector<int> legIds) {
-        comPose << robot->GetBasePosition(), robot->GetRpy();
+        comPose << robotState->GetBasePosition(), robotState->GetRpy();
         desiredComPose << 0.f,0.f,0.f,0.f,0.f,0.f; //comPose;
         desiredFootholds = currentFootholds;
         if (legIds.empty()) { // if is empty, update all legs.
@@ -64,7 +66,6 @@
     }
     void qrFootholdPlanner::ComputeFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds) {
         desiredFootholdsOffset = footstepper->GetOptimalFootholdsOffset(currentFootholds);
-        return desiredFootholdsOffset;
     }
 
     void qrFootholdPlanner::ComputeNextFootholds(Eigen::Matrix<float, 3, 4>& currentFootholds,
@@ -75,5 +76,4 @@
         auto res = footstepper->GetFootholdsInWorldFrame(currentFootholds, currentComPose, desiredComPose, legIds);
         desiredFootholds = std::get<0>(res);
         desiredFootholdsOffset = std::get<1>(res);
-        return desiredFootholdsOffset;
     }

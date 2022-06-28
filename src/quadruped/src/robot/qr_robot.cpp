@@ -4,27 +4,27 @@
 qrRobot::qrRobot()
 {
   stop = false;
-  config = nullptr;
+  robotConfig = nullptr;
 }
 
 qrRobot::qrRobot(std::string path)
 {
   stop = false;
-  config = new qrRobotConfig(path);
+  robotConfig = new qrRobotConfig(path);
 }
 
 void qrRobot::LoadConfig(std::string path)
 {
-  if(config == nullptr)
-    config = new qrRobotConfig(path);
+  if(robotConfig == nullptr)
+    robotConfig = new qrRobotConfig(path);
   else {
-    config->Load(path);
+    robotConfig->Load(path);
   }
 }
 
 qrRobot::~qrRobot()
 {
-  delete config;
+  delete robotConfig;
 }
 
 std::array<qrMotorCmd, 12> qrRobot::GetCmd()
@@ -57,7 +57,7 @@ void qrRobot::SetCmd(const std::array<qrMotorCmd, 12> cmd)
 void qrRobot::SetAngleCmd(const Eigen::Matrix<float, 12, 1> &qValues)
 {
   for (unsigned int i = 0; i < qrRobotConfig::numMotor; i++) {
-    cmds[i].SetCmd(qValues[i], config->motorKps[i], 0.0f, config->motorKds[i], 0);
+    cmds[i].SetCmd(qValues[i], robotConfig->motorKps[i], 0.0f, robotConfig->motorKds[i], 0);
   }
 }
 

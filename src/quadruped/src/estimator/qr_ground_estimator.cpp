@@ -28,14 +28,14 @@ qrGroundSurfaceEstimator::qrGroundSurfaceEstimator(qrRobot* robot, std::string t
     robot(robot)
 {
     terrainConfig = YAML::LoadFile(terrainConfigPath);
-    this->robotState = robot->getRobotState();
-    this->robotConfig = robot->getRobotConfig();
+    this->robotState = robot->GetRobotState();
+    this->robotConfig = robot->GetRobotConfig();
     Reset();
 }
 
 void qrGroundSurfaceEstimator::Update()
 {
-    Eigen::Matrix<bool, 4, 1> contactState = this->robotState->GetFootContacts();
+    Eigen::Matrix<bool, 4, 1> contactState = this->robotState->GetFootContact();
     bool shouldUpdate = false;
     int N = 0;
     int i = 0;
@@ -123,8 +123,8 @@ Eigen::Matrix<double, 3, 1> qrGroundSurfaceEstimator::GetNormalVector(bool updat
 Eigen::Matrix<double, 4, 4> qrGroundSurfaceEstimator::ComputeControlFrame()
 {
     Quat<double> quat = this->robotState->GetBaseOrientation().cast<double>();
-    Vec3<double> nInWorldFrame = math::invertRigidTransform<double>({0,0,0},quat, n);
-    Vec3<double> xAxis = math::quaternionToRotationMatrix(quat).transpose().col(0);
+    Vec3<double> nInWorldFrame = math::InvertRigidTransform<double>({0,0,0},quat, n);
+    Vec3<double> xAxis = math::Quat2RotMat(quat).col(0);
     Vec3<double> yAxis = nInWorldFrame.cross(xAxis);
     yAxis.normalize();
     xAxis = yAxis.cross(nInWorldFrame);
@@ -135,10 +135,10 @@ Eigen::Matrix<double, 4, 4> qrGroundSurfaceEstimator::ComputeControlFrame()
     R.col(1) = yAxis;
     R.col(2) = nInWorldFrame;
     double ratio = 0.7; // todo, 0.7 for walk mode
-    this->controlFrameRPY = (1 - ratio) * this->controlFrameRPY + ratio * math::rotationMatrixToRPY(R.transpose());
-    this->controlFrameOrientation = math::rpyToQuat(this->controlFrameRPY);
+    this->controlFrameRPY = (1 - ratio) * this->controlFrameRPY + ratio * math::RotMat2Rpy(R);
+    this->controlFrameOrientation = math::Rpy2Quat(this->controlFrameRPY);
     this->controlFrame.block<3,3>(0,0) = R;
-    this->controlFrame.block<3,1>(0,3) = this->robotConfig->GetBasePosition().cast<double>();
+    this->controlFrame.block<3,1>(0,3) = this->robotState->GetBasePosition().cast<double>();
     return controlFrame;
 }
 

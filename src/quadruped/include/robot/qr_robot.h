@@ -112,13 +112,17 @@ public:
    * @brief get config of the robot
    * @return config of the robot
    */
-  qrRobotConfig* getRobotConfig();
+  inline qrRobotConfig* GetRobotConfig(){
+    return robotConfig;
+  }
 
   /**
    * @brief get state of the robot
    * @return state of the robot
    */
-  qrRobotState* getRobotState();
+  inline qrRobotState* GetRobotState(){
+    return &robotState;
+  }
 
   inline double GetTimeSinceReset(){
     return timer.GetTimeSinceReset();
@@ -128,6 +132,13 @@ public:
     timer.ResetStartTime();
   }
 
+  inline bool IsStop()const{
+    return stop;
+  }
+
+  inline void SetStop(bool b){
+    stop = b;
+  }
 protected:
 
   /**
@@ -140,7 +151,7 @@ protected:
   /**
    * @brief stores the static config of the robot
    */
-  qrRobotConfig* config;
+  qrRobotConfig* robotConfig;
 
   /**
    * @brief stores the command that will execute at each motor
