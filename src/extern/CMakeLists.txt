@@ -94,6 +94,7 @@ find_package(catkin REQUIRED)
 ###################################
 set(TinyEKF_DIR ${PROJECT_SOURCE_DIR}/TinyEKF)
 set(QuadProgpp_DIR ${PROJECT_SOURCE_DIR}/QuadProgpp)
+set(Tinynurbs_DIR ${PROJECT_SOURCE_DIR}/tinynurbs)
 ## The catkin_package macro generates cmake config files for your package
 ## Declare things to be passed to dependent projects
 ## INCLUDE_DIRS: uncomment this if your package contains header files
@@ -101,8 +102,8 @@ set(QuadProgpp_DIR ${PROJECT_SOURCE_DIR}/QuadProgpp)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-   INCLUDE_DIRS "${TinyEKF_DIR}/src" "${QuadProgpp_DIR}/src"
-   LIBRARIES TinyEKF quadprog
+   INCLUDE_DIRS "${TinyEKF_DIR}/src" "${QuadProgpp_DIR}/src" "${Tinynurbs_DIR}/include"
+   LIBRARIES TinyEKF quadprog tinynurbs
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 )
@@ -116,9 +117,13 @@ catkin_package(
 include_directories(
  "${TinyEKF_DIR}/src"
  "${QuadProgpp_DIR}/src"
+ "${Tinynurbs_DIR}/include"
  #${catkin_INCLUDE_DIRS}
 )
 
+add_subdirectory(tinynurbs)
+
+add_subdirectory(QuadProgpp)
 ## Declare a C++ library
 add_library(TinyEKF INTERFACE)
 
@@ -176,19 +181,6 @@ add_library(TinyEKF INTERFACE)
  )
 
 ### Mark cpp header files for installation
- install(DIRECTORY ${TinyEKF_DIR}/src
-   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-   FILES_MATCHING PATTERN "*.h"
-   PATTERN ".svn" EXCLUDE
- )
-
- file(GLOB_RECURSE sources ${QuadProgpp_DIR}/*.cc)
- file(GLOB_RECURSE headers ${QuadProgpp_DIR}/*.hh)
- set(library_sources ${sources})
- list(REMOVE_ITEM library_sources ${QuadProgpp_DIR}/main.cc)
- add_library(quadprog STATIC ${library_sources} ${headers})
- set_property(TARGET quadprog PROPERTY POSITION_INDEPENDENT_CODE 1)
- set_property(TARGET quadprog PROPERTY PUBLIC_HEADER ${headers})
 
  install(TARGETS quadprog
    EXPORT quadprog-targets
@@ -196,9 +188,15 @@ add_library(TinyEKF INTERFACE)
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 
- install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+ install(TARGETS tinynurbs
+   EXPORT quadprog-targets
+   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
+
+ install(DIRECTORY include/${PROJECT_NAME}/
          DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-         FILES_MATCHING PATTERN "*.hh")
+         FILES_MATCHING PATTERN "*.h+")
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES
 #   # myfile1

@@ -136,9 +136,9 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
     Mat3<float> rotMatControlFrame = groundEstimator->GetAlignedDirections();
     Eigen::Matrix<float, 6, 1> g = Eigen::Matrix<float, 6, 1>::Zero();
     g(2, 0) = 9.8;
-    TerrainType& goundType = groundEstimator->GetTerrain().terrainType;
+    TerrainType groundType = groundEstimator->GetTerrain().terrainType;
     Mat3<float> rotMat;
-    if (goundType == TerrainType::PLANE || goundType==TerrainType::PLUM_PILES) {
+    if (groundType == TerrainType::PLANE || groundType == TerrainType::PLUM_PILES) {
         rotMat = Mat3<float>::Identity(); // control in base frame
     } else {
         // convert inertia in base frame to confrol frame

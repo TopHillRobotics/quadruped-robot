@@ -9,7 +9,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
-
 /* Cholesky-decomposition matrix-inversion code, adapated from
    http://jean-pierre.moreau.pagesperso-orange.fr/Cplus/choles_cpp.txt */
 
@@ -193,7 +192,6 @@ static void mat_addeye(double * a, int n)
 /* TinyEKF code ------------------------------------------------------------------- */
 
 #include "tiny_ekf.h"
-
 typedef struct {
 
     double * x;    /* state vector */

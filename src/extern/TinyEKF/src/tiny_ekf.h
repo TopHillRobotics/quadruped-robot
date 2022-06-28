@@ -6,6 +6,8 @@
  * MIT License
  */
 
+#ifndef TINYEKF_TINYEKF_H
+#define TINYEKF_TINYEKF_H
 
 /**
   * Initializes an EKF structure.
@@ -46,6 +48,8 @@
         double tmp5[M]; 
     * </pre>
   */
+
+
 void ekf_init(void * ekf, int n, int m);
 
 /**
@@ -56,3 +60,6 @@ void ekf_init(void * ekf, int n, int m);
   * @return 0 on success, 1 on failure caused by non-positive-definite matrix.
   */
 int ekf_step(void * ekf, double * z);
+
+
+#endif // TINYEKF_TINYEKF_H
