@@ -37,7 +37,6 @@
 #include "robot/qr_motor_cmd.h"
 #include "planner/qr_gait_generator.h"
 #include "planner/qr_com_planner.h"
-#include "planner/qr_pose_planner.h"
 #include "estimator/qr_robot_velocity_estimator.h"
 #include "estimator/qr_ground_estimator.h"
 
@@ -65,7 +64,7 @@ public:
                           qrRobotVelocityEstimator *robotVelocityEstimator,
                           qrGroundSurfaceEstimator *groundEstimator,
                           qrComPlanner *comPlanner,
-                          qrPosePlanner *posePlanner,
+                        //   qrPosePlanner *posePlanner,
                           qrFootholdPlanner *footholdPlanner,
                           Eigen::Matrix<float, 3, 1> desired_speed,
                           float desiredTwistingSpeed,
@@ -124,7 +123,7 @@ private:
     /**
      * @brief Robot estimator pointre. Get the estimated velocity.
      */
-    qrRobotVelocityEstimator *robotVelocityEstimator;
+    RobotVelocityEstimator *robotVelocityEstimator;
 
     /**
      * @brief Ground estimator pointer.
@@ -140,7 +139,7 @@ private:
     /**
      * @brief Robot pose planner obejct pointer. Get the intermediate base pose.
      */
-    qrPosePlanner *posePlanner;
+    // qrPosePlanner *posePlanner;
 
     /**
      * @brief Robot's foothold planner. Get desired COM pose when in walk locomotion.

@@ -178,7 +178,7 @@ Mat3<T> math::BasicRotMat(Axis axis, T theta)
 }
 
 template<typename T>
-Vec3<typename T::Scalar> Mat2SkewVec(const Eigen::MatrixBase<T> &m){
+Vec3<typename T::Scalar> math::Mat2SkewVec(const Eigen::MatrixBase<T> &m){
   static_assert(T::ColsAtCompileTime == 3 && T::RowsAtCompileTime == 3,
                             "Must have 3x3 matrix");
   return 0.5 * Vec3<typename T::Scalar>(m(2, 1) - m(1, 2), m(0, 2) - m(2, 0), (m(1, 0) - m(0, 1)));

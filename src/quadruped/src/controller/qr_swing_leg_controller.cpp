@@ -24,11 +24,12 @@
 
 
 #include "controller/qr_swing_leg_controller.h"
+#include "common/qr_se3.h"
 #include "common/qr_types.h"
 
 qrSwingLegController::qrSwingLegController(qrRobot *robot,
                                            qrGaitGenerator *gaitGenerator,
-                                           qrRobotEstimator* robotEstimator,
+                                           RobotVelocityEstimator* robotEstimator,
                                            qrGroundSurfaceEstimator *groundEstimator,
                                            Eigen::Matrix<float, 3, 1> desiredSpeed,
                                            float desiredTwistingSpeed,
@@ -268,14 +269,14 @@ std::map<int, qrMotorCmd> qrSwingLegController::GetAction()
         footVelocityInWorldFrame = Vec3<float>::Zero();
         footVelocityInControlFrame = Vec3<float>::Zero();
         Quat<float> robotComOrientation = this->robotState->GetBaseOrientation();
-        Mat3<float> robotBaseR = Math::quaternionToRotationMatrix(robotComOrientation).transpose();
+        Mat3<float> robotBaseR = math::quaternionToRotationMatrix(robotComOrientation).transpose();
         Quat<float> controlFrameOrientation = this->groundEstimator->GetControlFrameOrientation();
         Mat3<float> dR; // represent base frame in control frame
         if (this->groundEstimator->terrain.terrainType < 2) {
             dR = Mat3<float>::Identity();
             robotBaseR = Mat3<float>::Identity();
         } else {
-            dR = Math::quaternionToRotationMatrix(controlFrameOrientation) * robotBaseR;
+            dR = math::quaternionToRotationMatrix(controlFrameOrientation) * robotBaseR;
         }
         // switch (this->robotConfig->controlMode) {
         //     case LocomotionMode::VELOCITY_LOCOMOTION: {
@@ -289,7 +290,7 @@ std::map<int, qrMotorCmd> qrSwingLegController::GetAction()
                 footTargetPosition = dR.transpose() * (hipHorizontalVelocity * this->gaitGenerator->stanceDuration[legId] / 2.0 -
                     swingKp.cwiseProduct(targetHipHorizontalVelocity - hipHorizontalVelocity))
                         + Eigen::Matrix<float, 3, 1>(hipOffset[0], hipOffset[1], 0)
-                        - Math::TransformVecByQuat(Math::quatInverse(this->robotState->GetBaseOrientation()), desiredHeight);
+                        - math::TransformVecByQuat(math::quatInverse(this->robotState->GetBaseOrientation()), desiredHeight);
                 footPositionInBaseFrame = GenerateSwingFootTrajectory(this->gaitGenerator->normalizedPhase[legId],
                                                                  this->phaseSwitchFootLocalPos.col(legId),
                                                                  footTargetPosition);

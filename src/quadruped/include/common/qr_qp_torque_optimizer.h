@@ -26,10 +26,14 @@
 #define QR_QP_TORQUE_OPTIMIZER_H
 
 #include <tuple>
+#include <cmath>
 
 #include <Eigen/Dense>
 
 #include "robot/qr_robot.h"
+#include "robot/qr_robot_state.h"
+#include "robot/qr_robot_config.h"
+#include "common/qr_geometry.h"
 #include "estimator/qr_ground_estimator.h"
 
 /** 

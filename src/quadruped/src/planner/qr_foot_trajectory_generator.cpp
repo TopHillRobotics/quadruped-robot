@@ -32,7 +32,7 @@ qrFootSplinePatternGenerator::qrFootSplinePatternGenerator() : initial_time(0.f)
 void qrFootSplinePatternGenerator::SetParameters(const float initial_time,
                                                  const Eigen::Vector3f &initial_pos,
                                                  const Eigen::Vector3f &target_pos,
-                                                 const StepParameters &params)
+                                                 const qrStepParameters &params)
 {
     // Setting the initial time and duration of the swing movements
     this->initial_time = initial_time;
@@ -83,7 +83,7 @@ bool qrFootSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
         return false; // duration it's always positive, and makes sense when
     // is bigger than the sample time
     // Computing the time that allows us to discriminate the swing-up or swing-down phase
-    robotics::math::qrSpline::qrPoint swing_traj_x, swing_traj_y, swing_traj_z;
+    math::qrSpline::qrPoint swing_traj_x, swing_traj_y, swing_traj_z;
     float dt = time - initial_time_;
     foot_spliner_x_.getPoint(time, swing_traj_x);
     foot_spliner_y_.getPoint(time, swing_traj_y);
@@ -218,55 +218,55 @@ bool qrFootBSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
     return true;
 }
 
-float qrFootParabolaSplinePatternGenerator::GenParabola(float phase, float start, float mid, float end)
-{
-    float a;
-    float b;
-    float c;
+// float qrFootParabolaSplinePatternGenerator::GenParabola(float phase, float start, float mid, float end)
+// {
+//     float a;
+//     float b;
+//     float c;
    
-    a = 2*(y0 - 2*ym + y1);
-    b = -3*y0 + 4*ym - y1;
-    c = y0;
+//     a = 2*(y0 - 2*ym + y1);
+//     b = -3*y0 + 4*ym - y1;
+//     c = y0;
     
-    return a * x * x + b * x + c;
-}
+//     return a * x * x + b * x + c;
+// }
 
-Eigen::Matrix<float, 3, 1> qrFootParabolaSplinePatternGenerator::GenerateSwingFootTrajectory(float phase,
-                                                                                             Eigen::Matrix<float, 3, 1> startPos,
-                                                                                             Eigen::Matrix<float, 3, 1> endPos,
-                                                                                             float clearance=0.1)
-{
-    // refer to google's motion_imitation code (Python)
-    // For the first half of the swing cycle, the swing leg moves faster and finishes 
-    // 80% of the full swing trajectory. The rest 20% of trajectory takes another half swing cycle. 
-    // Intuitely, we want to move the swing foot quickly to the target landing location and 
-    // stay above the ground. In this way the control is more robust to perturbations to the body
-    // that may cause the swing foot to drop onto the ground earlier than expected.
-    // This is a common practice similar to the MIT cheetah and Marc Raibert's original controllers.
-    float phase;
-    float x;
-    float y;
-    float z;
-    float mid;
-    float clearance;
+// Eigen::Matrix<float, 3, 1> qrFootParabolaSplinePatternGenerator::GenerateSwingFootTrajectory(float phase,
+//                                                                                              Eigen::Matrix<float, 3, 1> startPos,
+//                                                                                              Eigen::Matrix<float, 3, 1> endPos,
+//                                                                                              float clearance=0.1)
+// {
+//     // refer to google's motion_imitation code (Python)
+//     // For the first half of the swing cycle, the swing leg moves faster and finishes 
+//     // 80% of the full swing trajectory. The rest 20% of trajectory takes another half swing cycle. 
+//     // Intuitely, we want to move the swing foot quickly to the target landing location and 
+//     // stay above the ground. In this way the control is more robust to perturbations to the body
+//     // that may cause the swing foot to drop onto the ground earlier than expected.
+//     // This is a common practice similar to the MIT cheetah and Marc Raibert's original controllers.
+//     float phase;
+//     float x;
+//     float y;
+//     float z;
+//     float mid;
+//     float clearance;
 
-    phase = inputPhase;
+//     phase = inputPhase;
 
-    if (inputPhase <= 0.5) {
-        phase = 0.8 * sin(inputPhase * M_PI);
-    } else {
-        phase = 0.8 + (inputPhase - 0.5) * 0.4;
-    }
+//     if (inputPhase <= 0.5) {
+//         phase = 0.8 * sin(inputPhase * M_PI);
+//     } else {
+//         phase = 0.8 + (inputPhase - 0.5) * 0.4;
+//     }
     
-    clearance = 0.1;
+//     clearance = 0.1;
     
-    x = (1 - phase) * startPos(0, 0) + phase * endPos(0, 0);
-    y = (1 - phase) * startPos(1, 0) + phase * endPos(1, 0);
-    mid = max(endPos(2, 0), startPos(2, 0)) + maxClearance;
-    z = GenerateParabola(phase, startPos(2, 0), mid, endPos(2, 0));
+//     x = (1 - phase) * startPos(0, 0) + phase * endPos(0, 0);
+//     y = (1 - phase) * startPos(1, 0) + phase * endPos(1, 0);
+//     mid = max(endPos(2, 0), startPos(2, 0)) + maxClearance;
+//     z = GenerateParabola(phase, startPos(2, 0), mid, endPos(2, 0));
 
-    return Eigen::Matrix<float, 3, 1>(x, y, z);
-}
+//     return Eigen::Matrix<float, 3, 1>(x, y, z);
+// }
 
 qrSwingFootTrajectory::qrSwingFootTrajectory(qrSplineInfo splineInfoIn,
                                              Vec3<float> startPosIn,
