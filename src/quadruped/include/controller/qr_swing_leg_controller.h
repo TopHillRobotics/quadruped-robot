@@ -33,6 +33,7 @@
 #include "robot/qr_motor_cmd.h"
 #include "planner/qr_gait_generator.h"
 #include "estimator/qr_ground_estimator.h"
+#include "estimator/qr_robot_velocity_estimator.h"
 #include "planner/qr_foothold_planner.h"
 #include "planner/qr_foot_trajectory_generator.h"
 
@@ -53,6 +54,7 @@ public:
      */
     qrSwingLegController(qrRobot *robot,
                          qrGaitGenerator *gaitGenerator,
+                         RobotVelocityEstimator *robotVelocityEstimator,
                          qrGroundSurfaceEstimator *groundEstimator,
                          Eigen::Matrix<float, 3, 1> desiredLinearVelocity,
                          float desiredTwistingVelocity,
@@ -138,7 +140,7 @@ private:
      * @brief Robot estimator pointre.
      */
     
-    qrRobotEstimator* robotEstimator;
+    RobotVelocityEstimator* robotEstimator;
     /**
      * @brief Ground estimator pointer.
      */

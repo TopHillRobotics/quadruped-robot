@@ -131,25 +131,25 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
                                                float fMinRatio,
                                                float fMaxRatio)
 {    
-    Quat<float> quat = robot->GetBaseOrientation();
+    Quat<float> quat = robot->getRobotState()->GetBaseOrientation();
     Vec3<float> controlFrameRPY = groundEstimator->GetControlFrameRPY();
     Mat3<float> rotMatControlFrame = groundEstimator->GetAlignedDirections();
     Eigen::Matrix<float, 6, 1> g = Eigen::Matrix<float, 6, 1>::Zero();
     g(2, 0) = 9.8;
-    TerrainType& goundType = groundEstimator->terrain.terrainType;
+    TerrainType& goundType = groundEstimator->GetTerrain().terrainType;
     Mat3<float> rotMat;
     if (goundType == TerrainType::PLANE || goundType==TerrainType::PLUM_PILES) {
         rotMat = Mat3<float>::Identity(); // control in base frame
     } else {
         // convert inertia in base frame to confrol frame
-        rotMat = rotMatControlFrame.transpose() * robotics::math::quaternionToRotationMatrix(quat).transpose();
+        rotMat = rotMatControlFrame.transpose() * math::quaternionToRotationMatrix(quat).transpose();
         // convert g from world frame to control frame
         g.head(3) = rotMatControlFrame.transpose() * g.head(3);
         fMaxRatio = fMaxRatio * cos(-controlFrameRPY[1]);
     }
-    Mat3<float> inertia = rotMat * robot->bodyInertia * rotMat.transpose();
-    Eigen::Matrix<float,3,4> footPosition = rotMat * robot->GetFootPositionsInBaseFrame();                
-    Eigen::Matrix<float, 6, 12> massMatrix = ComputeMassMatrix(robot->bodyMass, // compute in control frame or base frame, according to terrain.
+    Mat3<float> inertia = rotMat * robot->getRobotConfig()->bodyInertia * rotMat.transpose();
+    Eigen::Matrix<float,3,4> footPosition = rotMat * robot->getRobotState()->GetFootPositionInBaseFrame();                
+    Eigen::Matrix<float, 6, 12> massMatrix = ComputeMassMatrix(robot->getRobotConfig()->bodyMass, // compute in control frame or base frame, according to terrain.
                                                                inertia,
                                                                footPosition.transpose());
     
@@ -162,7 +162,7 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
     std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> CI;
     Eigen::Matrix<float, 12, 24> Ci;
     Eigen::Matrix<float, 24, 1> b;
-    CI = ComputeConstraintMatrix(robot->bodyMass, contacts, frictionCoef, fMinRatio, fMaxRatio);
+    CI = ComputeConstraintMatrix(robot->getRobotConfig()->bodyMass, contacts, frictionCoef, fMinRatio, fMaxRatio);
     Ci = std::get<0>(CI);
     b = std::get<1>(CI);
 
@@ -194,7 +194,7 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
     Eigen::Matrix<float, 4, 3> X;
     int invalidResNum = 0;
     for (int index = 0; index < x.size(); index++) {
-        if (isnan(x[index])) {
+        if (std::isnan(x[index])) {
             invalidResNum++;
         }
     }
@@ -228,12 +228,12 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
                                                float regWeight,
                                                float frictionCoef)
 {
-    Quat<float> quat = robot->GetBaseOrientation();
-    Eigen::Matrix<float,3,4> footPositionsInBaseFrame = robot->GetFootPositionsInBaseFrame();
-    Mat3<float> rotMat = robotics::math::quaternionToRotationMatrix(quat).transpose();
-    Eigen::Matrix<float, 3, 4> footPositionsInCOMWorldFrame = robotics::math::invertRigidTransform<float,4>({0.f,0.f,0.f},quat, footPositionsInBaseFrame);
-    Eigen::Matrix<float, 6, 12> massMatrix = ComputeMassMatrix(robot->bodyMass,
-                                                               robot->bodyInertia,
+    Quat<float> quat = robot->getRobotState()->GetBaseOrientation();
+    Eigen::Matrix<float,3,4> footPositionsInBaseFrame = robot->getRobotState()->GetFootPositionInBaseFrame();
+    Mat3<float> rotMat = math::quaternionToRotationMatrix(quat).transpose();
+    Eigen::Matrix<float, 3, 4> footPositionsInCOMWorldFrame = math::invertRigidTransform<float,4>({0.f,0.f,0.f},quat, footPositionsInBaseFrame);
+    Eigen::Matrix<float, 6, 12> massMatrix = ComputeMassMatrix(robot->getRobotConfig()->bodyMass,
+                                                               robot->getRobotConfig()->bodyInertia,
                                                                footPositionsInCOMWorldFrame.transpose(),
                                                                rotMat);
     std::tuple<Eigen::Matrix<float, 12, 12>, Eigen::Matrix<float, 12, 1>> Ga;
@@ -248,7 +248,7 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
     std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> CI;
     Eigen::Matrix<float, 12, 24> Ci;
     Eigen::Matrix<float, 24, 1> b;
-    CI = ComputeConstraintMatrix(robot->bodyMass, contacts, frictionCoef, fMinRatio, fMaxRatio, normal, tangent1, tangent2);
+    CI = ComputeConstraintMatrix(robot->getRobotConfig()->bodyMass, contacts, frictionCoef, fMinRatio, fMaxRatio, normal, tangent1, tangent2);
     Ci = std::get<0>(CI);
     b = std::get<1>(CI);
 
@@ -280,7 +280,7 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
     Eigen::Matrix<float, 4, 3> X;
     int invalidResNum = 0;
     for (int index = 0; index < x.size(); index++) {
-        if (isnan(x[index])) {
+        if (std::isnan(x[index])) {
             invalidResNum++;
         }
     }
@@ -299,7 +299,7 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
             }
         }
     }
-    return robotics::math::RigidTransform<float,4>({0.f,0.f,0.f}, quat, X.transpose());
+    return math::RigidTransform<float,4>({0.f,0.f,0.f}, quat, X.transpose());
 }
 
 Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,

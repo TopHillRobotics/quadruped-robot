@@ -41,17 +41,17 @@ void qrGroundSurfaceEstimator::Update()
     int i = 0;
     for(i = 0; i < 4; ++i) {
         if (contactState[i]) {
-            if (!this->lastContactState[i]) {
+            if (!this->lastContactStates[i]) {
                 shouldUpdate = true;
             }
             ++N;
         }
     }
-    this->lastContactState = contactState;
+    this->lastContactStates = contactState;
     if (N <= 3 || !shouldUpdate) {
         return ;
     }
-    Eigen::Matrix<double, 3, 4> footPositionsInBaseFrame = this->robotState->GetFootPositionsInBaseFrame().cast<double>();
+    Eigen::Matrix<double, 3, 4> footPositionsInBaseFrame = this->robotState->GetFootPositionInBaseFrame().cast<double>();
     this->pZ = footPositionsInBaseFrame.row(2);
     this->W.col(1) = footPositionsInBaseFrame.row(0);
     this->W.col(2) = footPositionsInBaseFrame.row(1);
@@ -72,7 +72,8 @@ void qrGroundSurfaceEstimator::Reset()
     }
 
     this->terrain.footHoldOffset = this->terrainConfig["foothold_offset"].as<float>();
-    this->robotConfig->footHoldOffset = this->terrain.footHoldOffset;
+    // TODO:: check this
+    // this->robotConfig->footHoldOffset = this->terrain.footHoldOffset;
     switch (terrain.terrainType) {
         case TerrainType::PLANE: {
         } break;
@@ -100,7 +101,7 @@ void qrGroundSurfaceEstimator::Reset()
                           0, 1, 0, 0,
                           0, 0, 1, 0,
                           0, 0, 0, 1;
-    this->lastContactState << 0, 0, 0, 0;
+    this->lastContactStates << 0, 0, 0, 0;
 }
 
 float qrGroundSurfaceEstimator::GetZ(float x, float y)
@@ -122,8 +123,8 @@ Eigen::Matrix<double, 3, 1> qrGroundSurfaceEstimator::GetNormalVector(bool updat
 Eigen::Matrix<double, 4, 4> qrGroundSurfaceEstimator::ComputeControlFrame()
 {
     Quat<double> quat = this->robotState->GetBaseOrientation().cast<double>();
-    Vec3<double> nInWorldFrame = robotics::math::invertRigidTransform<double>({0,0,0},quat, n);
-    Vec3<double> xAxis = robotics::math::quaternionToRotationMatrix(quat).transpose().col(0);
+    Vec3<double> nInWorldFrame = math::invertRigidTransform<double>({0,0,0},quat, n);
+    Vec3<double> xAxis = math::quaternionToRotationMatrix(quat).transpose().col(0);
     Vec3<double> yAxis = nInWorldFrame.cross(xAxis);
     yAxis.normalize();
     xAxis = yAxis.cross(nInWorldFrame);
@@ -134,8 +135,8 @@ Eigen::Matrix<double, 4, 4> qrGroundSurfaceEstimator::ComputeControlFrame()
     R.col(1) = yAxis;
     R.col(2) = nInWorldFrame;
     double ratio = 0.7; // todo, 0.7 for walk mode
-    this->controlFrameRPY = (1 - ratio) * this->controlFrameRPY + ratio * robotics::math::rotationMatrixToRPY(R.transpose());
-    this->controlFrameOrientation = robotics::math::rpyToQuat(this->controlFrameRPY);
+    this->controlFrameRPY = (1 - ratio) * this->controlFrameRPY + ratio * math::rotationMatrixToRPY(R.transpose());
+    this->controlFrameOrientation = math::rpyToQuat(this->controlFrameRPY);
     this->controlFrame.block<3,3>(0,0) = R;
     this->controlFrame.block<3,1>(0,3) = this->robotConfig->GetBasePosition().cast<double>();
     return controlFrame;

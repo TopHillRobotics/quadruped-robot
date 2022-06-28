@@ -150,50 +150,51 @@ void qrStanceLegController::UpdateFRatio(Vec4<bool> &contacts, int &N, float &mo
             }
         }
         return;
-    } else {
-        for (int legId = 0; legId < 4; ++legId) {
-            int desiredLegState = gaitGenerator->desiredLegState[legId];
-            int detectedLegState = gaitGenerator->detectedLegState[legId];
-            float phase = gaitGenerator->normalizedPhase[legId];
+    // } else {
+    //     for (int legId = 0; legId < 4; ++legId) {
+    //         int desiredLegState = gaitGenerator->desiredLegState[legId];
+    //         int detectedLegState = gaitGenerator->detectedLegState[legId];
+    //         float phase = gaitGenerator->normalizedPhase[legId];
             
-            if (detectedLegState == LegState::STANCE || detectedLegState == LegState::LOSE_CONTACT) {
-                contacts[legId] = true;
-                N++;
-                this->fMaxRatio[legId] = 10.0;
-                this->fMinRatio[legId] = 0.001;
-            } else if(detectedLegState == LegState::EARLY_CONTACT) { // plan is swing, actual is stand
-                    contacts[legId] = true;
-                    N++;
-                    float tempRatio = abs(phase-0.8);///(1.0-detectedEventTickPhase[legId]);
-                    this->fMaxRatio[legId] = 10.0 * std::min(0.01f, tempRatio);
-                    this->fMinRatio[legId] = 0.001;
-            } else { // Swing STATE in plan
-                moveBasePhase = gaitGenerator->moveBasePhase;
-                if (desiredLegState==SubLegState::LOAD_FORCE) {
-                    contacts[legId] = true;
-                    N++;
-                    this->fMaxRatio[legId] = 10.0 * std::max(0.001f, phase);
-                    this->fMinRatio[legId] = 0.001;
-                } else if (desiredLegState==SubLegState::UNLOAD_FORCE){
-                    contacts[legId] = true;
-                    N++;
-                    phase = phase / (3.f/4.0); // todo
-                    this->fMaxRatio[legId] = 10.0 * std::max(0.001, 1.0-phase);
-                    this->fMinRatio[legId] = 0.001;
-                } else if (desiredLegState==SubLegState::TRUE_SWING) {
-                    contacts[legId] = false;
-                    this->fMaxRatio[legId] = 0.002;
-                    this->fMinRatio[legId] = 0.001;
-                }  else if (desiredLegState==SubLegState::FULL_STANCE) {
-                    contacts[legId] = true;
-                    N++;
-                    this->fMaxRatio[legId] = 10.0;
-                    this->fMinRatio[legId] = 0.001;
-                } else {
-                    throw std::invalid_argument("no this leg state");
-                }
-            }
-        }
+    //         if (detectedLegState == LegState::STANCE || detectedLegState == LegState::LOSE_CONTACT) {
+    //             contacts[legId] = true;
+    //             N++;
+    //             this->fMaxRatio[legId] = 10.0;
+    //             this->fMinRatio[legId] = 0.001;
+    //         } else if(detectedLegState == LegState::EARLY_CONTACT) { // plan is swing, actual is stand
+    //                 contacts[legId] = true;
+    //                 N++;
+    //                 float tempRatio = abs(phase-0.8);///(1.0-detectedEventTickPhase[legId]);
+    //                 this->fMaxRatio[legId] = 10.0 * std::min(0.01f, tempRatio);
+    //                 this->fMinRatio[legId] = 0.001;
+    //         } else { // Swing STATE in plan
+    //             moveBasePhase = gaitGenerator->moveBasePhase;
+    //             if (desiredLegState==SubLegState::LOAD_FORCE) {
+    //                 contacts[legId] = true;
+    //                 N++;
+    //                 this->fMaxRatio[legId] = 10.0 * std::max(0.001f, phase);
+    //                 this->fMinRatio[legId] = 0.001;
+    //             } else if (desiredLegState==SubLegState::UNLOAD_FORCE){
+    //                 contacts[legId] = true;
+    //                 N++;
+    //                 phase = phase / (3.f/4.0); // todo
+    //                 this->fMaxRatio[legId] = 10.0 * std::max(0.001, 1.0-phase);
+    //                 this->fMinRatio[legId] = 0.001;
+    //             } else if (desiredLegState==SubLegState::TRUE_SWING) {
+    //                 contacts[legId] = false;
+    //                 this->fMaxRatio[legId] = 0.002;
+    //                 this->fMinRatio[legId] = 0.001;
+    //             }  else if (desiredLegState==SubLegState::FULL_STANCE) {
+    //                 contacts[legId] = true;
+    //                 N++;
+    //                 this->fMaxRatio[legId] = 10.0;
+    //                 this->fMinRatio[legId] = 0.001;
+    //             } else {
+    //                 throw std::invalid_argument("no this leg state");
+    //             }
+    //         }
+    //     }
+    // }
     }
 }
 
@@ -244,9 +245,9 @@ std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrStanceLegCon
     Eigen::Matrix<float, 3, 1> jointAngles;
     
     Quat<float> robotComOrientation = this->robotConfig->GetBaseOrientation();
-    Mat3<float> Rb = robotics::math::quaternionToRotationMatrix(robotComOrientation).transpose();
+    Mat3<float> Rb = math::quaternionToRotationMatrix(robotComOrientation).transpose();
     Quat<float> controlFrameOrientation = this->groundEstimator->GetControlFrameOrientation();
-    Mat3<float> Rc = robotics::math::quaternionToRotationMatrix(controlFrameOrientation).transpose();
+    Mat3<float> Rc = math::quaternionToRotationMatrix(controlFrameOrientation).transpose();
     Vec3<float> groundRPY = this->groundEstimator->GetControlFrameRPY();
     Mat3<float> Rcb = Rc.transpose() * Rb;
     
@@ -259,20 +260,20 @@ std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrStanceLegCon
             robotComPosition = {0., 0., this->robotConfig->GetBasePosition()[2]}; // vel mode in base frame, height is in world frame.
             robotComRpy[2] = 0.f;
             if (groundEstimator->terrain.terrainType>=2) { // not horizontal plane
-                robotComPosition = robotics::math::TransformVecByQuat(robotics::math::quatInverse(controlFrameOrientation), robotComPosition);      
+                robotComPosition = math::TransformVecByQuat(robotics::math::quatInverse(controlFrameOrientation), robotComPosition);      
                 robotComPosition[0] = 0.f;
                 robotComPosition[1] = 0.f;
-                robotComVelocity = robotics::math::invertRigidTransform({0,0,0}, robotComOrientation, robotComVelocity); // in world frame
-                robotComVelocity = robotics::math::RigidTransform({0,0,0}, controlFrameOrientation, robotComVelocity); // in control frame
-                robotComRpy = robotics::math::rotationMatrixToRPY(Rcb.transpose()); // body orientation in control frame.
-                robotComRpyRate = robotics::math::invertRigidTransform({0,0,0}, robotComOrientation, robotComRpyRate); // in world frame
-                robotComRpyRate = robotics::math::RigidTransform({0,0,0}, controlFrameOrientation, robotComRpyRate); // in control frame
+                robotComVelocity = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComVelocity); // in world frame
+                robotComVelocity = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComVelocity); // in control frame
+                robotComRpy = math::rotationMatrixToRPY(Rcb.transpose()); // body orientation in control frame.
+                robotComRpyRate = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComRpyRate); // in world frame
+                robotComRpyRate = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComRpyRate); // in control frame
             }
     //     } break;
     //     case LocomotionMode::WALK_LOCOMOTION: {
     //         robotComPosition = robotConfig->GetBasePosition(); // in world frame, walk mode
-    //         robotComVelocity = robotics::math::invertRigidTransform({0,0,0}, robotComOrientation, robotComVelocity); // in world frame
-    //         robotComRpyRate = robotics::math::invertRigidTransform({0,0,0}, robotComOrientation, robotComRpyRate); // in world frame   
+    //         robotComVelocity = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComVelocity); // in world frame
+    //         robotComRpyRate = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComRpyRate); // in world frame   
     //     } break;
     //     default: {  // pos mode
     //         robotComPosition = {0., 0., robotConfig->GetBasePosition()[2]};
@@ -298,7 +299,7 @@ std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrStanceLegCon
                     
     //             if ((contacts[i] && gaitGenerator->desiredLegState[i]==SubLegState::UNLOAD_FORCE && phase > 3.0/4) 
     //                 || robot->stop) {
-    //                 Quat<float> intermediateQuat = robotics::math::rpyToQuat(Vec3<float>(pose.tail(3)));
+    //                 Quat<float> intermediateQuat = math::rpyToQuat(Vec3<float>(pose.tail(3)));
     //                 Vec3<float> dr = Vec3<float>(0.f,0.f,0.01f) / 2000;
     //                 Vec3<float> r = this->robotState->GetFootPositionsInBaseFrame().col(i) + dr;
     //                 robotConfig->FootPosition2JointAngles(i, r, jointIdx, jointAngles);
@@ -334,19 +335,19 @@ std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrStanceLegCon
     
     if (computeForceInWorldFrame) {
         // case1: R(dR^T-->rpy) ; case2:   (R*dR)^T --> rpy
-        Mat3<float> robotR = robotics::math::rpyToRotMat(robotComRpy).transpose();
-        Mat3<float> desiredRobotRT = robotics::math::rpyToRotMat(desiredComRpy);
+        Mat3<float> robotR = math::rpyToRotMat(robotComRpy).transpose();
+        Mat3<float> desiredRobotRT = math::rpyToRotMat(desiredComRpy);
         Mat3<float> dR = desiredRobotRT*robotR;
-        dq.tail(3) = robotR * robotics::math::rotationMatrixToRPY(dR);
+        dq.tail(3) = robotR * math::rotationMatrixToRPY(dR);
         
         // case 1 : R*((/hat(WBdes) - /hat(WBcurr))---> to skewV)
-        Mat3<float> RTWdes = robotics::math::vectorToSkewMat(desiredRobotRT *  desiredComAngularVelocity);
-        Mat3<float> RTWcur = robotics::math::vectorToSkewMat(robotR.transpose() *  robotComRpyRate);
-        Vec3<float> dw = robotR * robotics::math::matToSkewVec(RTWdes - RTWcur);
+        Mat3<float> RTWdes = math::vectorToSkewMat(desiredRobotRT *  desiredComAngularVelocity);
+        Mat3<float> RTWcur = math::vectorToSkewMat(robotR.transpose() *  robotComRpyRate);
+        Vec3<float> dw = robotR * math::matToSkewVec(RTWdes - RTWcur);
         ddq.tail(3) =  dw;
         // case 2: do nothing
     } else { // computeForceInControlFrame
-
+        ;
     }   
 
     //
@@ -371,13 +372,13 @@ std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrStanceLegCon
                                              accWeight); // compute the force in control/base frame        
     }
     
-    map<int, qrMotorCmd> action;
-    map<int, float> motorTorques;
+    std::map<int, qrMotorCmd> action;
+    std::map<int, float> motorTorques;
     Eigen::Matrix<float, 12, 1> kps = this->robotConfig->GetKps();
     Eigen::Matrix<float, 12, 1> kds = this->robotConfig->GetKds();
     
-    for (int legId = 0; legId < NumLeg; ++legId) {
-        motorTorques = this->robotState->ContactForce2JointTorques(legId, contactForces.col(legId));    
+    for (int legId = 0; legId < this->robotConfig->numLegs; ++legId) {
+        motorTorques[legId] = this->robotState->ContactForce2JointTorque(contactForces.col(legId), legId);
         qrMotorCmd temp;
         // switch (this->robotConfig->controlMode) {
         //     case LocomotionMode::WALK_LOCOMOTION: {
@@ -393,7 +394,7 @@ std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrStanceLegCon
         //         }   
         //     } break;
         //     default:
-                for (map<int, float>::iterator it = motorTorques.begin(); it != motorTorques.end(); ++it) {
+                for (std::map<int, float>::iterator it = motorTorques.begin(); it != motorTorques.end(); ++it) {
                     temp.SetCmd(0.f, 0.f, 0.f, 0.f, it->second)
                     action[it->first] = temp;
                 }

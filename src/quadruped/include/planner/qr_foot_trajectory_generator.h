@@ -28,6 +28,9 @@
 #include <Eigen/Dense>
 
 #include "common/qr_geometry.h"
+#include <tinynurbs/tinynurbs.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/constants.hpp>
 
 /**
  * @brief 
@@ -130,7 +133,7 @@ public:
     virtual void SetParameters(const float initial_time,
                         const Eigen::Vector3f &initial_pos,
                         const Eigen::Vector3f &target_pos,
-                        const StepParameters &params);
+                        const qrStepParameters &params);
 
     /**
      * @brief Generates the foot-swing trajectory for a given time
@@ -174,10 +177,10 @@ private:
     /** 
      * @brief Spliners for the different axis of the foot movement 
      */
-    robotics::math::CubicSpline foot_spliner_x_;
-    robotics::math::CubicSpline foot_spliner_y_;
-    robotics::math::CubicSpline foot_spliner_up_z_;
-    robotics::math::CubicSpline foot_spliner_down_z_;
+    math::qrCubicSpline foot_spliner_x_;
+    math::qrCubicSpline foot_spliner_y_;
+    math::qrCubicSpline foot_spliner_up_z_;
+    math::qrCubicSpline foot_spliner_down_z_;
 };
 
 class qrFootBSplinePatternGenerator : public qrFootSplinePatternGenerator {
@@ -197,12 +200,12 @@ public:
      * @param initial_time The initial time.
      * @param initial_pos The initial position of the foot.
      * @param target_pos The target position of the foot
-     * @param params StepParameters object.
+     * @param params qrStepParameters object.
      */
     virtual void SetParameters(const float initial_time,
                                const Eigen::Vector3f &initial_pos,
                                const Eigen::Vector3f &target_pos,
-                               const StepParameters &params);
+                               const qrStepParameters &params);
 
     /** 
      * @brief Destructor function.
@@ -237,41 +240,41 @@ private:
     tinynurbs::Curve3f crv;
 };
 
-class qrFootParabolaSplinePatternGenerator : public qrFootSplinePatternGenerator {
+// class qrFootParabolaSplinePatternGenerator : public qrFootSplinePatternGenerator {
 
-public:
+// public:
 
-    /**
-     * @brief Default qrFootParabolaSplinePatternGenerator constructor.
-     */
-    qrFootParabolaSplinePatternGenerator();
+//     /**
+//      * @brief Default qrFootParabolaSplinePatternGenerator constructor.
+//      */
+//     qrFootParabolaSplinePatternGenerator();
 
-    virtual ~qrFootParabolaSplinePatternGenerator() = default;
+//     virtual ~qrFootParabolaSplinePatternGenerator() = default;
 
-    /**
-     * @brief Generate a parabola curve using three given points: (0, y0), (0.5, ym) and (1, y1).
-     * y = ax^2 + bx + c
-     * @param x specifies the given x coordiate (phase) to compute the parabola value. x is normalized to [0,1].
-     * @param y0 specifies the y coordinate of the start point at t=0.
-     * @param ym specifies the y coordinate of the middle point at x=0.5. 
-     * @param y1 specifies the y coordinate of the end point at x=1.
-     * @return the y coordinate of the parabola curve for a given x (phase).
-     */
-    float GenerateParabola(float x, float y0, float ym, float y1);
+//     /**
+//      * @brief Generate a parabola curve using three given points: (0, y0), (0.5, ym) and (1, y1).
+//      * y = ax^2 + bx + c
+//      * @param x specifies the given x coordiate (phase) to compute the parabola value. x is normalized to [0,1].
+//      * @param y0 specifies the y coordinate of the start point at t=0.
+//      * @param ym specifies the y coordinate of the middle point at x=0.5. 
+//      * @param y1 specifies the y coordinate of the end point at x=1.
+//      * @return the y coordinate of the parabola curve for a given x (phase).
+//      */
+//     float GenerateParabola(float x, float y0, float ym, float y1);
 
-    /**
-     * @brief Generate the 3D trajectory of the swing leg
-     * @param phase specifies the given phase in [0, 1] to compute the trajectory.
-     * @param startPos specifies the foot's position at the beginning of swing cycle.
-     * @param endPos specifies the foot's desired position at the end of swing cycle.
-     * @param clearance specifies the height over the ground.
-     * @return the desired foot position (x,y,z) at the current swing phase. 
-     */
-    Eigen::Matrix<float, 3, 1> GenerateSwingFootTrajectory(float phase,
-                                                           Eigen::Matrix<float, 3, 1> startPos,
-                                                           Eigen::Matrix<float, 3, 1> endPos,
-                                                           float clearance=0.1);
-};
+//     /**
+//      * @brief Generate the 3D trajectory of the swing leg
+//      * @param phase specifies the given phase in [0, 1] to compute the trajectory.
+//      * @param startPos specifies the foot's position at the beginning of swing cycle.
+//      * @param endPos specifies the foot's desired position at the end of swing cycle.
+//      * @param clearance specifies the height over the ground.
+//      * @return the desired foot position (x,y,z) at the current swing phase. 
+//      */
+//     Eigen::Matrix<float, 3, 1> GenerateSwingFootTrajectory(float phase,
+//                                                            Eigen::Matrix<float, 3, 1> startPos,
+//                                                            Eigen::Matrix<float, 3, 1> endPos,
+//                                                            float clearance=0.1);
+// };
 
 class qrSwingFootTrajectory {
 public:
@@ -373,11 +376,6 @@ private:
      * @brief qrFootSplinePatternGenerator object pointer.
      */
     qrFootSplinePatternGenerator *footTarjGen;
-
-    /** 
-     * @brief qrFootParabolaSplinePatternGenerator object pointer.
-     */
-    // qrFootParabolaSplinePatternGenerator *footNormalTrajGen;
 
     /** 
      * @brief SplineInfo object pointer.

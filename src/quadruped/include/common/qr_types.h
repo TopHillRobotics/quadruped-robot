@@ -47,3 +47,10 @@ enum TerrainType {
     PLUM_PILES,
     STAIRS
 };
+
+enum SubLegState {
+    LOAD_FORCE=5,
+    UNLOAD_FORCE,
+    FULL_STANCE,
+    TRUE_SWING,
+};
