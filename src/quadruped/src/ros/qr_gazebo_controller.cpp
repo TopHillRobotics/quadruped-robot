@@ -26,7 +26,7 @@
 
 bool startControllers(ros::NodeHandle &nodeHandle, std::string serviceName, std::vector<std::string> &controllersToStart) {
 
-    ros::ServiceClient switchController = n.serviceClient<controller_manager_msgs::SwitchController>(serviceName);
+    ros::ServiceClient switchController = nodeHandle.serviceClient<controller_manager_msgs::SwitchController>(serviceName);
     controller_manager_msgs::SwitchController switchControllerMsg;
     switchControllerMsg.request.start_controllers = controllersToStart;
     switchControllerMsg.request.strictness = switchControllerMsg.request.STRICT;
@@ -44,7 +44,7 @@ bool startControllers(ros::NodeHandle &nodeHandle, std::string serviceName, std:
 
 bool stopControllers(ros::NodeHandle &nodeHandle, std::string serviceName, std::vector<std::string> &controllersToStop) {
 
-    ros::ServiceClient switchController = n.serviceClient<controller_manager_msgs::SwitchController>(serviceName);
+    ros::ServiceClient switchController = nodeHandle.serviceClient<controller_manager_msgs::SwitchController>(serviceName);
     controller_manager_msgs::SwitchController switchControllerMsg;
     switchControllerMsg.request.stop_controllers = controllersToStop;
     switchControllerMsg.request.strictness = switchControllerMsg.request.STRICT;

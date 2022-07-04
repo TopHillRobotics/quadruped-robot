@@ -39,31 +39,29 @@ qrLocomotionController::qrLocomotionController(qrRobot *robotIn,
 
 void qrLocomotionController::Initialization(std::string homeDir, std::string robotName)
 {
-    this->gaitGenerator = qrGaitGenerator(this->robot, this->homeDir + "config/" + this->robotName
-                                                                         + "/gait_generator.yaml");
+    this->gaitGenerator = new qrGaitGenerator(this->robot, homeDir + "config/" + robotName + "/gait_generator.yaml");
     std::cout << "init gaitGenerator finish\n" << std::endl;
 
     this->groundEstimator = new qrGroundSurfaceEstimator(this->robot, homeDir + "config/" + robotName
                                                                                         + "/terrain.yaml");
     std::cout << "init groundEsitmator finish\n" << std::endl;
 
-    this->stateEstimator = new qrRobotVelocityEstimator(this->robot);
+    this->velocityEstimator = new qrRobotVelocityEstimator(this->robot);
     std::cout << "init robotEstimator finish\n" << std::endl;
      
-    this->comPlanner = new qrComPlanner(this->robot, gaitGenerator, stateEstimator);
+    this->comPlanner = new qrComPlanner(this->robot, gaitGenerator);
     std::cout << "init comPlanner finish\n" << std::endl;
 
-    this->footholdPlanner = new qrFootholdPlanner(this->robot, groundEsitmator);
+    this->footholdPlanner = new qrFootholdPlanner(this->robot, this->groundEstimator);
     std::cout << "init footholdPlanner finish\n" << std::endl;
 
     this->swingLegController = new qrSwingLegController(this->robot,
                                                         this->gaitGenerator,
-                                                        this->stateEstimator,
-                                                        this->groundEsitmator,
-                                                        this->footholdPlanner,
+                                                        this->velocityEstimator,
+                                                        this->groundEstimator,
                                                         this->desiredSpeed,
                                                         this->desiredTwistingSpeed,
-                                                        this->robotConfig->bodyHeight,
+                                                        this->robotConfig->GetBodyHeight(),
                                                         0.01f,
                                                         homeDir + "config/" + robotName
                                                             + "/swing_leg_controller.yaml");
@@ -71,12 +69,13 @@ void qrLocomotionController::Initialization(std::string homeDir, std::string rob
 
     this->stanceLegController = new qrStanceLegController(this->robot,
                                                           this->gaitGenerator,
-                                                          this->stateEstimator,
-                                                          this->groundEsitmator,
+                                                          this->velocityEstimator,
+                                                          this->groundEstimator,
                                                           this->comPlanner,
                                                           this->footholdPlanner,
                                                           this->desiredSpeed,
                                                           this->desiredTwistingSpeed,
+                                                          this->robotConfig->GetBodyHeight(),
                                                           homeDir + "config/" + robotName
                                                               + "/stance_leg_controller.yaml");
 
@@ -149,7 +148,7 @@ void qrLocomotionController::Update()
     this->stanceLegController->Update();
 }
 
-void UpdateDesiredSpeed(Vec3<float> linSpeed, float angSpeed)
+void qrLocomotionController::UpdateDesiredSpeed(Vec3<float> linSpeed, float angSpeed)
 {
     this->swingLegController->SetDesiredSpeed(linSpeed, angSpeed);
     this->stanceLegController->SetDesiredSpeed(linSpeed, angSpeed);

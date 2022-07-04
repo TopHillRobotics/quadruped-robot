@@ -172,6 +172,10 @@ public:
         this->yawOffset = yawOffset;
     }
 
+    inline float GetBodyHeight() const{
+        return bodyHeight;
+    }
+
 private:
 
     /**

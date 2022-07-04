@@ -22,6 +22,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#ifndef QR_GAZEBO_CONTROLLER_H
+#define QR_GAZEBO_CONTROLLER_H
+
 #include <gazebo_msgs/ModelState.h>
 #include <gazebo_msgs/SetModelState.h>
 #include <gazebo_msgs/SetModelConfiguration.h>
@@ -64,3 +67,5 @@ bool ResetRobotBySystem();
  * @param jointStateClient
  */
 bool ResetRobotByService(ros::ServiceClient &modelStateClient, ros::ServiceClient &jointStateClient);
+
+#endif //QR_GAZEBO_CONTROLLER_H

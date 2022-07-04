@@ -171,7 +171,7 @@ public:
     /**
      * @brief The desired angular velocity.
      */
-    Vec3<float> desiredTwistingSpeed;
+    float desiredTwistingSpeed;
 
 private:
 
@@ -204,6 +204,16 @@ private:
      * @brief qrComPlanner object.
      */
     qrComPlanner *comPlanner;
+
+    /**
+     * @brief velocityEstimator
+     */
+    qrRobotVelocityEstimator *velocityEstimator;
+
+    /**
+     * @brief footholdPlanner
+     */
+    qrFootholdPlanner* footholdPlanner;
 
     /** 
      * @brief joint command list.

@@ -200,7 +200,7 @@ public:
      */
     Vec3<float> ContactForce2JointTorque(Vec3<float> contractForce, int legId);
 
-    inline Vec4<float> GetFootContact() const
+    inline Vec4<bool> GetFootContact() const
     {
         for (int footId = 0; footId < qrRobotConfig::numLegs; footId++) {
             if (footForce[footId] > 5) {
