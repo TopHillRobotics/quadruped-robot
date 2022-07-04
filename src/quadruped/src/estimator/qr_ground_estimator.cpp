@@ -35,7 +35,7 @@ qrGroundSurfaceEstimator::qrGroundSurfaceEstimator(qrRobot* robot, std::string t
 
 void qrGroundSurfaceEstimator::Update()
 {
-    Eigen::Matrix<bool, 4, 1> contactState = this->robotState->GetFootContact();
+    Vec4<bool> contactState = this->robotState->GetFootContact();
     bool shouldUpdate = false;
     int N = 0;
     int i = 0;
@@ -91,7 +91,7 @@ void qrGroundSurfaceEstimator::Reset()
         default : throw std::domain_error("no such terrain!");
     }
 
-    this->a = Eigen::Matrix<double, 3, 1>::Zero();
+    this->a = Vec3<double>::Zero();
     this->W = Eigen::Matrix<double,4,3>::Ones();
     this->pZ = Vec4<double>::Zero();
     this->n << 0.f, 0.f, 1.f;
@@ -110,7 +110,7 @@ float qrGroundSurfaceEstimator::GetZ(float x, float y)
     return z;
 }
 
-Eigen::Matrix<double, 3, 1> qrGroundSurfaceEstimator::GetNormalVector(bool update)
+Vec3<double> qrGroundSurfaceEstimator::GetNormalVector(bool update)
 {
     if (update){
         double factor = std::sqrt(a[1] * a[1] + a[2] * a[2] + 1);
@@ -120,7 +120,7 @@ Eigen::Matrix<double, 3, 1> qrGroundSurfaceEstimator::GetNormalVector(bool updat
     return n;
 }
 
-Eigen::Matrix<double, 4, 4> qrGroundSurfaceEstimator::ComputeControlFrame()
+Mat4<double> qrGroundSurfaceEstimator::ComputeControlFrame()
 {
     Quat<double> quat = this->robotState->GetBaseOrientation().cast<double>();
     Vec3<double> nInWorldFrame = math::InvertRigidTransform<double>({0,0,0},quat, n);

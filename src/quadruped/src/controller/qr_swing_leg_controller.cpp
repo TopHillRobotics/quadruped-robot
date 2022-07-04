@@ -30,16 +30,16 @@ qrSwingLegController::qrSwingLegController(qrRobot *robot,
                                            qrGaitGenerator *gaitGenerator,
                                            qrRobotVelocityEstimator* robotEstimator,
                                            qrGroundSurfaceEstimator *groundEstimator,
-                                           Vec3<float> desiredLinearVelocity,
-                                           float desiredTwistingVelocity,
+                                           Vec3<float> desiredLinearSpeed,
+                                           float desiredTwistingSpeed,
                                            float desiredHeight,
                                            float footClearance,
                                            std::string configPath)
     : gaitGenerator(gaitGenerator),
       groundEstimator(groundEstimator),
       robotEstimator(robotEstimator),
-      desiredLinearVelocity(desiredLinearVelocity),
-      desiredTwistingVelocity(desiredTwistingVelocity),
+      desiredLinearSpeed(desiredLinearSpeed),
+      desiredTwistingSpeed(desiredTwistingSpeed),
       configFilepath(configPath)
 {
     this->robotState = robot->GetRobotState();
@@ -236,7 +236,7 @@ std::map<int, qrMotorCmd> qrSwingLegController::GetAction()
     Vec3<float> footPositionInBaseFrame, footVelocityInBaseFrame, footAccInBaseFrame;
     Vec3<float> footPositionInWorldFrame, footVelocityInWorldFrame, footAccInWorldFrame;
     Vec3<float> footPositionInControlFrame, footVelocityInControlFrame, footAccInControlFrame;
-    Eigen::Matrix<int, 3, 1> jointIdx;
+    Vec3<int> jointIdx;
     Vec3<float> jointAngles;
     Mat3x4<float> hipPositions;
     // The position correction coefficients in Raibert's formula.
@@ -284,7 +284,7 @@ std::map<int, qrMotorCmd> qrSwingLegController::GetAction()
                 hipHorizontalVelocity = comVelocity + yawDot * twistingVector; // in base frame
                 hipHorizontalVelocity = dR * hipHorizontalVelocity; // in control frame
                 hipHorizontalVelocity[2] = 0.f;
-                targetHipHorizontalVelocity = desiredLinearVelocity + desiredTwistingVelocity * twistingVector; // in control frame
+                targetHipHorizontalVelocity =  desiredLinearSpeed +  desiredTwistingSpeed * twistingVector; // in control frame
                     
                 footTargetPosition = dR.transpose() * (hipHorizontalVelocity * this->gaitGenerator->stanceDuration[legId] / 2.0 -
                     swingKp.cwiseProduct(targetHipHorizontalVelocity - hipHorizontalVelocity))

@@ -98,6 +98,17 @@ public:
      */
     std::tuple<std::map<int, qrMotorCmd>, Mat3x4<float>> GetAction();
 
+    /**
+     * @brief set the linear velocity and angular velocity.
+     * @param linSpeed The desired linear speed.
+     * @param angSpeed The desired angular speed.
+     */
+    inline void SetDesiredSpeed(Vec3<float> linSpeed, float angSpeed)
+    {
+        this->desiredSpeed = linSpeed;
+        this->desiredTwistingSpeed = angSpeed;
+    }
+
 private:
 
     /**

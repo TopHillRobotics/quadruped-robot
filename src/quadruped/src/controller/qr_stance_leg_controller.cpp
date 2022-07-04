@@ -239,7 +239,7 @@ std::tuple<std::map<int, qrMotorCmd>, Mat3x4<float>> qrStanceLegController::GetA
     // Mat3x4 com2FootInWorld = footPoseWorld.colwise() - pose.head(3);
     Mat3x4<float> footJointAngles = Mat3x4<float>::Zero();
     Eigen::Matrix<int, 3, 4> jointIdxs;
-    Eigen::Matrix<int, 3, 1> jointIdx;
+    Vec3<int> jointIdx;
     Vec3<float> jointAngles;
     
     Quat<float> robotComOrientation = this->robotState->GetBaseOrientation();
