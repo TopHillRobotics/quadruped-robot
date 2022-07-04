@@ -22,7 +22,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #ifndef QR_ROBOT_A1SIM_H
 #define QR_ROBOT_A1SIM_H
 
@@ -48,13 +47,18 @@ class qrRobotA1Sim: public qrRobot
 
 public:
 
+    /**
+      * @brief qrRobotA1Sim
+      * @param nhIn
+      * @param configFilePath
+      */
     qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath);
 
     ~qrRobotA1Sim();
 
-    void Observation();
+    void Observation() override;
 
-    void SendCmd();
+    void SendCmd() override;
 
     void ImuCallback(const sensor_msgs::Imu &msg);
 

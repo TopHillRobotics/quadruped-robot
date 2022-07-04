@@ -115,14 +115,25 @@ public:
         return defaultHipPosition;
     }
 
+    /**
+     * @brief get Kp of the robot config
+     * @return
+     */
     inline Vec12<float> GetKps() const{
         return motorKps;
     }
 
+    /**
+     * @brief get Kd of the robot config
+     * @return
+     */
     inline Vec12<float> GetKds() const{
         return motorKds;
     }
 
+    /**
+     * @brief motor numbers of the robot
+     */
     static const unsigned int numMotor  = 12;
 
     /**
@@ -143,7 +154,9 @@ public:
      */
     int controlMode;
 
-
+    /**
+     * @brief whether the robot is simulation or real robot
+     */
     bool isSim;
 
 
@@ -226,11 +239,24 @@ private:
     void LoadKds(YAML::Node &node);
 
 
+    /**
+     * @brief load CoM offset
+     * @param node: YAML node of config file
+     */
     void LoadComOffset(YAML::Node &node);
 
+    /**
+     * @brief load Hip offset
+     * @param node: YAML node of config file
+     */
     void LoadHipOffset(YAML::Node &node);
 
+    /**
+     * @brief load Hip Position
+     * @param node: YAML node of config file
+     */
     void LoadHipPosition(YAML::Node &node);
+
     /**
      * @brief convert foot position in hip frame to joint angles
      * @param footPosition: the position(x, y, z) of foot point

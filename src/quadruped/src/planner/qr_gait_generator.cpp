@@ -25,138 +25,138 @@
 
 #include "planner/qr_gait_generator.h"
 
-    qrGaitGenerator::qrGaitGenerator() {}
+qrGaitGenerator::qrGaitGenerator() {}
 
-    qrGaitGenerator::qrGaitGenerator(qrRobot *robot,
-                                     Vec4<float> stanceDuration,
-                                     Vec4<float> dutyFactor,
-                                     Vec4<int> initialLegState,
-                                     Vec4<float> initialLegPhase,
-                                     float contactDetectionPhaseThreshold)
-        {
-            this->robot = robot;
-            this->robotState = robot->GetRobotState();
-            this->stanceDuration = stanceDuration;
-            this->dutyFactor = dutyFactor;
-            this->initialLegState = initialLegState;
-            this->initialLegPhase = initialLegPhase;
-            this->contactDetectionPhaseThreshold = contactDetectionPhaseThreshold;
-            this->swingDuration = stanceDuration.cwiseQuotient(dutyFactor) - stanceDuration;
+qrGaitGenerator::qrGaitGenerator(qrRobot *robot,
+                                 Vec4<float> stanceDuration,
+                                 Vec4<float> dutyFactor,
+                                 Vec4<int> initialLegState,
+                                 Vec4<float> initialLegPhase,
+                                 float contactDetectionPhaseThreshold)
+{
+    this->robot = robot;
+    this->robotState = robot->GetRobotState();
+    this->stanceDuration = stanceDuration;
+    this->dutyFactor = dutyFactor;
+    this->initialLegState = initialLegState;
+    this->initialLegPhase = initialLegPhase;
+    this->contactDetectionPhaseThreshold = contactDetectionPhaseThreshold;
+    this->swingDuration = stanceDuration.cwiseQuotient(dutyFactor) - stanceDuration;
 
-            this->lastLegState = initialLegState;
+    this->lastLegState = initialLegState;
 
-            for (int legId = 0; legId < initialLegState.size(); legId++) {
-                if (initialLegState[legId] == LegState::SWING) {
-                    initStateRatioInCycle[legId] = 1 - dutyFactor[legId];
-                    nextLegState[legId] = LegState::STANCE;
-                } else {
-                    initStateRatioInCycle[legId] = dutyFactor[legId];
-                    nextLegState[legId] = LegState::SWING;
-                }
-            }
-
-            Reset(0);
+    for (int legId = 0; legId < initialLegState.size(); legId++) {
+        if (initialLegState[legId] == LegState::SWING) {
+            initStateRatioInCycle[legId] = 1 - dutyFactor[legId];
+            nextLegState[legId] = LegState::STANCE;
+        } else {
+            initStateRatioInCycle[legId] = dutyFactor[legId];
+            nextLegState[legId] = LegState::SWING;
         }
-
-
-    qrGaitGenerator::qrGaitGenerator(qrRobot *robot,std::string configFilePath)
-        {
-
-            this->configFilePath = configFilePath;
-            config = YAML::LoadFile(configFilePath);
-
-            this->robot = robot;
-            std::string gaitName = config["gait_params"]["gaitName"].as<std::string>();
-
-            std::vector<float> stanceDurationList = config["gait_params"][gaitName]["stance_duration"].as<std::vector<float>>();
-            stanceDuration = Eigen::MatrixXf::Map(&stanceDurationList[0], 4, 1);
-            std::vector<float> dutyFactorList = config["gait_params"][gaitName]["duty_factor"].as<std::vector<float >>();
-            dutyFactor = Eigen::MatrixXf::Map(&dutyFactorList[0], 4, 1);
-            std::vector<int> initialLegStateList = config["gait_params"][gaitName]["initial_leg_state"].as<std::vector<int >>();
-            initialLegState = Eigen::MatrixXi::Map(&initialLegStateList[0], 4, 1);
-            std::vector<float> initialLegPhaseList = config["gait_params"][gaitName]["init_phase_full_cycle"].as<std::vector<float >>();
-            initialLegPhase = Eigen::MatrixXf::Map(&initialLegPhaseList[0], 4, 1);
-            contactDetectionPhaseThreshold = config["gait_params"][gaitName]["contact_detection_phase_threshold"].as<float>();
-            
-            for (int legId = 0; legId < initialLegState.size(); legId++) {
-                // when dutyFactor is close 0, the leg stay in air.
-                if (math::almostEqual(dutyFactor[legId],0.f, 0.001f)) {
-                    swingDuration[legId] = 1e3;
-                    initialLegState[legId] = LegState::USERDEFINED_SWING;
-                    curLegState[legId] =  LegState::USERDEFINED_SWING;
-                    lastLegState[legId] = LegState::USERDEFINED_SWING;
-                    nextLegState[legId] = LegState::USERDEFINED_SWING;
-                } else {
-                    swingDuration[legId] = stanceDuration[legId]/dutyFactor[legId] - stanceDuration[legId];
-                    lastLegState = initialLegState;
-                    if (initialLegState[legId] == LegState::SWING) {
-                        initStateRatioInCycle[legId] = 1 - dutyFactor[legId];
-                        nextLegState[legId] = LegState::STANCE;
-                    } else {
-                        initStateRatioInCycle[legId] = dutyFactor[legId];
-                        nextLegState[legId] = LegState::SWING;
-                    }
-                }
-            }
-
-            Reset(0);
-        }
-
-    void qrGaitGenerator::Reset(float currentTime) 
-    {
-        normalizedLegPhase = Vec4<float>::Zero();
-        lastLegState = initialLegState;
-        curLegState = lastLegState;
-        legState = initialLegState;
-        desiredLegState = initialLegState;
     }
 
-    void qrGaitGenerator::Update(float currentTime) 
-    {
-        Eigen::Matrix<bool, 4, 1> contactState = robotState->GetFootContact();
-        float fullCyclePeriod, augmentedTime, phaseInFullCycle, ratio;
-        
+    Reset(0);
+}
 
-        for (int legId = 0; legId < initialLegState.size(); legId++) {
-            if (initialLegState[legId] == LegState::USERDEFINED_SWING) {
-                desiredLegState[legId] = initialLegState[legId];
-                legState[legId] = desiredLegState[legId];
-                continue;
-            }
-            
-            // if (!robot->stop || (robot->stop && lastLegState[legId]==LegState::SWING)) {
-            //     lastLegState[legId] = desiredLegState[legId];
-            //     curLegState[legId] = desiredLegState[legId];
-            // }
-            
-            fullCyclePeriod = stanceDuration[legId] / dutyFactor[legId];
-            augmentedTime = initialLegPhase[legId] * fullCyclePeriod + currentTime;
-            phaseInFullCycle = fmod(augmentedTime, fullCyclePeriod) / fullCyclePeriod;
-            
-            ratio = initStateRatioInCycle[legId];
 
-            if (phaseInFullCycle < ratio) {
-                desiredLegState[legId] = initialLegState[legId];
-                normalizedLegPhase[legId] = phaseInFullCycle / ratio;
-                
+qrGaitGenerator::qrGaitGenerator(qrRobot *robot,std::string configFilePath)
+{
+
+    this->configFilePath = configFilePath;
+    config = YAML::LoadFile(configFilePath);
+
+    this->robot = robot;
+    std::string gaitName = config["gait_params"]["gaitName"].as<std::string>();
+
+    std::vector<float> stanceDurationList = config["gait_params"][gaitName]["stance_duration"].as<std::vector<float>>();
+    stanceDuration = Eigen::MatrixXf::Map(&stanceDurationList[0], 4, 1);
+    std::vector<float> dutyFactorList = config["gait_params"][gaitName]["duty_factor"].as<std::vector<float >>();
+    dutyFactor = Eigen::MatrixXf::Map(&dutyFactorList[0], 4, 1);
+    std::vector<int> initialLegStateList = config["gait_params"][gaitName]["initial_leg_state"].as<std::vector<int >>();
+    initialLegState = Eigen::MatrixXi::Map(&initialLegStateList[0], 4, 1);
+    std::vector<float> initialLegPhaseList = config["gait_params"][gaitName]["init_phase_full_cycle"].as<std::vector<float >>();
+    initialLegPhase = Eigen::MatrixXf::Map(&initialLegPhaseList[0], 4, 1);
+    contactDetectionPhaseThreshold = config["gait_params"][gaitName]["contact_detection_phase_threshold"].as<float>();
+
+    for (int legId = 0; legId < initialLegState.size(); legId++) {
+        // when dutyFactor is close 0, the leg stay in air.
+        if (math::almostEqual(dutyFactor[legId],0.f, 0.001f)) {
+            swingDuration[legId] = 1e3;
+            initialLegState[legId] = LegState::USERDEFINED_SWING;
+            curLegState[legId] =  LegState::USERDEFINED_SWING;
+            lastLegState[legId] = LegState::USERDEFINED_SWING;
+            nextLegState[legId] = LegState::USERDEFINED_SWING;
+        } else {
+            swingDuration[legId] = stanceDuration[legId]/dutyFactor[legId] - stanceDuration[legId];
+            lastLegState = initialLegState;
+            if (initialLegState[legId] == LegState::SWING) {
+                initStateRatioInCycle[legId] = 1 - dutyFactor[legId];
+                nextLegState[legId] = LegState::STANCE;
             } else {
-                desiredLegState[legId] = nextLegState[legId];
-                normalizedLegPhase[legId] = (phaseInFullCycle - ratio) / (1 - ratio);
-            }
-            
-            legState[legId] = desiredLegState[legId];
-
-            // No contact detection at the beginning of each SWING/STANCE phase.
-            if (normalizedLegPhase[legId] < contactDetectionPhaseThreshold) {
-                continue;
-            }
-            
-            if (legState[legId] == LegState::SWING && contactState[legId]) {
-                legState[legId] = LegState::EARLY_CONTACT;
-            }
-
-            if (legState[legId] == LegState::STANCE && !contactState[legId]) {
-                legState[legId] = LegState::LOSE_CONTACT;
+                initStateRatioInCycle[legId] = dutyFactor[legId];
+                nextLegState[legId] = LegState::SWING;
             }
         }
     }
+
+    Reset(0);
+}
+
+void qrGaitGenerator::Reset(float currentTime)
+{
+    normalizedLegPhase = Vec4<float>::Zero();
+    lastLegState = initialLegState;
+    curLegState = lastLegState;
+    legState = initialLegState;
+    desiredLegState = initialLegState;
+}
+
+void qrGaitGenerator::Update(float currentTime)
+{
+    Eigen::Matrix<bool, 4, 1> contactState = robotState->GetFootContact();
+    float fullCyclePeriod, augmentedTime, phaseInFullCycle, ratio;
+
+
+    for (int legId = 0; legId < initialLegState.size(); legId++) {
+        if (initialLegState[legId] == LegState::USERDEFINED_SWING) {
+            desiredLegState[legId] = initialLegState[legId];
+            legState[legId] = desiredLegState[legId];
+            continue;
+        }
+
+        // if (!robot->stop || (robot->stop && lastLegState[legId]==LegState::SWING)) {
+        //     lastLegState[legId] = desiredLegState[legId];
+        //     curLegState[legId] = desiredLegState[legId];
+        // }
+
+        fullCyclePeriod = stanceDuration[legId] / dutyFactor[legId];
+        augmentedTime = initialLegPhase[legId] * fullCyclePeriod + currentTime;
+        phaseInFullCycle = fmod(augmentedTime, fullCyclePeriod) / fullCyclePeriod;
+
+        ratio = initStateRatioInCycle[legId];
+
+        if (phaseInFullCycle < ratio) {
+            desiredLegState[legId] = initialLegState[legId];
+            normalizedLegPhase[legId] = phaseInFullCycle / ratio;
+
+        } else {
+            desiredLegState[legId] = nextLegState[legId];
+            normalizedLegPhase[legId] = (phaseInFullCycle - ratio) / (1 - ratio);
+        }
+
+        legState[legId] = desiredLegState[legId];
+
+        // No contact detection at the beginning of each SWING/STANCE phase.
+        if (normalizedLegPhase[legId] < contactDetectionPhaseThreshold) {
+            continue;
+        }
+
+        if (legState[legId] == LegState::SWING && contactState[legId]) {
+            legState[legId] = LegState::EARLY_CONTACT;
+        }
+
+        if (legState[legId] == LegState::STANCE && !contactState[legId]) {
+            legState[legId] = LegState::LOSE_CONTACT;
+        }
+    }
+}

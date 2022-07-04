@@ -25,55 +25,56 @@
 #include "planner/qr_foothold_planner.h"
 
     // TODO: add robot module
-    qrFootholdPlanner::qrFootholdPlanner(qrRobot *robotIn, qrGroundSurfaceEstimator *groundEsitmatorIn)
-    : robot(robotIn), groundEstimator(groundEsitmatorIn), terrain(groundEstimator->GetTerrain()),
-        timeSinceReset(0.f)
-    {
-        robotState = robot->GetRobotState();
-        footstepper = new qrFootStepper(terrain, 0.10f, "optimal");
-        terrain = groundEstimator->GetTerrain();
-        Reset();
-    }
+qrFootholdPlanner::qrFootholdPlanner(qrRobot *robotIn, qrGroundSurfaceEstimator *groundEsitmatorIn)
+: robot(robotIn), groundEstimator(groundEsitmatorIn), terrain(groundEstimator->GetTerrain()),
+    timeSinceReset(0.f)
+{
+    robotState = robot->GetRobotState();
+    footstepper = new qrFootStepper(terrain, 0.10f, "optimal");
+    terrain = groundEstimator->GetTerrain();
+    Reset();
+}
 
-    void qrFootholdPlanner::Reset() {
-        resetTime = robot->GetTimeSinceReset();
-        timeSinceReset = 0.f;
-        footstepper->Reset(timeSinceReset);
-        comPose << robotState->GetBasePosition(), robotState->GetRpy();
-        desiredComPose = Vec6<float>::Zero();
-        desiredFootholdsOffset = Mat3x4<float>::Zero();
-    }
+void qrFootholdPlanner::Reset() {
+    resetTime = robot->GetTimeSinceReset();
+    timeSinceReset = 0.f;
+    footstepper->Reset(timeSinceReset);
+    comPose << robotState->GetBasePosition(), robotState->GetRpy();
+    desiredComPose = Vec6<float>::Zero();
+    desiredFootholdsOffset = Mat3x4<float>::Zero();
+}
 
-    void qrFootholdPlanner::UpdateOnce(Mat3x4<float> currentFootholds, std::vector<int> legIds) {
-        comPose << robotState->GetBasePosition(), robotState->GetRpy();
-        desiredComPose << 0.f,0.f,0.f,0.f,0.f,0.f; //comPose;
-        desiredFootholds = currentFootholds;
-        if (legIds.empty()) { // if is empty, update all legs.
-            legIds = {0,1,2,3};
-        } else {
-            std::cout<<"update foothold of Legs : ";
-            for(int legId : legIds) {
-                std::cout << legId << " ";
-            }
-            std::cout << "\n";
+void qrFootholdPlanner::UpdateOnce(Mat3x4<float> currentFootholds, std::vector<int> legIds) {
+    comPose << robotState->GetBasePosition(), robotState->GetRpy();
+    desiredComPose << 0.f,0.f,0.f,0.f,0.f,0.f; //comPose;
+    desiredFootholds = currentFootholds;
+    if (legIds.empty()) { // if is empty, update all legs.
+        legIds = {0,1,2,3};
+    } else {
+        std::cout<<"update foothold of Legs : ";
+        for(int legId : legIds) {
+            std::cout << legId << " ";
         }
-        
-        if (terrain.terrainType != TerrainType::STAIRS) { 
-            ComputeFootholdsOffset(currentFootholds);
-        } else {
-            ComputeNextFootholds(currentFootholds, comPose, desiredComPose, legIds);
-        }
-    }
-    void qrFootholdPlanner::ComputeFootholdsOffset(Mat3x4<float> currentFootholds) {
-        desiredFootholdsOffset = footstepper->GetOptimalFootholdsOffset(currentFootholds);
+        std::cout << "\n";
     }
 
-    void qrFootholdPlanner::ComputeNextFootholds(Mat3x4<float>& currentFootholds,
-                                                 Vec6<float>& currentComPose,
-                                                 Vec6<float>& desiredComPose,
-                                                 std::vector<int>& legIds) 
-    {
-        auto res = footstepper->GetFootholdsInWorldFrame(currentFootholds, currentComPose, desiredComPose, legIds);
-        desiredFootholds = std::get<0>(res);
-        desiredFootholdsOffset = std::get<1>(res);
+    if (terrain.terrainType != TerrainType::STAIRS) {
+        ComputeFootholdsOffset(currentFootholds);
+    } else {
+        ComputeNextFootholds(currentFootholds, comPose, desiredComPose, legIds);
     }
+}
+
+void qrFootholdPlanner::ComputeFootholdsOffset(Mat3x4<float> currentFootholds) {
+    desiredFootholdsOffset = footstepper->GetOptimalFootholdsOffset(currentFootholds);
+}
+
+void qrFootholdPlanner::ComputeNextFootholds(Mat3x4<float>& currentFootholds,
+                                             Vec6<float>& currentComPose,
+                                             Vec6<float>& desiredComPose,
+                                             std::vector<int>& legIds)
+{
+    auto res = footstepper->GetFootholdsInWorldFrame(currentFootholds, currentComPose, desiredComPose, legIds);
+    desiredFootholds = std::get<0>(res);
+    desiredFootholdsOffset = std::get<1>(res);
+}

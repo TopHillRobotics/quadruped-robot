@@ -48,6 +48,10 @@ public:
      */
     qrRobot();
 
+    /**
+     *  @brief Constructor of the class
+     *  @param path: the path to the YAML file
+     */
     qrRobot(std::string path);
 
     /**
@@ -126,18 +130,33 @@ public:
         return &robotState;
     }
 
+    /**
+     * @brief return last reset time
+     * @return last reset time
+     */
     inline double GetTimeSinceReset(){
         return timer.GetTimeSinceReset();
     }
 
+    /**
+     * @brief reset the start time of the robot
+     */
     inline void ResetStartTime(){
         timer.ResetStartTime();
     }
 
+    /**
+     * @brief return the status of the robot
+     * @return whether the robot is stopped
+     */
     inline bool IsStop()const{
         return stop;
     }
 
+    /**
+     * @brief set the status of the robot
+     * @param b: stop or not
+     */
     inline void SetStop(bool b){
         stop = b;
     }
@@ -148,6 +167,9 @@ protected:
      */
     bool stop;
 
+    /**
+     * @brief timer for controlling the robot
+     */
     Timer timer;
 
     /**
