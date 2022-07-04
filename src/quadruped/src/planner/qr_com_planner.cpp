@@ -45,12 +45,12 @@
             swingK[i] = 0.f;
             weightFactor[i] = 0.f;
         }
-        supportPolygonVertices = Eigen::Matrix<float, 3, 4>::Zero();
-        comPosInBaseFrame = Eigen::Matrix<float, 3, 1>::Zero();
+        supportPolygonVertices = Mat3x4<float>::Zero();
+        comPosInBaseFrame = Vec3<float>::Zero();
         comPosInWorldFrame << basePosition[0], basePosition[1], 0.f;
     }
 
-    Eigen::Matrix<float, 3, 1> qrComPlanner::Update(float currentTime) 
+    Vec3<float> qrComPlanner::Update(float currentTime) 
     {
         legState = gaitGenerator->legState;
         normalizedLegPhase = gaitGenerator->normalizedLegPhase;
@@ -89,8 +89,8 @@
             pMat.block<3, 1>(3, 1) = pCcw;
             Eigen::Matrix<float, 2, 1> phiMat = {phi, 1 - phi};
             auto virtualPointAdj = pMat * phiMat; // shape = 6 * 1
-            Eigen::Matrix<float, 3, 1> virtualPointCw = virtualPointAdj.head(3);
-            Eigen::Matrix<float, 3, 1> virtualPointCcw = virtualPointAdj.tail(3);
+            Vec3<float> virtualPointCw = virtualPointAdj.head(3);
+            Vec3<float> virtualPointCcw = virtualPointAdj.tail(3);
             supportPolygonVertices.col(legId) = (phi * p + phiCcw * virtualPointCcw + phiCw * virtualPointCw)
                 / (phi + phiCcw + phiCw);
         }

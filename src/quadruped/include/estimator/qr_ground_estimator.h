@@ -25,6 +25,7 @@
 #ifndef QR_GROUND_ESTIMATOR_H
 #define QR_GROUND_ESTIMATOR_H
 
+#include "common/qr_eigen_types.h"
 #include "common/qr_se3.h"
 #include "robot/qr_robot.h"
 
@@ -43,12 +44,12 @@ struct Gap {
     /**
      * @brief The cloest point on the gap margin in base frame.
      */
-    Eigen::Matrix<float, 3, 1> startPoint;
+    Vec3<float> startPoint;
     
     /**
      * @brief Construct a Gap object by using given distance d, width w and start point p.
      */
-    Gap(float d, float w, Eigen::Matrix<float, 3, 1> p):distance(d),width(w),startPoint(p)
+    Gap(float d, float w, Vec3<float> p):distance(d),width(w),startPoint(p)
     {}
 };
 
@@ -71,7 +72,7 @@ struct Stair {
     /**
      * @brief The cloest point on the gap margin in base frame.
      */
-    Eigen::Matrix<float, 3, 1> startPoint;
+    Vec3<float> startPoint;
     /**
      * @brief 
      */
@@ -88,7 +89,7 @@ struct Stair {
      * @param width The width of a stair.
      * @param p The cloest point on the gap margin in base frame.
      */
-    Stair(float h, float w, float l, Eigen::Matrix<float, 3, 1> p)
+    Stair(float h, float w, float l, Vec3<float> p)
         :height(h),width(w),length(l),startPoint(p)
     {}
 };
@@ -174,13 +175,13 @@ public:
      * @brief three direction vectors present in world frame when compute the GRF
      * @return A 3*3 matrix of three (x,y,z) direction vectors.
      */
-    Eigen::Matrix<float, 3, 3> GetAlignedDirections();
+    Mat3<float> GetAlignedDirections();
 
     /**
      * @brief Get the orientation in control frame.
      * @return A 4 * 1 Quad vector which descirbes the orientation in control frame.
      */
-    Eigen::Matrix<float, 4, 1> GetControlFrameOrientation()const
+    Vec4<float> GetControlFrameOrientation()const
     {
         return controlFrameOrientation.cast<float>();
     }

@@ -66,7 +66,7 @@ public:
                           qrGroundSurfaceEstimator *groundEstimator,
                           qrComPlanner *comPlanner,
                           qrFootholdPlanner *footholdPlanner,
-                          Eigen::Matrix<float, 3, 1> desired_speed,
+                          Vec3<float> desired_speed,
                           float desiredTwistingSpeed,
                           float desiredBodyHeight,
                           std::string configFilepath);
@@ -96,7 +96,7 @@ public:
      *  @return tuple<map, Matrix<3,4>> : 
      *          return control ouputs (e.g. positions/torques) for all (12) motors.
      */
-    std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> GetAction();
+    std::tuple<std::map<int, qrMotorCmd>, Mat3x4<float>> GetAction();
 
 private:
 
@@ -149,7 +149,7 @@ private:
     /**
      * @brief Desired speed of the robot in walk or position locomotion.
      */
-    Eigen::Matrix<float, 3, 1> desiredSpeed = {0., 0., 0.};
+    Vec3<float> desiredSpeed = {0., 0., 0.};
 
     /**
      * @brief The speed message of twist command given by gamepad.
@@ -169,27 +169,27 @@ private:
     /**
      * @brief The parameter KP in stance_leg_controller.yaml.
      */
-    Eigen::Matrix<float, 6, 1> KP;
+    Vec6<float> KP;
 
     /**
      * @brief The parameter KD in stance_leg_controller.yaml.
      */
-    Eigen::Matrix<float, 6, 1> KD;
+    Vec6<float> KD;
 
     /**
      * @brief The parameter maxDdq in stance_leg_controller.yaml.
      */
-    Eigen::Matrix<float, 6, 1> maxDdq;
+    Vec6<float> maxDdq;
 
     /**
      * @brief The parameter minDdq in stance_leg_controller.yaml.
      */
-    Eigen::Matrix<float, 6, 1> minDdq;
+    Vec6<float> minDdq;
 
     /**
      * @brief The parameter accWeight in stance_leg_controller.yaml.
      */
-    Eigen::Matrix<float, 6, 1> accWeight;
+    Vec6<float> accWeight;
 
     /**
      * @brief The minimum ratio.

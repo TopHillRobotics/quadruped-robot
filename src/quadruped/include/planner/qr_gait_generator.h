@@ -68,10 +68,10 @@
              * @param contactDetectionPhaseThreshold specifies the contact threshold when the leg state switches from SWING to STANCE.
             */
             qrGaitGenerator(qrRobot *robot,
-                            Eigen::Matrix<float, 4, 1> stanceDuration,
-                            Eigen::Matrix<float, 4, 1> dutyFactor,
-                            Eigen::Matrix<int, 4, 1> initialLegState,
-                            Eigen::Matrix<float, 4, 1> initialLegPhase,
+                            Vec4<float> stanceDuration,
+                            Vec4<float> dutyFactor,
+                            Vec4<int> initialLegState,
+                            Vec4<float> initialLegPhase,
                             float contactDetectionPhaseThreshold = 0.1f);
 
             /**
@@ -108,72 +108,72 @@
             /**
              * @brief the amount of stance time for each leg in a gait cycle.
              */
-            Eigen::Matrix<float, 4, 1> stanceDuration;
+            Vec4<float> stanceDuration;
 
             /**
              * @brief the amount of swing time for each leg in a gait cycle.
              */
-            Eigen::Matrix<float, 4, 1> swingDuration;
+            Vec4<float> swingDuration;
 
             /**
              * @brief the fraction of the cycle for stance phase. 
              * dutyFactor = stanceDuration / (stanceDuration + swingDuration).
              * @note In a periodic gait, dutyFactor is the same for all the legs.
              */
-            Eigen::Matrix<float, 4, 1> dutyFactor;
+            Vec4<float> dutyFactor;
 
             /**
              * @brief the relative phase for each leg at the initialization of generating a gait.
              * @note The one leg is assigned relative phase 0 and the others have the relative phases in the range [0,1).
              */
-            Eigen::Matrix<float, 4, 1> initialLegPhase;
+            Vec4<float> initialLegPhase;
 
             /**
              * @brief the relative phase for the desired state. 
              * @note when a leg state is STANCE, normalizedLegPhase = currentLegPhase / dutyFactor
              */
-            Eigen::Matrix<float, 4, 1> normalizedLegPhase;
+            Vec4<float> normalizedLegPhase;
 
             /**
              * @brief the state (SWING or STANCE) of each leg at the initialization of generating a gait.
              */
-            Eigen::Matrix<int, 4, 1> initialLegState;
+            Vec4<int> initialLegState;
 
             /**
              * @brief The new state of each leg when the current leg state switches, either from STAND to SWING, or from SWING to STAND. 
              * @note If the current state is SWING, the next state will be STAND. If the current state is STANCE, the next state will be SWING.
              */
-            Eigen::Matrix<int, 4, 1> nextLegState;
+            Vec4<int> nextLegState;
 
             /**
              * @brief The current state of each leg (either STANCE or SWING)
              */
-            Eigen::Matrix<int, 4, 1> legState;
+            Vec4<int> legState;
 
             /**
              * @brief the desired state (either STANCE or SWING) of each leg at a given moment.
              * e.g. if legState = STANCE and normalizedLegPhase < 1.0,  desiredLegState = legState
              * e.g. if legState = STANCE and normalizedLegPhase >= 1.0, desiredLegState = nextLegState
              */
-            Eigen::Matrix<int, 4, 1> desiredLegState;
+            Vec4<int> desiredLegState;
 
             /**
              * @brief the previous state of each leg, 
              * @note This is used to determine if the state changed in Velocity Mode
              */
-            Eigen::Matrix<int, 4, 1> lastLegState;
+            Vec4<int> lastLegState;
 
             /**
              * @brief The previous  (current) states of each leg, 
              * @note this is used to determine if the state changed in Position Mode or Walk Mode
              */
-            Eigen::Matrix<int, 4, 1> curLegState;
+            Vec4<int> curLegState;
 
             /**
              * @brief the fraction of the cycle for stance phase or for swing phase at a moment.
              * @note If legState = STANCE, the value is dutyfactor; if legState = SWING, the value is (1 - dutyfactor).
              */
-            Eigen::Matrix<float, 4, 1> initStateRatioInCycle;
+            Vec4<float> initStateRatioInCycle;
 
             /**
              * @brief the duration of a gait cycle. fullCyclePeriod = stanceDuration + swingDuration.

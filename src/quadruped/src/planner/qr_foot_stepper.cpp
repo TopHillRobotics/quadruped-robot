@@ -57,9 +57,9 @@
         
         defaultFootholdDelta = defaultFootholdOffset; // only alone to the X axis.
         meetGap = false;
-        // lastFootholdsOffset = Eigen::Matrix<float, 3, 4>::Zero();
-        // lastFootholdsOffset = Eigen::Matrix<float, 3, 4>::Zero();
-        nextFootholdsOffset = Eigen::Matrix<float, 3, 4>::Zero();
+        // lastFootholdsOffset = Mat3x4::Zero();
+        // lastFootholdsOffset = Mat3x4::Zero();
+        nextFootholdsOffset = Mat3x4<float>::Zero();
         nextFootholdsOffset.row(0)
             << defaultFootholdOffset, defaultFootholdOffset, defaultFootholdOffset, defaultFootholdOffset; // x DIRECTION
         // init qp param
@@ -179,15 +179,15 @@
         return 0;
     }
 
-    std::tuple<Eigen::Matrix<float,3,4>, Eigen::Matrix<float,3,4>> qrFootStepper::GetFootholdsInWorldFrame(
-                                                                    Eigen::Matrix<float, 3, 4>& currentFootholds,
-                                                                    Eigen::Matrix<float, 6, 1>& currentComPose,
-                                                                    Eigen::Matrix<float, 6, 1>& desiredComPose,
+    std::tuple<Mat3x4<float>, Mat3x4<float>> qrFootStepper::GetFootholdsInWorldFrame(
+                                                                    Mat3x4<float>& currentFootholds,
+                                                                    Vec6<float>& currentComPose,
+                                                                    Vec6<float>& desiredComPose,
                                                                     std::vector<int>& legIds)
     {   
         std::cout << "currentFootholds" << currentFootholds << std::endl;
-        Eigen::Matrix<float, 3, 4> nextFootholds = currentFootholds;
-        Eigen::Matrix<float, 3, 1> constOffset = {0.1f, 0.f, 0.f};
+        Mat3x4<float> nextFootholds = currentFootholds;
+        Vec3<float> constOffset = {0.1f, 0.f, 0.f};
         dZ << 0.f, 0.f, 0.f, 0.f; 
       
         // for sim a1
@@ -323,7 +323,7 @@
         return {nextFootholds, nextFootholdsOffset};
     }
 
-    Eigen::Matrix<float, 3, 4> qrFootStepper::GetOptimalFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds)
+    Mat3x4<float> qrFootStepper::GetOptimalFootholdsOffset(Mat3x4<float> currentFootholds)
     {
         Eigen::Matrix<float, 1, 4> currentFootholdsX = currentFootholds.row(0);
         nextFootholdsOffset.row(0) << defaultFootholdDelta, defaultFootholdDelta, defaultFootholdDelta, defaultFootholdDelta;

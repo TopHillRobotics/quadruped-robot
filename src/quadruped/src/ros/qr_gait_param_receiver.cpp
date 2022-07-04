@@ -31,19 +31,19 @@ qrGaitParamReceiver::qrGaitParamReceiver(ros::NodeHandle &nhIn)
     gaitParamSub = nh.subscribe(gaitParamTopic, 10, &qrGaitParamReceiver::GaitParamCallback, this);
 }
 
-Eigen::Matrix<float, 4, 1> qrGaitParamReceiver::GetStanceDuration() {
+Vec4<float> qrGaitParamReceiver::GetStanceDuration() {
     return stanceDuration;
 }
 
-Eigen::Matrix<float, 4, 1> qrGaitParamReceiver::GetDutyFactor() {
+Vec4<float> qrGaitParamReceiver::GetDutyFactor() {
     return dutyFactor;
 }
 
-Eigen::Matrix<int, 4, 1> qrGaitParamReceiver::GetInitialLegState() {
+Vec4<int> qrGaitParamReceiver::GetInitialLegState() {
     return initialLegState;
 }
 
-Eigen::Matrix<float, 4, 1> qrGaitParamReceiver::GetInitialLegPhase() {
+Vec4<float> qrGaitParamReceiver::GetInitialLegPhase() {
     return initialLegPhase;
 }
 

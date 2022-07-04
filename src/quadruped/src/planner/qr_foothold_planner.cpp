@@ -40,11 +40,11 @@
         timeSinceReset = 0.f;
         footstepper->Reset(timeSinceReset);
         comPose << robotState->GetBasePosition(), robotState->GetRpy();
-        desiredComPose = Eigen::Matrix<float, 6, 1>::Zero();
-        desiredFootholdsOffset = Eigen::Matrix<float, 3, 4>::Zero();
+        desiredComPose = Vec6<float>::Zero();
+        desiredFootholdsOffset = Mat3x4<float>::Zero();
     }
 
-    void qrFootholdPlanner::UpdateOnce(Eigen::Matrix<float, 3, 4> currentFootholds, std::vector<int> legIds) {
+    void qrFootholdPlanner::UpdateOnce(Mat3x4<float> currentFootholds, std::vector<int> legIds) {
         comPose << robotState->GetBasePosition(), robotState->GetRpy();
         desiredComPose << 0.f,0.f,0.f,0.f,0.f,0.f; //comPose;
         desiredFootholds = currentFootholds;
@@ -64,13 +64,13 @@
             ComputeNextFootholds(currentFootholds, comPose, desiredComPose, legIds);
         }
     }
-    void qrFootholdPlanner::ComputeFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds) {
+    void qrFootholdPlanner::ComputeFootholdsOffset(Mat3x4<float> currentFootholds) {
         desiredFootholdsOffset = footstepper->GetOptimalFootholdsOffset(currentFootholds);
     }
 
-    void qrFootholdPlanner::ComputeNextFootholds(Eigen::Matrix<float, 3, 4>& currentFootholds,
-                                                 Eigen::Matrix<float, 6, 1>& currentComPose,
-                                                 Eigen::Matrix<float, 6, 1>& desiredComPose,
+    void qrFootholdPlanner::ComputeNextFootholds(Mat3x4<float>& currentFootholds,
+                                                 Vec6<float>& currentComPose,
+                                                 Vec6<float>& desiredComPose,
                                                  std::vector<int>& legIds) 
     {
         auto res = footstepper->GetFootholdsInWorldFrame(currentFootholds, currentComPose, desiredComPose, legIds);

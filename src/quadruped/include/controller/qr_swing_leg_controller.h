@@ -56,7 +56,7 @@ public:
                          qrGaitGenerator *gaitGenerator,
                          qrRobotVelocityEstimator *robotVelocityEstimator,
                          qrGroundSurfaceEstimator *groundEstimator,
-                         Eigen::Matrix<float, 3, 1> desiredLinearVelocity,
+                         Vec3<float> desiredLinearVelocity,
                          float desiredTwistingVelocity,
                          float desiredHeight,
                          float footClearance,
@@ -97,10 +97,10 @@ public:
      * @param clearance specifies the height over the ground.
      * @return the desired foot position (x,y,z) at the current swing phase. 
      */
-    Eigen::Matrix<float, 3, 1> GenerateSwingFootTrajectory(float phase,
-                                                           Eigen::Matrix<float, 3, 1> startPos,
-                                                           Eigen::Matrix<float, 3, 1> endPos,
-                                                           float clearance=0.1);
+    Vec3<float> GenerateSwingFootTrajectory(float phase,
+                                            Vec3<float> startPos,
+                                            Vec3<float> endPos,
+                                            float clearance=0.1);
 
     /** @brief Compute all motors' commands using this controller.
      *  @return tuple<map, Matrix<3,4>> : 
@@ -155,17 +155,17 @@ private:
     /**
      * @brief The state of each leg.
      */
-    Eigen::Matrix<int, 4, 1> lastLegState;
+    Vec4<int> lastLegState;
 
     /**
      * @brief Desired robot's body height. 
      */
-    Eigen::Matrix<float, 3, 1> desiredHeight;
+    Vec3<float> desiredHeight;
 
     /**
      * @brief The desired linear velocity. This memeber variable appears in velocity mode.
      */
-    Eigen::Matrix<float, 3, 1> desiredLinearVelocity;
+    Vec3<float> desiredLinearVelocity;
 
     /**
      * @brief The desired angular velocity. This memeber variable appears in velocity mode.
@@ -181,17 +181,17 @@ private:
     /**
      * @brief Foot positions in the base frame when the leg state changes.
      */
-    Eigen::Matrix<float, 3, 4> phaseSwitchFootLocalPos;
+    Mat3x4<float> phaseSwitchFootLocalPos;
 
     /**
      * @brief Foot positions in the world frame when the leg state changes.
      */
-    Eigen::Matrix<float, 3, 4> phaseSwitchFootGlobalPos;
+    Mat3x4<float> phaseSwitchFootGlobalPos;
 
     /**
      * @brief the footholds in the world frame.
      */
-    Eigen::Matrix<float, 3, 4> footHoldInWorldFrame;
+    Mat3x4<float> footHoldInWorldFrame;
 
     /**
      * @brief The trajectories of each leg.

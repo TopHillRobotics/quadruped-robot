@@ -35,80 +35,80 @@ class qrMotorCmd
 
 public:
 
-  /**
-   * @brief Constructor of qrMotorCmd
-   */
-  qrMotorCmd();
+    /**
+     * @brief Constructor of qrMotorCmd
+     */
+    qrMotorCmd();
 
-  /**
-   * @brief Constructor of qrMotorCmd. Initialize with input
-   * @param q: angle
-   * @param dq: joint velocity
-   * @param tau: torque
-   * @param Kp: position stiffness (unit: N.m/rad )
-   * @param Kd: velocity stiffness (unit: N.m/(rad/s) )
-   */
-  qrMotorCmd(float q, float dq, float tau, float Kp, float Kd);
+    /**
+     * @brief Constructor of qrMotorCmd. Initialize with input
+     * @param q: angle
+     * @param dq: joint velocity
+     * @param tau: torque
+     * @param Kp: position stiffness (unit: N.m/rad )
+     * @param Kd: velocity stiffness (unit: N.m/(rad/s) )
+     */
+    qrMotorCmd(float q, float dq, float tau, float Kp, float Kd);
 
-  /**
-   * @brief Destructor of qrMotorCmd
-   */
-  ~qrMotorCmd();
+    /**
+     * @brief Destructor of qrMotorCmd
+     */
+    ~qrMotorCmd();
 
-  /**
-   * @brief convert result to eigen vector
-   * @return eigen vector
-   */
-  Eigen::Matrix<float, 5, 1> ToEigenVector();
+    /**
+     * @brief convert result to eigen vector
+     * @return eigen vector
+     */
+    Eigen::Matrix<float, 5, 1> ToEigenVector();
 
-  /**
-   * @brief convert result to array
-   * @return array of motor command
-   */
-  std::array<float, 5> ToArray() const;
+    /**
+     * @brief convert result to array
+     * @return array of motor command
+     */
+    std::array<float, 5> ToArray() const;
 
-  /**
-   * @brief setCmd
-   * @param q: joint angle (unit: radian)
-   * @param Kp: position stiffness (unit: N.m/rad )
-   * @param dq: joint velocity ( unit: radian/second)
-   * @param Kd: velocity stiffness (unit: N.m/(rad/s) )
-   * @param tau: torque (unit: N.m)
-   */
-  void SetCmd(float q, float Kp, float dq, float Kd, float tau);
+    /**
+     * @brief setCmd
+     * @param q: joint angle (unit: radian)
+     * @param Kp: position stiffness (unit: N.m/rad )
+     * @param dq: joint velocity ( unit: radian/second)
+     * @param Kd: velocity stiffness (unit: N.m/(rad/s) )
+     * @param tau: torque (unit: N.m)
+     */
+    void SetCmd(float q, float Kp, float dq, float Kd, float tau);
 
-  /**
-   * @brief overload  operator =
-   * @param cmd: command that need to be equal
-   */
-  void operator=(const qrMotorCmd &cmd);
+    /**
+     * @brief overload  operator =
+     * @param cmd: command that need to be equal
+     */
+    void operator=(const qrMotorCmd &cmd);
 
 private:
 
-  /**
-   * @brief joint angle (unit: radian)
-   */
-  float q;
+    /**
+     * @brief joint angle (unit: radian)
+     */
+    float q;
 
-  /**
-   * @brief joint velocity ( unit: radian/second)
-   */
-  float dq;
+    /**
+     * @brief joint velocity ( unit: radian/second)
+     */
+    float dq;
 
-  /**
-   * @brief torque (unit: N.m)
-   */
-  float tau;
+    /**
+     * @brief torque (unit: N.m)
+     */
+    float tau;
 
-  /**
-   * @brief position stiffness (unit: N.m/rad )
-   */
-  float Kp;
+    /**
+     * @brief position stiffness (unit: N.m/rad )
+     */
+    float Kp;
 
-  /**
-   * @brief velocity stiffness (unit: N.m/(rad/s) )
-   */
-  float Kd;
+    /**
+     * @brief velocity stiffness (unit: N.m/(rad/s) )
+     */
+    float Kd;
 };
 
 #endif // QR_MOTORCMD_H

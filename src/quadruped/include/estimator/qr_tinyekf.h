@@ -8,6 +8,8 @@
 #include <Eigen/Dense>
 #include <TinyEKF.h>
 
+#include "common/qr_eigen_types.h"
+
 class qrTinyEKF: public TinyEKF {
 
 public:
@@ -40,7 +42,7 @@ public:
   /**
    * @brief same as step, but use eigen vector
    */
-  bool step(Eigen::Matrix<float, 3, 1> deltaX, Eigen::Matrix<float, 3, 1> z);
+  bool step(Vec3<float> deltaX, Vec3<float> z);
 
 protected:
 

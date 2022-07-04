@@ -276,9 +276,9 @@ private:
 //      * @param clearance specifies the height over the ground.
 //      * @return the desired foot position (x,y,z) at the current swing phase. 
 //      */
-//     Eigen::Matrix<float, 3, 1> GenerateSwingFootTrajectory(float phase,
-//                                                            Eigen::Matrix<float, 3, 1> startPos,
-//                                                            Eigen::Matrix<float, 3, 1> endPos,
+//     Vec3<float> GenerateSwingFootTrajectory(float phase,
+//                                                            Vec3<float> startPos,
+//                                                            Vec3<float> endPos,
 //                                                            float clearance=0.1);
 // };
 

@@ -32,10 +32,10 @@
 #include "robot/qr_robot_config.h"
 
 enum Joint{
-  FRhip, FRthigh, FRcalf, \
-  FLhip, FLthigh, FLcalf, \
-  RRhip, RRthigh, RRcalf, \
-  RLhip, RLthigh, RLcalf
+    FRhip, FRthigh, FRcalf, \
+    FLhip, FLthigh, FLcalf, \
+    RRhip, RRthigh, RRcalf, \
+    RLhip, RLthigh, RLcalf
 };
 
 // TODO: check initialization
@@ -45,48 +45,48 @@ enum Joint{
 struct qrIMU
 {
 
-  /**
-   * @brief normalized quaternion  (w,x,y,z)
-   */
-  Eigen::Matrix<float, 4, 1> quaternion;
+    /**
+     * @brief normalized quaternion  (w,x,y,z)
+     */
+    Vec4<float> quaternion;
 
-  /**
-   * @brief angular velocity （unit: rad/s)
-   */
-  Eigen::Matrix<float, 3, 1> gyroscope;
+    /**
+     * @brief angular velocity （unit: rad/s)
+     */
+    Vec3<float> gyroscope;
 
-  // TODO: discuss
-  /**
-   * @brief acceleration  (unit: m/(s2) )
-   */
-  Eigen::Matrix<float, 3, 1> acc;
+    // TODO: discuss
+    /**
+     * @brief acceleration  (unit: m/(s2) )
+     */
+    Vec3<float> acc;
 
-  /**
-   * @brief euler angle（unit: rad)
-   */
-  Eigen::Matrix<float, 3, 1> rpy;
+    /**
+     * @brief euler angle（unit: rad)
+     */
+    Vec3<float> rpy;
 
-  /**
-   * @brief calibrate the yaw when out [-PI, PI]
-   * @return rpy with calibrated yaw
-   */
-  Eigen::Matrix<float, 3, 1> CalibratedYawRpy(){
-    Eigen::Matrix<float, 3, 1> rpyCalibrate = rpy;
-    if(rpyCalibrate(2, 0) >= float(M_PI)){
-      rpyCalibrate(2, 0) -= float(2 * M_PI);
+    /**
+     * @brief calibrate the yaw when out [-PI, PI]
+     * @return rpy with calibrated yaw
+     */
+    Vec3<float> CalibratedYawRpy(){
+        Vec3<float> rpyCalibrate = rpy;
+        if(rpyCalibrate(2, 0) >= float(M_PI)){
+            rpyCalibrate(2, 0) -= float(2 * M_PI);
+        }
+        else if (rpyCalibrate(2, 0) <= -float(M_PI)) {
+            rpyCalibrate(2, 0) += float(2 * M_PI);
+        }
+        return rpyCalibrate;
     }
-    else if (rpyCalibrate(2, 0) <= -float(M_PI)) {
-      rpyCalibrate(2, 0) += float(2 * M_PI);
-    }
-    return rpyCalibrate;
-  }
 
-  void operator=(const qrIMU &imu){
-    this->quaternion = imu.quaternion;
-    this->rpy        = imu.rpy;
-    this->gyroscope  = imu.gyroscope;
-    this->acc        = imu.acc;
-  }
+    void operator=(const qrIMU &imu){
+        this->quaternion = imu.quaternion;
+        this->rpy        = imu.rpy;
+        this->gyroscope  = imu.gyroscope;
+        this->acc        = imu.acc;
+    }
 
 };
 
@@ -98,144 +98,144 @@ class qrRobotState
 
 public:
 
-  /**
-   * @brief constructor of qrRobotState
-   */
-  qrRobotState();
+    /**
+     * @brief constructor of qrRobotState
+     */
+    qrRobotState();
 
-  /**
-   * @brief constructor of qrRobotState
-   * @param robotConfig used to calculate current state
-   */
-  qrRobotState(qrRobotConfig* robotConfig);
+    /**
+     * @brief constructor of qrRobotState
+     * @param robotConfig used to calculate current state
+     */
+    qrRobotState(qrRobotConfig* robotConfig);
 
-  /**
-   * @brief imu related date
-   */
-  qrIMU imu;
+    /**
+     * @brief imu related date
+     */
+    qrIMU imu;
 
-  /**
-   * @brief current angle (unit: radian)
-   */
-  Eigen::Matrix<float, 12, 1> q;
+    /**
+     * @brief current angle (unit: radian)
+     */
+    Vec12<float> q;
 
-  /**
-   * @brief current velocity (unit: radian/second)
-   */
-  Eigen::Matrix<float, 12, 1> dq;
+    /**
+     * @brief current velocity (unit: radian/second)
+     */
+    Vec12<float> dq;
 
-  /**
-   * @brief current estimated output torque (unit: N.m)
-   */
-  Eigen::Matrix<float, 12, 1> tau;
+    /**
+     * @brief current estimated output torque (unit: N.m)
+     */
+    Vec12<float> tau;
 
-  /**
-   * @brief force on foot
-   */
-  Eigen::Matrix<float, 4, 1> footForce;
+    /**
+     * @brief force on foot
+     */
+    Vec4<float> footForce;
 
-  /**
-   * @brief time between this currentStamp and last stamp;
-   *        at the first time, delta time will set 0.001 as default
-   */
-  float deltaTime;
+    /**
+     * @brief time between this currentStamp and last stamp;
+     *        at the first time, delta time will set 0.001 as default
+     */
+    float deltaTime;
 
-  /**
-   * @brief set current time stamp from hardware
-   * @param tick: time stamp
-   */
-  void setTimeStamp(uint32_t tick);
+    /**
+     * @brief set current time stamp from hardware
+     * @param tick: time stamp
+     */
+    void setTimeStamp(uint32_t tick);
 
-  /**
-   * @brief get a vector of motor velocities
-   * @param legId: which leg's velocity
-   * @return vector of motor velocities
-   */
-  Eigen::Matrix<float, 3, 1> GetDq(unsigned int legId);
+    /**
+     * @brief get a vector of motor velocities
+     * @param legId: which leg's velocity
+     * @return vector of motor velocities
+     */
+    Vec3<float> GetDq(unsigned int legId);
 
 
-  /**
-   * @brief get a vector of motor velocities
-   * @param legId: which leg's velocity
-   * @return vector of motor velocities
-   */
-  Eigen::Matrix<float, 3, 1> GetQ(unsigned int legId);
+    /**
+     * @brief get a vector of motor velocities
+     * @param legId: which leg's velocity
+     * @return vector of motor velocities
+     */
+    Vec3<float> GetQ(unsigned int legId);
 
-  /**
-   * @brief return foot position accroding to base frame
-   * @return foot position in base frame
-   */
-  Eigen::Matrix<float, 3, 4> GetFootPositionInBaseFrame();
+    /**
+     * @brief return foot position accroding to base frame
+     * @return foot position in base frame
+     */
+    Mat3x4<float> GetFootPositionInBaseFrame();
 
-  /**
-   * @brief get roll pitch yall of robot body
-   * @return roll, pitch, yaw
-   */
-  Eigen::Matrix<float, 3, 1> GetRpy();
+    /**
+     * @brief get roll pitch yall of robot body
+     * @return roll, pitch, yaw
+     */
+    Vec3<float> GetRpy();
 
-  /**
-   * @brief get velocity of roll, pitch, yaw
-   * @return velocity of roll, pitch, yaw
-   */
-  Eigen::Matrix<float, 3, 1> GetDrpy();
+    /**
+     * @brief get velocity of roll, pitch, yaw
+     * @return velocity of roll, pitch, yaw
+     */
+    Vec3<float> GetDrpy();
 
-  /**
-   * @brief return orientation of robot body
-   * @return orientation of robot body
-   */
-  Eigen::Matrix<float, 4, 1> GetBaseOrientation();
+    /**
+     * @brief return orientation of robot body
+     * @return orientation of robot body
+     */
+    Vec4<float> GetBaseOrientation();
 
-  /**
-   * @brief get current jacobian of leg legId
-   * @param legId: which leg to calculate
-   * @return current Jacobian
-   */
-  Eigen::Matrix<float, 3, 3> GetJacobian(int legId);
+    /**
+     * @brief get current jacobian of leg legId
+     * @param legId: which leg to calculate
+     * @return current Jacobian
+     */
+    Mat3<float> GetJacobian(int legId);
 
-  /**
-   * @brief convert contact force of one leg to joint torque
-   * @param contractForce: contact force of the leg
-   * @param legId: which leg to convert
-   * @return joint torques, totally 3 joints
-   */
-  Eigen::Matrix<float, 3, 1> ContactForce2JointTorque(Eigen::Matrix<float, 3, 1> contractForce, int legId);
+    /**
+     * @brief convert contact force of one leg to joint torque
+     * @param contractForce: contact force of the leg
+     * @param legId: which leg to convert
+     * @return joint torques, totally 3 joints
+     */
+    Vec3<float> ContactForce2JointTorque(Vec3<float> contractForce, int legId);
 
-  inline Eigen::Matrix<bool, 4, 1> GetFootContact() const
-  {
-      return footContact;
-  }
+    inline Eigen::Matrix<bool, 4, 1> GetFootContact() const
+    {
+        return footContact;
+    }
 
-  inline Eigen::Matrix<float, 3, 1> GetBasePosition() const{
-      return basePosition;
-  }
+    inline Vec3<float> GetBasePosition() const{
+        return basePosition;
+    }
 
-  void operator=(const qrRobotState &robotState);
+    void operator=(const qrRobotState &robotState);
 
 private:
 
-  /**
-   * @brief the smallest time interval of each loop, which means max frequence is 1000HZ
-   */
-  static constexpr float leastDeltaTime = 0.001f;
+    /**
+     * @brief the smallest time interval of each loop, which means max frequence is 1000HZ
+     */
+    static constexpr float leastDeltaTime = 0.001f;
 
-  /**
-   * @see robotConfig
-   */
-  qrRobotConfig* robotConfig;
+    /**
+     * @see robotConfig
+     */
+    qrRobotConfig* robotConfig;
 
-  /**
-   * @brief last time stamp
-   */
-  uint32_t lastStamp = 0;
+    /**
+     * @brief last time stamp
+     */
+    uint32_t lastStamp = 0;
 
-  // TODO: get and set
-  /**
-   * @brief the contact status of 4 foot
-   */
-  Eigen::Matrix<bool, 4, 1> footContact;
+    // TODO: get and set
+    /**
+     * @brief the contact status of 4 foot
+     */
+    Eigen::Matrix<bool, 4, 1> footContact;
 
-  // TODO: check this
-  Eigen::Matrix<float, 3, 1> basePosition;
+    // TODO: check this
+    Vec3<float> basePosition;
 };
 
 #endif // QR_ROBOT_STATE_H

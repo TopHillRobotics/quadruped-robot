@@ -41,7 +41,7 @@
            M2 = 3*temp - dv / duration;
            M3 = (temp - M2) / duration;
 
-           W = 0.5 * inertial.trace() * Eigen::Matrix<float,3,3>::Identity() - inertial;
+           W = 0.5 * inertial.trace() * Mat3<float>::Identity() - inertial;
        }
 
        void qrCubicSplineInSO3::GetPoint(float currentTime, Mat3<float>& outR, Vec3<float>& outwb)

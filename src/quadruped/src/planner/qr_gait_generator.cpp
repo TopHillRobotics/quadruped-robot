@@ -28,10 +28,10 @@
     qrGaitGenerator::qrGaitGenerator() {}
 
     qrGaitGenerator::qrGaitGenerator(qrRobot *robot,
-                                     Eigen::Matrix<float, 4, 1> stanceDuration,
-                                     Eigen::Matrix<float, 4, 1> dutyFactor,
-                                     Eigen::Matrix<int, 4, 1> initialLegState,
-                                     Eigen::Matrix<float, 4, 1> initialLegPhase,
+                                     Vec4<float> stanceDuration,
+                                     Vec4<float> dutyFactor,
+                                     Vec4<int> initialLegState,
+                                     Vec4<float> initialLegPhase,
                                      float contactDetectionPhaseThreshold)
         {
             this->robot = robot;
@@ -104,7 +104,7 @@
 
     void qrGaitGenerator::Reset(float currentTime) 
     {
-        normalizedLegPhase = Eigen::Matrix<float, 4, 1>::Zero();
+        normalizedLegPhase = Vec4<float>::Zero();
         lastLegState = initialLegState;
         curLegState = lastLegState;
         legState = initialLegState;

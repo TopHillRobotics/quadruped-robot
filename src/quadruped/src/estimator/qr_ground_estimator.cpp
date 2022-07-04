@@ -142,8 +142,8 @@ Eigen::Matrix<double, 4, 4> qrGroundSurfaceEstimator::ComputeControlFrame()
     return controlFrame;
 }
 
-Eigen::Matrix<float, 3, 3> qrGroundSurfaceEstimator::GetAlignedDirections()
+Mat3<float> qrGroundSurfaceEstimator::GetAlignedDirections()
 {
-    Mat3<float> R = controlFrame.block<3,3>(0,0).cast<float>();   
+    Mat3<float> R = controlFrame.block<3,3>(0,0).cast<float>();
     return R;
 }

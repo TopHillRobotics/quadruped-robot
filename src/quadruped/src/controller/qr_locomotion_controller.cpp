@@ -107,7 +107,7 @@ void qrLocomotionController::Update()
     this->stanceLegController->Update();
 }
 
-std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrLocomotionController::GetAction()
+std::tuple<std::vector<qrMotorCmd>, Mat3x4<float>> qrLocomotionController::GetAction()
 {
     this->action.clear();
     // Returns the control ouputs (e.g. positions/torques) for all motors. type: map
@@ -126,10 +126,10 @@ std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrLocomotionCont
     return {action, qpSol};
 }
 
-std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrLocomotionController::GetFakeAction()
+std::tuple<std::vector<qrMotorCmd>, Mat3x4<float>> qrLocomotionController::GetFakeAction()
 {
     this->action.clear();
-    Eigen::Matrix<float, 3, 4> qpSol = Eigen::Matrix<float, 3, 4>::Zero();
+    Mat3x4<float> qpSol = Mat3x4<float>::Zero();
     std::vector<qrMotorCmd> action;
     // copy motors' actions from subcontrollers to output variable.         
     for (int joint_id = 0; joint_id < qrRobotConfig::dofPerLeg; ++joint_id) {
