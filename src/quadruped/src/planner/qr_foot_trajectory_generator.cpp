@@ -231,9 +231,9 @@ bool qrFootBSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
 //     return a * x * x + b * x + c;
 // }
 
-// Eigen::Matrix<float, 3, 1> qrFootParabolaSplinePatternGenerator::GenerateSwingFootTrajectory(float phase,
-//                                                                                              Eigen::Matrix<float, 3, 1> startPos,
-//                                                                                              Eigen::Matrix<float, 3, 1> endPos,
+// Vec3<float> qrFootParabolaSplinePatternGenerator::GenerateSwingFootTrajectory(float phase,
+//                                                                                              Vec3<float> startPos,
+//                                                                                              Vec3<float> endPos,
 //                                                                                              float clearance=0.1)
 // {
 //     // refer to google's motion_imitation code (Python)
@@ -265,7 +265,7 @@ bool qrFootBSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
 //     mid = max(endPos(2, 0), startPos(2, 0)) + maxClearance;
 //     z = GenerateParabola(phase, startPos(2, 0), mid, endPos(2, 0));
 
-//     return Eigen::Matrix<float, 3, 1>(x, y, z);
+//     return Vec3<float>(x, y, z);
 // }
 
 qrSwingFootTrajectory::qrSwingFootTrajectory(qrSplineInfo splineInfoIn,

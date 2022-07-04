@@ -32,7 +32,7 @@ qrStanceLegController::
                          qrComPlanner *comPlanner,
                         //  qrPosePlanner *posePlanner,
                          qrFootholdPlanner *footholdPlanner,
-                         Eigen::Matrix<float, 3, 1> desired_speed,
+                         Vec3<float> desired_speed,
                          float desiredTwistingSpeed,
                          float desiredBodyHeight,
                          std::string configFilepath)
@@ -198,17 +198,17 @@ void qrStanceLegController::UpdateFRatio(Vec4<bool> &contacts, int &N, float &mo
 
 std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrStanceLegController::GetAction()
 {
-    Eigen::Matrix<float, 3, 1> robotComPosition;
-    Eigen::Matrix<float, 3, 1> robotComVelocity;
-    Eigen::Matrix<float, 3, 1> robotComRpy;
-    Eigen::Matrix<float, 3, 1> robotComRpyRate;
+    Vec3<float> robotComPosition;
+    Vec3<float> robotComVelocity;
+    Vec3<float> robotComRpy;
+    Vec3<float> robotComRpyRate;
     Eigen::Matrix<float, 6, 1> robotQ;
     Eigen::Matrix<float, 6, 1> robotDq;
 
-    Eigen::Matrix<float, 3, 1> desiredComPosition(0.0, 0.0, 0.0);
-    Eigen::Matrix<float, 3, 1> desiredComVelocity(0.0, 0.0, 0.0);
-    Eigen::Matrix<float, 3, 1> desiredComRpy(0.0, 0.0, 0.0);
-    Eigen::Matrix<float, 3, 1> desiredComAngularVelocity(0.0, 0.0, 0.0);
+    Vec3<float> desiredComPosition(0.0, 0.0, 0.0);
+    Vec3<float> desiredComVelocity(0.0, 0.0, 0.0);
+    Vec3<float> desiredComRpy(0.0, 0.0, 0.0);
+    Vec3<float> desiredComAngularVelocity(0.0, 0.0, 0.0);
     Eigen::Matrix<float, 6, 1> desiredQ;
     Eigen::Matrix<float, 6, 1> desiredDq;
     Eigen::Matrix<float, 6, 1> desiredDdq;
@@ -239,8 +239,8 @@ std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrStanceLegCon
     // Eigen::Matrix<float, 3, 4> com2FootInWorld = footPoseWorld.colwise() - pose.head(3);
     Eigen::Matrix<float, 3, 4> footJointAngles = Eigen::Matrix<float,3,4>::Zero();
     Eigen::Matrix<int, 3, 4> jointIdxs;
-    Eigen::Matrix<int, 3, 1> jointIdx;
-    Eigen::Matrix<float, 3, 1> jointAngles;
+    Vec3<int> jointIdx;
+    Vec3<float> jointAngles;
     
     Quat<float> robotComOrientation = this->robotState->GetBaseOrientation();
     Mat3<float> Rb = math::Quat2RotMat(robotComOrientation);

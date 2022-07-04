@@ -50,20 +50,19 @@ public:
     /** 
      * @brief Constructor of qrLocomotionController.
      * @param robot The robot object pointer.
-     * @param gaitGenerator The gait generator object pointer.
-     * @param groundEstimator The ground estimator object pointer.
-     * @param comPlanner The COM planner object pointer.
-     * @param swingLegController The swing leg controller.
-     * @param stanceLegController The stance leg controller.
+     * @param homeDir the file path of this project.
+     * @param robotName the name of the robot.
      */
-    qrLocomotionController(qrRobot *robot,
-                           qrGaitGenerator *gaitGenerator,
-                           qrGroundSurfaceEstimator *groundEstimator,
-                           qrComPlanner *comPlanner,
-                           qrSwingLegController *swingLegController,
-                           qrStanceLegController *stanceLegController);
+    qrLocomotionController(qrRobot *robot, std::string homeDir, std::string robotName);
 
     ~qrLocomotionController() = default;
+
+    /**
+     * @brief Initial locomotion controller.
+     * @param homeDir the file path of this project.
+     * @param robotName the name of the robot.
+     */
+    void Initialization(std::string homeDir, std::string robotName);
 
     /** 
      * @brief Reset the planners, estimatiors and controllers.
@@ -74,6 +73,13 @@ public:
      * @brief Update the planners, estimatiors and controllers.
      */
     void Update();
+
+    /** 
+     * @brief setup the desired speed for robot. 
+     * @param linSpeed The desired linear speed.
+     * @param angSpeed The desired angular speed.
+     */
+    void UpdateDesiredSpeed(Vec3<float> linSpeed, float angSpeed);
 
     /** 
      * @brief Compute all motors' commands via subcontrollers.
@@ -156,6 +162,17 @@ public:
      * @brief the time when robot stopped.
      */
     float stopTick = 0;
+
+    /**
+     * @brief The desired linear velocity.
+     */
+    Vec3<float> desiredSpeed;
+
+    /**
+     * @brief The desired angular velocity.
+     */
+    Vec3<float> desiredTwistingSpeed;
+
 private:
 
     /** 

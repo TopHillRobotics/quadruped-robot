@@ -54,7 +54,7 @@ Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,
 
 std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> ComputeConstraintMatrix(
     float mpcBodyMass,
-    Eigen::Matrix<bool, 4, 1> contacts,
+    Vec4<bool> contacts,
     float frictionCoef,
     float fMinRatio,
     float fMaxRatio)
@@ -96,10 +96,10 @@ std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> ComputeCon
 
 std::tuple<Eigen::Matrix<float, 12, 12>, Eigen::Matrix<float, 12, 1>> ComputeObjectiveMatrix(
     Eigen::Matrix<float, 6, 12> massMatrix,
-    Eigen::Matrix<float, 6, 1> desiredAcc,
-    Eigen::Matrix<float, 6, 1> accWeight,
+    Vec6<float> desiredAcc,
+    Vec6<float> accWeight,
     float regWeight,
-    Eigen::Matrix<float, 6, 1> g)
+    Vec6<float> g)
 {
     Eigen::Matrix<float, 6, 6> Q = Eigen::Matrix<float, 6, 6>::Zero();
     for (int i = 0; i < 6; ++i) {
@@ -123,9 +123,9 @@ Eigen::Matrix<float,12,12> ComputeWeightMatrix(qrRobot *robot, const Eigen::Matr
 
 Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
                                                qrGroundSurfaceEstimator* groundEstimator,
-                                               Eigen::Matrix<float, 6, 1> desiredAcc,
-                                               Eigen::Matrix<bool, 4, 1> contacts,
-                                               Eigen::Matrix<float, 6, 1> accWeight,
+                                               Vec6<float> desiredAcc,
+                                               Vec4<bool> contacts,
+                                               Vec6<float> accWeight,
                                                float regWeight,
                                                float frictionCoef,
                                                float fMinRatio,
@@ -134,7 +134,7 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
     Quat<float> quat = robot->GetRobotState()->GetBaseOrientation();
     Vec3<float> controlFrameRPY = groundEstimator->GetControlFrameRPY();
     Mat3<float> rotMatControlFrame = groundEstimator->GetAlignedDirections();
-    Eigen::Matrix<float, 6, 1> g = Eigen::Matrix<float, 6, 1>::Zero();
+    Vec6<float> g = Vec6<float>::Zero();
     g(2, 0) = 9.8;
     TerrainType groundType = groundEstimator->GetTerrain().terrainType;
     Mat3<float> rotMat;
@@ -217,9 +217,9 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
 }
 
 Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
-                                               Eigen::Matrix<float, 6, 1> desiredAcc,
-                                               Eigen::Matrix<bool, 4, 1> contacts,
-                                               Eigen::Matrix<float, 6, 1> accWeight,
+                                               Vec6<float> desiredAcc,
+                                               Vec4<bool> contacts,
+                                               Vec6<float> accWeight,
                                                Vec3<float> normal,
                                                Vec3<float> tangent1,
                                                Vec3<float> tangent2,
@@ -237,7 +237,7 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
                                                                footPositionsInCOMWorldFrame.transpose(),
                                                                rotMat);
     std::tuple<Eigen::Matrix<float, 12, 12>, Eigen::Matrix<float, 12, 1>> Ga;
-    Eigen::Matrix<float, 6, 1> g = Eigen::Matrix<float, 6, 1>::Zero();
+    Vec6<float> g = Vec6<float>::Zero();
     g(2, 0) = 9.8;
     Ga = ComputeObjectiveMatrix(massMatrix, desiredAcc, accWeight, regWeight, g);
     Eigen::Matrix<float, 12, 12> G = std::get<0>(Ga);
@@ -331,7 +331,7 @@ Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,
 
 std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> ComputeConstraintMatrix(
     float mpcBodyMass,
-    Eigen::Matrix<bool, 4, 1> contacts,
+    Vec4<bool> contacts,
     float frictionCoef,
     Vec4<float> fMinRatio,
     Vec4<float> fMaxRatio,

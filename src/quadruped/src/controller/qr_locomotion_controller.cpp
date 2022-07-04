@@ -25,20 +25,62 @@
 #include "controller/qr_locomotion_controller.h"
 
 qrLocomotionController::qrLocomotionController(qrRobot *robotIn,
-                                           qrGaitGenerator *gaitGeneratorIn,
-                                           qrGroundSurfaceEstimator *groundEstimatorIn,
-                                           qrComPlanner *comPlannerIn,
-                                           qrSwingLegController *swingLegControllerIn,
-                                           qrStanceLegController *stanceLegControllerIn)
-    : robot(robotIn), 
-      gaitGenerator(gaitGeneratorIn),
-      groundEstimator(groundEstimatorIn), 
-      comPlanner(comPlannerIn), 
-      swingLegController(swingLegControllerIn), 
-      stanceLegController(stanceLegControllerIn)
+                                               std::string homeDir,
+                                               std::string robotName)
+    : robot(robotIn)
 {
     this->resetTime = robot->GetTimeSinceReset();
     this->timeSinceReset = 0.f;
+    this->robotConfig = this->robot->GetRobotConfig();
+    this->robotState = this->robot->GetRobotState();
+    this->desiredSpeed = {0.f, 0.f, 0.f};
+    this->desiredTwistingSpeed = 0.f;
+}
+
+void qrLocomotionController::Initialization(std::string homeDir, std::string robotName)
+{
+    this->gaitGenerator = qrGaitGenerator(this->robot, this->homeDir + "config/" + this->robotName
+                                                                         + "/gait_generator.yaml");
+    std::cout << "init gaitGenerator finish\n" << std::endl;
+
+    this->groundEsitmator = new qrGroundSurfaceEstimator(this->robot, homeDir + "config/" + robotName
+                                                                                        + "/terrain.yaml");
+    std::cout << "init groundEsitmator finish\n" << std::endl;
+    
+    this->stateEstimator = new qrRobotVelocityEstimator(this->robot);
+    std::cout << "init robotEstimator finish\n" << std::endl;
+     
+    this->comPlanner = new qrComPlanner(this->robot, gaitGenerator, stateEstimator);
+    std::cout << "init comPlanner finish\n" << std::endl;
+
+    this->footholdPlanner = new qrFootholdPlanner(this->robot, groundEsitmator);
+    std::cout << "init footholdPlanner finish\n" << std::endl;
+
+    this->swingLegController = new qrSwingLegController(this->robot,
+                                                        this->gaitGenerator,
+                                                        this->stateEstimator,
+                                                        this->groundEsitmator,
+                                                        this->footholdPlanner,
+                                                        this->desiredSpeed,
+                                                        this->desiredTwistingSpeed,
+                                                        this->robotConfig->bodyHeight,
+                                                        0.01f,
+                                                        homeDir + "config/" + robotName
+                                                            + "/swing_leg_controller.yaml");
+    std::cout << "init swingLegController finish\n" << std::endl;
+
+    this->stanceLegController = new qrStanceLegController(this->robot,
+                                                          this->gaitGenerator,
+                                                          this->stateEstimator,
+                                                          this->groundEsitmator,
+                                                          this->comPlanner,
+                                                          this->footholdPlanner,
+                                                          this->desiredSpeed,
+                                                          this->desiredTwistingSpeed,
+                                                          homeDir + "config/" + robotName
+                                                              + "/stance_leg_controller.yaml");
+
+    std::cout << "init stanceLegController finish\n" << std::endl;
 }
 
 void qrLocomotionController::Reset()
@@ -105,6 +147,12 @@ void qrLocomotionController::Update()
     // }
     this->swingLegController->Update();
     this->stanceLegController->Update();
+}
+
+void UpdateDesiredSpeed(Vec3<float> linSpeed, float angSpeed)
+{
+    this->swingLegController->SetDesiredSpeed(linSpeed, angSpeed);
+    this->stanceLegController->SetDesiredSpeed(linSpeed, angSpeed);
 }
 
 std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrLocomotionController::GetAction()

@@ -131,8 +131,8 @@ public:
      * @param params Step parameters.
      */
     virtual void SetParameters(const float initial_time,
-                        const Eigen::Vector3f &initial_pos,
-                        const Eigen::Vector3f &target_pos,
+                        const Vec3<float> &initial_pos,
+                        const Vec3<float> &target_pos,
                         const qrStepParameters &params);
 
     /**
@@ -142,12 +142,12 @@ public:
      * @param foot_acc Instantaneous foot acceleration.
      * @param time Current time.
      */
-    virtual bool GenerateTrajectory(Eigen::Vector3f &foot_pos,
-                            Eigen::Vector3f &foot_vel,
-                            Eigen::Vector3f &foot_acc,
+    virtual bool GenerateTrajectory(Vec3<float> &foot_pos,
+                            Vec3<float> &foot_vel,
+                            Vec3<float> &foot_acc,
                             float time);
     
-    virtual void UpdateSpline(float initial_time, float duration, Eigen::Vector3f &initial_pos, float target_appex, Eigen::Vector3f &target_pos)
+    virtual void UpdateSpline(float initial_time, float duration, Vec3<float> &initial_pos, float target_appex, Vec3<float> &target_pos)
     {
         //
     }
@@ -209,8 +209,8 @@ public:
      * @param params qrStepParameters object.
      */
     virtual void SetParameters(const float initial_time,
-                               const Eigen::Vector3f &initial_pos,
-                               const Eigen::Vector3f &target_pos,
+                               const Vec3<float> &initial_pos,
+                               const Vec3<float> &target_pos,
                                const qrStepParameters &params);
 
     /** 
@@ -220,9 +220,9 @@ public:
      * @param foot_acc The foot acceleration.
      * @param time Current time.
      */
-    virtual bool GenerateTrajectory(Eigen::Vector3f &foot_pos,
-                                    Eigen::Vector3f &foot_vel,
-                                    Eigen::Vector3f &foot_acc,
+    virtual bool GenerateTrajectory(Vec3<float> &foot_pos,
+                                    Vec3<float> &foot_vel,
+                                    Vec3<float> &foot_acc,
                                     float time);
 
     /** 
@@ -235,9 +235,9 @@ public:
      */
     virtual void UpdateSpline(float initial_time, 
                               float duration, 
-                              const Eigen::Vector3f &initial_pos, 
+                              const Vec3<float> &initial_pos, 
                               float target_appex,
-                              const Eigen::Vector3f &target_pos);
+                              const Vec3<float> &target_pos);
 
 private:
     /** 
@@ -276,9 +276,9 @@ private:
 //      * @param clearance specifies the height over the ground.
 //      * @return the desired foot position (x,y,z) at the current swing phase. 
 //      */
-//     Eigen::Matrix<float, 3, 1> GenerateSwingFootTrajectory(float phase,
-//                                                            Eigen::Matrix<float, 3, 1> startPos,
-//                                                            Eigen::Matrix<float, 3, 1> endPos,
+//     Vec3<float> GenerateSwingFootTrajectory(float phase,
+//                                                            Vec3<float> startPos,
+//                                                            Vec3<float> endPos,
 //                                                            float clearance=0.1);
 // };
 

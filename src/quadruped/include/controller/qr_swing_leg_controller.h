@@ -46,8 +46,8 @@ public:
      * @param stateEstimator The gait estimator
      * @param groundEstimator The ground estimator
      * @param FootholdPlanner The foothold planner
-     * @param desiredLinearVelocity The desired linear velocity
-     * @param desiredTwistingVelocity The desired angular velocity
+     * @param desiredLinearSpeed The desired linear velocity
+     * @param desiredTwistingSpeed The desired angular velocity
      * @param desiredHeight The desired body height of the robot.
      * @param footClearance 
      * @param configPath The config file path
@@ -56,8 +56,8 @@ public:
                          qrGaitGenerator *gaitGenerator,
                          qrRobotVelocityEstimator *robotVelocityEstimator,
                          qrGroundSurfaceEstimator *groundEstimator,
-                         Eigen::Matrix<float, 3, 1> desiredLinearVelocity,
-                         float desiredTwistingVelocity,
+                         Vec3<float> desiredLinearSpeed,
+                         float desiredTwistingSpeed,
                          float desiredHeight,
                          float footClearance,
                          std::string configPath);
@@ -97,9 +97,9 @@ public:
      * @param clearance specifies the height over the ground.
      * @return the desired foot position (x,y,z) at the current swing phase. 
      */
-    Eigen::Matrix<float, 3, 1> GenerateSwingFootTrajectory(float phase,
-                                                           Eigen::Matrix<float, 3, 1> startPos,
-                                                           Eigen::Matrix<float, 3, 1> endPos,
+    Vec3<float> GenerateSwingFootTrajectory(float phase,
+                                                           Vec3<float> startPos,
+                                                           Vec3<float> endPos,
                                                            float clearance=0.1);
 
     /** @brief Compute all motors' commands using this controller.
@@ -113,6 +113,17 @@ public:
      *          return control ouputs (e.g. positions/torques) for all 12 motors.
      */
     std::map<int, qrMotorCmd> GetAction();
+
+    /**
+     * @brief set the linear velocity and angular velocity.
+     * @param linSpeed The desired linear speed.
+     * @param angSpeed The desired angular speed.
+     */
+    inline void SetDesiredSpeed(Vec3<float> linSpeed, float angSpeed)
+    {
+        this->desiredSpeed = linSpeed;
+        this->desiredTwistingSpeed = angSpeed;
+    }
 
 private:
     
@@ -155,22 +166,22 @@ private:
     /**
      * @brief The state of each leg.
      */
-    Eigen::Matrix<int, 4, 1> lastLegState;
+    Vec4<int> lastLegState;
 
     /**
      * @brief Desired robot's body height. 
      */
-    Eigen::Matrix<float, 3, 1> desiredHeight;
+    Vec3<float> desiredHeight;
 
     /**
      * @brief The desired linear velocity. This memeber variable appears in velocity mode.
      */
-    Eigen::Matrix<float, 3, 1> desiredLinearVelocity;
+    Vec3<float> desiredLinearSpeed;
 
     /**
      * @brief The desired angular velocity. This memeber variable appears in velocity mode.
      */
-    float desiredTwistingVelocity;
+    float desiredTwistingSpeed;
 
     /**
      * @brief The joint's angles and motor velocities data structure. The first is joint angle,
