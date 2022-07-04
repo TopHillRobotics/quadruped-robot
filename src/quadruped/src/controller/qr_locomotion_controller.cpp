@@ -43,10 +43,10 @@ void qrLocomotionController::Initialization(std::string homeDir, std::string rob
                                                                          + "/gait_generator.yaml");
     std::cout << "init gaitGenerator finish\n" << std::endl;
 
-    this->groundEsitmator = new qrGroundSurfaceEstimator(this->robot, homeDir + "config/" + robotName
+    this->groundEstimator = new qrGroundSurfaceEstimator(this->robot, homeDir + "config/" + robotName
                                                                                         + "/terrain.yaml");
     std::cout << "init groundEsitmator finish\n" << std::endl;
-    
+
     this->stateEstimator = new qrRobotVelocityEstimator(this->robot);
     std::cout << "init robotEstimator finish\n" << std::endl;
      

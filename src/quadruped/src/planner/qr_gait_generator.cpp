@@ -114,7 +114,6 @@ void qrGaitGenerator::Reset(float currentTime)
 void qrGaitGenerator::Update(float currentTime)
 {
     Eigen::Matrix<bool, 4, 1> contactState = robotState->GetFootContact();
-    float fullCyclePeriod, augmentedTime, phaseInFullCycle, ratio;
 
 
     for (int legId = 0; legId < initialLegState.size(); legId++) {
@@ -129,11 +128,9 @@ void qrGaitGenerator::Update(float currentTime)
         //     curLegState[legId] = desiredLegState[legId];
         // }
 
-        fullCyclePeriod = stanceDuration[legId] / dutyFactor[legId];
-        augmentedTime = initialLegPhase[legId] * fullCyclePeriod + currentTime;
-        phaseInFullCycle = fmod(augmentedTime, fullCyclePeriod) / fullCyclePeriod;
+        float phaseInFullCycle = GetPhaseByTime(currentTime, legId);
 
-        ratio = initStateRatioInCycle[legId];
+        float ratio = initStateRatioInCycle[legId];
 
         if (phaseInFullCycle < ratio) {
             desiredLegState[legId] = initialLegState[legId];
@@ -159,4 +156,11 @@ void qrGaitGenerator::Update(float currentTime)
             legState[legId] = LegState::LOSE_CONTACT;
         }
     }
+}
+
+float qrGaitGenerator::GetPhaseByTime(float time, int legId)
+{
+  float fullCyclePeriod = stanceDuration[legId] / dutyFactor[legId];
+  float augmentedTime   = initialLegPhase[legId] * fullCyclePeriod + time;
+  return fmod(augmentedTime, fullCyclePeriod) / fullCyclePeriod;
 }
