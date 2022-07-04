@@ -46,8 +46,8 @@ public:
      * @param stateEstimator The gait estimator
      * @param groundEstimator The ground estimator
      * @param FootholdPlanner The foothold planner
-     * @param desiredLinearVelocity The desired linear velocity
-     * @param desiredTwistingVelocity The desired angular velocity
+     * @param desiredLinearSpeed The desired linear velocity
+     * @param desiredTwistingSpeed The desired angular velocity
      * @param desiredHeight The desired body height of the robot.
      * @param footClearance 
      * @param configPath The config file path
@@ -56,8 +56,8 @@ public:
                          qrGaitGenerator *gaitGenerator,
                          qrRobotVelocityEstimator *robotVelocityEstimator,
                          qrGroundSurfaceEstimator *groundEstimator,
-                         Vec3<float> desiredLinearVelocity,
-                         float desiredTwistingVelocity,
+                         Vec3<float> desiredLinearSpeed,
+                         float desiredTwistingSpeed,
                          float desiredHeight,
                          float footClearance,
                          std::string configPath);
@@ -114,6 +114,17 @@ public:
      */
     std::map<int, qrMotorCmd> GetAction();
 
+    /**
+     * @brief set the linear velocity and angular velocity.
+     * @param linSpeed The desired linear speed.
+     * @param angSpeed The desired angular speed.
+     */
+    inline void SetDesiredSpeed(Vec3<float> linSpeed, float angSpeed)
+    {
+        this->desiredLinearSpeed = linSpeed;
+        this->desiredTwistingSpeed = angSpeed;
+    }
+
 private:
     
     /**
@@ -165,12 +176,12 @@ private:
     /**
      * @brief The desired linear velocity. This memeber variable appears in velocity mode.
      */
-    Vec3<float> desiredLinearVelocity;
+    Vec3<float> desiredLinearSpeed;
 
     /**
      * @brief The desired angular velocity. This memeber variable appears in velocity mode.
      */
-    float desiredTwistingVelocity;
+    float desiredTwistingSpeed;
 
     /**
      * @brief The joint's angles and motor velocities data structure. The first is joint angle,

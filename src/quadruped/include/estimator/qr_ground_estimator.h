@@ -155,7 +155,7 @@ public:
      * @param update If need to update the normal vector. True is yes and False is no.
      * @return The normal vector of plane equation.
      */
-    Eigen::Matrix<double, 3, 1> GetNormalVector(bool update);
+    Vec3<double> GetNormalVector(bool update);
 
     /**
      * @brief control frame is the frame origin at COM, and x axis is algined with body COM frame's X-axis,
@@ -163,7 +163,7 @@ public:
      * with the local surface plane.
      * @return the result is presented in the world frame.
      */
-    Eigen::Matrix<double, 4, 4> ComputeControlFrame();
+    Mat4<double> ComputeControlFrame();
 
     /**
      * @brief Get the height of the map in point (x,y).
@@ -259,12 +259,12 @@ private:
     /**
      * @brief Quad vector which descirbes the orientation in control frame.
      */
-    Eigen::Matrix<double, 4, 1> controlFrameOrientation;
+    Vec4<double> controlFrameOrientation;
 
     /**
      * @brief Last Contact states of each leg. 0 represents not contact and 1 represents contact.
      */
-    Eigen::Matrix<bool, 4, 1> lastContactStates;
+    Vec4<bool> lastContactStates;
 
     /**
      * @brief YAML node of terrain config.

@@ -55,7 +55,7 @@ Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,
 
 std::tuple<Eigen::Matrix<float, 12, 24>, Vec24<float>> ComputeConstraintMatrix(
     float mpcBodyMass,
-    Eigen::Matrix<bool, 4, 1> contacts,
+    Vec4<bool> contacts,
     float frictionCoef,
     float fMinRatio,
     float fMaxRatio)
@@ -125,7 +125,7 @@ Eigen::Matrix<float,12,12> ComputeWeightMatrix(qrRobot *robot, const Eigen::Matr
 Mat3x4<float> ComputeContactForce(qrRobot *robot,
                                                qrGroundSurfaceEstimator* groundEstimator,
                                                Vec6<float> desiredAcc,
-                                               Eigen::Matrix<bool, 4, 1> contacts,
+                                               Vec4<bool> contacts,
                                                Vec6<float> accWeight,
                                                float regWeight,
                                                float frictionCoef,
@@ -217,6 +217,7 @@ Mat3x4<float> ComputeContactForce(qrRobot *robot,
     return (X*rotMat).transpose(); // convert force to current base frame
 }
 
+
 Mat3x4<float> ComputeContactForce(qrRobot *robot,
                                                Vec6<float> desiredAcc,
                                                Eigen::Matrix<bool, 4, 1> contacts,
@@ -237,6 +238,7 @@ Mat3x4<float> ComputeContactForce(qrRobot *robot,
                                                                robot->GetRobotConfig()->GetBodyInertia(),
                                                                footPositionsInCOMWorldFrame.transpose(),
                                                                rotMat);
+
     std::tuple<Mat12<float>, Vec12<float>> Ga;
     Vec6<float> g = Vec6<float>::Zero();
     g(2, 0) = 9.8;
@@ -332,7 +334,7 @@ Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,
 
 std::tuple<Eigen::Matrix<float, 12, 24>, Vec24<float>> ComputeConstraintMatrix(
     float mpcBodyMass,
-    Eigen::Matrix<bool, 4, 1> contacts,
+    Vec4<bool> contacts,
     float frictionCoef,
     Vec4<float> fMinRatio,
     Vec4<float> fMaxRatio,
