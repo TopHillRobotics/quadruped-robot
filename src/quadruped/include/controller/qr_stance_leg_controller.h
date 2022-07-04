@@ -96,7 +96,7 @@ public:
      *  @return tuple<map, Matrix<3,4>> : 
      *          return control ouputs (e.g. positions/torques) for all (12) motors.
      */
-    std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> GetAction();
+    std::tuple<std::map<int, qrMotorCmd>, Mat3x4<float>> GetAction();
 
     /**
      * @brief set the linear velocity and angular velocity.

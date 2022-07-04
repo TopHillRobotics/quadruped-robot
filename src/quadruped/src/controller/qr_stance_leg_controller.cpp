@@ -196,30 +196,30 @@ void qrStanceLegController::UpdateFRatio(Vec4<bool> &contacts, int &N, float &mo
     }
 }
 
-std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrStanceLegController::GetAction()
+std::tuple<std::map<int, qrMotorCmd>, Mat3x4<float>> qrStanceLegController::GetAction()
 {
     Vec3<float> robotComPosition;
     Vec3<float> robotComVelocity;
     Vec3<float> robotComRpy;
     Vec3<float> robotComRpyRate;
-    Eigen::Matrix<float, 6, 1> robotQ;
-    Eigen::Matrix<float, 6, 1> robotDq;
+    Vec6<float> robotQ;
+    Vec6<float> robotDq;
 
     Vec3<float> desiredComPosition(0.0, 0.0, 0.0);
     Vec3<float> desiredComVelocity(0.0, 0.0, 0.0);
     Vec3<float> desiredComRpy(0.0, 0.0, 0.0);
     Vec3<float> desiredComAngularVelocity(0.0, 0.0, 0.0);
-    Eigen::Matrix<float, 6, 1> desiredQ;
-    Eigen::Matrix<float, 6, 1> desiredDq;
-    Eigen::Matrix<float, 6, 1> desiredDdq;
+    Vec6<float> desiredQ;
+    Vec6<float> desiredDq;
+    Vec6<float> desiredDdq;
     
-    Eigen::Matrix<float, 3, 4> contactForces;
+    Mat3x4<float> contactForces;
     Eigen::Matrix<bool, 4, 1> contacts;
     float moveBasePhase = 1.f;
     int N=0;
 
     UpdateFRatio(contacts, N, moveBasePhase);
-    // Eigen::Matrix<float, 3, 4> footPoseWorld = robot->GetFootPositionsInWorldFrame();
+    // Mat3x4 footPoseWorld = robot->GetFootPositionsInWorldFrame();
     
     Vec6<float> pose;
     Vec6<float> twist; // v, wb
@@ -236,8 +236,8 @@ std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrStanceLegCon
     //         twist = std::get<1>(res);  
     //     }
     // }
-    // Eigen::Matrix<float, 3, 4> com2FootInWorld = footPoseWorld.colwise() - pose.head(3);
-    Eigen::Matrix<float, 3, 4> footJointAngles = Eigen::Matrix<float,3,4>::Zero();
+    // Mat3x4 com2FootInWorld = footPoseWorld.colwise() - pose.head(3);
+    Mat3x4<float> footJointAngles = Mat3x4<float>::Zero();
     Eigen::Matrix<int, 3, 4> jointIdxs;
     Vec3<int> jointIdx;
     Vec3<float> jointAngles;
@@ -372,8 +372,8 @@ std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrStanceLegCon
     
     std::map<int, qrMotorCmd> action;
     std::map<int, float> motorTorques;
-    Eigen::Matrix<float, 12, 1> kps = this->robotConfig->GetKps();
-    Eigen::Matrix<float, 12, 1> kds = this->robotConfig->GetKds();
+    Vec12<float> kps = this->robotConfig->GetKps();
+    Vec12<float> kds = this->robotConfig->GetKds();
     
     for (int legId = 0; legId < this->robotConfig->numLegs; ++legId) {
         Vec3<float> torqueOfLeg = this->robotState->ContactForce2JointTorque(contactForces.col(legId), int(legId));
@@ -384,6 +384,6 @@ std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> qrStanceLegCon
         }
     }
 
-    std::tuple<std::map<int, qrMotorCmd>, Eigen::Matrix<float, 3, 4>> actionContactForce(action, contactForces);
+    std::tuple<std::map<int, qrMotorCmd>, Mat3x4<float>> actionContactForce(action, contactForces);
     return actionContactForce;
 }

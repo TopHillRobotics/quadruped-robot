@@ -84,12 +84,30 @@ namespace math {
   template<typename T>
   Vec3<typename T::Scalar> Mat2SkewVec(const Eigen::MatrixBase<T> &m);
 
+  /**
+   * @brief convert quaternion to rotation matrix
+   * @param q: quaternion
+   */
   template<typename T>
   Mat3<typename T::Scalar> Quat2RotMat(const Eigen::MatrixBase<T> &q);
 
+  /**
+   * @brief Tranform points coordination represented in base frame to world frame.
+   * @param Vec3<T> the 3d position of the origin of the base frame w.r.t. world frame;
+   * @param Quat<T> the orientation of the base frame (quaternion, wxyz) w.r.t. worlf frame;
+   * @param Eigen::Matrix<T, 3, N> The input point(s) is represent in the body frame
+   * @return Eigen::Matrix<T, 3, N> The output point(s) is represent in the world frame, but these two point are the same point in physics.
+   */
   template<typename T, int N = 1>
   Eigen::Matrix<T, 3, N> InvertRigidTransform(Vec3<T> t, Quat<T> R, Eigen::Matrix<T, 3, N> points);
 
+  /**
+   * @brief Tranform points coordination represented in world frame to base frame.
+   * @param Vec3<T> the 3d position of the origin of the base frame w.r.t. world frame;
+   * @param Quat<T> the orientation of the base frame (quaternion, wxyz) w.r.t. worlf frame;
+   * @param Eigen::Matrix<T, 3, N> The input point(s) is represent in the world frame
+   * @return Eigen::Matrix<T, 3, N> The output point(s) is represent in the base frame, but these two point are the same point in physics.
+   */
   template<typename T, int N = 1>
   Eigen::Matrix<T, 3, N> RigidTransform(Vec3<T> t, Quat<T> R, Eigen::Matrix<T, 3, N> points);
 
@@ -101,18 +119,38 @@ namespace math {
   template<typename T>
   Vec3<T> TransformVecByQuat(Quat<T> quat, Vec3<T> r_b);
 
+  /**
+   * @brief calculate the inverse of quaternion
+   * @param q: quaternion to calculate the inverse
+   */
   template<typename T>
   Quat<typename T::Scalar> QuatInverse(const Eigen::MatrixBase<T> &q);
 
+  /**
+   * @brief convert rotation matrix to row, pitch, yaw
+   * @param R: rotation matrix
+   */
   template<typename T>
   Vec3<typename T::Scalar> RotMat2Rpy(const Eigen::MatrixBase<T> &R);
 
+  /**
+   * @brief convert quaternion to row, pitch, yaw
+   * @param q: quaternion
+   */
   template<typename T>
   Vec3<typename T::Scalar> Quat2Rpy(const Eigen::MatrixBase<T> &q);
 
+  /**
+   * @brief convert vector to skew matrix
+   * @param v: vector
+   */
   template<typename T>
   Mat3<typename T::Scalar> Vector2SkewMat(const Eigen::MatrixBase<T> &v);
 
+  /**
+   * @brief convert skew matrix to skew vector
+   * @param m: skew matrix
+   */
   template<typename T>
   Vec3<typename T::Scalar> Mat2SkewVec(const Eigen::MatrixBase<T> &m);
 }

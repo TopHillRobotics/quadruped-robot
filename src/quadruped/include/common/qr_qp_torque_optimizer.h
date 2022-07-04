@@ -39,12 +39,12 @@
 /** 
  * @brief Compute robot's mass matrix.
  * @param robotMass : float, ture mass of robot.
- * @param robotInertia : Eigen::Matrix<float, 3, 3>, should expressed in control frame.
+ * @param robotInertia : Mat3<float>, should expressed in control frame.
  * @param footPositions : Eigen::Matrix<float, 4, 3>, should expressed in control frame.
  * @return massMat : Eigen::Matrix<float, 6, 12>, in control frame.
  */
 Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,
-                                              Eigen::Matrix<float, 3, 3> robotInertia,
+                                              Mat3<float> robotInertia,
                                               Eigen::Matrix<float, 4, 3> footPositions);
 /** 
  * @brief Compute constraint matrix.
@@ -55,7 +55,7 @@ Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,
  * @param fMaxRatio max force that applys
  * @return Constraint matrix.
  */
-std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> ComputeConstraintMatrix(
+std::tuple<Eigen::Matrix<float, 12, 24>, Vec24<float>> ComputeConstraintMatrix(
     float mpcBodyMass,
     Eigen::Matrix<bool, 4, 1> contacts,
     float frictionCoef,
@@ -71,12 +71,12 @@ std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> ComputeCon
  * @param g acceleration of gravity.
  * @return Objective matrix.
  */
-std::tuple<Eigen::Matrix<float, 12, 12>, Eigen::Matrix<float, 12, 1>> ComputeObjectiveMatrix(
+std::tuple<Mat12<float>, Vec12<float>> ComputeObjectiveMatrix(
     Eigen::Matrix<float, 6, 12> massMatrix,
-    Eigen::Matrix<float, 6, 1> desiredAcc,
-    Eigen::Matrix<float, 6, 1> accWeight,
+    Vec6<float> desiredAcc,
+    Vec6<float> accWeight,
     float regWeight,
-    Eigen::Matrix<float, 6, 1> g);
+    Vec6<float> g);
 
 // TODO: check this
 /** 
@@ -100,11 +100,11 @@ Eigen::Matrix<float,12,12> ComputeWeightMatrix(qrRobot *robot, const Eigen::Matr
  * @param fMaxRatio max force that applys.
  * @return Four legs contact force matrix.
  */
-Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
+Mat3x4<float> ComputeContactForce(qrRobot *robot,
                                                qrGroundSurfaceEstimator* groundEstimator,
-                                               Eigen::Matrix<float, 6, 1> desiredAcc,
+                                               Vec6<float> desiredAcc,
                                                Eigen::Matrix<bool, 4, 1> contacts,
-                                               Eigen::Matrix<float, 6, 1> accWeight,
+                                               Vec6<float> accWeight,
                                                float regWeight=1e-4,
                                                float frictionCoef = 0.45,
                                                float fMinRatio = 0.1,
@@ -127,10 +127,10 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
  * @param frictionCoef frictionCoef defines the interaction force effect between foot and env.
  * @return Four legs contact force matrix.
  */
-Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
-                                               Eigen::Matrix<float, 6, 1> desiredAcc,
+Mat3x4<float> ComputeContactForce(qrRobot *robot,
+                                               Vec6<float> desiredAcc,
                                                Eigen::Matrix<bool, 4, 1> contacts,
-                                               Eigen::Matrix<float, 6, 1> accWeight,
+                                               Vec6<float> accWeight,
                                                Vec3<float> normal,
                                                Vec3<float> tangent1,
                                                Vec3<float> tangent2,
@@ -143,13 +143,13 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
  * @brief Compute robot's mass matrix. Writen by Zhu Yijie, in world frame. 
  * Used for climbing stairs or slopes.
  * @param robotMass : float, ture mass of robot.
- * @param robotInertia : Eigen::Matrix<float, 3, 3>, should expressed in control frame.
+ * @param robotInertia : Mat3<float>, should expressed in control frame.
  * @param footPositions : Eigen::Matrix<float, 4, 3>, should expressed in control frame.
  * @param rotMat : 
  * @return massMat : Eigen::Matrix<float, 6, 12>, in control frame.
  */
 Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,
-                                              Eigen::Matrix<float, 3, 3> robotInertia,
+                                              Mat3<float> robotInertia,
                                               Eigen::Matrix<float, 4, 3> footPositions,
                                               Mat3<float> rotMat);
 
@@ -166,7 +166,7 @@ Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,
  * @param tangent2 y axis vector.
  * @return Constraint matrix.
  */
-std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> ComputeConstraintMatrix(
+std::tuple<Eigen::Matrix<float, 12, 24>, Vec24<float>> ComputeConstraintMatrix(
     float mpcBodyMass,
     Eigen::Matrix<bool, 4, 1> contacts,
     float frictionCoef,

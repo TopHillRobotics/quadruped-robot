@@ -64,7 +64,7 @@ bool qrTinyEKF::step(double *deltaX, double *z)
   return ekf_step(&this->ekf, z) ? false : true;
 }
 
-bool qrTinyEKF::step(Eigen::Matrix<float, 3, 1> deltaX, Eigen::Matrix<float, 3, 1> z)
+bool qrTinyEKF::step(Vec3<float> deltaX, Vec3<float> z)
 {
   double deltaXArray[3] = {double(deltaX[0]), double(deltaX[1]), double(deltaX[2])};
   double zArray[3]      = {double(z[0]), double(z[1]), double(z[2])};

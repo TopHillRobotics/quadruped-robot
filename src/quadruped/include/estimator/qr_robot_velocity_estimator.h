@@ -107,7 +107,7 @@ private:
    */
   qrTinyEKF *filter;
 
-  Eigen::Matrix<float, 3, 1> movingWindowUpdate(float x, float y, float z);
+  Vec3<float> movingWindowUpdate(float x, float y, float z);
 
 };
 

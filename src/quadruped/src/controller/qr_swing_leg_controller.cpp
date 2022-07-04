@@ -30,16 +30,16 @@ qrSwingLegController::qrSwingLegController(qrRobot *robot,
                                            qrGaitGenerator *gaitGenerator,
                                            qrRobotVelocityEstimator* robotEstimator,
                                            qrGroundSurfaceEstimator *groundEstimator,
-                                           Vec3<float>  desiredLinearSpeed,
-                                           float  desiredTwistingSpeed,
+                                           Vec3<float> desiredLinearSpeed,
+                                           float desiredTwistingSpeed,
                                            float desiredHeight,
                                            float footClearance,
                                            std::string configPath)
     : gaitGenerator(gaitGenerator),
       groundEstimator(groundEstimator),
       robotEstimator(robotEstimator),
-       desiredLinearSpeed( desiredLinearSpeed),
-       desiredTwistingSpeed( desiredTwistingSpeed),
+      desiredLinearSpeed(desiredLinearSpeed),
+      desiredTwistingSpeed(desiredTwistingSpeed),
       configFilepath(configPath)
 {
     this->robotState = robot->GetRobotState();
@@ -54,9 +54,9 @@ void qrSwingLegController::Reset()
     // TODO: interface
     this->phaseSwitchFootLocalPos = this->robotState->GetFootPositionInBaseFrame();
     // this->phaseSwitchFootGlobalPos = this->robot->GetFootPositionsInWorldFrame();
-    Eigen::Matrix<float, 1, 4> footX = Eigen::MatrixXf::Map(&this->footInitPose[0][0], 1, 4);
-    Eigen::Matrix<float, 1, 4> footY = Eigen::MatrixXf::Map(&this->footInitPose[1][0], 1, 4);
-    Eigen::Matrix<float, 1, 4> footZ = Eigen::MatrixXf::Map(&this->footInitPose[2][0], 1, 4);
+//    Eigen::Matrix<float, 1, 4> footX = Eigen::MatrixXf::Map(&this->footInitPose[0][0], 1, 4);
+//    Eigen::Matrix<float, 1, 4> footY = Eigen::MatrixXf::Map(&this->footInitPose[1][0], 1, 4);
+//    Eigen::Matrix<float, 1, 4> footZ = Eigen::MatrixXf::Map(&this->footInitPose[2][0], 1, 4);
     
     this->footHoldInWorldFrame.row(0) << 0.185f, 0.185f, -0.175f, -0.175f;
     this->footHoldInWorldFrame.row(1) << -0.145f, 0.145f, -0.145f, 0.145f;
@@ -238,11 +238,11 @@ std::map<int, qrMotorCmd> qrSwingLegController::GetAction()
     Vec3<float> footPositionInControlFrame, footVelocityInControlFrame, footAccInControlFrame;
     Vec3<int> jointIdx;
     Vec3<float> jointAngles;
-    Eigen::Matrix<float, 3, 4> hipPositions;
+    Mat3x4<float> hipPositions;
     // The position correction coefficients in Raibert's formula.
     const Vec3<float> swingKp(0.03, 0.03, 0.03);
     float yawDot;
-    Eigen::Matrix<float, 12, 1> currentJointAngles = this->robotState->q;
+    Vec12<float> currentJointAngles = this->robotState->q;
     comVelocity = this->robotEstimator->GetEstimatedVelocity(); // in base frame
     yawDot = this->robotState->GetDrpy()(2, 0); // in base frame
     hipPositions = this->robotConfig->GetHipPositionsInBaseFrame();
@@ -347,7 +347,7 @@ std::map<int, qrMotorCmd> qrSwingLegController::GetAction()
     auto RLAngles = currentJointAngles.tail(3);
     // map<int, Eigen::Matrix<float, 5, 1>> actions;
     std::map<int, qrMotorCmd> actions;
-    Eigen::Matrix<float, 12, 1> kps, kds;
+    Vec12<float> kps, kds;
     kps = robotConfig->GetKps();
     kds = robotConfig->GetKds();
     for (auto it = this->swingJointAnglesVelocities.begin(); it != this->swingJointAnglesVelocities.end(); ++it) {

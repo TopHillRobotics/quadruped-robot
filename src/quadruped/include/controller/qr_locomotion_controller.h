@@ -85,8 +85,8 @@ public:
      * @brief Compute all motors' commands via subcontrollers.
      *  @return tuple<map, Matrix<3,4>> : return control ouputs (e.g. positions/torques) for all (12) motors.
      */
-    std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> GetAction();
-    std::tuple<std::vector<qrMotorCmd>, Eigen::Matrix<float, 3, 4>> GetFakeAction();
+    std::tuple<std::vector<qrMotorCmd>, Mat3x4<float>> GetAction();
+    std::tuple<std::vector<qrMotorCmd>, Mat3x4<float>> GetFakeAction();
 
     /** 
      * @brief Get gait generator object.

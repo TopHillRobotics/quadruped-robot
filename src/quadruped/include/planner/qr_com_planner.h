@@ -46,13 +46,13 @@
          */
         void Reset(float currentTime);
 
-        Eigen::Matrix<float, 3, 1> Update(float currentTime);
+        Vec3<float> Update(float currentTime);
 
         /**
          * @brief
          * @return Eigen::Matrix<float,3,1>: comPosInBaseFrame
          */
-        Eigen::Matrix<float, 3, 1> GetComPosInBaseFrame();
+        Vec3<float> GetComPosInBaseFrame();
 
         /**
          * @brief the vector index of ADJEST_LEG means the order of the legs,
@@ -74,39 +74,39 @@
         /**
          * @brief com position from robot state
          */
-        Eigen::Matrix<float, 3, 1> basePosition;
+        Vec3<float> basePosition;
 
         /**
          * @brief com pose from robot state
          */
-        Eigen::Matrix<float, 4, 1> baseOrientation;
+        Vec4<float> baseOrientation;
 
         /**
          * @brief com positon after ajusted in base frame
          */
-        Eigen::Matrix<float, 3, 1> comPosInBaseFrame;
+        Vec3<float> comPosInBaseFrame;
 
         /**
          * @brief com position after ajusted in world frame
          *
          */
-        Eigen::Matrix<float, 3, 1> comPosInWorldFrame;
+        Vec3<float> comPosInWorldFrame;
 
         /**
          * @brief the state of each leg from qrGaitGenerator class
          * e.g. SWING/STAND
          */
-        Eigen::Matrix<int, 4, 1> legState;
+        Vec4<int> legState;
 
         /**
          * @brief the relative phase for the desired state.
          */
-        Eigen::Matrix<float, 4, 1> normalizedLegPhase;
+        Vec4<float> normalizedLegPhase;
 
         /**
          * @brief the foot-end position from robot state in base frame
          */
-        Eigen::Matrix<float, 3, 4> footPosition;
+        Mat3x4<float> footPosition;
 
         /**
          * @brief the probability of foot end touching the ground(range:0.~1.)
@@ -128,7 +128,7 @@
          * @brief coordinates of each point in the support polygon
          * 
          */
-        Eigen::Matrix<float, 3, 4> supportPolygonVertices;
+        Mat3x4<float> supportPolygonVertices;
 
         /**
          * @brief used to caculate contactK and swingK

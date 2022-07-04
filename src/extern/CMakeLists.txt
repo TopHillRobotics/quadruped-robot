@@ -8,7 +8,7 @@ set(QuadProgpp_DIR ${PROJECT_SOURCE_DIR}/QuadProgpp)
 set(Tinynurbs_DIR ${PROJECT_SOURCE_DIR}/tinynurbs)
 
 catkin_package(
-   INCLUDE_DIRS "${TinyEKF_DIR}/src" "${QuadProgdpp_DIR}/src" "${Tinynurbs_DIR}/include"
+   INCLUDE_DIRS "${TinyEKF_DIR}/src" "${QuadProgpp_DIR}/src" "${Tinynurbs_DIR}/include"
    LIBRARIES TinyEKF quadprog tinynurbs
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
@@ -22,6 +22,9 @@ include_directories(
 )
 
 add_library(TinyEKF INTERFACE)
+target_link_libraries(TinyEKF
+   INTERFACE ${TinyEKF_DIR}/src/
+ )
 
 add_subdirectory(QuadProgpp)
 add_subdirectory(tinynurbs)

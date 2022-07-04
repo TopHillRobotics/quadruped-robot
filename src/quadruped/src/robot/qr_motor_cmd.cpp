@@ -27,36 +27,36 @@
 
 Eigen::Matrix<float, 5, 1> qrMotorCmd::ToEigenVector()
 {
-  Eigen::Matrix<float, 5, 1> cmd;
-  cmd << q, Kp, dq, Kd, tau;
-  return cmd;
+    Eigen::Matrix<float, 5, 1> cmd;
+    cmd << q, Kp, dq, Kd, tau;
+    return cmd;
 }
 
 std::array<float, 5> qrMotorCmd::ToArray() const
 {
-  std::array<float, 5> result;
-  result[0] = q;
-  result[1] = Kp;
-  result[2] = dq;
-  result[3] = Kd;
-  result[4] = tau;
-  return result;
+    std::array<float, 5> result;
+    result[0] = q;
+    result[1] = Kp;
+    result[2] = dq;
+    result[3] = Kd;
+    result[4] = tau;
+    return result;
 }
 
 void qrMotorCmd::SetCmd(float q, float Kp, float dq, float Kd, float tau)
 {
-  this->q   = q;
-  this->Kp  = Kp;
-  this->dq  = dq;
-  this->Kd  = Kd;
-  this->tau = tau;
+    this->q   = q;
+    this->Kp  = Kp;
+    this->dq  = dq;
+    this->Kd  = Kd;
+    this->tau = tau;
 }
 
 void qrMotorCmd::operator=(const qrMotorCmd &cmd)
 {
-  this->q   = cmd.q;
-  this->dq  = cmd.dq;
-  this->Kd  = cmd.Kd;
-  this->Kp  = cmd.Kp;
-  this->tau = cmd.tau;
+    this->q   = cmd.q;
+    this->dq  = cmd.dq;
+    this->Kd  = cmd.Kd;
+    this->Kp  = cmd.Kp;
+    this->tau = cmd.tau;
 }

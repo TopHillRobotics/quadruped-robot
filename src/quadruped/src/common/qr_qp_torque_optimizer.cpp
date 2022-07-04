@@ -26,17 +26,18 @@
 #include <Array.hh>
 
 #include "common/qr_qp_torque_optimizer.h"
+#include "common/qr_eigen_types.h"
 
 Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,
-                                              Eigen::Matrix<float, 3, 3> robotInertia,
+                                              Mat3<float> robotInertia,
                                               Eigen::Matrix<float, 4, 3> footPositions)
 {
-    Eigen::Matrix<float, 3, 3> I = Eigen::Matrix<float, 3, 3>::Identity(3, 3);
-    Eigen::Matrix<float, 3, 3> invMass;
-    Eigen::Matrix<float, 3, 3> invInertia; // in control frame
+    Mat3<float> I = Mat3<float>::Identity(3, 3);
+    Mat3<float> invMass;
+    Mat3<float> invInertia; // in control frame
     Eigen::Matrix<float, 6, 12> massMat = Eigen::Matrix<float, 6, 12>::Zero();
     Eigen::Matrix<float, 1, 3> x;
-    Eigen::Matrix<float, 3, 3> footPositionSkew;
+    Mat3<float> footPositionSkew;
 
     invMass = I / robotMass;
     invInertia = robotInertia.inverse();
@@ -52,7 +53,7 @@ Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,
     return massMat;
 }
 
-std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> ComputeConstraintMatrix(
+std::tuple<Eigen::Matrix<float, 12, 24>, Vec24<float>> ComputeConstraintMatrix(
     float mpcBodyMass,
     Vec4<bool> contacts,
     float frictionCoef,
@@ -64,7 +65,7 @@ std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> ComputeCon
     fMin = fMinRatio * mpcBodyMass * 9.8;
     fMax = fMaxRatio * mpcBodyMass * 9.8;
     Eigen::Matrix<float, 24, 12> A = Eigen::Matrix<float, 24, 12>::Zero();
-    Eigen::Matrix<float, 24, 1> lb = Eigen::Matrix<float, 24, 1>::Zero();
+    Vec24<float> lb = Vec24<float>::Zero();
 
     // constrains on normal component of friction
     for (int legId = 0; legId < 4; legId++) {
@@ -90,28 +91,28 @@ std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> ComputeCon
         A.block<1, 3>(rowId + 2, colId) <<  0,  1, frictionCoef;
         A.block<1, 3>(rowId + 3, colId) <<  0, -1, frictionCoef;
     }
-    std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> Alb(A.transpose(), lb);
+    std::tuple<Eigen::Matrix<float, 12, 24>, Vec24<float>> Alb(A.transpose(), lb);
     return Alb;
 }
 
-std::tuple<Eigen::Matrix<float, 12, 12>, Eigen::Matrix<float, 12, 1>> ComputeObjectiveMatrix(
+std::tuple<Mat12<float>, Vec12<float>> ComputeObjectiveMatrix(
     Eigen::Matrix<float, 6, 12> massMatrix,
     Vec6<float> desiredAcc,
     Vec6<float> accWeight,
     float regWeight,
     Vec6<float> g)
 {
-    Eigen::Matrix<float, 6, 6> Q = Eigen::Matrix<float, 6, 6>::Zero();
+    Mat6<float> Q = Mat6<float>::Zero();
     for (int i = 0; i < 6; ++i) {
         Q(i, i) = accWeight(i, 0);
     }
-    Eigen::Matrix<float, 12, 12> R = Eigen::Matrix<float, 12, 12>::Ones();
+    Mat12<float> R = Mat12<float>::Ones();
     R = R * regWeight;
-    Eigen::Matrix<float, 12, 12> quadTerm;
-    Eigen::Matrix<float, 12, 1> linearTerm;
+    Mat12<float> quadTerm;
+    Vec12<float> linearTerm;
     quadTerm = massMatrix.transpose() * Q * massMatrix + R;
     linearTerm = (g + desiredAcc).transpose() * Q * massMatrix;
-    std::tuple<Eigen::Matrix<float, 12, 12>, Eigen::Matrix<float, 12, 1>> quadLinear(quadTerm, linearTerm);
+    std::tuple<Mat12<float>, Vec12<float>> quadLinear(quadTerm, linearTerm);
     return quadLinear;
 }
 
@@ -121,7 +122,7 @@ Eigen::Matrix<float,12,12> ComputeWeightMatrix(qrRobot *robot, const Eigen::Matr
     return W;
 }
 
-Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
+Mat3x4<float> ComputeContactForce(qrRobot *robot,
                                                qrGroundSurfaceEstimator* groundEstimator,
                                                Vec6<float> desiredAcc,
                                                Vec4<bool> contacts,
@@ -148,20 +149,20 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
         fMaxRatio = fMaxRatio * cos(-controlFrameRPY[1]);
     }
     Mat3<float> inertia = rotMat * robot->GetRobotConfig()->GetBodyInertia() * rotMat.transpose();
-    Eigen::Matrix<float,3,4> footPosition = rotMat * robot->GetRobotState()->GetFootPositionInBaseFrame();
+    Mat3x4<float> footPosition = rotMat * robot->GetRobotState()->GetFootPositionInBaseFrame();
     Eigen::Matrix<float, 6, 12> massMatrix = ComputeMassMatrix(robot->GetRobotConfig()->GetBodyMass(), // compute in control frame or base frame, according to terrain.
                                                                inertia,
                                                                footPosition.transpose());
     
-    std::tuple<Eigen::Matrix<float, 12, 12>, Eigen::Matrix<float, 12, 1>> Ga;
+    std::tuple<Mat12<float>, Vec12<float>> Ga;
     Ga = ComputeObjectiveMatrix(massMatrix, desiredAcc, accWeight, regWeight, g);
-    Eigen::Matrix<float, 12, 12> G = std::get<0>(Ga);
+    Mat12<float> G = std::get<0>(Ga);
     Eigen::Matrix<float,12,12> W = ComputeWeightMatrix(robot, contacts);
     G = G + W;
-    Eigen::Matrix<float, 12, 1> a = std::get<1>(Ga);
-    std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> CI;
+    Vec12<float> a = std::get<1>(Ga);
+    std::tuple<Eigen::Matrix<float, 12, 24>, Vec24<float>> CI;
     Eigen::Matrix<float, 12, 24> Ci;
-    Eigen::Matrix<float, 24, 1> b;
+    Vec24<float> b;
     CI = ComputeConstraintMatrix(robot->GetRobotConfig()->GetBodyMass(), contacts, frictionCoef, fMinRatio, fMaxRatio);
     Ci = std::get<0>(CI);
     b = std::get<1>(CI);
@@ -216,9 +217,10 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
     return (X*rotMat).transpose(); // convert force to current base frame
 }
 
-Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
+
+Mat3x4<float> ComputeContactForce(qrRobot *robot,
                                                Vec6<float> desiredAcc,
-                                               Vec4<bool> contacts,
+                                               Eigen::Matrix<bool, 4, 1> contacts,
                                                Vec6<float> accWeight,
                                                Vec3<float> normal,
                                                Vec3<float> tangent1,
@@ -229,25 +231,26 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
                                                float frictionCoef)
 {
     Quat<float> quat = robot->GetRobotState()->GetBaseOrientation();
-    Eigen::Matrix<float,3,4> footPositionsInBaseFrame = robot->GetRobotState()->GetFootPositionInBaseFrame();
+    Mat3x4<float> footPositionsInBaseFrame = robot->GetRobotState()->GetFootPositionInBaseFrame();
     Mat3<float> rotMat = math::Quat2RotMat(quat);
-    Eigen::Matrix<float, 3, 4> footPositionsInCOMWorldFrame = math::InvertRigidTransform<float,4>({0.f,0.f,0.f},quat, footPositionsInBaseFrame);
+    Mat3x4<float> footPositionsInCOMWorldFrame = math::InvertRigidTransform<float,4>({0.f,0.f,0.f},quat, footPositionsInBaseFrame);
     Eigen::Matrix<float, 6, 12> massMatrix = ComputeMassMatrix(robot->GetRobotConfig()->GetBodyMass(),
                                                                robot->GetRobotConfig()->GetBodyInertia(),
                                                                footPositionsInCOMWorldFrame.transpose(),
                                                                rotMat);
-    std::tuple<Eigen::Matrix<float, 12, 12>, Eigen::Matrix<float, 12, 1>> Ga;
+
+    std::tuple<Mat12<float>, Vec12<float>> Ga;
     Vec6<float> g = Vec6<float>::Zero();
     g(2, 0) = 9.8;
     Ga = ComputeObjectiveMatrix(massMatrix, desiredAcc, accWeight, regWeight, g);
-    Eigen::Matrix<float, 12, 12> G = std::get<0>(Ga);
+    Mat12<float> G = std::get<0>(Ga);
     Eigen::Matrix<float,12,12> W = ComputeWeightMatrix(robot, contacts);
     G = G + W;
-    Eigen::Matrix<float, 12, 1> a = std::get<1>(Ga);
+    Vec12<float> a = std::get<1>(Ga);
     
-    std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> CI;
+    std::tuple<Eigen::Matrix<float, 12, 24>, Vec24<float>> CI;
     Eigen::Matrix<float, 12, 24> Ci;
-    Eigen::Matrix<float, 24, 1> b;
+    Vec24<float> b;
     CI = ComputeConstraintMatrix(robot->GetRobotConfig()->GetBodyMass(), contacts, frictionCoef, fMinRatio, fMaxRatio, normal, tangent1, tangent2);
     Ci = std::get<0>(CI);
     b = std::get<1>(CI);
@@ -303,16 +306,16 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
 }
 
 Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,
-                                                Eigen::Matrix<float, 3, 3> robotInertia,
+                                                Mat3<float> robotInertia,
                                                 Eigen::Matrix<float, 4, 3> footPositions,
                                                 Mat3<float> rotMat)
 {
-    Eigen::Matrix<float, 3, 3> I = Eigen::Matrix<float, 3, 3>::Identity(3, 3);
-    Eigen::Matrix<float, 3, 3> invMass;
-    Eigen::Matrix<float, 3, 3> invInertiaInWorld;
+    Mat3<float> I = Mat3<float>::Identity(3, 3);
+    Mat3<float> invMass;
+    Mat3<float> invInertiaInWorld;
     Eigen::Matrix<float, 6, 12> massMat = Eigen::Matrix<float, 6, 12>::Zero();
     Eigen::Matrix<float, 1, 3> x;
-    Eigen::Matrix<float, 3, 3> footPositionSkew;
+    Mat3<float> footPositionSkew;
 
     invMass = I / robotMass;
     Mat3<float> robotInertiaInWorld = rotMat * robotInertia * rotMat.transpose();
@@ -329,7 +332,7 @@ Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,
     return massMat;
 }
 
-std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> ComputeConstraintMatrix(
+std::tuple<Eigen::Matrix<float, 12, 24>, Vec24<float>> ComputeConstraintMatrix(
     float mpcBodyMass,
     Vec4<bool> contacts,
     float frictionCoef,
@@ -340,7 +343,7 @@ std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> ComputeCon
     Vec3<float> tangent2)
 { 
     Eigen::Matrix<float, 24, 12> A = Eigen::Matrix<float, 24, 12>::Zero();
-    Eigen::Matrix<float, 24, 1> lb = Eigen::Matrix<float, 24, 1>::Zero();
+    Vec24<float> lb = Vec24<float>::Zero();
 
     for (int legId = 0; legId < 4; legId++) {
         A.block<1,3>(legId*2, legId*3) = normal;
@@ -365,6 +368,6 @@ std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> ComputeCon
         A.block<1, 3>(rowId + 2, colId) << (frictionCoef*normal + tangent2).transpose();
         A.block<1, 3>(rowId + 3, colId) << (frictionCoef*normal - tangent2).transpose();
     }
-    std::tuple<Eigen::Matrix<float, 12, 24>, Eigen::Matrix<float, 24, 1>> Alb(A.transpose(), lb);
+    std::tuple<Eigen::Matrix<float, 12, 24>, Vec24<float>> Alb(A.transpose(), lb);
     return Alb;
 }

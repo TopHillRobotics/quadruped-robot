@@ -31,7 +31,7 @@
 #include <Eigen/Dense>
 #include <ros/ros.h>
 #include <unitree_legged_msgs/GaitParameter.h>
-
+#include "common/qr_eigen_types.h"
 /**
  * @brief  A qrGaitParamReceiver object receives the gait parameters from ROS topic when a gait updates.
  */
@@ -62,27 +62,27 @@ class qrGaitParamReceiver {
 
         /**
          * @brief Get the stance duration.
-         * @return Eigen::Matrix<float, 4, 1>: stanceDuration   
+         * @return Vec4<float>: stanceDuration
          */
-        Eigen::Matrix<float, 4, 1> GetStanceDuration();
+        Vec4<float> GetStanceDuration();
 
         /**
          * @brief Get the duty factor.
-         * @return Eigen::Matrix<float, 4, 1>: dutyFactor  
+         * @return Vec4<float>: dutyFactor
          */
-        Eigen::Matrix<float, 4, 1> GetDutyFactor();
+        Vec4<float> GetDutyFactor();
 
         /**
         * @brief Get the state of each leg at the initialization.
-        * @return Eigen::Matrix<float, 4, 1>: initialLegState  
+        * @return Vec4<float>: initialLegState
         */
-        Eigen::Matrix<int, 4, 1> GetInitialLegState();
+        Vec4<int> GetInitialLegState();
 
         /**
         * @brief Get the relative phase of each leg at the initialization.
-        * @return Eigen::Matrix<float, 4, 1>: initialLegPhase  
+        * @return Vec4<float>: initialLegPhase
         */
-        Eigen::Matrix<float, 4, 1> GetInitialLegPhase();
+        Vec4<float> GetInitialLegPhase();
         
         /**
         * @brief Get the threshold for switching from SWING to STANCE using contact detection.
@@ -113,10 +113,10 @@ class qrGaitParamReceiver {
         bool flag = false;
 
         std::string gaitName;
-        Eigen::Matrix<float, 4, 1>  stanceDuration;
-        Eigen::Matrix<float, 4, 1>  dutyFactor;
-        Eigen::Matrix<int, 4, 1>    initialLegState;
-        Eigen::Matrix<float, 4, 1>  initialLegPhase;
+        Vec4<float>  stanceDuration;
+        Vec4<float>  dutyFactor;
+        Vec4<int>    initialLegState;
+        Vec4<float>  initialLegPhase;
         float contactDetectionPhaseThreshold=0.1f;
 };
 #endif //QR_GAIT_PARAM_RECEIVER_H

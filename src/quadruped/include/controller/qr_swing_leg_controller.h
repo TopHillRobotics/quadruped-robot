@@ -98,9 +98,9 @@ public:
      * @return the desired foot position (x,y,z) at the current swing phase. 
      */
     Vec3<float> GenerateSwingFootTrajectory(float phase,
-                                                           Vec3<float> startPos,
-                                                           Vec3<float> endPos,
-                                                           float clearance=0.1);
+                                            Vec3<float> startPos,
+                                            Vec3<float> endPos,
+                                            float clearance=0.1);
 
     /** @brief Compute all motors' commands using this controller.
      *  @return tuple<map, Matrix<3,4>> : 
@@ -121,7 +121,7 @@ public:
      */
     inline void SetDesiredSpeed(Vec3<float> linSpeed, float angSpeed)
     {
-        this->desiredSpeed = linSpeed;
+        this->desiredLinearSpeed = linSpeed;
         this->desiredTwistingSpeed = angSpeed;
     }
 
@@ -192,17 +192,17 @@ private:
     /**
      * @brief Foot positions in the base frame when the leg state changes.
      */
-    Eigen::Matrix<float, 3, 4> phaseSwitchFootLocalPos;
+    Mat3x4<float> phaseSwitchFootLocalPos;
 
     /**
      * @brief Foot positions in the world frame when the leg state changes.
      */
-    Eigen::Matrix<float, 3, 4> phaseSwitchFootGlobalPos;
+    Mat3x4<float> phaseSwitchFootGlobalPos;
 
     /**
      * @brief the footholds in the world frame.
      */
-    Eigen::Matrix<float, 3, 4> footHoldInWorldFrame;
+    Mat3x4<float> footHoldInWorldFrame;
 
     /**
      * @brief The trajectories of each leg.

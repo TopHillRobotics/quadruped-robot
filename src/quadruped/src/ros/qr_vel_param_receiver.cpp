@@ -32,11 +32,11 @@ qrVelocityParamReceiver::qrVelocityParamReceiver(ros::NodeHandle &nhIn)
 }
 
 
-Eigen::Matrix<float, 3, 1> qrVelocityParamReceiver::GetLinearVelocity() {
+Vec3<float> qrVelocityParamReceiver::GetLinearVelocity() {
     return linearVel;
 }
 
-Eigen::Matrix<float, 3, 1> qrVelocityParamReceiver::GetAngularVelocity() {
+Vec3<float> qrVelocityParamReceiver::GetAngularVelocity() {
     return angularVel;
 }
 

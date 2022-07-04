@@ -34,6 +34,7 @@
 #include <geometry_msgs/Pose.h>
 
 #include "common/qr_types.h"
+#include "common/qr_eigen_types.h"
 
 /**
  * @brief A qrVelocityParamReceiver object recieves the velocity parameters from a ROS topic when a gait updates
@@ -60,15 +61,15 @@ class qrVelocityParamReceiver {
 
         /**
         * @brief Get the linear velocity.
-        * @return Eigen::Matrix<float, 3, 1>: linearVel  
+        * @return Vec3<float>: linearVel  
         */
-        Eigen::Matrix<float, 3, 1> GetLinearVelocity();
+        Vec3<float> GetLinearVelocity();
 
        /**
         * @brief Get the angular velocity.
-        * @return Eigen::Matrix<float, 3, 1>: angularVel  
+        * @return Vec3<float>: angularVel  
         */
-        Eigen::Matrix<float, 3, 1> GetAngularVelocity();
+        Vec3<float> GetAngularVelocity();
 
         /**
         * @brief Get the angular velocity.
@@ -83,8 +84,8 @@ class qrVelocityParamReceiver {
         std::string velParamTopic = "/velocity_param";
 
     private:
-        Eigen::Matrix<float, 3, 1> linearVel = Eigen::Matrix<float, 3, 1>::Zero();
-        Eigen::Matrix<float, 3, 1> angularVel = Eigen::Matrix<float, 3, 1>::Zero();
+        Vec3<float> linearVel = Vec3<float>::Zero();
+        Vec3<float> angularVel = Vec3<float>::Zero();
 
 };
 #endif //QR_VEL_PARAM_RECEIVER_H

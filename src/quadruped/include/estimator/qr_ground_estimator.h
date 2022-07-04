@@ -25,6 +25,7 @@
 #ifndef QR_GROUND_ESTIMATOR_H
 #define QR_GROUND_ESTIMATOR_H
 
+#include "common/qr_eigen_types.h"
 #include "common/qr_se3.h"
 #include "robot/qr_robot.h"
 
@@ -174,7 +175,7 @@ public:
      * @brief three direction vectors present in world frame when compute the GRF
      * @return A 3*3 matrix of three (x,y,z) direction vectors.
      */
-    Eigen::Matrix<float, 3, 3> GetAlignedDirections();
+    Mat3<float> GetAlignedDirections();
 
     /**
      * @brief Get the orientation in control frame.

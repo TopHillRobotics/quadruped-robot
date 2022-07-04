@@ -38,13 +38,13 @@
         /**
          * @brief only be called at the moment right before lift up legs.
          */
-        void UpdateOnce(Eigen::Matrix<float, 3, 4> currentFootholds, std::vector<int> legIds={});
+        void UpdateOnce(Mat3x4<float> currentFootholds, std::vector<int> legIds={});
 
         /**
          * @brief compute desired foot-end position delta in position mode
          * @param currentFootholds current foot-end position of all the leg
          */
-        void ComputeFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds);
+        void ComputeFootholdsOffset(Mat3x4<float> currentFootholds);
 
         /**
          * @brief compute desired foot-end position in walk mode
@@ -53,15 +53,15 @@
          * @param desiredComPose desired com postion and pose
          * @param legIds the order of legs
          */
-        void ComputeNextFootholds(Eigen::Matrix<float, 3, 4>& currentFootholds,
-                                  Eigen::Matrix<float, 6, 1>& currentComPose,
-                                  Eigen::Matrix<float, 6, 1>& desiredComPose,
+        void ComputeNextFootholds(Mat3x4<float>& currentFootholds,
+                                  Vec6<float>& currentComPose,
+                                  Vec6<float>& desiredComPose,
                                   std::vector<int>& legIds);
         
         /**
          * @brief get desired com position and rpy
          */
-        inline const Eigen::Matrix<float, 6, 1> &GetDesiredComPose() const
+        inline const Vec6<float> &GetDesiredComPose() const
         {
             return desiredComPose;
         }
@@ -70,7 +70,7 @@
          * @brief get desired foot-end position delta
          * i.e. currentFootholds + desiredFootholdsOffset = desiredFootholds
          */
-        inline const Eigen::Matrix<float, 3, 4> &GetFootholdsOffset() const
+        inline const Mat3x4<float> &GetFootholdsOffset() const
         {
             return desiredFootholdsOffset;
         }
@@ -78,7 +78,7 @@
         /**
          * @brief get desired com position and rpy
          */
-        inline Eigen::Matrix<float, 6, 1> GetComGoal(Eigen::Matrix<float, 6, 1> currentComPose)
+        inline Vec6<float> GetComGoal(Vec6<float> currentComPose)
         {
             desiredComPose << 0.f, 0.f, 0.f, 0.f, 0.f, 0.f;
             return desiredComPose;
@@ -135,21 +135,21 @@
         /**
          * @brief current com position and rpy
          */
-        Eigen::Matrix<float, 6, 1> comPose;
+        Vec6<float> comPose;
 
         /**
          * @brief desired com position and rpy
          */
-        Eigen::Matrix<float, 6, 1> desiredComPose;
+        Vec6<float> desiredComPose;
 
         /**
          * @brief desired foot-end position delta for position mode
          */
-        Eigen::Matrix<float, 3, 4> desiredFootholdsOffset;
+        Mat3x4<float> desiredFootholdsOffset;
 
         /**
          * @brief desired foot-end position for walk mode 
          */
-        Eigen::Matrix<float, 3, 4> desiredFootholds;
+        Mat3x4<float> desiredFootholds;
     };
 #endif // QR_FOOTHOLD_PLANNER_H_

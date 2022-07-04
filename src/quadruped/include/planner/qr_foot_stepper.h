@@ -46,14 +46,14 @@
 
         void Reset(float timeSinceReset) {}
 
-        inline Eigen::Matrix<float, 3, 1> GetDefaultFootholdOffset(int legId)
+        inline Vec3<float> GetDefaultFootholdOffset(int legId)
         {
             return {defaultFootholdDelta, 0.f, 0.f};
         }
 
         /**
          * @brief Find a optimal foot placement for swing legs, usually larger then zero.
-         * @param Eigen::Matrix<float, 3, 4> feet positions in world frame when all stance at ground.
+         * @param Mat3x4 feet positions in world frame when all stance at ground.
          * @note Assuming that foot offset L = L0 + x, gap width is W,
          * the cost objective is F = x^T * G * x + a^T * x = x^2,
          * this means we want the increment for default offset to be small.
@@ -64,7 +64,7 @@
          * This means the front leg either (1.a)walk through the gap or (1.b)not, respectively.
          * At the mean time, the back legs do not walk over the gap.
          */
-        Eigen::Matrix<float, 3, 4> GetOptimalFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds);
+        Mat3x4<float> GetOptimalFootholdsOffset(Mat3x4<float> currentFootholds);
 
         /**
          * @brief compute desired foot-end position in walk mode
@@ -73,10 +73,10 @@
          * @param desiredComPose desired com postion and pose
          * @param legIds the order of legs
          */
-        std::tuple<Eigen::Matrix<float,3,4>, Eigen::Matrix<float,3,4>> GetFootholdsInWorldFrame(
-                                                        Eigen::Matrix<float, 3, 4>& currentFootholds,
-                                                        Eigen::Matrix<float, 6, 1>& currentComPose,
-                                                        Eigen::Matrix<float, 6, 1>& desiredComPose,
+        std::tuple<Mat3x4<float>, Mat3x4<float>> GetFootholdsInWorldFrame(
+                                                        Mat3x4<float>& currentFootholds,
+                                                        Vec6<float>& currentComPose,
+                                                        Vec6<float>& desiredComPose,
                                                         std::vector<int>& legIds);
         /**
          * @brief Find a optimal placement for swing legs, and check it.
@@ -134,7 +134,7 @@
         /**
          * @brief the foot-end position delta for the next step
          */
-        Eigen::Matrix<float, 3, 4> nextFootholdsOffset;
+        Mat3x4<float> nextFootholdsOffset;
 
         /**
          * @brief offset along Z-axis
