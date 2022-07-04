@@ -200,14 +200,22 @@ public:
      */
     Vec3<float> ContactForce2JointTorque(Vec3<float> contractForce, int legId);
 
-    inline Eigen::Matrix<bool, 4, 1> GetFootContact() const
+    inline Vec4<float> GetFootContact() const
     {
+        for (int footId = 0; footId < qrRobotConfig::numLegs; footId++) {
+            if (footForce[footId] > 5) {
+                footContact[footId] = true;
+            } else {
+                footContact[footId] = false;
+            }
+        }
         return footContact;
     }
 
     inline Vec3<float> GetBasePosition() const{
         return basePosition;
     }
+
 
     void operator=(const qrRobotState &robotState);
 
@@ -232,7 +240,7 @@ private:
     /**
      * @brief the contact status of 4 foot
      */
-    Eigen::Matrix<bool, 4, 1> footContact;
+    mutable Vec4<bool> footContact;
 
     // TODO: check this
     Vec3<float> basePosition;
