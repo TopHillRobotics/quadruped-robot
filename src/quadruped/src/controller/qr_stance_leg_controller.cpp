@@ -34,7 +34,6 @@ qrStanceLegController::
                          qrFootholdPlanner *footholdPlanner,
                          Vec3<float> desired_speed,
                          float desiredTwistingSpeed,
-                         float desiredBodyHeight,
                          std::string configFilepath)
     : robot(robot),
       gaitGenerator(gaitGenerator),
@@ -44,12 +43,12 @@ qrStanceLegController::
       footholdPlanner(footholdPlanner),
       desiredSpeed(desired_speed),
       desiredTwistingSpeed(desiredTwistingSpeed),
-      desiredBodyHeight(desiredBodyHeight),
       configFilepath(configFilepath)
 {
     this->Reset(0.f);
     this->robotConfig = this->robot->GetRobotConfig();
     this->robotState = this->robot->GetRobotState();
+    this->desiredBodyHeight = this->robotConfig->GetDesiredBodyHeight();
 }
 
 void qrStanceLegController::Reset(float currentTime)

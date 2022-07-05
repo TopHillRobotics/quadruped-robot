@@ -50,10 +50,8 @@ public:
     /** 
      * @brief Constructor of qrLocomotionController.
      * @param robot The robot object pointer.
-     * @param homeDir the file path of this project.
-     * @param robotName the name of the robot.
      */
-    qrLocomotionController(qrRobot *robot, std::string homeDir, std::string robotName);
+    qrLocomotionController(qrRobot *robot);
 
     ~qrLocomotionController() = default;
 
@@ -79,7 +77,11 @@ public:
      * @param linSpeed The desired linear speed.
      * @param angSpeed The desired angular speed.
      */
-    void UpdateDesiredSpeed(Vec3<float> linSpeed, float angSpeed);
+    inline void UpdateDesiredSpeed(Vec3<float> linSpeed, float angSpeed)
+    {
+        this->swingLegController->SetDesiredSpeed(linSpeed, angSpeed);
+        this->stanceLegController->SetDesiredSpeed(linSpeed, angSpeed);
+    }
 
     /** 
      * @brief Compute all motors' commands via subcontrollers.

@@ -24,10 +24,7 @@
 
 #include "controller/qr_locomotion_controller.h"
 
-qrLocomotionController::qrLocomotionController(qrRobot *robotIn,
-                                               std::string homeDir,
-                                               std::string robotName)
-    : robot(robotIn)
+qrLocomotionController::qrLocomotionController(qrRobot *robotIn) : robot(robotIn)
 {
     this->resetTime = robot->GetTimeSinceReset();
     this->timeSinceReset = 0.f;
@@ -61,7 +58,6 @@ void qrLocomotionController::Initialization(std::string homeDir, std::string rob
                                                         this->groundEstimator,
                                                         this->desiredSpeed,
                                                         this->desiredTwistingSpeed,
-                                                        this->robotConfig->GetBodyHeight(),
                                                         0.01f,
                                                         homeDir + "config/" + robotName
                                                             + "/swing_leg_controller.yaml");
@@ -75,7 +71,6 @@ void qrLocomotionController::Initialization(std::string homeDir, std::string rob
                                                           this->footholdPlanner,
                                                           this->desiredSpeed,
                                                           this->desiredTwistingSpeed,
-                                                          this->robotConfig->GetBodyHeight(),
                                                           homeDir + "config/" + robotName
                                                               + "/stance_leg_controller.yaml");
 
@@ -148,12 +143,6 @@ void qrLocomotionController::Update()
     this->stanceLegController->Update();
 }
 
-void qrLocomotionController::UpdateDesiredSpeed(Vec3<float> linSpeed, float angSpeed)
-{
-    this->swingLegController->SetDesiredSpeed(linSpeed, angSpeed);
-    this->stanceLegController->SetDesiredSpeed(linSpeed, angSpeed);
-}
-
 std::tuple<std::vector<qrMotorCmd>, Mat3x4<float>> qrLocomotionController::GetAction()
 {
     this->action.clear();
@@ -162,7 +151,7 @@ std::tuple<std::vector<qrMotorCmd>, Mat3x4<float>> qrLocomotionController::GetAc
     auto [stanceAction, qpSol] = this->stanceLegController->GetAction(); // map<int, MotorCommand>
     std::vector<qrMotorCmd> action;
     // copy motors' actions from subcontrollers to output variable.         
-    for (int joint_id = 0; joint_id < qrRobotConfig::dofPerLeg; ++joint_id) {
+    for (int joint_id = 0; joint_id < qrRobotConfig::numMotor; ++joint_id) {
         auto it = swingAction.find(joint_id);
         if (it != swingAction.end()) {
             this->action.push_back(it->second);
@@ -179,7 +168,7 @@ std::tuple<std::vector<qrMotorCmd>, Mat3x4<float>> qrLocomotionController::GetFa
     Mat3x4<float> qpSol = Mat3x4<float>::Zero();
     std::vector<qrMotorCmd> action;
     // copy motors' actions from subcontrollers to output variable.         
-    for (int joint_id = 0; joint_id < qrRobotConfig::dofPerLeg; ++joint_id) {
+    for (int joint_id = 0; joint_id < qrRobotConfig::numMotor; ++joint_id) {
         this->action.push_back({0,0,0,0,0});
     }
     return {action, qpSol};
