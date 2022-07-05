@@ -48,7 +48,6 @@ public:
      * @param FootholdPlanner The foothold planner
      * @param desiredLinearSpeed The desired linear velocity
      * @param desiredTwistingSpeed The desired angular velocity
-     * @param desiredHeight The desired body height of the robot.
      * @param footClearance 
      * @param configPath The config file path
      */
@@ -58,7 +57,6 @@ public:
                          qrGroundSurfaceEstimator *groundEstimator,
                          Vec3<float> desiredLinearSpeed,
                          float desiredTwistingSpeed,
-                         float desiredHeight,
                          float footClearance,
                          std::string configPath);
 

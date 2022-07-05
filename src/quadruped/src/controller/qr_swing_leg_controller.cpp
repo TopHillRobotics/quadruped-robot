@@ -32,7 +32,6 @@ qrSwingLegController::qrSwingLegController(qrRobot *robot,
                                            qrGroundSurfaceEstimator *groundEstimator,
                                            Vec3<float> desiredLinearSpeed,
                                            float desiredTwistingSpeed,
-                                           float desiredHeight,
                                            float footClearance,
                                            std::string configPath)
     : gaitGenerator(gaitGenerator),
@@ -44,7 +43,7 @@ qrSwingLegController::qrSwingLegController(qrRobot *robot,
 {
     this->robotState = robot->GetRobotState();
     this->robotConfig = robot->GetRobotConfig();
-    this->desiredHeight = Vec3<float>(0, 0, desiredHeight - footClearance);
+    this->desiredHeight = Vec3<float>(0, 0, this->robotConfig->GetBodyHeight() - footClearance);
     YAML::Node swingLegConfig = YAML::LoadFile(configPath);
     this->footInitPose = swingLegConfig["swing_leg_params"]["foot_in_world"].as<std::vector<std::vector<float>>>();
 }
@@ -289,7 +288,7 @@ std::map<int, qrMotorCmd> qrSwingLegController::GetAction()
                 footTargetPosition = dR.transpose() * (hipHorizontalVelocity * this->gaitGenerator->stanceDuration[legId] / 2.0 -
                     swingKp.cwiseProduct(targetHipHorizontalVelocity - hipHorizontalVelocity))
                         + Vec3<float>(hipOffset[0], hipOffset[1], 0)
-                        - math::TransformVecByQuat(math::QuatInverse(this->robotState->GetBaseOrientation()), desiredHeight);
+                        - math::TransformVecByQuat(math::QuatInverse(this->robotState->GetBaseOrientation()), this->desiredHeight);
                 footPositionInBaseFrame = GenerateSwingFootTrajectory(this->gaitGenerator->normalizedLegPhase[legId],
                                                                  this->phaseSwitchFootLocalPos.col(legId),
                                                                  footTargetPosition);
