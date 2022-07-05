@@ -57,7 +57,6 @@ public:
      * @param footholdPlanner The foothold planner object pointer.
      * @param desired_speed The robot desired speed in velocity control.
      * @param desiredTwistingSpeed The robot desired twisting speed in velocity control.
-     * @param desiredBodyHeight The desired body height of robot.
      * @param configFilepath The stance leg config file path.
      */
     qrStanceLegController(qrRobot *robot,
@@ -68,7 +67,6 @@ public:
                           qrFootholdPlanner *footholdPlanner,
                           Vec3<float> desired_speed,
                           float desiredTwistingSpeed,
-                          float desiredBodyHeight,
                           std::string configFilepath);
 
     virtual ~qrStanceLegController();
