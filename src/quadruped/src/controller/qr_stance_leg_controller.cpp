@@ -48,7 +48,7 @@ qrStanceLegController::
     this->Reset(0.f);
     this->robotConfig = this->robot->GetRobotConfig();
     this->robotState = this->robot->GetRobotState();
-    this->desiredBodyHeight = this->robotConfig->GetDesiredBodyHeight();
+    this->desiredBodyHeight = this->robotConfig->GetBodyHeight();
 }
 
 void qrStanceLegController::Reset(float currentTime)
