@@ -29,8 +29,9 @@ qrRobot::~qrRobot()
 
 std::array<qrMotorCmd, 12> qrRobot::GetCmd()
 {
-    return cmds;
+  return cmds;
 }
+
 
 void qrRobot::SetCmd(const Eigen::MatrixXf &motorCmdValues, MotorMode mode)
 {
@@ -73,6 +74,18 @@ void qrRobot::SetHybridCmd(const Eigen::Matrix<float, 5, 12> &cmdValues)
     for (unsigned int i = 0; i < qrRobotConfig::numMotor; i++) {
         cmds[i].SetCmd(cmdValues(0, i), cmdValues(1, i), cmdValues(2, i), cmdValues(3, i), cmdValues(4, i));
     }
+}
+
+void qrRobot::ApplyAction(const std::array<qrMotorCmd, 12> cmd)
+{
+  SetCmd(cmd);
+  SendCmd();
+}
+
+void qrRobot::ApplyAction(const Eigen::MatrixXf &motorCmdValues, MotorMode mode)
+{
+  SetCmd(motorCmdValues, mode);
+  SendCmd();
 }
 
 
