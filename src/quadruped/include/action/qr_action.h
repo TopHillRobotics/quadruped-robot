@@ -38,7 +38,7 @@
  * @param totalTime total time spent standing and keeping stand, i.e. totalTime >= standUpTime
  * @param timeStep time spent per action execution
  */
-void StandUp(qRobot *robot, float standUpTime, float totalTime, float timeStep);
+void StandUp(qrRobot *robot, float standUpTime, float totalTime, float timeStep);
 
 /**
  * @brief control the robot to sit down
@@ -46,6 +46,6 @@ void StandUp(qRobot *robot, float standUpTime, float totalTime, float timeStep);
  * @param sitDownTime total time spent sit down
  * @param timeStep time spent per action execution
  */
-void SitDown(qRobot *robot, float sitDownTime, float timeStep);
+void SitDown(qrRobot *robot, float sitDownTime, float timeStep);
         
 #endif //QR_ACTION_H

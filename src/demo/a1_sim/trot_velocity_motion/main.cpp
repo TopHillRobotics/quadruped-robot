@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 
     qrRobot *quadruped = new qrRobotA1Sim(nh, privateNh, homeDir + robotName + "a1_sim.yaml");
     StandUp(quadruped, 3.f, 5.f, 0.001);
-    qrLocomotionController *locomotionController = new qrLocomotionController(quadruped,homeDir,robotName);
+    qrLocomotionController *locomotionController = new qrLocomotionController(quadruped);
     locomotionController->Initialization(homeDir,robotName);
     locomotionController->Reset();
     locomotionController->UpdateDesiredSpeed({0.,0.,0.}, 0.);
