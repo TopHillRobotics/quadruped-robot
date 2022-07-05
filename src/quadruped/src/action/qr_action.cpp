@@ -51,7 +51,7 @@ void StandUp(qrRobot *robot, float standUpTime, float totalTime, float timeStep)
     std::cout << "---------------------Stand Up Finished---------------------" << std::endl;
 }
 
-SitDown(qRobot *robot, float sitDownTime, float timeStep) {
+void SitDown(qrRobot *robot, float sitDownTime, float timeStep) {
     float startTime = robot->GetTimeSinceReset();
     float endTime = startTime + sitDownTime;
     Eigen::Matrix<float, 12, 1> motorAnglesBeforeSitDown = robot->q;
