@@ -83,13 +83,13 @@ public:
      */
     std::array<qrMotorCmd, 12> GetCmd();
 
+    //TODO: change this
     /**
      * @brief setCmd config the cmds
      * @param motorCmdValues: values needed to config cmds
      * @param mode: control mode the the motorCmdValues
      */
     void SetCmd(const Eigen::MatrixXf &motorCmdValues, MotorMode mode);
-
     /**
      * @brief setCmd config the cmds
      * @param cmd: command vector
@@ -160,6 +160,11 @@ public:
     inline void SetStop(bool b){
         stop = b;
     }
+
+    void ApplyAction(const std::array<qrMotorCmd, 12> cmd);
+
+    void ApplyAction(const Eigen::MatrixXf &motorCmdValues, MotorMode mode);
+
 protected:
 
     /**
