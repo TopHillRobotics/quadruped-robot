@@ -39,21 +39,20 @@
 #include <controller_manager_msgs/SwitchController.h>
 #include <controller_manager_msgs/ControllerState.h>
 
+
 /**
  * @brief init simulation controllers
  * @param nodeHandle
  * @param serviceName
- * @param controllersToStart List of controllers to be activated
  */
-bool startControllers(ros::NodeHandle &nodeHandle, std::string serviceName, std::vector<std::string> &controllersToStart);
+bool startControllers(ros::NodeHandle &nodeHandle, std::string serviceName);
 
 /**
  * @brief stop simulation controllers
  * @param nodeHandle
  * @param serviceName
- * @param controllersToStart List of controllers to be deactivated
  */
-bool stopControllers(ros::NodeHandle &nodeHandle, std::string serviceName, std::vector<std::string> &controllersToStop);
+bool stopControllers(ros::NodeHandle &nodeHandle, std::string serviceName);
 
 /**
  * @brief restart simultion by system command

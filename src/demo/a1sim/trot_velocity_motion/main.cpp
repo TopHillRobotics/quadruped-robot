@@ -40,23 +40,23 @@ int main(int argc, char **argv)
     std::string pathToPackage = ros::package::getPath("path");
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
 
-    YAML::Node motionConfig = YAML::LoadFile(pathToNode + "config/motion_config.yaml");
-    int twistMode = motionConfig["speed_update_mode"].as<int>();
-    std::vector<float> linearVel = motionConfig["const_twist"]["linear"].as<std::vector<float >>();
-    auto desiredSpeed = Eigen::MatrixXf::Map(&linearVel[0], 3, 1);
-    auto desiredTwistingSpeed = motionConfig["const_twist"]["angular"].as<float>();
-    std::vector<std::string> controllerList = motionConfig["controllerList"].as<std::vector<std::string>>();
+    // YAML::Node motionConfig = YAML::LoadFile(pathToNode + "config/motion_config.yaml");
+    // int twistMode = motionConfig["speed_update_mode"].as<int>();
+    // std::vector<float> linearVel = motionConfig["const_twist"]["linear"].as<std::vector<float >>();
+    // auto desiredSpeed = Eigen::MatrixXf::Map(&linearVel[0], 3, 1);
+    // auto desiredTwistingSpeed = motionConfig["const_twist"]["angular"].as<float>();
+    // std::vector<std::string> controllerList = motionConfig["controllerList"].as<std::vector<std::string>>();
 
-    std::cout << "---------Yaml Config Motion Load Finished---------" << std::endl;
+    // std::cout << "---------Yaml Config Motion Load Finished---------" << std::endl;
 
-    stopControllers(nh, "/a1_gazebo/controller_manager/switch_controller", controllerList);
+    stopControllers(nh, "/a1_gazebo/controller_manager/switch_controller");
     ros::ServiceClient modelStateClient = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
     ros::ServiceClient jointStateClient = nh.serviceClient<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
     ResetRobotByService(modelStateClient, jointStateClient);
-    startControllers(nh, "/a1_gazebo/controller_manager/switch_controller", controllerList);
+    startControllers(nh, "/a1_gazebo/controller_manager/switch_controller");
     ros::AsyncSpinner spinner(1); // one threads
     spinner.start();
-
+    
     std::cout << "---------Ros Node Init Finished---------" << std::endl;
 
 
@@ -77,18 +77,15 @@ int main(int argc, char **argv)
     while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS) {
         startTimeWall = quadruped->GetTimeSinceReset();
       
-        if (twistMode == TwistMode::ROS) {
-            desiredSpeed = cmdVelReceiver->GetLinearVelocity();
-            desiredTwistingSpeed = cmdVelReceiver->GetAngularVelocity();
-        }
-
+        desiredSpeed = cmdVelReceiver->GetLinearVelocity();
+        desiredTwistingSpeed = cmdVelReceiver->GetAngularVelocity();
+  
         locomotionController->UpdateDesiredSpeed(desiredSpeed,desiredTwistingSpeed);
         locomotionController->Update();
 
         quadruped->Observation();
         auto [hybridAction, qpSol] = locomotionController->GetAction();
         quadruped->ApplyAction(MotorCommand::convertToMatix(hybridAction), MotorMode::HYBRID);
-
 
         currentTime = quadruped->GetTimeSinceReset();
         if (abs(quadruped->GetRpy[0]) > 0.5f || abs(quadruped->GetRpy[1]) > 0.5f) {

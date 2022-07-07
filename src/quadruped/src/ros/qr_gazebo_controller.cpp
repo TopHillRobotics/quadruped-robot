@@ -24,11 +24,17 @@
 
 #include "ros/qr_gazebo_controller.h"
 
-bool startControllers(ros::NodeHandle &nodeHandle, std::string serviceName, std::vector<std::string> &controllersToStart) {
 
+static const std::vector<std::string> controllerList = {"joint_state_controller", "FL_hip_controller", "FL_thigh_controller",
+                                                            "FL_calf_controller", "FR_hip_controller", "FR_thigh_controller",
+                                                            "FR_calf_controller", "RL_hip_controller", "RL_thigh_controller",
+                                                            "RL_calf_controller", "RR_hip_controller", "RR_thigh_controller",
+                                                            "RR_calf_controller"};
+
+bool startControllers(ros::NodeHandle &nodeHandle, std::string serviceName) {
     ros::ServiceClient switchController = nodeHandle.serviceClient<controller_manager_msgs::SwitchController>(serviceName);
     controller_manager_msgs::SwitchController switchControllerMsg;
-    switchControllerMsg.request.start_controllers = controllersToStart;
+    switchControllerMsg.request.start_controllers = controllerList;
     switchControllerMsg.request.strictness = switchControllerMsg.request.STRICT;
     ros::service::waitForService(serviceName, -1);
     switchController.call(switchControllerMsg);
@@ -42,11 +48,11 @@ bool startControllers(ros::NodeHandle &nodeHandle, std::string serviceName, std:
     }
 }
 
-bool stopControllers(ros::NodeHandle &nodeHandle, std::string serviceName, std::vector<std::string> &controllersToStop) {
+bool stopControllers(ros::NodeHandle &nodeHandle, std::string serviceName) {
 
     ros::ServiceClient switchController = nodeHandle.serviceClient<controller_manager_msgs::SwitchController>(serviceName);
     controller_manager_msgs::SwitchController switchControllerMsg;
-    switchControllerMsg.request.stop_controllers = controllersToStop;
+    switchControllerMsg.request.stop_controllers = controllerList;
     switchControllerMsg.request.strictness = switchControllerMsg.request.STRICT;
     switchControllerMsg.request.start_asap = false;
     ros::service::waitForService(serviceName, -1);
