@@ -34,13 +34,12 @@ qrLocomotionController::qrLocomotionController(qrRobot *robotIn) : robot(robotIn
     this->desiredTwistingSpeed = 0.f;
 }
 
-void qrLocomotionController::Initialization(std::string homeDir, std::string robotName)
+void qrLocomotionController::Initialization(std::string path)
 {
-    this->gaitGenerator = new qrGaitGenerator(this->robot, homeDir + "config/" + robotName + "/gait_generator.yaml");
+    this->gaitGenerator = new qrGaitGenerator(this->robot, path + "gait_config.yaml");
     std::cout << "init gaitGenerator finish\n" << std::endl;
 
-    this->groundEstimator = new qrGroundSurfaceEstimator(this->robot, homeDir + "config/" + robotName
-                                                                                        + "/terrain.yaml");
+    this->groundEstimator = new qrGroundSurfaceEstimator(this->robot, path + "terrain.yaml");
     std::cout << "init groundEsitmator finish\n" << std::endl;
 
     this->velocityEstimator = new qrRobotVelocityEstimator(this->robot);
@@ -59,8 +58,7 @@ void qrLocomotionController::Initialization(std::string homeDir, std::string rob
                                                         this->desiredSpeed,
                                                         this->desiredTwistingSpeed,
                                                         0.01f,
-                                                        homeDir + "config/" + robotName
-                                                            + "/swing_leg_controller.yaml");
+                                                        path + "swing_leg_controller.yaml");
     std::cout << "init swingLegController finish\n" << std::endl;
 
     this->stanceLegController = new qrStanceLegController(this->robot,
@@ -71,8 +69,7 @@ void qrLocomotionController::Initialization(std::string homeDir, std::string rob
                                                           this->footholdPlanner,
                                                           this->desiredSpeed,
                                                           this->desiredTwistingSpeed,
-                                                          homeDir + "config/" + robotName
-                                                              + "/stance_leg_controller.yaml");
+                                                          path + "stance_leg_controller.yaml");
 
     std::cout << "init stanceLegController finish\n" << std::endl;
 }

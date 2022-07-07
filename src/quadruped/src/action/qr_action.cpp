@@ -24,44 +24,57 @@
 
 #include "action/qr_action.h"
 
+#include <Eigen/Dense>
+
+static const Eigen::Matrix<float, 3, 1> standUpAnglesConfig = {0, 0.9, -1.8};
+
+static const Eigen::Matrix<float, 3, 1> sitDownAnglesConfig = {-0.167136, 0.934969, -2.54468};
+
+Eigen::Matrix<float, 12, 1> LegAngles(Eigen::Matrix<float, 3, 1> config){
+  Eigen::Matrix<float, 12, 1> angles;
+  angles << config, config, config, config;
+  return angles;
+}
+
 void StandUp(qrRobot *robot, float standUpTime, float totalTime, float timeStep) {
     float startTime = robot->GetTimeSinceReset();
     float endTime = startTime + standUpTime;
-    Eigen::Matrix<float, 12, 1> motorAnglesBeforeStandUP = robotState->q;
 
+    Eigen::Matrix<float, 12, 1> motorAnglesBeforeStandUP = robot->GetRobotState()->q;
+    Eigen::Matrix<float, 12, 1> motorAnglesAfterStandUP  = LegAngles(standUpAnglesConfig);
     std::cout << "motorAnglesBeforeStandUP: \n" << motorAnglesBeforeStandUP.transpose() << std::endl;
     std::cout << "---------------------Standing Up---------------------" << std::endl;
-    std::cout << "robot->standMotorAngles: \n" << robot->standUpMotorAngles.transpose() << std::endl;
+    std::cout << "robot->standMotorAngles: \n" << motorAnglesAfterStandUP.transpose() << std::endl;
 
     for (float t = startTime; t < totalTime; t += timeStep) {
         float blendRatio = (t - startTime) / standUpTime;
         Eigen::Matrix<float, 12, 1> action;
         if (blendRatio < 1.0f) {
-            action = blendRatio * robot->standUpMotorAngles + (1 - blendRatio) * motorAnglesBeforeStandUP;
+            action = blendRatio * motorAnglesAfterStandUP + (1 - blendRatio) * motorAnglesBeforeStandUP;
             robot->ApplyAction(action,MotorMode::POSITION);
-            // robot->Step(action, MotorMode::POSITION_MODE);
             while (robot->GetTimeSinceReset() < t + timeStep) {}
         } else {
-            // robot->Step(action, MotorMode::POSITION_MODE);
             robot->ApplyAction(action,MotorMode::POSITION);
             while (robot->GetTimeSinceReset() < t + timeStep) {}
         }
     }
-    std::cout << "robot->GetMotorAngles: \n" << robot->q.transpose() << std::endl;
     std::cout << "---------------------Stand Up Finished---------------------" << std::endl;
 }
 
 void SitDown(qrRobot *robot, float sitDownTime, float timeStep) {
     float startTime = robot->GetTimeSinceReset();
     float endTime = startTime + sitDownTime;
-    Eigen::Matrix<float, 12, 1> motorAnglesBeforeSitDown = robot->q;
+
+    Eigen::Matrix<float, 12, 1> motorAnglesBeforeSitDown = robot->GetRobotState()->q;
+    Eigen::Matrix<float, 12, 1> motorAnglesAfterStandUP  = LegAngles(sitDownAnglesConfig);
+
     std::cout << "motorAnglesBeforeSitDown: \n" << motorAnglesBeforeSitDown.transpose() << std::endl;
-    std::cout << "robot->sitDownMotorAngles: \n" << robot->sitDownMotorAngles.transpose() << std::endl;
+    std::cout << "robot->sitDownMotorAngles: \n" << motorAnglesAfterStandUP.transpose() << std::endl;
 
     for (float t = startTime; t < endTime; t += timeStep) {
         float blendRatio = (t - startTime) / sitDownTime;
         Eigen::Matrix<float, 12, 1> action;
-        action = blendRatio * robot->sitDownMotorAngles + (1 - blendRatio) * motorAnglesBeforeSitDown;
+        action = blendRatio * motorAnglesAfterStandUP + (1 - blendRatio) * motorAnglesBeforeSitDown;
         robot->ApplyAction(action,MotorMode::POSITION);
         while (robot->GetTimeSinceReset() < t + timeStep) {}
     }

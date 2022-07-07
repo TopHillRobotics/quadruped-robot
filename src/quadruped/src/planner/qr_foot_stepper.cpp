@@ -22,8 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "QuadProg++.hh"
-#include "Array.hh"
+#include <quadprogpp/QuadProg++.hh>
+#include <quadprogpp/Array.hh>
 
 #include "planner/qr_foot_stepper.h"
 

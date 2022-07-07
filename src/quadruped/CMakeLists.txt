@@ -8,7 +8,9 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   geometry_msgs
   unitree_legged_msgs
-  extern
+  tinyekf
+  tinynurbs
+  quadprogpp
 )
 
 find_package(yaml-cpp REQUIRED)
@@ -17,12 +19,7 @@ find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 catkin_package(
     INCLUDE_DIRS include
     LIBRARIES ${PROJECT_NAME}
-)
-
-include_directories(
-  ${catkin_INCLUDE_DIRS}
-  ${YAML_CPP_INCLUDE_DIRS}
-  include
+    CATKIN_DEPENDS roscpp unitree_legged_msgs tinyekf tinynurbs quadprogpp
 )
 
 ## add all cpp files into QUADRUPED_SOURCE_FILES
@@ -33,9 +30,8 @@ add_library(${PROJECT_NAME}
    ${QUADRUPED_SOURCE_FILES}
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIRECTORIES})
-
-target_link_libraries(${PROJECT_NAME} ${YAML_CPP_LIBRARIES} Eigen3::Eigen)
+target_include_directories(${PROJECT_NAME} PUBLIC ${catkin_INCLUDE_DIRS} ${YAML_CPP_INCLUDE_DIRS} include/${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME} ${YAML_CPP_LIBRARIES} Eigen3::Eigen ${catkin_LIBRARIES})
 
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
