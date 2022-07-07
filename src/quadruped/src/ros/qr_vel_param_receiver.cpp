@@ -24,11 +24,15 @@
 
 #include "ros/qr_vel_param_receiver.h"
 
-qrVelocityParamReceiver::qrVelocityParamReceiver(ros::NodeHandle &nhIn)
+qrVelocityParamReceiver::qrVelocityParamReceiver(ros::NodeHandle &nhIn,std::string FilePath)
     : nh(nhIn)
 {
     ROS_INFO("velocity param topic: %s", velParamTopic.c_str());
     velParamSub = nh.subscribe(velParamTopic, 10, &qrVelocityParamReceiver::VelocityParamCallback, this);
+
+    YAML::Node motionConfig = YAML::LoadFile(pathToNode + "config/motion_config.yaml");
+    linearVel = motionConfig["const_twist"]["linear"].as<std::vector<float >>();
+    angularVel[2] = motionConfig["const_twist"]["angular"].as<float>();
 }
 
 

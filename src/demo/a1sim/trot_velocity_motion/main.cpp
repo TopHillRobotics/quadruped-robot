@@ -31,6 +31,7 @@
 #include "quadruped/controller/qr_locomotion_controller.h"
 #include "quadruped/action/qr_action.h"
 #include "quadruped/robot/qr_robot_a1sim.h"
+#include "quadruped/ros/qr_vel_param_receiver.h"
 
 int main(int argc, char **argv) 
 {
@@ -47,13 +48,14 @@ int main(int argc, char **argv)
     // auto desiredTwistingSpeed = motionConfig["const_twist"]["angular"].as<float>();
     // std::vector<std::string> controllerList = motionConfig["controllerList"].as<std::vector<std::string>>();
 
-    // std::cout << "---------Yaml Config Motion Load Finished---------" << std::endl;
+    std::cout << "---------Yaml Config Motion Load Finished---------" << std::endl;
 
     stopControllers(nh, "/a1_gazebo/controller_manager/switch_controller");
     ros::ServiceClient modelStateClient = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
     ros::ServiceClient jointStateClient = nh.serviceClient<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
     ResetRobotByService(modelStateClient, jointStateClient);
     startControllers(nh, "/a1_gazebo/controller_manager/switch_controller");
+    qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh,pathToNode);
     ros::AsyncSpinner spinner(1); // one threads
     spinner.start();
     
@@ -62,10 +64,14 @@ int main(int argc, char **argv)
 
     qrRobot *quadruped = new qrRobotA1Sim(nh, pathToPackage + "/robot_config.yaml");
     StandUp(quadruped, 3.f, 5.f, 0.001);
+
+    std::vector<float> desiredSpeed = {0.,0.,0.};
+    float desiredTwistingSpeed = 0.; 
+
     qrLocomotionController *locomotionController = new qrLocomotionController(quadruped);
     locomotionController->Initialization(pathToNode + "/config/");
     locomotionController->Reset();
-    locomotionController->UpdateDesiredSpeed({0.,0.,0.}, 0.);
+    locomotionController->UpdateDesiredSpeed(desiredSpeed,desiredTwistingSpeed);
     
     std::cout << "---------LocomotionController Init Finished---------" << std::endl;
 
@@ -78,7 +84,7 @@ int main(int argc, char **argv)
         startTimeWall = quadruped->GetTimeSinceReset();
       
         desiredSpeed = cmdVelReceiver->GetLinearVelocity();
-        desiredTwistingSpeed = cmdVelReceiver->GetAngularVelocity();
+        desiredTwistingSpeed = cmdVelReceiver->GetAngularVelocity(2);
   
         locomotionController->UpdateDesiredSpeed(desiredSpeed,desiredTwistingSpeed);
         locomotionController->Update();

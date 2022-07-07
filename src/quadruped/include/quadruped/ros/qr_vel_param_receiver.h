@@ -28,6 +28,7 @@
 #include <iostream>
 #include <string>
 
+#include <yaml-cpp/yaml.h>
 #include <Eigen/Dense>
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
@@ -37,16 +38,16 @@
 #include "common/qr_eigen_types.h"
 
 /**
- * @brief A qrVelocityParamReceiver object recieves the velocity parameters from a ROS topic when a gait updates
+ * @brief A qrVelocityParamReceiver object recieves the velocity parameters from a ROS topic
  * 
  */
 class qrVelocityParamReceiver {
     public:
         /**
-         * @brief Construct a qrVelocityParamReceiver object using a givne ROS nodeHandle.
+         * @brief Construct a qrVelocityParamReceiver object using a  ROS nodeHandle.
          * @param nhIn specifies the ROS node to communicate
          */
-        qrVelocityParamReceiver(ros::NodeHandle &nhIn);
+        qrVelocityParamReceiver(ros::NodeHandle &nhIn, std::string FilePath);
 
         /**
          * @brief Deconstruct a qrVelocityParamReceiver object.
@@ -55,7 +56,7 @@ class qrVelocityParamReceiver {
 
         /**
         * @brief Receive the updated information from a ROS topic
-        * @param msg the gait msg from a ROS topic
+        * @param msg the vel  msg from a ROS topic
         */
         void VelocityParamCallback(const geometry_msgs::Twist::ConstPtr &msg);
 
@@ -74,7 +75,7 @@ class qrVelocityParamReceiver {
         /**
         * @brief Get the angular velocity.
         * @param axis: 0: x, 1: y, 2: z
-        * @return float: the z coordinate of the angular Vel
+        * @return float: the z coordinate of the angular vel
         */
         float GetAngularVelocity(int axis);
         
