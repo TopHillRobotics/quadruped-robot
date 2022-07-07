@@ -4,12 +4,14 @@
 qrRobot::qrRobot()
 {
     stop = false;
+    timeStep = 0.001f;
     robotConfig = nullptr;
 }
 
 qrRobot::qrRobot(std::string path)
 {
     stop = false;
+    timeStep = 0.001f;
     robotConfig = new qrRobotConfig(path);
 }
 

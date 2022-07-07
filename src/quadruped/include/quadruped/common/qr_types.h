@@ -60,6 +60,6 @@ enum SubLegState {
 enum TwistMode {
     CONST, 
     DYNAMIC
-}
+};
 
 #endif // QR_TYPES_H

@@ -25,10 +25,13 @@ catkin_package(
 ## add all cpp files into QUADRUPED_SOURCE_FILES
 file(GLOB_RECURSE QUADRUPED_SOURCE_FILES src/*.cpp)
 
+#include_directories(${catkin_INCLUDE_DIRS} ${YAML_CPP_INCLUDE_DIRS} include/${PROJECT_NAME})
+
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
    ${QUADRUPED_SOURCE_FILES}
 )
+
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${catkin_INCLUDE_DIRS} ${YAML_CPP_INCLUDE_DIRS} include/${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME} ${YAML_CPP_LIBRARIES} Eigen3::Eigen ${catkin_LIBRARIES})

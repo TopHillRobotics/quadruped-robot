@@ -161,9 +161,26 @@ public:
         stop = b;
     }
 
+    /**
+     * @brief set and execute commands
+     * @param cmd: commands to execute
+     */
     void ApplyAction(const std::array<qrMotorCmd, 12> cmd);
 
+    /**
+     * @brief set and execute commands with Mode mode
+     * @param motorCmdValues: matrix of command values(5x12)
+     * @param mode: in which mode to execute the command
+     */
     void ApplyAction(const Eigen::MatrixXf &motorCmdValues, MotorMode mode);
+
+    inline float GetTimeStep() const{
+        return timeStep;
+    }
+
+    inline void SetTimeStep(float timeStep){
+        this->timeStep = timeStep;
+    }
 
 protected:
 
@@ -172,6 +189,7 @@ protected:
      */
     bool stop;
 
+    float timeStep;
     /**
      * @brief timer for controlling the robot
      */

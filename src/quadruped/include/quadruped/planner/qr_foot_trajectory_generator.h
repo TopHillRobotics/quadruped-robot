@@ -120,7 +120,7 @@ public:
     /** 
      * @brief Destructor function 
      */
-    virtual ~qrFootSplinePatternGenerator();
+    virtual ~qrFootSplinePatternGenerator(){}
 
     /**
      * @brief Set the parameters for the generation of the foot swing trajectory

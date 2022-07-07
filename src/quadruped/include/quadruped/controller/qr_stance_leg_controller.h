@@ -69,7 +69,7 @@ public:
                           float desiredTwistingSpeed,
                           std::string configFilepath);
 
-    virtual ~qrStanceLegController();
+    virtual ~qrStanceLegController()=default;
     
     /**
      * @brief Reset the parameters of the qrStanceLegController.

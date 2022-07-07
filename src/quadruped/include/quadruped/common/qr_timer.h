@@ -24,27 +24,29 @@
 
 #ifndef QR_TIMER_H
 #define QR_TIMER_H
+
 #include <time.h>
 
-class Timer {
+class Timer
+{
 public:
     Timer()
     {
         start = clock();
-        startTime = (double)start;
+        startTime = double(start);
     }
 
     inline double GetTimeSinceReset()
     {
         finish = clock();
-        double timeSinceReset = (double)(finish - startTime) / CLOCKS_PER_SEC; // second(s)
+        double timeSinceReset = double(finish - startTime) / CLOCKS_PER_SEC; // second(s)
         return timeSinceReset;
     }
 
     inline void ResetStartTime()
     {
         start = clock();
-        startTime = (double)start;
+        startTime = double(start);
     }
 
 private:
@@ -52,4 +54,5 @@ private:
     clock_t finish;
     double startTime;
 };
+
 #endif // QR_TIMER_H

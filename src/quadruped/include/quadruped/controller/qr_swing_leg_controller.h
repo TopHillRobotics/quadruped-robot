@@ -64,7 +64,7 @@ public:
     /**
      * @brief Deconstruct a qrSwingLegController object.
      */
-    virtual ~qrSwingLegController();
+    virtual ~qrSwingLegController(){}
 
     /**
      * @brief Reset the controller parameters.

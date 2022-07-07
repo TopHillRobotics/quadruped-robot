@@ -53,6 +53,7 @@
   <build_depend>roslib</build_depend>
   <build_depend>quadruped</build_depend>
   <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>quadruped</build_export_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>roslib</exec_depend>
   <exec_depend>quadruped</exec_depend>

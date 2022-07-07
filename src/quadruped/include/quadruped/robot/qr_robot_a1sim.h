@@ -1,4 +1,4 @@
-// The MIT License
+﻿// The MIT License
 
 // Copyright (c) 2022
 // Robot Motion and Vision Laboratory at East China Normal University
@@ -53,8 +53,6 @@ public:
       * @param configFilePath
       */
     qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath);
-
-    ~qrRobotA1Sim() override;
 
     void Observation() override;
 

@@ -26,14 +26,14 @@
 
 #include <Eigen/Dense>
 
-static const Eigen::Matrix<float, 3, 1> standUpAnglesConfig = {0, 0.9, -1.8};
+static const Eigen::Matrix<float, 3, 1> standUpAnglesConfig = {0.0f, 0.9f, -1.8f};
 
-static const Eigen::Matrix<float, 3, 1> sitDownAnglesConfig = {-0.167136, 0.934969, -2.54468};
+static const Eigen::Matrix<float, 3, 1> sitDownAnglesConfig = {-0.167136f, 0.934969f, -2.54468f};
 
 Eigen::Matrix<float, 12, 1> LegAngles(Eigen::Matrix<float, 3, 1> config){
-  Eigen::Matrix<float, 12, 1> angles;
-  angles << config, config, config, config;
-  return angles;
+    Eigen::Matrix<float, 12, 1> angles;
+    angles << config, config, config, config;
+    return angles;
 }
 
 void StandUp(qrRobot *robot, float standUpTime, float totalTime, float timeStep) {

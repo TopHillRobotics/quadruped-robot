@@ -25,7 +25,25 @@
 #include "robot/qr_motor_cmd.h"
 
 
-Eigen::Matrix<float, 5, 1> qrMotorCmd::ToEigenVector()
+qrMotorCmd::qrMotorCmd()
+{
+    this->q   = 0.0f;
+    this->dq  = 0.0f;
+    this->tau = 0.0f;
+    this->Kp  = 0.0f;
+    this->Kd  = 0.0f;
+}
+
+qrMotorCmd::qrMotorCmd(float q, float dq, float tau, float Kp, float Kd)
+{
+    this->q   = q;
+    this->dq  = dq;
+    this->tau = tau;
+    this->Kp  = Kp;
+    this->Kd  = Kd;
+}
+
+Eigen::Matrix<float, 5, 1> qrMotorCmd::ToEigenVector() const
 {
     Eigen::Matrix<float, 5, 1> cmd;
     cmd << q, Kp, dq, Kd, tau;
@@ -58,5 +76,14 @@ void qrMotorCmd::operator=(const qrMotorCmd &cmd)
     this->dq  = cmd.dq;
     this->Kd  = cmd.Kd;
     this->Kp  = cmd.Kp;
-    this->tau = cmd.tau;
+  this->tau = cmd.tau;
+}
+
+Eigen::Matrix<float, 5, 12> qrMotorCmd::CmdsToMatrix5x12(const std::vector<qrMotorCmd> &cmds)
+{
+    Eigen::Matrix<float, 5, 12> cmdMatrix;
+    for (unsigned int i = 0; i < 12; i++) {
+        cmdMatrix.col(i) = cmds[i].ToEigenVector();
+    }
+    return cmdMatrix;
 }

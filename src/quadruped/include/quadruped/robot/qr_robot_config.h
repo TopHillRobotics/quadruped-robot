@@ -53,11 +53,6 @@ public:
     qrRobotConfig(std::string path);
 
     /**
-     * @brief Destruction of qrRobotConfig
-     */
-    ~qrRobotConfig();
-
-    /**
      * @brief load parameter of the robot
      * @param path: the path to the YAML config file
      */
@@ -147,7 +142,7 @@ public:
     static const unsigned int dofPerLeg = 3;
 
     // TODO: explain
-    static constexpr float footHoldOffset = 0.1f;
+    static const float footHoldOffset;
 
     /**
      * @brief control mode of the robot

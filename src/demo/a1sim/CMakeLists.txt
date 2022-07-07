@@ -11,7 +11,9 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(yaml-cpp REQUIRED)
 
-catkin_package()
+catkin_package(
+    CATKIN_DEPENDS roscpp roslib quadruped
+)
 
 include_directories(
   ${catkin_INCLUDE_DIRS}

@@ -31,6 +31,7 @@
 #include "quadruped/controller/qr_locomotion_controller.h"
 #include "quadruped/action/qr_action.h"
 #include "quadruped/robot/qr_robot_a1sim.h"
+#include "quadruped/robot/qr_motor_cmd.h"
 #include "quadruped/ros/qr_vel_param_receiver.h"
 
 int main(int argc, char **argv) 
@@ -65,9 +66,8 @@ int main(int argc, char **argv)
     qrRobot *quadruped = new qrRobotA1Sim(nh, pathToPackage + "/robot_config.yaml");
     StandUp(quadruped, 3.f, 5.f, 0.001);
 
-    std::vector<float> desiredSpeed = {0.,0.,0.};
     float desiredTwistingSpeed = 0.; 
-
+    Eigen::Matrix<float, 3, 1> desiredSpeed = {0.0, 0.0, 0.0};
     qrLocomotionController *locomotionController = new qrLocomotionController(quadruped);
     locomotionController->Initialization(pathToNode + "/config/");
     locomotionController->Reset();
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
     while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS) {
         startTimeWall = quadruped->GetTimeSinceReset();
       
-        desiredSpeed = cmdVelReceiver->GetLinearVelocity();
+        auto desiredSpeed = cmdVelReceiver->GetLinearVelocity();
         desiredTwistingSpeed = cmdVelReceiver->GetAngularVelocity(2);
   
         locomotionController->UpdateDesiredSpeed(desiredSpeed,desiredTwistingSpeed);
@@ -91,14 +91,14 @@ int main(int argc, char **argv)
 
         quadruped->Observation();
         auto [hybridAction, qpSol] = locomotionController->GetAction();
-        quadruped->ApplyAction(MotorCommand::convertToMatix(hybridAction), MotorMode::HYBRID);
+        quadruped->ApplyAction(qrMotorCmd::CmdsToMatrix5x12(hybridAction), MotorMode::HYBRID);
 
         currentTime = quadruped->GetTimeSinceReset();
-        if (abs(quadruped->GetRpy[0]) > 0.5f || abs(quadruped->GetRpy[1]) > 0.5f) {
+        if (abs(quadruped->GetRobotState()->GetRpy()[0]) > 0.5f || abs(quadruped->GetRobotState()->GetRpy()[1]) > 0.5f) {
             ROS_ERROR("The dog is going down, main function exit.");
             break;
         }
-        while (quadruped->GetTimeSinceReset() - startTimeWall < quadruped->timeStep) {}
+        while (quadruped->GetTimeSinceReset() - startTimeWall < quadruped->GetTimeStep()) {}
     }
     
     ROS_INFO("Time is up, end now.");

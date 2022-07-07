@@ -124,6 +124,27 @@ qrFootBSplinePatternGenerator::qrFootBSplinePatternGenerator()
     glm::vec3 pt1 = tinynurbs::curvePoint(crv, 0.f);
 }
 
+qrFootBSplinePatternGenerator::qrFootBSplinePatternGenerator(qrSplineInfo &splineInfo)
+{
+    crv.control_points = {glm::vec3(-10, 0, 0),
+                          glm::vec3(-11, 0, 0.2),
+                          glm::vec3(-14, 0, 2),
+                          glm::vec3(-15, 0, 7),
+                          glm::vec3(0, 0, 8),
+                          glm::vec3(15, 0, 7),
+                          glm::vec3(14, 0, 2),
+                          glm::vec3(11, 0, 0.2),
+                          glm::vec3(10, 0, 0),
+                          };
+    crv.knots = {0., 0., 0., 0.,
+                1./6, 2./6, 3./6, 4./6, 5./6,
+                // 0.5/6, 1.0/6, 2.0/6, 3.0/6, 4.5/6,
+                1, 1, 1, 1
+                };
+    crv.degree = 3;
+    glm::vec3 pt1 = tinynurbs::curvePoint(crv, 0.f);
+}
+
 void qrFootBSplinePatternGenerator::SetParameters(const float initial_time,
                                                   const Eigen::Vector3f &initial_pos,
                                                   const Eigen::Vector3f &target_pos,

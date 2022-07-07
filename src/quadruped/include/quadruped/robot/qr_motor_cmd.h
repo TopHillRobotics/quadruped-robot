@@ -26,6 +26,7 @@
 #define QR_MOTOR_CMD_H
 
 #include <Eigen/Dense>
+#include <vector>
 
 /**
  * @brief The qrMotorCmd class is used to store the result motor command of one iteration
@@ -51,15 +52,10 @@ public:
     qrMotorCmd(float q, float dq, float tau, float Kp, float Kd);
 
     /**
-     * @brief Destructor of qrMotorCmd
-     */
-    ~qrMotorCmd();
-
-    /**
      * @brief convert result to eigen vector
      * @return eigen vector
      */
-    Eigen::Matrix<float, 5, 1> ToEigenVector();
+    Eigen::Matrix<float, 5, 1> ToEigenVector() const;
 
     /**
      * @brief convert result to array
@@ -82,6 +78,13 @@ public:
      * @param cmd: command that need to be equal
      */
     void operator=(const qrMotorCmd &cmd);
+
+    /**
+     * @brief convert vector of commands to eigen matrix
+     * @param cmds: vector of cmds
+     * @return command matrix
+     */
+    static Eigen::Matrix<float, 5, 12> CmdsToMatrix5x12(const std::vector<qrMotorCmd> &cmds);
 
 private:
 

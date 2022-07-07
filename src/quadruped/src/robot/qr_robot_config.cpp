@@ -28,6 +28,7 @@
 std::unordered_map<int, std::string> qrRobotConfig::modeMap =
   {{0, "velocity"}, {1, "position"}, {2, "walk"}};
 
+const float qrRobotConfig::footHoldOffset = 0.1f;
 
 qrRobotConfig::qrRobotConfig()
 {

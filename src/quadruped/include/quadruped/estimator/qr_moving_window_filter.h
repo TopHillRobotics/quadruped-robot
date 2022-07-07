@@ -47,11 +47,6 @@ public:
    */
   qrMovingWindowFilter(unsigned int windowSize);
 
-  /**
-   * @brief destructor of qrMovingWindowFilter
-   */
-  ~qrMovingWindowFilter();
-
   // This need to be checked
   /**
    * @brief update the moving window sum using Neumaier's algorithm.

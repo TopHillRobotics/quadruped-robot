@@ -14,9 +14,9 @@ catkin_package(
     LIBRARIES ${PROJECT_NAME}
 )
 
-add_library(${PROJECT_NAME} INTERFACE)
+add_library(${PROJECT_NAME} include/${PROJECT_NAME}/tiny_ekf.c)
 target_include_directories(${PROJECT_NAME}
-    INTERFACE include/${PROJECT_NAME}
+    PUBLIC include/${PROJECT_NAME}
 )
 
 install(TARGETS ${PROJECT_NAME}
