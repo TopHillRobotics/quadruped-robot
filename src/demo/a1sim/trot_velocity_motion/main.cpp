@@ -42,14 +42,6 @@ int main(int argc, char **argv)
     std::string pathToPackage = ros::package::getPath("a1sim");
 
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
-    // std::cout<<pathToPackage<< "|||||" << pathToNode<<std::endl;
-    //YAML::Node motionConfig = YAML::LoadFile("/home/xmc/Documents/quadruped-robot/src/demo/a1sim/trot_velocity_motion/config/motion_config.yaml");
-    // std::cout<<motionConfig<<std::endl;
-    // int twistMode = motionConfig["speed_update_mode"].as<int>();
-    // std::vector<float> linearVel = motionConfig["const_twist"]["linear"].as<std::vector<float >>();
-    // auto desiredSpeed = Eigen::MatrixXf::Map(&linearVel[0], 3, 1);
-    // auto desiredTwistingSpeed = motionConfig["const_twist"]["angular"].as<float>();
-    // std::vector<std::string> controllerList = motionConfig["controllerList"].as<std::vector<std::string>>();
 
     std::cout << "---------Yaml Config Motion Load Finished---------" << std::endl;
 
@@ -58,7 +50,7 @@ int main(int argc, char **argv)
     ros::ServiceClient jointStateClient = nh.serviceClient<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
     ResetRobotByService(modelStateClient, jointStateClient);
     startControllers(nh, "/a1_gazebo/controller_manager/switch_controller");
-    qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh,pathToNode);
+    qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
     ros::AsyncSpinner spinner(1); // one threads
     spinner.start();
     

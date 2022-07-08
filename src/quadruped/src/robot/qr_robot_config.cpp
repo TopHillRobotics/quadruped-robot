@@ -48,20 +48,25 @@ qrRobotConfig::qrRobotConfig(std::string path)
 
 void qrRobotConfig::Load(std::string path)
 {
+
+
     YAML::Node node = YAML::LoadFile(path);
+
+
     bodyMass    = node["body_mass"].as<float>();
     bodyHeight  = node["body_height"].as<float>();
     hipLength   = node["hip_length"].as<float>();
     upperLength = node["upper_length"].as<float>();
     lowerLength = node["lower_length"].as<float>();
-    controlMode = node["controlMode"].as<int>();
-    isSim = node["is simulation"].as<bool>();
+    controlMode = node["control_mode"].as<int>();
+    isSim = node["is_simulation"].as<bool>();
     LoadKps(node);
     LoadKds(node);
     LoadComOffset(node);
     LoadHipOffset(node);
     LoadHipPosition(node);
-    std::vector<float> bodyInertiaList = node["body_inertia"].as<std::vector<float >>();
+    std::vector<float> bodyInertiaList = node["body_inertia"].as<std::vector<float>>();
+
     bodyInertia = Eigen::MatrixXf::Map(&bodyInertiaList[0], 3, 3);
 }
 
@@ -85,14 +90,13 @@ void qrRobotConfig::LoadKds(YAML::Node &n)
 
 void qrRobotConfig::LoadComOffset(YAML::Node &n)
 {
-    std::vector<float> comOffsetList = n["robot_params"][modeMap[controlMode]]["com_offset"].as<std::vector<float >>();
+    std::vector<float> comOffsetList = n["com_offset"][modeMap[controlMode]].as<std::vector<float >>();
     comOffset = Eigen::MatrixXf::Map(&comOffsetList[0], 3, 1);
 }
 
 void qrRobotConfig::LoadHipOffset(YAML::Node &n)
 {
-    std::vector<std::vector<float >>
-                hipOffsetList = n["hip_offset"].as<std::vector<std::vector<float>>>();
+    std::vector<std::vector<float >> hipOffsetList = n["hip_offset"].as<std::vector<std::vector<float>>>();
     Vec3<float> hipOffsetFR = Eigen::MatrixXf::Map(&hipOffsetList[0][0], 3, 1) + comOffset;
     Vec3<float> hipOffsetFL = Eigen::MatrixXf::Map(&hipOffsetList[1][0], 3, 1) + comOffset;
     Vec3<float> hipOffsetRL = Eigen::MatrixXf::Map(&hipOffsetList[2][0], 3, 1) + comOffset;
