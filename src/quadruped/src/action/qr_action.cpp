@@ -40,6 +40,7 @@ void StandUp(qrRobot *robot, float standUpTime, float totalTime, float timeStep)
     float startTime = robot->GetTimeSinceReset();
     float endTime = startTime + standUpTime;
 
+    robot->Observation();
     Eigen::Matrix<float, 12, 1> motorAnglesBeforeStandUP = robot->GetRobotState()->q;
     Eigen::Matrix<float, 12, 1> motorAnglesAfterStandUP  = LegAngles(standUpAnglesConfig);
     std::cout << "motorAnglesBeforeStandUP: \n" << motorAnglesBeforeStandUP.transpose() << std::endl;
@@ -64,6 +65,8 @@ void StandUp(qrRobot *robot, float standUpTime, float totalTime, float timeStep)
 void SitDown(qrRobot *robot, float sitDownTime, float timeStep) {
     float startTime = robot->GetTimeSinceReset();
     float endTime = startTime + sitDownTime;
+
+    robot->Observation();
 
     Eigen::Matrix<float, 12, 1> motorAnglesBeforeSitDown = robot->GetRobotState()->q;
     Eigen::Matrix<float, 12, 1> motorAnglesAfterStandUP  = LegAngles(sitDownAnglesConfig);
