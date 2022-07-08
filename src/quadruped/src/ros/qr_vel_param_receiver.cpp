@@ -30,9 +30,9 @@ qrVelocityParamReceiver::qrVelocityParamReceiver(ros::NodeHandle &nhIn,std::stri
     ROS_INFO("velocity param topic: %s", velParamTopic.c_str());
     velParamSub = nh.subscribe(velParamTopic, 10, &qrVelocityParamReceiver::VelocityParamCallback, this);
 
-    YAML::Node motionConfig = YAML::LoadFile(pathToNode + "config/motion_config.yaml");
-    std::vector<float> vel = motionConfig["const_twist"]["linear"].as<std::vector<float >>();
-    linearVel << vel[0], vel[1], vel[2];
+    YAML::Node motionConfig = YAML::LoadFile("/home/xmc/Documents/quadruped-robot/src/demo/a1sim/trot_velocity_motion/config/motion_config.yaml");
+    std::vector<float> linear = motionConfig["const_twist"]["linear"].as<std::vector<float >>();
+    linearVel << linear[0], linear[1], linear[2];
     angularVel[2] = motionConfig["const_twist"]["angular"].as<float>();
 }
 

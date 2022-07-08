@@ -39,10 +39,12 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "trot_velocity_motion");
     ros::NodeHandle nh;
 
-    std::string pathToPackage = ros::package::getPath("path");
-    std::string pathToNode =  pathToPackage + ros::this_node::getName();
+    std::string pathToPackage = ros::package::getPath("a1sim");
 
-    // YAML::Node motionConfig = YAML::LoadFile(pathToNode + "config/motion_config.yaml");
+    std::string pathToNode =  pathToPackage + ros::this_node::getName();
+    // std::cout<<pathToPackage<< "|||||" << pathToNode<<std::endl;
+    //YAML::Node motionConfig = YAML::LoadFile("/home/xmc/Documents/quadruped-robot/src/demo/a1sim/trot_velocity_motion/config/motion_config.yaml");
+    // std::cout<<motionConfig<<std::endl;
     // int twistMode = motionConfig["speed_update_mode"].as<int>();
     // std::vector<float> linearVel = motionConfig["const_twist"]["linear"].as<std::vector<float >>();
     // auto desiredSpeed = Eigen::MatrixXf::Map(&linearVel[0], 3, 1);

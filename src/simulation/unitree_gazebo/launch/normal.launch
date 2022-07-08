@@ -1,5 +1,5 @@
 <launch>
-    <arg name="wname" default="stairs"/>
+    <arg name="wname" default="earth"/>
     <arg name="rname" default="a1"/>
     <arg name="robot_path" value="(find $(arg rname)_description)"/>
     <arg name="dollar" value="$"/>
@@ -54,8 +54,8 @@
     <!-- <node pkg="unitree_gazebo" type="servo" name="servo" required="true" output="screen"/> -->
 
     <!-- load the parameter unitree_controller -->
-    <include file="$(find unitree_controller)/launch/set_ctrl.launch">
+    <!-- <include file="$(find unitree_controller)/launch/set_ctrl.launch">
         <arg name="rname" value="$(arg rname)"/>
-    </include>
+    </include> -->
 
 </launch>
