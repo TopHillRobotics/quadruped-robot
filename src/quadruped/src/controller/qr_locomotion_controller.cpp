@@ -137,7 +137,7 @@ void qrLocomotionController::Update()
     //     default: break;
     // }
     this->swingLegController->Update();
-    this->stanceLegController->Update();
+    this->stanceLegController->Update(robot->GetTimeSinceReset() - this->timeSinceReset);
 }
 
 std::tuple<std::vector<qrMotorCmd>, Mat3x4<float>> qrLocomotionController::GetAction()

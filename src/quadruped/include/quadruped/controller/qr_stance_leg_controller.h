@@ -79,8 +79,9 @@ public:
     
     /**
      * @brief Update the parameters of the qrStanceLegController.
+     * @param currentTime Current run time
      */
-    virtual void Update();
+    virtual void Update(float currentTime);
 
     /**
      * @brief Update ratio
