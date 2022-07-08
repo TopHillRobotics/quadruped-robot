@@ -88,7 +88,7 @@ void qrStanceLegController::Reset(float currentTime)
     // this->posePlanner->Reset(timeSinceReset);
 }
 
-void qrStanceLegController::Update()
+void qrStanceLegController::Update(float currentTime)
 {
     // if(!this->robot->stop){
     //     this->timeSinceReset = this->robot->GetTimeSinceReset() - this->resetTime;
@@ -123,6 +123,7 @@ void qrStanceLegController::Update()
     //     } break;
     //     default: break;
     // }
+    this->currentTime = currentTime;
 }
 
 void qrStanceLegController::UpdateFRatio(Vec4<bool> &contacts, int &N, float &moveBasePhase)
