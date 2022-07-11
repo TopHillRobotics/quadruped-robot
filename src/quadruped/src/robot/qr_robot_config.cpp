@@ -81,9 +81,9 @@ void qrRobotConfig::LoadKps(YAML::Node &n)
 
 void qrRobotConfig::LoadKds(YAML::Node &n)
 {
-    float abadKd = n["abad_kp"].as<float>();
-    float hipKd  = n["hip_kp"].as<float>();
-    float kneeKd = n["knee_kp"].as<float>();
+    float abadKd = n["abad_kd"].as<float>();
+    float hipKd  = n["hip_kd"].as<float>();
+    float kneeKd = n["knee_kd"].as<float>();
     Vec3<float> kd(abadKd, hipKd, kneeKd);
     motorKds << kd, kd, kd, kd;
 }

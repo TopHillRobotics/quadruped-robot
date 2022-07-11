@@ -42,12 +42,11 @@ int main(int argc, char **argv)
     std::string pathToPackage = ros::package::getPath("a1sim");
 
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
-
     stopControllers(nh, "/a1_gazebo/controller_manager/switch_controller");
-    //ros::ServiceClient modelStateClient = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
-    //ros::ServiceClient jointStateClient = nh.serviceClient<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
-    //ResetRobotByService(modelStateClient, jointStateClient);
-    ResetRobotBySystem();
+    ros::ServiceClient modelStateClient = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
+    ros::ServiceClient jointStateClient = nh.serviceClient<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
+    ResetRobotByService(modelStateClient, jointStateClient);
+    // ResetRobotBySystem();
     startControllers(nh, "/a1_gazebo/controller_manager/switch_controller");
     qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
     ros::AsyncSpinner spinner(1); // one threads
@@ -57,42 +56,44 @@ int main(int argc, char **argv)
 
 
     qrRobot *quadruped = new qrRobotA1Sim(nh, pathToPackage + "/robot_config.yaml");
-    StandUp(quadruped, 3.f, 5.f, 0.001f);
+    quadruped->Observation();
+    std::cout << quadruped->GetRobotState()->GetBaseOrientation() <<std::endl;
+    StandUp(quadruped, 10.f, 12.f, 0.001f);
 
-//    float desiredTwistingSpeed = 0.;
-//    Eigen::Matrix<float, 3, 1> desiredSpeed = {0.0, 0.0, 0.0};
-//    qrLocomotionController *locomotionController = new qrLocomotionController(quadruped);
-//    locomotionController->Initialization(pathToNode + "/config/");
-//    locomotionController->Reset();
-//    locomotionController->UpdateDesiredSpeed(desiredSpeed,desiredTwistingSpeed);
+   float desiredTwistingSpeed = 0.;
+   Eigen::Matrix<float, 3, 1> desiredSpeed = {0.0, 0.0, 0.0};
+   qrLocomotionController *locomotionController = new qrLocomotionController(quadruped);
+   locomotionController->Initialization(pathToNode + "/config/");
+   locomotionController->Reset();
+   locomotionController->UpdateDesiredSpeed(desiredSpeed,desiredTwistingSpeed);
     
-//    std::cout << "---------LocomotionController Init Finished---------" << std::endl;
+   std::cout << "---------LocomotionController Init Finished---------" << std::endl;
 
 
-//    float startTime = quadruped->GetTimeSinceReset();
-//    float currentTime = startTime;
-//    float startTimeWall = startTime;
-//    const float MAX_TIME_SECONDS = 300.f;
-//    while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS) {
-//        startTimeWall = quadruped->GetTimeSinceReset();
+   float startTime = quadruped->GetTimeSinceReset();
+   float currentTime = startTime;
+   float startTimeWall = startTime;
+   const float MAX_TIME_SECONDS = 300.f;
+   while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS) {
+       startTimeWall = quadruped->GetTimeSinceReset();
       
-//        auto desiredSpeed = cmdVelReceiver->GetLinearVelocity();
-//        desiredTwistingSpeed = cmdVelReceiver->GetAngularVelocity(2);
+       auto desiredSpeed = cmdVelReceiver->GetLinearVelocity();
+       desiredTwistingSpeed = cmdVelReceiver->GetAngularVelocity(2);
   
-//        locomotionController->UpdateDesiredSpeed(desiredSpeed,desiredTwistingSpeed);
-//        locomotionController->Update();
+       locomotionController->UpdateDesiredSpeed(desiredSpeed,desiredTwistingSpeed);
+       locomotionController->Update();
 
-//        quadruped->Observation();
-//        auto [hybridAction, qpSol] = locomotionController->GetAction();
-//        quadruped->ApplyAction(qrMotorCmd::CmdsToMatrix5x12(hybridAction), MotorMode::HYBRID);
+       quadruped->Observation();
+       auto [hybridAction, qpSol] = locomotionController->GetAction();
+       quadruped->ApplyAction(qrMotorCmd::CmdsToMatrix5x12(hybridAction), MotorMode::HYBRID);
 
-//        currentTime = quadruped->GetTimeSinceReset();
-//        if (abs(quadruped->GetRobotState()->GetRpy()[0]) > 0.5f || abs(quadruped->GetRobotState()->GetRpy()[1]) > 0.5f) {
-//            ROS_ERROR("The dog is going down, main function exit.");
-//            break;
-//        }
-//        while (quadruped->GetTimeSinceReset() - startTimeWall < quadruped->GetTimeStep()) {}
-//    }
+       currentTime = quadruped->GetTimeSinceReset();
+       if (abs(quadruped->GetRobotState()->GetRpy()[0]) > 0.5f || abs(quadruped->GetRobotState()->GetRpy()[1]) > 0.5f) {
+           ROS_ERROR("The dog is going down, main function exit.");
+           break;
+       }
+       while (quadruped->GetTimeSinceReset() - startTimeWall < quadruped->GetTimeStep()) {}
+   }
     
     ROS_INFO("Time is up, end now.");
     ros::shutdown();
