@@ -31,9 +31,16 @@ static const Eigen::Matrix<float, 3, 1> standUpAnglesConfig = {0.0f, 0.9f, -1.8f
 
 static const Eigen::Matrix<float, 3, 1> sitDownAnglesConfig = {-0.167136f, 0.934969f, -2.54468f};
 
-Eigen::Matrix<float, 12, 1> LegAngles(Eigen::Matrix<float, 3, 1> config){
+Eigen::Matrix<float, 12, 1> LegAngles(qrRobotConfig *robotConfig, Eigen::Matrix<float, 3, 1> config){
     Eigen::Matrix<float, 12, 1> angles;
-    angles << config, config, config, config;
+    float abAngle = 0.0f;
+    float hipAngle = std::acos(robotConfig->GetBodyHeight() / 2.0f / robotConfig->GetUpperLength());
+    float kneeAngle = -2.0f * hipAngle;
+    Eigen::Matrix<float, 3, 1> singleAngles(abAngle, hipAngle, kneeAngle);
+    std::cout << robotConfig->GetBodyHeight() << " " <<robotConfig->GetUpperLength()<< std::endl;
+    std::cout << abAngle << " " << hipAngle<< " " << kneeAngle << std::endl;
+
+    angles << singleAngles, singleAngles, singleAngles, singleAngles;
     return angles;
 }
 
@@ -43,7 +50,7 @@ void StandUp(qrRobot *robot, float standUpTime, float totalTime, float timeStep)
 
     robot->Observation();
     Eigen::Matrix<float, 12, 1> motorAnglesBeforeStandUP = robot->GetRobotState()->q;
-    Eigen::Matrix<float, 12, 1> motorAnglesAfterStandUP  = LegAngles(standUpAnglesConfig);
+    Eigen::Matrix<float, 12, 1> motorAnglesAfterStandUP  = LegAngles(robot->GetRobotConfig(), standUpAnglesConfig);
     std::cout << "motorAnglesBeforeStandUP: \n" << motorAnglesBeforeStandUP.transpose() << std::endl;
     std::cout << "---------------------Standing Up---------------------" << std::endl;
     std::cout << "robot->standMotorAngles: \n" << motorAnglesAfterStandUP.transpose() << std::endl;
@@ -76,9 +83,8 @@ void SitDown(qrRobot *robot, float sitDownTime, float timeStep) {
     float endTime = startTime + sitDownTime;
 
     robot->Observation();
-
     Eigen::Matrix<float, 12, 1> motorAnglesBeforeSitDown = robot->GetRobotState()->q;
-    Eigen::Matrix<float, 12, 1> motorAnglesAfterStandUP  = LegAngles(sitDownAnglesConfig);
+    Eigen::Matrix<float, 12, 1> motorAnglesAfterStandUP  = LegAngles(robot->GetRobotConfig(), sitDownAnglesConfig);
 
     std::cout << "motorAnglesBeforeSitDown: \n" << motorAnglesBeforeSitDown.transpose() << std::endl;
     std::cout << "robot->sitDownMotorAngles: \n" << motorAnglesAfterStandUP.transpose() << std::endl;
