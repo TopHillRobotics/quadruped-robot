@@ -178,6 +178,7 @@ void qrRobotA1Sim::SendCmd()
         lowCmd.motorCmd[motorId].Kd   = cmd[3];
         lowCmd.motorCmd[motorId].tau  = cmd[4];
     }
+
     for(int m = 0; m < 12; m++){
         jointCmdPub[m].publish(lowCmd.motorCmd[m]);
     }

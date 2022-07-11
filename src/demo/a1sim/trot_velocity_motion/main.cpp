@@ -44,9 +44,10 @@ int main(int argc, char **argv)
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
 
     stopControllers(nh, "/a1_gazebo/controller_manager/switch_controller");
-    ros::ServiceClient modelStateClient = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
-    ros::ServiceClient jointStateClient = nh.serviceClient<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
-    ResetRobotByService(modelStateClient, jointStateClient);
+    //ros::ServiceClient modelStateClient = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
+    //ros::ServiceClient jointStateClient = nh.serviceClient<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
+    //ResetRobotByService(modelStateClient, jointStateClient);
+    ResetRobotBySystem();
     startControllers(nh, "/a1_gazebo/controller_manager/switch_controller");
     qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
     ros::AsyncSpinner spinner(1); // one threads
@@ -56,7 +57,7 @@ int main(int argc, char **argv)
 
 
     qrRobot *quadruped = new qrRobotA1Sim(nh, pathToPackage + "/robot_config.yaml");
-    StandUp(quadruped, 3.f, 5.f, 0.001);
+    StandUp(quadruped, 3.f, 5.f, 0.001f);
 
 //    float desiredTwistingSpeed = 0.;
 //    Eigen::Matrix<float, 3, 1> desiredSpeed = {0.0, 0.0, 0.0};

@@ -171,6 +171,15 @@ public:
         return bodyHeight;
     }
 
+    inline float GetHipLength() const{
+        return hipLength;
+    }
+
+    inline float GetUpperLength() const{
+        return upperLength;
+    }
+
+
 private:
 
     /**
