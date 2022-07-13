@@ -13,6 +13,7 @@ qrRobot::qrRobot(std::string path)
     stop = false;
     timeStep = 0.001f;
     robotConfig = new qrRobotConfig(path);
+    robotState.SetRobotConfig(robotConfig);
 }
 
 void qrRobot::LoadConfig(std::string path)

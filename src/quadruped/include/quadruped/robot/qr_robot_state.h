@@ -147,6 +147,12 @@ public:
     void setTimeStamp(uint32_t tick);
 
     /**
+     * @brief set qrRobotConfig object
+     * @param robotConfig
+     */
+    void SetRobotConfig(qrRobotConfig *robotConfig);
+
+    /**
      * @brief get a vector of motor velocities
      * @param legId: which leg's velocity
      * @return vector of motor velocities

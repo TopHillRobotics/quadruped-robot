@@ -66,6 +66,7 @@ qrGaitGenerator::qrGaitGenerator(qrRobot *robot,std::string configFilePath)
     config = YAML::LoadFile(configFilePath);
 
     this->robot = robot;
+    this->robotState = robot->GetRobotState();
     std::string gaitName = config["gait_params"]["gaitName"].as<std::string>();
 
     std::vector<float> stanceDurationList = config["gait_params"][gaitName]["stance_duration"].as<std::vector<float>>();
