@@ -19,6 +19,11 @@ void qrRobotState::setTimeStamp(uint32_t tick){
     lastStamp = tick;
 }
 
+void qrRobotState::SetRobotConfig(qrRobotConfig *robotConfig)
+{
+    this->robotConfig = robotConfig;
+}
+
 Vec3<float> qrRobotState::GetDq(unsigned int legId){
     Vec3<float> result;
     result << dq[legId * 3], dq[legId * 3 + 1], dq[legId * 3 + 2];

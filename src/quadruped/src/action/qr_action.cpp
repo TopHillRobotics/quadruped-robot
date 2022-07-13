@@ -25,7 +25,6 @@
 #include "action/qr_action.h"
 
 #include <Eigen/Dense>
-#include <fstream>
 
 static const Eigen::Matrix<float, 3, 1> standUpAnglesConfig = {0.0f, 0.9f, -1.8f};
 
@@ -55,8 +54,6 @@ void StandUp(qrRobot *robot, float standUpTime, float totalTime, float timeStep)
     std::cout << "---------------------Standing Up---------------------" << std::endl;
     std::cout << "robot->standMotorAngles: \n" << motorAnglesAfterStandUP.transpose() << std::endl;
 
-    std::ofstream ofs;
-    ofs.open("/home/gk/Documents/angles.data",std::ios::out|std::ios::app);
     for (float t = startTime; t < totalTime; t += timeStep) {
         float blendRatio = (t - startTime) / standUpTime;
         Eigen::Matrix<float, 12, 1> action;
@@ -68,13 +65,7 @@ void StandUp(qrRobot *robot, float standUpTime, float totalTime, float timeStep)
             robot->ApplyAction(action,MotorMode::POSITION);
             while (robot->GetTimeSinceReset() < t + timeStep) {}
         }
-        ofs << t << " ";
-        for(int i = 0; i < 12; ++i){
-            ofs << action[i] << " ";
-        }
-        ofs << '\n';
     }
-    ofs.close();
     std::cout << "---------------------Stand Up Finished---------------------" << std::endl;
 }
 

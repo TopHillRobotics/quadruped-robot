@@ -146,7 +146,6 @@ std::tuple<std::vector<qrMotorCmd>, Mat3x4<float>> qrLocomotionController::GetAc
     // Returns the control ouputs (e.g. positions/torques) for all motors. type: map
     auto swingAction = this->swingLegController->GetAction();
     auto [stanceAction, qpSol] = this->stanceLegController->GetAction(); // map<int, MotorCommand>
-    std::vector<qrMotorCmd> action;
     // copy motors' actions from subcontrollers to output variable.         
     for (int joint_id = 0; joint_id < qrRobotConfig::numMotor; ++joint_id) {
         auto it = swingAction.find(joint_id);
@@ -156,7 +155,7 @@ std::tuple<std::vector<qrMotorCmd>, Mat3x4<float>> qrLocomotionController::GetAc
             this->action.push_back(stanceAction[joint_id]);
         }
     }
-    return {action, qpSol};
+    return {this->action, qpSol};
 }
 
 std::tuple<std::vector<qrMotorCmd>, Mat3x4<float>> qrLocomotionController::GetFakeAction()

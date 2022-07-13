@@ -45,10 +45,10 @@ qrStanceLegController::
       desiredTwistingSpeed(desiredTwistingSpeed),
       configFilepath(configFilepath)
 {
-    this->Reset(0.f);
     this->robotConfig = this->robot->GetRobotConfig();
     this->robotState = this->robot->GetRobotState();
     this->desiredBodyHeight = this->robotConfig->GetBodyHeight();
+    this->Reset(0.f);
 }
 
 void qrStanceLegController::Reset(float currentTime)
@@ -78,7 +78,7 @@ void qrStanceLegController::Reset(float currentTime)
     v = param["stance_leg_params"][controlModeStr]["min_ddq"].as<std::vector<float>>();
     this->minDdq = Eigen::MatrixXf::Map(&v[0], 6, 1);
     v = param["stance_leg_params"][controlModeStr]["acc_weight"].as<std::vector<float>>();
-    this->accWeight = Eigen::MatrixXf::Map(&v[0], 6, 1);        
+    this->accWeight = Eigen::MatrixXf::Map(&v[0], 6, 1);
     this->currentTime = currentTime;
     // this->resetTime = this->robot->GetTimeSinceReset();
     // this->gaitGenerator->Reset(timeSinceReset);
