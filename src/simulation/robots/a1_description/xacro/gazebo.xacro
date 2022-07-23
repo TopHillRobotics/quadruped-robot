@@ -43,12 +43,12 @@
         </plugin>
     </gazebo> -->
 
-   <!-- <gazebo>
-       <plugin filename="libgazebo_ros_force.so" name="gazebo_ros_force">
-           <bodyName>trunk</bodyName>
-           <topicName>/apply_force/trunk</topicName>
-       </plugin>
-    </gazebo> -->
+<!--    <gazebo>-->
+<!--        <plugin filename="libgazebo_ros_force.so" name="gazebo_ros_force">-->
+<!--            <bodyName>trunk</bodyName>-->
+<!--            <topicName>/apply_force/trunk</topicName>-->
+<!--        </plugin>-->
+<!--    </gazebo>-->
 
     <gazebo reference="imu_link">
         <gravity>true</gravity>
@@ -137,46 +137,7 @@
             </plugin>
         </visual>
     </gazebo> -->
-    <!-- <gazebo>
-        <plugin filename="libnewLinkPlot3DPlugin.so" name="3dplot">
-            <frequency>1000</frequency>
-            <plot>
-                <link>FR_calf</link>
-                <pose>0 0 -0.2 0 0 0</pose>
-                <material>Gazebo/Yellow</material>
-            </plot>
-        </plugin>
-    </gazebo>
-    <gazebo>
-        <plugin filename="libnewLinkPlot3DPlugin.so" name="3dplot">
-            <frequency>1000</frequency>
-            <plot>
-                <link>FL_calf</link>
-                <pose>0 0 -0.2 0 0 0</pose>
-                <material>Gazebo/Red</material>
-            </plot>
-        </plugin>
-    </gazebo>
-    <gazebo>
-        <plugin filename="libnewLinkPlot3DPlugin.so" name="3dplot">
-            <frequency>1000</frequency>
-            <plot>
-                <link>RR_calf</link>
-                <pose>0 0 -0.2 0 0 0</pose>
-                <material>Gazebo/Blue</material>
-            </plot>
-        </plugin>
-    </gazebo>
-    <gazebo>
-        <plugin filename="libnewLinkPlot3DPlugin.so" name="3dplot">
-            <frequency>1000</frequency>
-            <plot>
-                <link>RL_calf</link>
-                <pose>0 0 -0.2 0 0 0</pose>
-                <material>Gazebo/Black</material>
-            </plot>
-        </plugin>
-    </gazebo> -->
+
     <!-- Show planned pose location -->
      <!-- <gazebo reference="base">
         <visual>
@@ -185,19 +146,6 @@
             </plugin>
         </visual>
     </gazebo> -->
-
-    <!-- <gazebo>
-        <plugin filename="libLinkPlot3DPlugin.so" name="3dplotTrunk">
-            <frequency>10</frequency>
-            <plot>
-                <link>base</link>
-                <pose>0 0 0 0 0 0</pose>
-                <material>Gazebo/Yellow</material>
-            </plot>
-        </plugin>
-  </gazebo> -->
-    
-
 
     <gazebo reference="base">
         <material>Gazebo/Green</material>

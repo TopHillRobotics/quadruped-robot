@@ -1,4 +1,0 @@
-speed_update_mode: 0 # const twist
-const_twist:
-  linear: [0.2, 0., 0.]
-  angular: 0. # 0.2

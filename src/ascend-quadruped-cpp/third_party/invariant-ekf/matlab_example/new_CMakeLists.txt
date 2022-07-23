@@ -1,0 +1,36 @@
+# Specify the minimum version for CMake
+cmake_minimum_required(VERSION 3.10.0)
+# Project's name
+project(inekf_interface)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -pthread  -march=native -W")
+
+message("begin to build python_interface of INEKF!")
+# Threading
+find_package (Threads)
+# Boost
+find_package(Boost 1.57 REQUIRED COMPONENTS system)
+include_directories(${Boost_INCLUDE_DIR})
+message("Boost_INCLUDE_DIR: " ${Boost_INCLUDE_DIR})
+# Eigen 
+find_package(Eigen3 REQUIRED)
+include_directories(${EIGEN3_INCLUDE_DIR})
+message("EIGEN3_INCLUDE_DIR: " ${EIGEN3_INCLUDE_DIR})
+
+include_directories(${PROJECT_SOURCE_DIR}/include)
+link_directories(${PROJECT_SOURCE_DIR}/lib)
+set(SDK "/home/ascend/Documents/motion_imitation-master/third_party/unitree_legged_sdk")
+include_directories(${SDK}/include)
+link_directories(${SDK}/lib)
+
+
+set(EXTRA_LIBS libinekf.so libunitree_legged_sdk_amd64.so lcm
+    ${Boost_LIBRARIES}
+    )    
+message("EXTRA_LIBS = " ${EXTRA_LIBS})
+
+# include_directories(${SDK}/pybind11/include)
+add_subdirectory(pybind11)
+pybind11_add_module(inekf_interface ${PROJECT_SOURCE_DIR}/src/tests/inekf_python_interface.cpp)
+target_link_libraries(inekf_interface PRIVATE ${EXTRA_LIBS})

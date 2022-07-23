@@ -1,0 +1,14 @@
+unitreeA1: #namespace
+    task_and_robot_environment_name: 'UnitreeDogWorld-v0'
+    ros_ws_abspath: "/home/bowang/projects/robots-dev-zy"
+    running_step: 0.03 # amount of time the control will be executed
+    pos_step: 0.016     # increment in position for each command
+    
+    #qlearn parameters
+    alpha: 0.1
+    gamma: 0.7
+    epsilon: 0.9
+    epsilon_discount: 0.999
+    nepisodes: 500
+    nsteps: 1000
+    running_step: 0.06 # Time for each step

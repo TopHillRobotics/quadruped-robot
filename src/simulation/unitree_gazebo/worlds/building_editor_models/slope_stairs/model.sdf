@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <sdf version='1.6'>
   <model name='slope_stairs'>
-    <pose frame=''>3.15 0 0 1.5707 0 3.1415</pose>
+    <pose frame=''>4.15 0 0 1.5707 0 3.1415</pose>
     <link name='slope'>
       <visual name='slope_0'>
         <pose frame=''>0 0 0 0 0 0</pose>

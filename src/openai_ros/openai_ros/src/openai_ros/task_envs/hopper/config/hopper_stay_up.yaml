@@ -1,0 +1,44 @@
+monoped: #namespace
+
+    n_actions: 6 # 1-2) Increment/Decrement haa_joint
+                 # 3-4) Increment/Decrement hfe_joint
+                 # 5-6) Increment/Decrement kfe_joint
+
+    init_joint_states:
+      haa_joint: 0.0
+      hfe_joint: 0.0
+      kfe_joint: 0.0
+
+    desired_point:
+      x: 0.0
+      y: 0.0
+      z: 1.0
+    accepted_error_in_des_pos: 0.1 # Accepted error un meters of the desired position
+
+    desired_yaw: 0.0 # Desired yaw in radians for the hopper to stay
+    joint_increment_value: 0.05  # in radians
+    accepted_joint_error: 0.1 # Radians of accepted error in the joints, should be bigger than the joint increment
+    update_rate: 20 # Hz frequency in whihc we check that the joints are in the correct place, the bigger the more precise but more overhead
+    number_decimals_precision_obs: 1
+    desired_force: 7.08 # In Newtons, normal contact force when stanting still with 9.81 gravity
+    max_x_pos: 3.0 # Maximum Position of the base in X axis in World
+    max_y_pos: 3.0 # Maximum Position of the base in Y axis in World
+    max_height: 3.0   # in meters
+    min_height: 0.5   # in meters
+    distance_from_desired_point_max: 3.0 # Distance that we consider maximum to be from the desired point
+    max_incl: 1.57       # Maximum acceptable roll and pitch for the hoppers base. More is conidered a fallen robot
+    max_contact_force: 14.16 # The maxixmum contact force that we consoder acceptable.
+    maximum_haa_joint: 1.6 # Max and Min value ( sign change ) based on the URDF joint values
+    maximum_hfe_joint: 1.6 # Max and Min value ( sign change ) based on the URDF joint values
+    maximum_kfe_joint: 0.0 # Max based on the URDF joint values
+    min_kfe_joint: -1.6 #  Min value based on the URDF joint values
+
+    rewards_weight:
+      weight_joint_position: 1.0 # Weight for joint positions ( joints in the zero is perfect )
+      weight_contact_force: 1.0 # Weight for contact force similar to desired ( weight of monoped )
+      weight_orientation: 1.0 # Weight for orientation ( vertical is perfect )
+      weight_distance_from_des_point: 1.0 # Weight for distance from desired point ( on the point is perfect )
+
+    alive_reward: 100.0 # reward
+    done_reward: 1000.0 # reward
+

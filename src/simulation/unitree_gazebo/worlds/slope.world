@@ -115,7 +115,7 @@
 
          <include>
 	    	<!-- <uri>model:///home/ascend/Documents/robots/src/simulation/unitree_gazebo/worlds/building_editor_models/slope_stairs</uri> -->
-            <uri>model:///home/xmc/Documents/robots/src/simulation/unitree_gazebo/worlds/building_editor_models/slope15</uri>
+            <uri>model:///home/ascend/Documents/robots/src/simulation/unitree_gazebo/worlds/building_editor_models/slope15</uri>
         </include>
               
     </world>

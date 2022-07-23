@@ -62,39 +62,6 @@
                 </visual>
             </link>
         </model>
-        <!--
-        <model name="slippry_sheet">
-        <static>true</static>
-            <link name="slippry_sheet1">
-                <pose>1 0 0.005 0 0 0</pose>
-                <collision name="static_box_collision">
-                    <geometry>
-                        <box>
-                            <size>0.2 1 0.005</size>
-                        </box>
-                    </geometry>
-                    <surface>
-                        <friction>
-                            <ode>
-                                <mu>0.11</mu>
-                                <mu2>0.11</mu2>
-                            </ode>
-                        </friction>
-                    </surface>
-                </collision>
-                <visual name="slippry_sheet1_visual">
-                    <geometry>
-                        <box>
-                            <size>0.2 1 0.005</size>
-                        </box>
-                    </geometry>
-                    <material>
-                        <ambient>0.2 0.2 0.2 1.0</ambient>
-                        <diffuse>.421 0.225 0.0 1.0</diffuse>
-                    </material>
-                </visual>
-            </link>
-        </model>
-        -->
+
     </world>
 </sdf>

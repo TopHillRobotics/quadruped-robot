@@ -35,7 +35,7 @@
 
     <!-- Load joint controller configurations from YAML file to parameter server -->
     <rosparam file="$(arg dollar)$(arg robot_path)/config/robot_control.yaml" command="load"/>
-    <!-- <rosparam file="/home/xmc/Documents/robots/src/ascend-quadruped-cpp/config/a1_sim/openloop_gait_generator.yaml" command="load"/> -->
+
     <!-- load the controllers -->
     <node pkg="controller_manager" type="spawner" name="controller_spawner" respawn="false"
           output="screen" ns="/$(arg rname)_gazebo" args="joint_state_controller
@@ -54,8 +54,8 @@
     <!-- <node pkg="unitree_gazebo" type="servo" name="servo" required="true" output="screen"/> -->
 
     <!-- load the parameter unitree_controller -->
-    <!-- <include file="$(find unitree_controller)/launch/set_ctrl.launch">
+    <include file="$(find unitree_controller)/launch/set_ctrl.launch">
         <arg name="rname" value="$(arg rname)"/>
-    </include> -->
+    </include>
 
 </launch>

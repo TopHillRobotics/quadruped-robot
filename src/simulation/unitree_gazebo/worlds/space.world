@@ -1,14 +1,12 @@
 <?xml version="1.0" ?>
 <sdf version="1.5">
     <world name="default">
-        <gui>
-      	    <plugin name="gaitParameterGui" filename="libGaitParameterGuiPlugin.so"/>
-    	</gui>
+
         <physics type="ode">
         <max_step_size>0.001</max_step_size>
         <real_time_factor>1</real_time_factor>
         <real_time_update_rate>1000</real_time_update_rate>
-        <gravity>0 0 -9.81</gravity>
+        <gravity>0 0 0</gravity>
             <ode>
                 <solver>
                 <type>quick</type>  
@@ -23,8 +21,13 @@
                 </constraints>  
             </ode>
         </physics>
-        
+
         <scene>
+        <!-- <sky>
+            <clouds>
+                <speed>12</speed>
+            </clouds>
+        </sky> -->
         </scene>
         <!-- A global light source -->
         <include>
@@ -34,7 +37,31 @@
         <include>
             <uri>model://ground_plane</uri>
         </include>
+        <!-- environment blocks, obstacles or stairs -->
+        <model name="static_environment">
+        <static>true</static>
+            <link name="static_box">
+                <pose>-2 2 0.5 0 0 0</pose>
+                <collision name="static_box_collision">
+                    <geometry>
+                        <box>
+                            <size>1 1 1</size>
+                        </box>
+                    </geometry>
+                </collision>
+                <visual name="static_box_visual">
+                    <geometry>
+                        <box>
+                            <size>1 1 1</size>
+                        </box>
+                    </geometry>
+                    <material>
+                        <ambient>0.2 0.2 0.2 1.0</ambient>
+                        <diffuse>.421 0.225 0.0 1.0</diffuse>
+                    </material>
+                </visual>
+            </link>
+        </model>
 
-        
     </world>
 </sdf>

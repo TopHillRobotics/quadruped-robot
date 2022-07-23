@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>openai_ros</name>
+  <version>1.0.0</version>
+  <description>The openai_ros package</description>
+  <maintainer email="rdaneel@todo.todo">rdaneel</maintainer>
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+
+  <build_depend>python-catkin-pkg</build_depend>
+  <build_depend>message_generation</build_depend> 
+  
+  <build_export_depend>rospy</build_export_depend>
+  
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>message_runtime</exec_depend>
+
+  <exec_depend>gazebo_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>controller_manager_msgs</exec_depend>
+
+  <!-- Dependencies But only needed if you execute certain RobotEnvs and TasksEnvs-->
+  <!--
+  <exec_depend>std_srvs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>trajectory_msgs</exec_depend>
+  <exec_depend>rosgraph_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>tf</exec_depend>
+  <exec_depend>intera_interface</exec_depend>
+  <exec_depend>intera_core_msgs</exec_depend>
+  <exec_depend>smart_grasping_sandbox</exec_depend>
+  <exec_depend>moveit_msgs</exec_depend>
+  <exec_depend>robotx_gazebo</exec_depend>
+  <exec_depend>python-numpy</exec_depend>
+  -->
+
+
+  <export>
+    <rosdoc config="rosdoc.yaml"/>
+  </export>
+</package>

@@ -1,0 +1,30 @@
+sumit_xl: #namespace
+    n_actions: 3 # We have 3 actions, Forwards,TurnLeft,TurnRight, STOP
+    n_observations: 6 # We have 6 different observations
+
+    speed_step: 1.0 # Time to wait in the reset phases
+
+    linear_forward_speed: 0.5 # Spwwed for ging fowards
+    linear_turn_speed: 0.05 # Lienare speed when turning
+    angular_speed: 0.3 # Angular speed when turning Left or Right
+    init_linear_forward_speed: 0.0 # Initial linear speed in which we start each episode
+    init_linear_turn_speed: 0.0 # Initial angular speed in shich we start each episode
+    
+    new_ranges: 5 # How many laser readings we jump in each observation reading, the bigger the less laser resolution
+    min_range: 0.5 # Minimum meters below wich we consider we have crashed
+    max_laser_value: 6 # Value considered Ok, no wall
+    min_laser_value: 0 # Value considered there is an obstacle or crashed
+    max_linear_aceleration: 20.0 # Linear acceleration value in which we consider Turtlebot 3 has crashed into something
+    max_distance: 4.0 # Distance value in which we base the space range of the odometry X and Y axis ( SQUARE RANGE )
+    
+    desired_pose:
+      x: -2.94
+      y: 3.92
+      z: 0.0
+    
+    
+    closer_to_point_reward: 10 # We give points for getting closer to the desired point
+    not_ending_point_reward: 1 # We give points for getting closer to the desired point
+    end_episode_points: 200 # Points given when ending an episode
+    
+

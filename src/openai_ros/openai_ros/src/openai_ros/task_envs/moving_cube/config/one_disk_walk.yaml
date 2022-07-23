@@ -1,0 +1,19 @@
+moving_cube: #namespace
+    # Cube Realated parameters
+    roll_speed_fixed_value: 50.0 # High Propeller Speed             
+    roll_speed_increment_value: 10.0 # Low Propeller Speed
+    max_distance: 10.0 # Maximum Base Turn Angular speed
+    max_pitch_angle: 0.3
+    max_y_linear_speed: 100
+    max_yaw_angle: 0.3
+    init_cube_pose: # 3D cube in which Drone is allowed to move
+      x: 0.0
+      y: 0.0
+      z: 0.0    
+    move_distance_reward_weight: 100.0 # reward
+    y_linear_speed_reward_weight: 100.0
+    y_axis_angle_reward_weight: 100.0
+    end_episode_points: -10.0
+    roll_reward_weight: 120
+    init_roll_vel: 10
+    n_actions: 3 # Number of actions used by algorithm and task

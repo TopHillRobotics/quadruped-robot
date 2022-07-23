@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <sdf version='1.6'>
   <model name='slope15'>
-    <pose frame=''>3.475 0 0 1.5707 0 3.1415</pose>
+    <pose frame=''>4.475 0 0 1.5707 0 3.1415</pose>
     <link name='slope15'>
       <visual name='slope15_0'>
         <pose frame=''>0 0 0 0 0 0</pose>

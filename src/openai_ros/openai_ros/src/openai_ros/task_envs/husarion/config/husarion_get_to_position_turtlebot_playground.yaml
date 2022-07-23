@@ -1,0 +1,42 @@
+husarion: #namespace
+    n_actions: 4 # Forwards,TurnLeft,TurnRight, Backwards
+    init_linear_forward_speed: 0.0 # Initial linear speed in which we start each episode
+    init_linear_turn_speed: 0.0 # Initial angular speed in shich we start each episode
+    linear_forward_speed: 0.5 # Spwwed for ging fowards
+    linear_turn_speed: 0.0 # Lienare speed when turning
+    angular_speed: 1.5 # Angular speed when turning Left or Right
+    new_ranges: 40 # How many laser readings we jump in each observation reading, the bigger the less laser resolution
+    max_laser_value: 6.0 # Value considered Ok, no wall
+    min_laser_value: 0.3 # Value considered there is an obstacle or crashed
+    work_space: # 2D cube in which Husarion Cant surpass.
+      x_max: 3.0
+      x_min: -7.0
+      y_max: 3.0
+      y_min: -5.0
+    desired_pose:
+      x: -2.94
+      y: 3.92
+    precision: 1 # Number of decimals that we will accept in all sensor readings
+    move_base_precision: 0.2 # We allow this difference between the asked linear speed and the real one. Note that angular is not because controller is too imprecise in sim.
+    closer_to_point_reward: 10 # We give points for getting closer to the desired point
+    alive_reward: 0 # Point we give to just not not end the episode
+    end_episode_points: 200 # Points given when ending an episode
+
+
+
+    
+
+    
+
+
+      
+    
+   
+
+    
+    
+    
+    
+    
+    
+
