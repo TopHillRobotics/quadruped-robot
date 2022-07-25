@@ -16,10 +16,10 @@
 #include "config.h"
 
 namespace Quadruped {
-    struct StepParameters {
-        StepParameters() : duration(0.), height(0.), penetration(0.)
+    struct qrStepParameters {
+        qrStepParameters() : duration(0.), height(0.), penetration(0.)
         {}
-        StepParameters(float _duration, float _height, float _penetration = 0.)
+        qrStepParameters(float _duration, float _height, float _penetration = 0.)
             : duration(_duration), height(_height), penetration(_penetration)
         {}
 
@@ -38,26 +38,26 @@ namespace Quadruped {
      * @param degree int, the degree of spline, such as 2, 3, 5
      * @param splineType string, option value: quadratic, cubicPolygon, quinticPolygon, BSpline
      */
-    struct SplineInfo {
+    struct qrSplineInfo {
         int degree=3;
         std::string splineType = "cubicPolygon"; //  "BSpline";
         std::vector<glm::vec3> controlPoints;
         std::vector<float> knots;
-        SplineInfo () {}
-        SplineInfo (std::vector<glm::vec3> &controlPointsIn, std::vector<float> &knotsIn) {
+        qrSplineInfo () {}
+        qrSplineInfo (std::vector<glm::vec3> &controlPointsIn, std::vector<float> &knotsIn) {
             splineType = "BSpline";
             controlPoints = controlPointsIn;
             knots = knotsIn;
         }
     };
 
-    class FootSplinePatternGenerator {
+    class qrFootSplinePatternGenerator {
     public:
         /** @brief Constructor function */
-        FootSplinePatternGenerator();
+        qrFootSplinePatternGenerator();
 
         /** @brief Destructor function */
-        virtual ~FootSplinePatternGenerator();
+        virtual ~qrFootSplinePatternGenerator();
 
         /**
          * @brief Set the parameters for the generation of the foot swing trajectory
@@ -65,12 +65,12 @@ namespace Quadruped {
          * @param const double& Initial time
          * @param const Eigen::Vector3d& Initial foot position
          * @param const Eigen::Vector3d& Target foot position
-         * @param const StepParameters Step parameters
+         * @param const qrStepParameters Step parameters
          */
         virtual void SetParameters(const float initial_time,
                            const Eigen::Vector3f &initial_pos,
                            const Eigen::Vector3f &target_pos,
-                           const StepParameters &params);
+                           const qrStepParameters &params);
 
         /**
          * @brief Generates the foot-swing trajectory for a given time
@@ -114,18 +114,18 @@ namespace Quadruped {
     };
 
     
-    class FootBSplinePatternGenerator : public FootSplinePatternGenerator {
+    class qrFootBSplinePatternGenerator : public qrFootSplinePatternGenerator {
     public:
         /** @brief Constructor function */
-        FootBSplinePatternGenerator(SplineInfo &splineInfo);
+        qrFootBSplinePatternGenerator(qrSplineInfo &qrSplineInfo);
 
         /** @brief Destructor function */
-        virtual ~FootBSplinePatternGenerator() = default;
+        virtual ~qrFootBSplinePatternGenerator() = default;
 
         virtual void SetParameters(const float initial_time,
                             const Eigen::Vector3f &initial_pos,
                             const Eigen::Vector3f &target_pos,
-                            const StepParameters &params);
+                            const qrStepParameters &params);
         virtual bool GenerateTrajectory(Eigen::Vector3f &foot_pos,
                                         Eigen::Vector3f &foot_vel,
                                         Eigen::Vector3f &foot_acc,
@@ -136,7 +136,7 @@ namespace Quadruped {
         tinynurbs::Curve3f crv;
     };
     
-    class SwingFootTrajectory {
+    class qrSwingFootTrajectory {
     public:
         /** brief init func
          * @param Vec3<float> startPosIn
@@ -144,18 +144,18 @@ namespace Quadruped {
          * @param float duration, default value=1.f
          * @param float maxClearance, default value = 0.1f
          */
-        SwingFootTrajectory() {};
+        qrSwingFootTrajectory() {};
 
-        SwingFootTrajectory(SplineInfo splineInfoIn,
+        qrSwingFootTrajectory(qrSplineInfo qrSplineInfoIn,
                             Vec3<float> startPosIn = {0.f, 0.f, 0.f},
                             Vec3<float> endPosIn = {0.f, 0.f, 0.f},
                             float duration = 1.f,
                             float maxClearance = 0.1f
                             );
 
-        SwingFootTrajectory(const SwingFootTrajectory &item);
+        qrSwingFootTrajectory(const qrSwingFootTrajectory &item);
 
-        virtual ~SwingFootTrajectory() = default;
+        virtual ~qrSwingFootTrajectory() = default;
 
         /** @brief Call it every time you need a tarjectory point to control. 
          * @param Vec3<float>& foot position;
@@ -197,9 +197,9 @@ namespace Quadruped {
         float mid;
         Vec3<float> startPos;
         Vec3<float> endPos;
-        StepParameters stepParams;
-        FootSplinePatternGenerator *footTarjGen;
-        SplineInfo splineInfo;
+        qrStepParameters stepParams;
+        qrFootSplinePatternGenerator *footTarjGen;
+        qrSplineInfo qrSplineInfo;
         std::vector<float> datax, datay1, datay2, datay3;        
 
     };

@@ -11,7 +11,7 @@
 
 namespace Quadruped {
 
-    FootBSplinePatternGenerator::FootBSplinePatternGenerator(SplineInfo &splineInfo) {
+    qrFootBSplinePatternGenerator::qrFootBSplinePatternGenerator(SplineInfo &splineInfo) {
         // points in regular frame
         crv.control_points = {glm::vec3(-10, 0, 0),
                             glm::vec3(-11, 0, 0.2),
@@ -32,7 +32,7 @@ namespace Quadruped {
         glm::vec3 pt1 = tinynurbs::curvePoint(crv, 0.f);
     }
     
-    void FootBSplinePatternGenerator::SetParameters(const float initial_time,
+    void qrFootBSplinePatternGenerator::SetParameters(const float initial_time,
                                                    const Eigen::Vector3f &initial_pos,
                                                    const Eigen::Vector3f &target_pos,
                                                    const StepParameters &params)
@@ -58,7 +58,7 @@ namespace Quadruped {
         UpdateSpline(initial_time, params.duration, initial_pos, target_appex, target_pos);
     }
 
-    void FootBSplinePatternGenerator::UpdateSpline(float initial_time, float duration, const Eigen::Vector3f &initial_pos, float target_appex, const Eigen::Vector3f &target_pos)
+    void qrFootBSplinePatternGenerator::UpdateSpline(float initial_time, float duration, const Eigen::Vector3f &initial_pos, float target_appex, const Eigen::Vector3f &target_pos)
     {
         std::vector<glm::vec3> &controlPoints =  crv.control_points;
         std::vector<float> &knots = crv.knots;
@@ -101,15 +101,9 @@ namespace Quadruped {
             controlPoints[2].z = controlPoints[0].z + 2.0/8 *z_length_left;
             controlPoints[3].z = controlPoints[0].z + 7.0/8 *z_length_left; 
         }
-        
-        // int i=0;
-        // for (auto &point : controlPoints) {
-        //     printf("controlPoint [%d] = %f, %f, %f\n",i, point.x,point.y,point.z);
-        //     i+=1;
-        // }
     }
 
-    bool FootBSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
+    bool qrFootBSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
                                                         Vec3<float> &foot_vel,
                                                         Vec3<float> &foot_acc,
                                                         float time)
@@ -120,33 +114,24 @@ namespace Quadruped {
             return false; // duration it's always positive, and makes sense when
         
         // Setting the foot state
-        // foot_pos << swing_traj_x.x, swing_traj_y.x, swing_traj_z.x;
-        // foot_vel << swing_traj_x.xd, swing_traj_y.xd, swing_traj_z.xd;
-        // foot_acc << swing_traj_x.xdd, swing_traj_y.xdd, swing_traj_z.xdd;
         glm::vec3 pt1 = tinynurbs::curvePoint(crv, dt);
-        // glm::vec2 tgt1 = tinynurbs::curveTangent(crv, 0.5f);
-        // REQUIRE(tgt1.x == Approx(1));
-        // REQUIRE(tgt1.y == Approx(0));
         foot_pos[0] = pt1.x/100; // cm --> m
         foot_pos[1] = pt1.y/100;
         foot_pos[2] = pt1.z/100;
 
-        // from regular frame -> world frame
-        // foot_pos[0] = foot_pos[0] + (startPos[0] - crv.control_points[0].x)/100; 
         foot_pos[1] = (1.f - dt) * startPos(1, 0)/100 + dt * endPos(1, 0)/100;
-        // foot_pos[2] = foot_pos[2] + (startPos[2] - crv.control_points[0].z)/100; 
         
         return true;
     }
 
 
-    FootSplinePatternGenerator::FootSplinePatternGenerator() : initial_time_(0.), duration_(0.)
+    qrFootSplinePatternGenerator::qrFootSplinePatternGenerator() : initial_time_(0.), duration_(0.)
     {}
 
-    FootSplinePatternGenerator::~FootSplinePatternGenerator()
+    qrFootSplinePatternGenerator::~qrFootSplinePatternGenerator()
     {}
 
-    void FootSplinePatternGenerator::SetParameters(const float initial_time,
+    void qrFootSplinePatternGenerator::SetParameters(const float initial_time,
                                                    const Eigen::Vector3f &initial_pos,
                                                    const Eigen::Vector3f &target_pos,
                                                    const StepParameters &params)
@@ -191,7 +176,7 @@ namespace Quadruped {
                                          target_pos(2) - params.penetration);
     }
 
-    bool FootSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
+    bool qrFootSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
                                                         Vec3<float> &foot_vel,
                                                         Vec3<float> &foot_acc,
                                                         float time)
@@ -221,7 +206,7 @@ namespace Quadruped {
         return true;
     }
 
-    SwingFootTrajectory::SwingFootTrajectory(SplineInfo splineInfoIn,
+    qrSwingFootTrajectory::qrSwingFootTrajectory(SplineInfo splineInfoIn,
                                             Vec3<float> startPosIn,
                                              Vec3<float> endPosIn,
                                              float duration,
@@ -233,29 +218,24 @@ namespace Quadruped {
         if (splineInfo.splineType=="BSpline") {
             std::cout << "swing BSpline\n";
             stepParams.height = std::min(0.2f, std::max(0.1f, maxClearance + abs(endPos[2] - startPos[2])));
-            footTarjGen = new FootBSplinePatternGenerator(splineInfo);
+            footTarjGen = new qrFootBSplinePatternGenerator(splineInfo);
         } else {
             std::cout << "swing CubicPolygon\n";
             // stepParams.height = maxClearance;  // todo
             stepParams = StepParameters(duration, mid, 0.);
-            footTarjGen = new FootSplinePatternGenerator();
+            footTarjGen = new qrFootSplinePatternGenerator();
         }
         footTarjGen->SetParameters(0., startPos, endPos, stepParams);
     }
 
-    SwingFootTrajectory::SwingFootTrajectory(const SwingFootTrajectory &item)
+    qrSwingFootTrajectory::qrSwingFootTrajectory(const qrSwingFootTrajectory &item)
     {
         mid = item.mid;
         stepParams = item.stepParams;
         footTarjGen->SetParameters(0., item.startPos, item.endPos, stepParams);
     }
 
-    // SwingFootTrajectory::~SwingFootTrajectory()
-    // {
-        // delete  footTarjGen;
-    // }
-
-    bool SwingFootTrajectory::GenerateTrajectoryPoint(Vec3<float> &footPos,
+    bool qrSwingFootTrajectory::GenerateTrajectoryPoint(Vec3<float> &footPos,
                                                       Vec3<float> &footV,
                                                       Vec3<float> &footA,
                                                       float t,
@@ -272,27 +252,8 @@ namespace Quadruped {
         } else {
             phase = inputPhase;
         }
-        // std::cout << footPos << "\n" << footV << "\n"<< footA << std::endl;
-        // std::cout << "swing gen 266\n";
         bool flag;
         flag = footTarjGen->GenerateTrajectory(footPos, footV, footA, phase);
-        // if (endPos[2] < -0.05) {
-            // for (float i = 0.f; i<1.f; i=i+0.01) {
-            //     flag = footTarjGen->GenerateTrajectory(footPos, footV, footA, i);
-            //     datax.push_back(footPos[0]);
-            //     // std::cout << "swing gen "<< footPos << std::endl;
-            //     datay1.push_back(footPos[2]);
-            // }
-            // std::cout << "swing gen 273\n";
-            // plt::figure();
-            // std::map<std::string,std::string> map_;
-            // map_["cmap"] = "viridis";
-            // map_["alpha"] = "0.5";
-            // plt::scatter(datax, datay1, (2.0), map_);
-            // plt::grid(true);
-            // plt::show();
-            // exit(0);
-        // }
         return flag; // return # p,v,a
     }
 

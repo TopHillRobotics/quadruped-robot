@@ -18,21 +18,21 @@
 #include "mpc_controller/foot_trajectory_generator.h"
 
 namespace Quadruped {
-    class RaibertSwingLegController {
+    class qrSwingLegController {
 
     public:
-        RaibertSwingLegController(Robot *robot,
-                                  OpenloopGaitGenerator *gaitGenerator,
-                                  RobotEstimator *stateEstimator,
-                                  GroundSurfaceEstimator *groundEstimator,
-                                  FootholdPlanner *FootholdPlanner,
+        qrSwingLegController(Robot *robot,
+                                  qrGaitGenerator *gaitGenerator,
+                                  qrRobotEstimator *stateEstimator,
+                                  qrGroundSurfaceEstimator *groundEstimator,
+                                  qrFootholdPlanner *FootholdPlanner,
                                   Eigen::Matrix<float, 3, 1> desiredSpeed,
                                   float desiredTwistingSpeed,
                                   float desiredHeight,
                                   float footClearance,
                                   std::string configPath);
 
-        ~RaibertSwingLegController() = default;
+        ~qrSwingLegController() = default;
 
         /**
          * @brief Quadratic interpolation function, used to generate polygon curve.
@@ -66,10 +66,10 @@ namespace Quadruped {
         float desiredTwistingSpeed; // appear in velocity mode usually.
 
         Robot *robot;
-        OpenloopGaitGenerator *gaitGenerator;
-        RobotEstimator *stateEstimator;
-        GroundSurfaceEstimator *groundEstimator;
-        FootholdPlanner *footholdPlanner;
+        qrGaitGenerator *gaitGenerator;
+        qrRobotEstimator *stateEstimator;
+        qrGroundSurfaceEstimator *groundEstimator;
+        qrFootholdPlanner *footholdPlanner;
         Eigen::Matrix<int, 4, 1> lastLegState;
         Eigen::Matrix<float, 3, 1> desiredHeight;
         std::map<int, float> swigJointAngles;
@@ -82,7 +82,7 @@ namespace Quadruped {
         Eigen::Matrix<float, 3, 4> phaseSwitchFootControlPos;
         Eigen::Matrix<float, 3, 4> footHoldInControlFrame;
         
-        SwingFootTrajectory swingFootTrajectories[4];
+        qrSwingFootTrajectory swingFootTrajectories[4];
         // yaml config
         YAML::Node swingLegConfig;
         // init pose in position mode
