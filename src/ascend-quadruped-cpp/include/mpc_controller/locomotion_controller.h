@@ -30,19 +30,19 @@ namespace Quadruped {
  * @brief Universe Controller that combines planners and estimators.
  * todo : laterly the estimators need to be moved outside and runs asynchronously with controllers.
  */
-    class LocomotionController {
+    class qrLocomotionController {
 
     public:
-        LocomotionController(Robot *robot,
+        qrLocomotionController(Robot *robot,
                              qrGaitGenerator *gaitGenerator,
-                             RobotEstimator *stateEstimator,
-                             GroundSurfaceEstimator *groundEstimator,
-                             qrComPlanner  *comPlanner ,
+                             qrRobotEstimator *stateEstimator,
+                             qrGroundSurfaceEstimator *groundEstimator,
+                             qrComPlanner *comPlanner,
                              qrPosePlanner *posePlanner,
-                             RaibertSwingLegController *swingLegController,
-                             TorqueStanceLegController *stanceLegController);
+                             qrSwingLegController *swingLegController,
+                             qrStanceLegController *stanceLegController);
 
-        ~LocomotionController() = default;
+        ~qrLocomotionController() = default;
 
         void Reset();
 
@@ -58,22 +58,22 @@ namespace Quadruped {
             return gaitGenerator;
         }
 
-        inline RaibertSwingLegController *GetsSwingLegController()
+        inline qrSwingLegController *GetsSwingLegController()
         {
             return swingLegController;
         }
 
-        inline TorqueStanceLegController *GetStanceLegController()
+        inline qrStanceLegController *GetStanceLegController()
         {
             return stanceLegController;
         }
 
-        inline RobotEstimator *GetRobotEstimator()
+        inline qrRobotEstimator *GetRobotEstimator()
         {
             return stateEstimator;
         }
 
-        inline GroundSurfaceEstimator *GetGroundEstimator()
+        inline qrGroundSurfaceEstimator *GetGroundEstimator()
         {
             return groundEstimator;
         }
@@ -88,8 +88,8 @@ namespace Quadruped {
             return robot->GetTimeSinceReset();
         }
 
-        RaibertSwingLegController *swingLegController;
-        TorqueStanceLegController *stanceLegController;
+        qrSwingLegController *swingLegController;
+        qrStanceLegController *stanceLegController;
         bool stop=false;
     private:
         Robot *robot;

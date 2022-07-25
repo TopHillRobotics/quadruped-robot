@@ -16,7 +16,7 @@ namespace Quadruped {
 // The position correction coefficients in Raibert's formula.
     const Matrix<float, 3, 1> swingKp(0.03, 0.03, 0.03);
 
-    float RaibertSwingLegController::GenParabola(float phase, float start, float mid, float end)
+    float qrSwingLegController::GenParabola(float phase, float start, float mid, float end)
     {
         float mid_phase = 0.5;
         float deltaOne, deltaTwo, deltaThree, coefa, coefb, coefc;
@@ -29,7 +29,7 @@ namespace Quadruped {
         return coefa * pow(phase, 2) + coefb * phase + coefc;
     }
 
-    Matrix<float, 3, 1> RaibertSwingLegController::GenSwingFootTrajectory(float inputPhase,
+    Matrix<float, 3, 1> qrSwingLegController::GenSwingFootTrajectory(float inputPhase,
                                                                           Matrix<float, 3, 1> startPos,
                                                                           Matrix<float, 3, 1> endPos)
     {
@@ -48,10 +48,10 @@ namespace Quadruped {
         return Matrix<float, 3, 1>(x, y, z);
     }
 
-    RaibertSwingLegController::RaibertSwingLegController(Robot *robot,
+    qrSwingLegController::qrSwingLegController(Robot *robot,
                                                          qrGaitGenerator *gaitGenerator,
                                                          RobotEstimator *stateEstimator,
-                                                         GroundSurfaceEstimator *groundEstimator,
+                                                         qrGroundSurfaceEstimator *groundEstimator,
                                                          qrFootholdPlanner *footholdPlanner,
                                                          Matrix<float, 3, 1> desiredSpeed,
                                                          float desiredTwistingSpeed,
@@ -72,7 +72,7 @@ namespace Quadruped {
         footOffset = swingLegConfig["swing_leg_params"]["foot_offset"].as<float>();        
     }
 
-    void RaibertSwingLegController::Reset(float currentTime)
+    void qrSwingLegController::Reset(float currentTime)
     { 
         phaseSwitchFootLocalPos = robot->state.GetFootPositionsInBaseFrame();
         phaseSwitchFootGlobalPos = robot->state.GetFootPositionsInWorldFrame();
@@ -89,7 +89,7 @@ namespace Quadruped {
         swingJointAnglesVelocities.clear();
     }
 
-    void RaibertSwingLegController::Update(float currentTime)
+    void qrSwingLegController::Update(float currentTime)
     {
         // swingJointAnglesVelocities.clear();
         const Vec4<int>& newLegState = gaitGenerator->desiredLegState;
@@ -107,7 +107,7 @@ namespace Quadruped {
        
     }
 
-    map<int, Matrix<float, 5, 1>> RaibertSwingLegController::GetAction()
+    map<int, Matrix<float, 5, 1>> qrSwingLegController::GetAction()
     {
         Matrix<float, 3, 1> comVelocity;
         Matrix<float, 3, 1> hipOffset;

@@ -23,13 +23,13 @@ namespace Quadruped {
     /**
      * @brief Control stance leg of robot
      */
-    class TorqueStanceLegController {
+    class qrStanceLegController {
     public:
-        TorqueStanceLegController(Robot *robot,
+        qrStanceLegController(Robot *robot,
                                   qrGaitGenerator *gaitGenerator,
                                   RobotEstimator *robotVelocityEstimator,
-                                  GroundSurfaceEstimator *groundEstimatorIn,
-                                  qrComPlanner  *comPlanner ,
+                                  qrGroundSurfaceEstimator *groundEstimatorIn,
+                                  qrComPlanner *comPlanner,
                                   qrPosePlanner *posePlanner,
                                   qrFootholdPlanner *footholdPlanner,
                                   Eigen::Matrix<float, 3, 1> desired_speed,
@@ -39,7 +39,7 @@ namespace Quadruped {
                                   std::string configFilepath,
                                   std::vector<float> frictionCoeffs = {0.45, 0.45, 0.45, 0.45});
 
-        virtual ~TorqueStanceLegController() = default;
+        virtual ~qrStanceLegController() = default;
 
         void Reset(float currentTime);
 
@@ -53,14 +53,21 @@ namespace Quadruped {
 
         void Update(float currentTime);
 
-        virtual std::tuple<std::map<int, MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
+        virtual std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
 
         Robot *robot;
         qrGaitGenerator *gaitGenerator;
+<<<<<<< HEAD
         RobotEstimator *robotEstimator;
         GroundSurfaceEstimator *groundEstimator;
         qrComPlanner  *comPlanner ;
         qrPosePlanner *posePlanner;                          
+=======
+        qrRobotEstimator *robotEstimator;
+        qrGroundSurfaceEstimator *groundEstimator;
+        qrComPlanner *comPlanner;
+        PosePlanner *posePlanner;                          
+>>>>>>> 542b8fb90bb2c16c746b293e132160ab98466155
         qrFootholdPlanner *footholdPlanner;
         Eigen::Matrix<float, 3, 1> desiredSpeed = {0., 0., 0.};
         float desiredTwistingSpeed = 0.;

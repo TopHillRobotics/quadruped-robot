@@ -35,7 +35,7 @@ namespace Quadruped {
     class qrFootholdPlanner {
     public:
 
-        qrFootholdPlanner(Robot *robotIn, GroundSurfaceEstimator *groundEsitmatorIn);
+        qrFootholdPlanner(Robot *robotIn, qrGroundSurfaceEstimator *groundEsitmatorIn);
 
         ~qrFootholdPlanner() = default;
 
@@ -87,9 +87,15 @@ namespace Quadruped {
 
     public:
 
+<<<<<<< HEAD:src/ascend-quadruped-cpp/include/planner/qr_foothold_planner.h
         Robot *robot;
         GroundSurfaceEstimator *groundEsitmator;
         qrFootStepper  *footstepper;
+=======
+        qrRobot *robot;
+        qrGroundSurfaceEstimator *groundEsitmator;
+        qrFootStepper *footstepper;
+>>>>>>> 542b8fb90bb2c16c746b293e132160ab98466155:src/ascend-quadruped-cpp/include/planner/foothold_planner.h
 
         float resetTime;
         float timeSinceReset;
@@ -98,7 +104,7 @@ namespace Quadruped {
         float gapWidth;
         float footHoldOffset;
         std::vector<float> gaps;
-        Terrain& terrain;
+        qrTerrain& terrain;
         constexpr static int N = 50; // default map size
         
         long long unsigned stepCount;

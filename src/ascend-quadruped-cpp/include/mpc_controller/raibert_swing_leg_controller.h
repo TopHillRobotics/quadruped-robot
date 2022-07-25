@@ -18,21 +18,21 @@
 #include "mpc_controller/foot_trajectory_generator.h"
 
 namespace Quadruped {
-    class RaibertSwingLegController {
+    class qrSwingLegController {
 
     public:
-        RaibertSwingLegController(Robot *robot,
+        qrSwingLegController(Robot *robot,
                                   qrGaitGenerator *gaitGenerator,
-                                  RobotEstimator *stateEstimator,
-                                  GroundSurfaceEstimator *groundEstimator,
-                                  qrFootholdPlanner *qrFootholdPlanner,
+                                  qrRobotEstimator *stateEstimator,
+                                  qrGroundSurfaceEstimator *groundEstimator,
+                                  qrFootholdPlanner *FootholdPlanner,
                                   Eigen::Matrix<float, 3, 1> desiredSpeed,
                                   float desiredTwistingSpeed,
                                   float desiredHeight,
                                   float footClearance,
                                   std::string configPath);
 
-        ~RaibertSwingLegController() = default;
+        ~qrSwingLegController() = default;
 
         /**
          * @brief Quadratic interpolation function, used to generate polygon curve.
@@ -67,8 +67,13 @@ namespace Quadruped {
 
         Robot *robot;
         qrGaitGenerator *gaitGenerator;
+<<<<<<< HEAD
         RobotEstimator *stateEstimator;
         GroundSurfaceEstimator *groundEstimator;
+=======
+        qrRobotEstimator *stateEstimator;
+        qrGroundSurfaceEstimator *groundEstimator;
+>>>>>>> 542b8fb90bb2c16c746b293e132160ab98466155
         qrFootholdPlanner *footholdPlanner;
         Eigen::Matrix<int, 4, 1> lastLegState;
         Eigen::Matrix<float, 3, 1> desiredHeight;
@@ -82,7 +87,7 @@ namespace Quadruped {
         Eigen::Matrix<float, 3, 4> phaseSwitchFootControlPos;
         Eigen::Matrix<float, 3, 4> footHoldInControlFrame;
         
-        SwingFootTrajectory swingFootTrajectories[4];
+        qrSwingFootTrajectory swingFootTrajectories[4];
         // yaml config
         YAML::Node swingLegConfig;
         // init pose in position mode
