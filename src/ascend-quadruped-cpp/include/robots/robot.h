@@ -144,12 +144,6 @@ namespace Quadruped {
         Eigen::Matrix<float, 4, 1> gazeboBaseOrientation = {1.f,0.f,0.f,0.f}; //robot base orientation in world frame
         
 
-        virtual void RecordData(int beginId) {};
-        virtual void SaveData(std::string fileName) {};
-        const long unsigned int NumX=20000;
-        const long unsigned int NumY=54;
-        std::vector<float> trainData;
-        std::vector<uint8_t> trainDataLabel;
         std::unordered_map<int, std::string> modeMap = {{0, "velocity"}, {1, "position"}, {2, "walk"}};
     };
 } // namespace Quadruped

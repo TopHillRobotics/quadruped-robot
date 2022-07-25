@@ -133,14 +133,10 @@ else() #A1 & AligenGo
     ## Add Executable
     #add_executable(a1_real src/exec/a1_real.cpp)
     #target_link_libraries(a1_real robot_runtime)
-    
-    # add_executable(aligengo_real src/exec/aligengo_real.cpp)
-    # target_link_libraries(aligengo_real robot_runtime)
-    
-    #  add_executable(a1_sim src/exec/a1_sim.cpp)
-    #  target_link_libraries(a1_sim robot_runtime)
-    add_executable(sim src/exec/a1_sim_pose_optim.cpp)
-    target_link_libraries(sim robot_runtime)
+     add_executable(a1_sim src/exec/a1_sim.cpp)
+     target_link_libraries(a1_sim robot_runtime)
+    # add_executable(sim src/exec/a1_sim_pose_optim.cpp)
+    # target_link_libraries(sim robot_runtime)
 endif()
 
 #################################TEST#################################

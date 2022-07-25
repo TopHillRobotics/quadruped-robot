@@ -61,7 +61,6 @@ namespace Quadruped {
         jointCmdPub[10] = nh.advertise<unitree_legged_msgs::MotorCmd>("a1_gazebo/RL_thigh_controller/command", 1);
         jointCmdPub[11] = nh.advertise<unitree_legged_msgs::MotorCmd>("a1_gazebo/RL_calf_controller/command", 1);
 
-        // ros::spinOnce();
         usleep(300000); // must wait 300ms, to get first state
 
         timeStep = 0.001;
@@ -203,8 +202,6 @@ namespace Quadruped {
         for (int m = 0; m < 12; m++) {
             jointCmdPub[m].publish(lowCmd.motorCmd[m]);
         }
-        // ros::spinOnce();
-        // usleep(1000);
     }
 
     void A1Sim::ReceiveObservation()

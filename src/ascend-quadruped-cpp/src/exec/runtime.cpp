@@ -36,13 +36,8 @@ std::string GetHomeDir(std::string homeName)
 LocomotionController *setUpController(Robot *quadruped, std::string homeDir, std::string robotName)
 {
     OpenloopGaitGenerator *gaitGenerator;
-    if (quadruped->controlParams["mode"] == LocomotionMode::WALK_LOCOMOTION) {
-        gaitGenerator = new WalkGaitGenerator(quadruped, homeDir + "config/" + robotName
+    gaitGenerator = new OpenloopGaitGenerator(quadruped, homeDir + "config/" + robotName
                                                                          + "/openloop_gait_generator.yaml");
-    } else {
-        gaitGenerator = new OpenloopGaitGenerator(quadruped, homeDir + "config/" + robotName
-                                                                         + "/openloop_gait_generator.yaml");
-    }
                                                                      
     std::cout << "init gaitGenerator finish\n" << std::endl;
 

@@ -55,7 +55,6 @@ namespace Quadruped {
 
         virtual std::tuple<std::map<int, MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
 
-//private:
         Robot *robot;
         OpenloopGaitGenerator *gaitGenerator;
         RobotEstimator *robotEstimator;
@@ -81,11 +80,6 @@ namespace Quadruped {
         
         float currentTime;
         long long count = 0;
-
-        const int n = 20000;
-        std::vector<float> datax, datay1, datay2, datay3, datay4;
-        Eigen::Matrix<float,3,4> lastMotorTorques = Eigen::Matrix<float,3,4>::Zero();
-
     };
 } // namespace Quadruped
 

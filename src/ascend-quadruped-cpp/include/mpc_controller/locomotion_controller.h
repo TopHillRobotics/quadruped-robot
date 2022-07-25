@@ -18,10 +18,8 @@
 #include "robots/robot.h"
 #include "robots/motor.h"
 #include "mpc_controller/openloop_gait_generator.h"
-#include "mpc_controller/walk_gait_generator.h"
 #include "mpc_controller/raibert_swing_leg_controller.h"
 #include "mpc_controller/torque_stance_leg_controller.h"
-#include "mpc_controller/torque_stance_leg_controller_mpc.h"
 #include "planner/com_adjuster.h"
 #include "planner/pose_planner.h"
 #include "state_estimator/robot_estimator.h"
@@ -54,7 +52,6 @@ namespace Quadruped {
          *  @return tuple<map, Matrix<3,4>> : return control ouputs (e.g. positions/torques) for all (12) motors.
          */
         std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
-        std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetFakeAction();
     
         inline OpenloopGaitGenerator *GetGaitGenerator()
         {
@@ -91,14 +88,9 @@ namespace Quadruped {
             return robot->GetTimeSinceReset();
         }
 
-        // let robot walk one step more.
-        void ForwardOne();
-
         RaibertSwingLegController *swingLegController;
         TorqueStanceLegController *stanceLegController;
         bool stop=false;
-        int swingSemaphore = 10000000; // total steps 
-        float stopTick = 0;
     private:
         Robot *robot;
         OpenloopGaitGenerator *gaitGenerator;

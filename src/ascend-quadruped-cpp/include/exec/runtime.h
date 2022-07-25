@@ -26,7 +26,6 @@
 #include "ros/cmd_vel_receiver.h"
 #include "ros/slam_pose_receiver.h"
 #include "ros/robot_odom_estimator.h"
-#include "ros/switch_mode_receiver.h"
 #include "utils/tools.h"
 
 using namespace Quadruped;
@@ -50,7 +49,7 @@ void updateControllerParams(LocomotionController *controller, Eigen::Vector3f li
 
 #ifdef _useros
 /** @brief a toolkit for loading yaml config file correctly. */
-std::string GetHomeDir(std::string homeName = "robots/");
+std::string GetHomeDir(std::string homeName = "quadruped-robot/");
 #else
 /** @brief a toolkit for loading yaml config file correctly. */
 std::string GetHomeDir(std::string homeName = "ascend-quadruped-cpp/");

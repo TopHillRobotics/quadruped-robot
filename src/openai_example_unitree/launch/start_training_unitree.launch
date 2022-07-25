@@ -1,6 +1,0 @@
-<launch>
-    <!-- This version uses the openai_ros environments -->
-    <rosparam command="load" file="$(find openai_example_unitree)/config/start_learning_a1_param.yaml" />
-    <!-- Launch the training system -->
-    <node pkg="openai_example_unitree" name="unitreedog_world" type="start_learning_a1.py" output="screen"/>
-</launch>

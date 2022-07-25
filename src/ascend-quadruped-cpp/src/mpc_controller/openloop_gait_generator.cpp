@@ -49,8 +49,7 @@ namespace Quadruped {
         config = YAML::LoadFile(configFilePath);
 
         this->robot = robot;
-        // string gait = config["gait_params"]["gait"].as<string>();
-        string gait = "trot";
+        string gait = config["gait_params"]["gait"].as<string>();
         cout << "OpenLoopGaitGenerator Set gait: " << gait << endl;
 
         vector<float> stanceDurationList = config["gait_params"][gait]["stance_duration"].as<vector<float >>();
@@ -59,8 +58,7 @@ namespace Quadruped {
         dutyFactor = Eigen::MatrixXf::Map(&dutyFactorList[0], 4, 1);
         vector<int> initialLegStateList = config["gait_params"][gait]["initial_leg_state"].as<vector<int >>();
         initialLegState = Eigen::MatrixXi::Map(&initialLegStateList[0], 4, 1);
-        vector<float>
-            initialLegPhaseList = config["gait_params"][gait]["init_phase_full_cycle"].as<vector<float >>();
+        vector<float> initialLegPhaseList = config["gait_params"][gait]["init_phase_full_cycle"].as<vector<float >>();
         initialLegPhase = Eigen::MatrixXf::Map(&initialLegPhaseList[0], 4, 1);
         contactDetectionPhaseThreshold = config["gait_params"][gait]["contact_detection_phase_threshold"].as<float>();
         

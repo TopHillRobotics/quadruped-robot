@@ -88,9 +88,6 @@ namespace Quadruped {
         // init pose in position mode
         std::vector<std::vector<float>> footInitPose;
         float footOffset;
-
-        std::vector<float> datay,datay1, datay2, datay3, datax;
-        int count =0;
     };
 } // namespace Quadruped
 

@@ -154,7 +154,8 @@ int main(int argc, char **argv)
     ros::ServiceClient modelStateClient = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
     ros::ServiceClient jointStateClient = nh.serviceClient<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
 
-    bool flag = ResetRobot(modelStateClient, jointStateClient);
+    // bool flag = ResetRobot(modelStateClient, jointStateClient);
+    ResetRobotBySystem();
     ROS_INFO("Reset the Robot pose");
 
     startControllers(nh, "/a1_gazebo/controller_manager/switch_controller", controllerList);
@@ -175,10 +176,7 @@ int main(int argc, char **argv)
     ROS_INFO("LocomotionController Reset Finished");
 
     // ros module init
-    RobotOdometryEstimator *legOdom = new RobotOdometryEstimator(quadruped, locomotionController, nh);
     CmdVelReceiver *cmdVelReceiver = new CmdVelReceiver(nh, privateNh);
-    SLAMPoseReceiver *slamPoseReceiver = new SLAMPoseReceiver(nh, privateNh);
-    SwitchModeReceiver *switchModeReceiver = new SwitchModeReceiver(nh, privateNh);
     ROS_INFO("ROS Modules Init Finished");
 
     ROS_INFO("TimeSinceReset: %f", quadruped->GetTimeSinceReset());
@@ -192,16 +190,11 @@ int main(int argc, char **argv)
     ROS_INFO("start control loop....");
     while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS) {
         startTimeWall = quadruped->GetTimeSinceReset();
-        switchMode = switchModeReceiver->GetSwitchMode();
 
         if (twistMode == TwistMode::ROS) {
             desiredSpeed = cmdVelReceiver->GetLinearVelocity();
             desiredTwistingSpeed = cmdVelReceiver->GetAngularVelocity(); 
         }
-        // if (switchMode != 2 && quadruped->controlParams["mode"] != switchMode) {
-        //     ROS_INFO_STREAM("switch mode from " << quadruped->controlParams["mode"] << " to " << switchMode);
-        //     SwitchMode<A1Sim>(quadruped, locomotionController, desiredSpeed, desiredTwistingSpeed, switchMode, startTimeWall);
-        // }
         updateControllerParams(locomotionController,
                                 desiredSpeed,
                                 desiredTwistingSpeed); // ros velocity
@@ -210,11 +203,8 @@ int main(int argc, char **argv)
         auto [hybridAction, qpSol] = locomotionController->GetAction();
         quadruped->Step(MotorCommand::convertToMatix(hybridAction), HYBRID_MODE);
 
-        // ros
-        legOdom->PublishOdometry();
-
         currentTime = quadruped->GetTimeSinceReset();
-        if (abs(quadruped->baseRollPitchYaw[0]) > 0.5f || abs(quadruped->baseRollPitchYaw[1]) > 0.5f) {
+        if (abs(quadruped->GetBaseRollPitchYaw()[0]) > 0.5f || abs(quadruped->GetBaseRollPitchYaw()[1]) > 0.5f) {
             ROS_ERROR("The dog is going down, main function exit.");
             break;
         }
