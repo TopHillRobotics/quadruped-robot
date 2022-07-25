@@ -27,7 +27,7 @@
 namespace Quadruped {
 
     qrVisualGazeboMsg::qrVisualGazeboMsg(Robot *robotIn,
-                                                   LocomotionController *locomotionControllerIn,
+                                                   qrLocomotionController *locomotionControllerIn,
                                                    ros::NodeHandle &nhIn)
         : robot(robotIn), nh(nhIn)
     {

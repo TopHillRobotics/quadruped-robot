@@ -52,13 +52,13 @@ namespace Quadruped {
         stanceLegController->Update(robot->GetTimeSinceReset() - resetTime);
     }
 
-    std::tuple<std::vector<qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrLocomotionController::GetAction()
+    std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> qrLocomotionController::GetAction()
     {
         action.clear();
         // Returns the control ouputs (e.g. positions/torques) for all motors. type: map
         auto swingAction = swingLegController->GetAction();
-        auto [stanceAction, qpSol] = stanceLegController->GetAction(); // map<int, qrMotorCommand>
-        std::vector<qrMotorCommand> action;
+        auto [stanceAction, qpSol] = stanceLegController->GetAction(); // map<int, MotorCommand>
+        std::vector<MotorCommand> action;
         // copy motors' actions from subcontrollers to output variable.         
         for (int joint_id = 0; joint_id < RobotConfig::numMotors; ++joint_id) {
             auto it = swingAction.find(joint_id);

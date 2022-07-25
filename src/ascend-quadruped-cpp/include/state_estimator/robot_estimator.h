@@ -25,7 +25,7 @@ namespace Quadruped {
     public:
         RobotEstimator(Robot *robotIn,
                        qrGaitGenerator *gaitGeneratorIn,
-                       GroundSurfaceEstimator *groundEstimatorIn);
+                       qrGroundSurfaceEstimator *groundEstimatorIn);
 
         void Reset(float currentTime);
 

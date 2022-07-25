@@ -23,7 +23,7 @@ namespace Quadruped {
     public:
         RobotPoseEstimator(Robot *robotIn,
                            qrGaitGenerator *gaitGeneratorIn,
-                           GroundSurfaceEstimator *groundEstimatorIn,
+                           qrGroundSurfaceEstimator *groundEstimatorIn,
                            RobotVelocityEstimator *velocityEstimator);
 
         void Reset(float currentTime);
@@ -50,7 +50,7 @@ namespace Quadruped {
         float lastTimestamp;
         Vec6<float> estimatedPose;
         qrGaitGenerator *gaitGenerator;
-        GroundSurfaceEstimator *groundEstimator;
+        qrGroundSurfaceEstimator *groundEstimator;
         RobotVelocityEstimator *velocityEstimator;
 
     };

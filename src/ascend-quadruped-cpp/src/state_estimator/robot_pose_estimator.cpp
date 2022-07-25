@@ -13,7 +13,7 @@ namespace Quadruped {
 
     RobotPoseEstimator::RobotPoseEstimator(Robot *robotIn,
                                            qrGaitGenerator *gaitGeneratorIn,
-                                           GroundSurfaceEstimator *groundEstimatorIn,
+                                           qrGroundSurfaceEstimator *groundEstimatorIn,
                                            RobotVelocityEstimator *velocityEstimatorIn)
         : robot(robotIn), gaitGenerator(gaitGeneratorIn), groundEstimator(groundEstimatorIn), velocityEstimator(velocityEstimatorIn)
     {

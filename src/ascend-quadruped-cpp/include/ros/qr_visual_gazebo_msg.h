@@ -49,12 +49,12 @@ namespace Quadruped {
      */
     class qrVisualGazeboMsg {
     public:
-        qrVisualGazeboMsg(Robot *robotIn, LocomotionController *locomotionController, ros::NodeHandle &nhIn);
+        qrVisualGazeboMsg(Robot *robotIn, qrLocomotionController *locomotionController, ros::NodeHandle &nhIn);
         // void PublishPose();
         void PublishGazeboStateCallback();
     private:
         Robot *robot;
-        LocomotionController *locomotionController;
+        qrLocomotionController *locomotionController;
         qrPosePlanner *posePlanner;
 
         ros::NodeHandle &nh;

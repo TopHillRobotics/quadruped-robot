@@ -12,7 +12,7 @@
 namespace Quadruped {
 
     qrOdometryParamReceiver::qrOdometryParamReceiver(Robot *robotIn,
-                                                   LocomotionController *locomotionControllerIn,
+                                                   qrLocomotionController *locomotionControllerIn,
                                                    ros::NodeHandle &nhIn)
         : robot(robotIn), nh(nhIn)
     {

@@ -87,15 +87,9 @@ namespace Quadruped {
 
     public:
 
-<<<<<<< HEAD:src/ascend-quadruped-cpp/include/planner/qr_foothold_planner.h
         Robot *robot;
-        GroundSurfaceEstimator *groundEsitmator;
-        qrFootStepper  *footstepper;
-=======
-        qrRobot *robot;
         qrGroundSurfaceEstimator *groundEsitmator;
         qrFootStepper *footstepper;
->>>>>>> 542b8fb90bb2c16c746b293e132160ab98466155:src/ascend-quadruped-cpp/include/planner/foothold_planner.h
 
         float resetTime;
         float timeSinceReset;

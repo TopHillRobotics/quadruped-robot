@@ -38,7 +38,7 @@
 namespace Quadruped {
 class qrPosePlanner {
 public:
-    qrPosePlanner(Robot *robotIn, RobotEstimator *robotEstimatorIn, GroundSurfaceEstimator *groundEstimatorIn, qrGaitGenerator *gaitGeneratorIn);
+    qrPosePlanner(Robot *robotIn, RobotEstimator *robotEstimatorIn, qrGroundSurfaceEstimator *groundEstimatorIn, qrGaitGenerator *gaitGeneratorIn);
 
     ~qrPosePlanner() = default;
 
@@ -132,7 +132,7 @@ public:
     const int invLegIdMap2CounterwiseOrder[4] = {0, 2, 3, 1};
     Robot *robot;
     RobotEstimator *robotEstimator;
-    GroundSurfaceEstimator *groundEstimator;
+    qrGroundSurfaceEstimator *groundEstimator;
     qrGaitGenerator *gaitGenerator;
 
     Eigen::Matrix<float, 3, 4> rBH; // hip (offset) position in base frame;

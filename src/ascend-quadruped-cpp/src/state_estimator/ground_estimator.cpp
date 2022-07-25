@@ -10,7 +10,7 @@
 
 namespace Quadruped {
   
-    qrGroundSurfaceEstimator::qrGroundSurfaceEstimator(qrRobot *robotIn, std::string terrainConfigPath, unsigned int windowSize)
+    qrGroundSurfaceEstimator::qrGroundSurfaceEstimator(Robot *robotIn, std::string terrainConfigPath, unsigned int windowSize)
         : robot(robotIn)
     {
         // Loadterrain(terrainConfigPath);
@@ -65,7 +65,7 @@ namespace Quadruped {
                 float gapWidth = footStepperConfig["gap_width"].as<float>();
                 std::vector<float> distanceOfGaps = footStepperConfig["gaps"].as<std::vector<float>>();
                 for (float distance : distanceOfGaps) {
-                    Gap* gap = new Gap(distance, gapWidth, {0, 0, 0});
+                    qrGap* gap = new qrGap(distance, gapWidth, {0, 0, 0});
                     terrain.gaps.push_back(gap);
                 }
             } break;

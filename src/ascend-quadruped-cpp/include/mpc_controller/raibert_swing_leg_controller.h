@@ -23,7 +23,7 @@ namespace Quadruped {
     public:
         qrSwingLegController(Robot *robot,
                                   qrGaitGenerator *gaitGenerator,
-                                  qrRobotEstimator *stateEstimator,
+                                  RobotEstimator *stateEstimator,
                                   qrGroundSurfaceEstimator *groundEstimator,
                                   qrFootholdPlanner *FootholdPlanner,
                                   Eigen::Matrix<float, 3, 1> desiredSpeed,
@@ -67,13 +67,8 @@ namespace Quadruped {
 
         Robot *robot;
         qrGaitGenerator *gaitGenerator;
-<<<<<<< HEAD
         RobotEstimator *stateEstimator;
-        GroundSurfaceEstimator *groundEstimator;
-=======
-        qrRobotEstimator *stateEstimator;
         qrGroundSurfaceEstimator *groundEstimator;
->>>>>>> 542b8fb90bb2c16c746b293e132160ab98466155
         qrFootholdPlanner *footholdPlanner;
         Eigen::Matrix<int, 4, 1> lastLegState;
         Eigen::Matrix<float, 3, 1> desiredHeight;

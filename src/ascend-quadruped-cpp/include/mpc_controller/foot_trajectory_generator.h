@@ -199,7 +199,7 @@ namespace Quadruped {
         Vec3<float> endPos;
         qrStepParameters stepParams;
         qrFootSplinePatternGenerator *footTarjGen;
-        qrSplineInfo qrSplineInfo;
+        qrSplineInfo splineInfo;
         std::vector<float> datax, datay1, datay2, datay3;        
 
     };

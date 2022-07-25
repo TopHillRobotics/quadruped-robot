@@ -149,7 +149,7 @@ namespace Quadruped {
         }
     }
     
-    std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLegController::GetAction()
+    std::tuple<std::map<int, MotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLegController::GetAction()
     {
         Eigen::Matrix<float, 3, 1> robotComPosition;
         Eigen::Matrix<float, 3, 1> robotComVelocity;
@@ -242,21 +242,21 @@ namespace Quadruped {
         // std::cout << "fMaxRatio " << fMaxRatio.transpose() << std::endl;
         // std::cout << "contact for force compute " << contacts.transpose() << std::endl;
         
-        map<int, qrMotorCommand> action;
+        map<int, MotorCommand> action;
         map<int, float> motorTorques;
         Eigen::Matrix<float, 12, 1> kps = robot->config->motorKps;
         Eigen::Matrix<float, 12, 1> kds = robot->config->motorKds;
         
         for (int legId = 0; legId < NumLeg; ++legId) {
             motorTorques = robot->state.MapContactForceToJointTorques(legId, contactForces.col(legId));
-            qrMotorCommand temp;
+            MotorCommand temp;
             for (map<int, float>::iterator it = motorTorques.begin(); it != motorTorques.end(); ++it) {
                     temp = {0., 0., 0., 0., it->second};
                     action[it->first] = temp;
             }
         }
 
-        std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> actionContactForce(action, contactForces);
+        std::tuple<std::map<int, MotorCommand>, Eigen::Matrix<float, 3, 4>> actionContactForce(action, contactForces);
         return actionContactForce;
     }
 } // namespace Quadruped

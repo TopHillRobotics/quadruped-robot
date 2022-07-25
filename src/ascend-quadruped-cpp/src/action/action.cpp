@@ -75,7 +75,7 @@ namespace Quadruped {
             }
         }
 
-        void ControlFoot(Robot *robot, LocomotionController *locomotionController, float walkTime, float timeStep)
+        void ControlFoot(Robot *robot, qrLocomotionController *locomotionController, float walkTime, float timeStep)
         {
             const float FREQ = 1;   
             float startTime = robot->GetTimeSinceReset();

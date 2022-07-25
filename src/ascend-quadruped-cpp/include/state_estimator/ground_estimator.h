@@ -52,7 +52,7 @@ namespace Quadruped{
     class qrGroundSurfaceEstimator {
 
     public:
-        qrGroundSurfaceEstimator(qrRobot *robot, std::string terrainConfigPath, unsigned int windowSize=DEFAULT_WINDOW_SIZE);
+        qrGroundSurfaceEstimator(Robot *robot, std::string terrainConfigPath, unsigned int windowSize=DEFAULT_WINDOW_SIZE);
     
         void Loadterrain(std::string& terrainConfigPath);
     
@@ -93,7 +93,7 @@ namespace Quadruped{
         Vec3<double> controlFrameRPY;
         Quat<double> controlFrameOrientation;
     // private:
-        qrRobot *robot;
+        Robot *robot;
         qrTerrain terrain;
         Vec3<double> a; // coeffcient of plane equation
         Eigen::Matrix<double, 4, 3> W;

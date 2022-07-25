@@ -170,10 +170,10 @@ int main(int argc, char **argv)
 
     Action::StandUp(quadruped, 3.f, 5.f, 0.001);
 
-    LocomotionController *locomotionController = setUpController(quadruped, homeDir, robotName);
-    ROS_INFO("LocomotionController Init Finished");
+    qrLocomotionController *locomotionController = setUpController(quadruped, homeDir, robotName);
+    ROS_INFO("qrLocomotionController Init Finished");
     locomotionController->Reset();
-    ROS_INFO("LocomotionController Reset Finished");
+    ROS_INFO("qrLocomotionController Reset Finished");
 
     // ros module init
     qrVelocityParamReceiver *cmdVelReceiver = new qrVelocityParamReceiver (nh, privateNh);

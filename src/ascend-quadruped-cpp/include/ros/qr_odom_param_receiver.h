@@ -38,14 +38,14 @@ namespace Quadruped {
      */    
     class qrOdometryParamReceiver {
     public:
-        qrOdometryParamReceiver(Robot *robotIn, LocomotionController *locomotionController, ros::NodeHandle &nhIn);
+        qrOdometryParamReceiver(Robot *robotIn, qrLocomotionController *locomotionController, ros::NodeHandle &nhIn);
 
         void PublishOdometry();
         
     private:
         Robot *robot;
         RobotEstimator *robotEstimator;
-        LocomotionController *locomotionController;
+        qrLocomotionController *locomotionController;
 
         ros::NodeHandle &nh;
         ros::Publisher pubOdometry;

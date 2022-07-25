@@ -53,21 +53,14 @@ namespace Quadruped {
 
         void Update(float currentTime);
 
-        virtual std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
+        virtual std::tuple<std::map<int, MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
 
         Robot *robot;
         qrGaitGenerator *gaitGenerator;
-<<<<<<< HEAD
         RobotEstimator *robotEstimator;
-        GroundSurfaceEstimator *groundEstimator;
-        qrComPlanner  *comPlanner ;
-        qrPosePlanner *posePlanner;                          
-=======
-        qrRobotEstimator *robotEstimator;
         qrGroundSurfaceEstimator *groundEstimator;
         qrComPlanner *comPlanner;
-        PosePlanner *posePlanner;                          
->>>>>>> 542b8fb90bb2c16c746b293e132160ab98466155
+        qrPosePlanner *posePlanner;                          
         qrFootholdPlanner *footholdPlanner;
         Eigen::Matrix<float, 3, 1> desiredSpeed = {0., 0., 0.};
         float desiredTwistingSpeed = 0.;

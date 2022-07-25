@@ -35,7 +35,7 @@ namespace Quadruped {
     public:
         qrLocomotionController(Robot *robot,
                              qrGaitGenerator *gaitGenerator,
-                             qrRobotEstimator *stateEstimator,
+                             RobotEstimator *stateEstimator,
                              qrGroundSurfaceEstimator *groundEstimator,
                              qrComPlanner *comPlanner,
                              qrPosePlanner *posePlanner,
@@ -68,7 +68,7 @@ namespace Quadruped {
             return stanceLegController;
         }
 
-        inline qrRobotEstimator *GetRobotEstimator()
+        inline RobotEstimator *GetRobotEstimator()
         {
             return stateEstimator;
         }
@@ -95,7 +95,7 @@ namespace Quadruped {
         Robot *robot;
         qrGaitGenerator *gaitGenerator;
         RobotEstimator *stateEstimator;
-        GroundSurfaceEstimator *groundEstimator;
+        qrGroundSurfaceEstimator *groundEstimator;
         qrComPlanner  *comPlanner ;
         qrPosePlanner *posePlanner;
         std::vector<MotorCommand> action;

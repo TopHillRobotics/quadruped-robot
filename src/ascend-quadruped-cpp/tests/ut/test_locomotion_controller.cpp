@@ -25,11 +25,11 @@ protected:
     }
 
 public:
-    LocomotionController *controller;
+    qrLocomotionController *controller;
     Timer timer;
-    LocomotionController *buildController()
+    qrLocomotionController *buildController()
     {
-        return new LocomotionController(nullptr,
+        return new qrLocomotionController(nullptr,
                                         nullptr,
                                         nullptr,
                                         nullptr,
@@ -50,10 +50,10 @@ public:
     }
  
 public:
-    LocomotionController* controller;
+    qrLocomotionController* controller;
     Timer timer;
-    LocomotionController* buildController() {
-        return new LocomotionController(nullptr, 
+    qrLocomotionController* buildController() {
+        return new qrLocomotionController(nullptr, 
                                 nullptr,
                                 nullptr,
                                 nullptr,

@@ -33,7 +33,7 @@ std::string GetHomeDir(std::string homeName)
 }
 #endif
 
-LocomotionController *setUpController(Robot *quadruped, std::string homeDir, std::string robotName)
+qrLocomotionController *setUpController(Robot *quadruped, std::string homeDir, std::string robotName)
 {
     qrGaitGenerator *gaitGenerator;
     gaitGenerator = new qrGaitGenerator(quadruped, homeDir + "config/" + robotName
@@ -41,7 +41,7 @@ LocomotionController *setUpController(Robot *quadruped, std::string homeDir, std
                                                                      
     std::cout << "init gaitGenerator finish\n" << std::endl;
 
-    GroundSurfaceEstimator *groundEsitmator = new GroundSurfaceEstimator(quadruped, homeDir + "config/" + robotName
+    qrGroundSurfaceEstimator *groundEsitmator = new qrGroundSurfaceEstimator(quadruped, homeDir + "config/" + robotName
                                                                                         + "/terrain.yaml");
     std::cout << "init groundEsitmator finish\n" << std::endl;
     
@@ -57,7 +57,7 @@ LocomotionController *setUpController(Robot *quadruped, std::string homeDir, std
     qrFootholdPlanner *footholdPlanner = new qrFootholdPlanner(quadruped, groundEsitmator);
     std::cout << "init footholdPlanner finish\n" << std::endl;
 
-    RaibertSwingLegController *swingLegController = new RaibertSwingLegController(quadruped,
+    qrSwingLegController *swingLegController = new qrSwingLegController(quadruped,
                                                                                   gaitGenerator,
                                                                                   stateEstimator,
                                                                                   groundEsitmator,
@@ -71,7 +71,7 @@ LocomotionController *setUpController(Robot *quadruped, std::string homeDir, std
 
     std::cout << "init swingLegController finish\n" << std::endl;
 
-    TorqueStanceLegController *stanceLegController = new TorqueStanceLegController(quadruped,
+    qrStanceLegController *stanceLegController = new qrStanceLegController(quadruped,
                                                                                    gaitGenerator,
                                                                                    stateEstimator,
                                                                                    groundEsitmator,
@@ -87,7 +87,7 @@ LocomotionController *setUpController(Robot *quadruped, std::string homeDir, std
 
     std::cout << "init stanceLegController finish\n" << std::endl;
 
-    LocomotionController *locomotionController = new LocomotionController(quadruped,
+    qrLocomotionController *locomotionController = new qrLocomotionController(quadruped,
                                                                           gaitGenerator,
                                                                           stateEstimator,
                                                                           groundEsitmator,
@@ -102,7 +102,7 @@ LocomotionController *setUpController(Robot *quadruped, std::string homeDir, std
 
 }
 
-void updateControllerParams(LocomotionController *controller, Eigen::Vector3f linSpeed, float angSpeed)
+void updateControllerParams(qrLocomotionController *controller, Eigen::Vector3f linSpeed, float angSpeed)
 {
     controller->swingLegController->desiredSpeed = linSpeed;
     controller->swingLegController->desiredTwistingSpeed = angSpeed;

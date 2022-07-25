@@ -281,7 +281,7 @@
 //               << quadruped.GetBaseOrientation().transpose() << std::endl;
 //     // MockRobotVelocityEstimator *stateEstimator = new MockRobotVelocityEstimator(quadruped, 0.1f, 0.1f, 0.1f, 120);
 //     // cout << "init stateEstimator" << endl;
-//     LocomotionController *locomotionController = setUpController(&quadruped, homeDir, robotName);
+//     qrLocomotionController *locomotionController = setUpController(&quadruped, homeDir, robotName);
 //     RobotEstimator* robotEstimator = locomotionController->GetRobotEstimator();
 //     FakePosePlanner posePlanner(&quadruped, robotEstimator);
     

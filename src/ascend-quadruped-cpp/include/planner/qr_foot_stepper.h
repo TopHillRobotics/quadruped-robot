@@ -43,7 +43,7 @@ namespace Quadruped {
     // todo :different terrains may apply to different qrFootStepper , using factory method.
     class qrFootStepper  {
     public:
-        qrFootStepper (Terrain& terrain, float defaultFootholdOffset, std::string level);
+        qrFootStepper (qrTerrain& terrain, float defaultFootholdOffset, std::string level);
 
         void Reset(float timeSinceReset) {}
 
@@ -87,7 +87,7 @@ namespace Quadruped {
          * @param backGap
          * @return if solution valid, return x; otherwise, return -1;
          */        
-        double CheckSolution(Eigen::Matrix<float, 1, 4> currentFootholdsX, double front, double back, Gap frontGap, Gap backGap);        
+        double CheckSolution(Eigen::Matrix<float, 1, 4> currentFootholdsX, double front, double back, qrGap frontGap, qrGap backGap);        
 
         /**
          * @brief genetator the next step offset alone x-axis for legs  to pass the plum piles.
@@ -96,8 +96,8 @@ namespace Quadruped {
         int StepGenerator(Eigen::Matrix<float, 1, 4>& currentFootholds, Eigen::Matrix<float, 1, 4>& desiredFootholdsOffset);
 
     protected:
-        std::vector<Gap> gaps;
-        Stair stairUp, stairDown;
+        std::vector<qrGap> gaps;
+        qrStair stairUp, stairDown;
         std::queue<Eigen::Matrix<float, 1, 4>> steps; // contains the step offset alone x-axis for legs in future to pass the plum piles.
         bool generatorFlag = false; // if false means has not generate the step
         bool gaitFlag = false; // if true means has changed the gait

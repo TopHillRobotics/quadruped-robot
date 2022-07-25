@@ -26,13 +26,13 @@
 #include "QuadProg++.hh"
 #include "Array.hh"
 namespace Quadruped {
-    qrFootStepper ::qrFootStepper (Terrain& terrain, float defaultFootholdOffset, std::string level)
+    qrFootStepper ::qrFootStepper (qrTerrain& terrain, float defaultFootholdOffset, std::string level)
     {
         // terrainType
         switch (terrain.terrainType)
         {
             case TerrainType::PLUM_PILES: {
-                for (Gap* gap : terrain.gaps) {
+                for (qrGap* gap : terrain.gaps) {
                     gaps.push_back(*gap);
                 }
             } break;
@@ -81,7 +81,7 @@ namespace Quadruped {
         x[0] = 0.0;
     }
     
-    double  qrFootStepper ::CheckSolution(Eigen::Matrix<float, 1, 4> currentFootholdsX, double front, double back, Gap frontGap, Gap backGap) {
+    double  qrFootStepper ::CheckSolution(Eigen::Matrix<float, 1, 4> currentFootholdsX, double front, double back, qrGap frontGap, qrGap backGap) {
         for (int i = 1; i < 5; ++i) {
             if (i <= 2) {
                 // cout << defaultFootholdDelta<< endl;
@@ -127,9 +127,9 @@ namespace Quadruped {
         desiredFootholdsOffset << defaultFootholdDelta, defaultFootholdDelta, defaultFootholdDelta, defaultFootholdDelta;
         
         for (int gapIndex = 0; gapIndex < gaps.size(); gapIndex++){
-            Gap &gap = gaps[gapIndex];
-            Gap frontGap = gap;
-            Gap backGap = gap;
+            qrGap &gap = gaps[gapIndex];
+            qrGap frontGap = gap;
+            qrGap backGap = gap;
             if (gapIndex > 0) {
                 backGap = gaps[gapIndex-1];
             }
@@ -175,7 +175,7 @@ namespace Quadruped {
         }
         // recovery of cross gait.
         if (gaitFlag) {
-            for (Gap &gap: gaps) {
+            for (qrGap &gap: gaps) {
                 if (std::abs(currentFootholdsX[0] + defaultFootholdDelta / 2.0 - gap.distance) <= gap.width / 2 ||
                     std::abs(currentFootholdsX[3] + defaultFootholdDelta / 2.0 - gap.distance) <= gap.width / 2) {
                     return 0;
@@ -366,7 +366,7 @@ namespace Quadruped {
         b[0] = -defaultFootholdDelta;
         quadprogpp::Vector<double> x(1);
         x[0] = 0.0;
-        for (Gap &gap: gaps) {
+        for (qrGap &gap: gaps) {
             float deltaX = 0.0;
             for (int legId = 0; legId < 4; ++legId) {
                 float defaultNextFootholdX = defaultNextFootholdsX[legId];
@@ -503,7 +503,7 @@ namespace Quadruped {
             while (!steps.empty()) {
                 steps.pop();
             }  
-            Gap lastGap = gaps.back();
+            qrGap lastGap = gaps.back();
             Eigen::Matrix<float, 1, 4> desiredFootholdsOffset;
             while (currentFootholdsX.row(0)[3] < lastGap.distance + lastGap.width / 2.0 ) {        
                 int flag = StepGenerator(currentFootholdsX, desiredFootholdsOffset);

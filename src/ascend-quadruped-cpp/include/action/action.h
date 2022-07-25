@@ -27,7 +27,7 @@ namespace Quadruped {
 
         void KeepStand(Robot *robot, float KeepStandTime = 1.0, float timeStep = 0.001);
     
-        void ControlFoot(Robot *robot, LocomotionController *locomotionController, float walkTime, float timeStep);
+        void ControlFoot(Robot *robot, qrLocomotionController *locomotionController, float walkTime, float timeStep);
         
     } // Action
 } // Quadruped

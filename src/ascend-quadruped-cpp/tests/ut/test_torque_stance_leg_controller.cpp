@@ -36,10 +36,10 @@ public:
     std::vector<float> frictionCoeffs;
     std::string configFilepath = "../config/stance_leg_controller.yaml";
 
-    TorqueStanceLegController* stanceLegPtr;
-    TorqueStanceLegController* build()
+    qrStanceLegController* stanceLegPtr;
+    qrStanceLegController* build()
     {
-        return new TorqueStanceLegController(robot,
+        return new qrStanceLegController(robot,
                                              gaitGenerator,
                                              robotVelocityEstimator,
                                              desiredSpeed,

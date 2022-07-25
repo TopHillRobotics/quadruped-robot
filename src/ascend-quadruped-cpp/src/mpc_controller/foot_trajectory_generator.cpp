@@ -11,7 +11,7 @@
 
 namespace Quadruped {
 
-    qrFootBSplinePatternGenerator::qrFootBSplinePatternGenerator(SplineInfo &splineInfo) {
+    qrFootBSplinePatternGenerator::qrFootBSplinePatternGenerator(qrSplineInfo &splineInfo) {
         // points in regular frame
         crv.control_points = {glm::vec3(-10, 0, 0),
                             glm::vec3(-11, 0, 0.2),
@@ -35,7 +35,7 @@ namespace Quadruped {
     void qrFootBSplinePatternGenerator::SetParameters(const float initial_time,
                                                    const Eigen::Vector3f &initial_pos,
                                                    const Eigen::Vector3f &target_pos,
-                                                   const StepParameters &params)
+                                                   const qrStepParameters &params)
     {
         // Setting the initial time and duration of the swing movements
         initial_time_ = initial_time;
@@ -134,7 +134,7 @@ namespace Quadruped {
     void qrFootSplinePatternGenerator::SetParameters(const float initial_time,
                                                    const Eigen::Vector3f &initial_pos,
                                                    const Eigen::Vector3f &target_pos,
-                                                   const StepParameters &params)
+                                                   const qrStepParameters &params)
     {
         // Setting the initial time and duration of the swing movements
         initial_time_ = initial_time;
@@ -206,7 +206,7 @@ namespace Quadruped {
         return true;
     }
 
-    qrSwingFootTrajectory::qrSwingFootTrajectory(SplineInfo splineInfoIn,
+    qrSwingFootTrajectory::qrSwingFootTrajectory(qrSplineInfo splineInfoIn,
                                             Vec3<float> startPosIn,
                                              Vec3<float> endPosIn,
                                              float duration,
@@ -222,7 +222,7 @@ namespace Quadruped {
         } else {
             std::cout << "swing CubicPolygon\n";
             // stepParams.height = maxClearance;  // todo
-            stepParams = StepParameters(duration, mid, 0.);
+            stepParams = qrStepParameters(duration, mid, 0.);
             footTarjGen = new qrFootSplinePatternGenerator();
         }
         footTarjGen->SetParameters(0., startPos, endPos, stepParams);

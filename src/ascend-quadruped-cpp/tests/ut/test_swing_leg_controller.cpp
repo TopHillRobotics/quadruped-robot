@@ -29,7 +29,7 @@ public:
 
     }
 
-    RaibertSwingLegController *raibertSwingLegController;
+    qrSwingLegController *raibertSwingLegController;
     Eigen::Matrix<float, 3, 1> desiredSpeed;
     float desiredTwistingSpeed;
     float desiredHeight;
@@ -42,7 +42,7 @@ TestSwingLegController::TestSwingLegController() {
     desiredTwistingSpeed = 0.13568;
     desiredHeight = 0.24;
     footClearance = 0.01;
-    raibertSwingLegController = new RaibertSwingLegController(desiredSpeed,
+    raibertSwingLegController = new qrSwingLegController(desiredSpeed,
                                                               desiredTwistingSpeed,
                                                               desiredHeight,
                                                               footClearance);
