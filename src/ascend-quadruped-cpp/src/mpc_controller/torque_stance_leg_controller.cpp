@@ -12,13 +12,13 @@
 using namespace std;
 namespace Quadruped {
 
-    TorqueStanceLegController::TorqueStanceLegController(Robot *robot,
-                                                         OpenloopGaitGenerator *gaitGenerator,
-                                                         RobotEstimator *robotEstimator,
-                                                         GroundSurfaceEstimator *groundEstimatorIn,
-                                                         ComAdjuster *comAdjuster,
+    qrStanceLegController::qrStanceLegController(qrRobot *robot,
+                                                         qrGaitGenerator *gaitGenerator,
+                                                         qrRobotEstimator *robotEstimator,
+                                                         qrGroundSurfaceEstimator *groundEstimatorIn,
+                                                         qrComPlanner *comPlanner,
                                                          PosePlanner *posePlanner,
-                                                         FootholdPlanner *footholdPlanner,
+                                                         qrFootholdPlanner *footholdPlanner,
                                                          Eigen::Matrix<float, 3, 1> desiredSpeed,
                                                          float desiredTwistingSpeed,
                                                          float desiredBodyHeight,
@@ -29,8 +29,8 @@ namespace Quadruped {
         this->robot = robot;
         this->gaitGenerator = gaitGenerator;
         this->robotEstimator = robotEstimator;
-        groundEstimator = groundEstimatorIn;
-        this->comAdjuster = comAdjuster;
+        this->groundEstimator = groundEstimatorIn;
+        this->comPlanner = comPlanner;
         this->posePlanner = posePlanner;
         this->footholdPlanner = footholdPlanner;
         this->configFilepath = configFilepath;
@@ -42,7 +42,7 @@ namespace Quadruped {
         Reset(0.f);
     }
 
-    void TorqueStanceLegController::Reset(float currentTime_)
+    void qrStanceLegController::Reset(float currentTime_)
     {   
         string controlModeStr;        
         switch (robot->controlParams["mode"])
@@ -74,12 +74,12 @@ namespace Quadruped {
         currentTime = currentTime_;
     }
 
-    void TorqueStanceLegController::Update(float currentTime_)
+    void qrStanceLegController::Update(float currentTime_)
     {
         currentTime = currentTime_;
     }
 
-    void TorqueStanceLegController::UpdateFRatio(Vec4<bool> &contacts, int &N, float &moveBasePhase)
+    void qrStanceLegController::UpdateFRatio(Vec4<bool> &contacts, int &N, float &moveBasePhase)
     {
         /// leg contact status  ///
         if (robot->stop) {
@@ -149,7 +149,7 @@ namespace Quadruped {
         }
     }
     
-    std::tuple<std::map<int, MotorCommand>, Eigen::Matrix<float, 3, 4>> TorqueStanceLegController::GetAction()
+    std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLegController::GetAction()
     {
         Eigen::Matrix<float, 3, 1> robotComPosition;
         Eigen::Matrix<float, 3, 1> robotComVelocity;
@@ -242,21 +242,21 @@ namespace Quadruped {
         // std::cout << "fMaxRatio " << fMaxRatio.transpose() << std::endl;
         // std::cout << "contact for force compute " << contacts.transpose() << std::endl;
         
-        map<int, MotorCommand> action;
+        map<int, qrMotorCommand> action;
         map<int, float> motorTorques;
         Eigen::Matrix<float, 12, 1> kps = robot->config->motorKps;
         Eigen::Matrix<float, 12, 1> kds = robot->config->motorKds;
         
         for (int legId = 0; legId < NumLeg; ++legId) {
             motorTorques = robot->state.MapContactForceToJointTorques(legId, contactForces.col(legId));
-            MotorCommand temp;
+            qrMotorCommand temp;
             for (map<int, float>::iterator it = motorTorques.begin(); it != motorTorques.end(); ++it) {
                     temp = {0., 0., 0., 0., it->second};
                     action[it->first] = temp;
             }
         }
 
-        std::tuple<std::map<int, MotorCommand>, Eigen::Matrix<float, 3, 4>> actionContactForce(action, contactForces);
+        std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> actionContactForce(action, contactForces);
         return actionContactForce;
     }
 } // namespace Quadruped

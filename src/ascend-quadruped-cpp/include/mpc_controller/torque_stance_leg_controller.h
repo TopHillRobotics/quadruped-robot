@@ -23,15 +23,15 @@ namespace Quadruped {
     /**
      * @brief Control stance leg of robot
      */
-    class TorqueStanceLegController {
+    class qrStanceLegController {
     public:
-        TorqueStanceLegController(Robot *robot,
-                                  OpenloopGaitGenerator *gaitGenerator,
-                                  RobotEstimator *robotVelocityEstimator,
-                                  GroundSurfaceEstimator *groundEstimatorIn,
-                                  ComAdjuster *comAdjuster,
+        qrStanceLegController(qrRobot *robot,
+                                  qrGaitGenerator *gaitGenerator,
+                                  qrRobotEstimator *robotVelocityEstimator,
+                                  qrGroundSurfaceEstimator *groundEstimatorIn,
+                                  qrComPlanner *comPlanner,
                                   PosePlanner *posePlanner,
-                                  FootholdPlanner *footholdPlanner,
+                                  qrFootholdPlanner *footholdPlanner,
                                   Eigen::Matrix<float, 3, 1> desired_speed,
                                   float desiredTwistingSpeed,
                                   float desiredBodyHeight,
@@ -39,7 +39,7 @@ namespace Quadruped {
                                   std::string configFilepath,
                                   std::vector<float> frictionCoeffs = {0.45, 0.45, 0.45, 0.45});
 
-        virtual ~TorqueStanceLegController() = default;
+        virtual ~qrStanceLegController() = default;
 
         void Reset(float currentTime);
 
@@ -53,15 +53,15 @@ namespace Quadruped {
 
         void Update(float currentTime);
 
-        virtual std::tuple<std::map<int, MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
+        virtual std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
 
         Robot *robot;
-        OpenloopGaitGenerator *gaitGenerator;
-        RobotEstimator *robotEstimator;
-        GroundSurfaceEstimator *groundEstimator;
-        ComAdjuster *comAdjuster;
+        qrGaitGenerator *gaitGenerator;
+        qrRobotEstimator *robotEstimator;
+        qrGroundSurfaceEstimator *groundEstimator;
+        qrComPlanner *comPlanner;
         PosePlanner *posePlanner;                          
-        FootholdPlanner *footholdPlanner;
+        qrFootholdPlanner *footholdPlanner;
         Eigen::Matrix<float, 3, 1> desiredSpeed = {0., 0., 0.};
         float desiredTwistingSpeed = 0.;
         float desiredBodyHeight = 0.45; //overwrite in the class constructor by robot->bodyHeight

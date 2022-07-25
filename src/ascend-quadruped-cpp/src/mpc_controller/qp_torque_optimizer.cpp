@@ -105,7 +105,7 @@ namespace Quadruped {
         return quadLinear;
     }
 
-    Eigen::Matrix<float,12,12> ComputeWeightMatrix(Robot *robot, const Eigen::Matrix<bool, 4, 1>& contacts)
+    Eigen::Matrix<float,12,12> ComputeWeightMatrix(qrRobot *robot, const Eigen::Matrix<bool, 4, 1>& contacts)
     {
         Eigen::Matrix<float,12,12> W = 1e-4 * Eigen::Matrix<float,12,12>::Identity(); // 1e-4
         // regularize the joint torque
@@ -118,8 +118,8 @@ namespace Quadruped {
         return W;
     }
 
-    Eigen::Matrix<float, 3, 4> ComputeContactForce(Robot *robot,
-                                                   GroundSurfaceEstimator* groundEstimator,
+    Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
+                                                   qrGroundSurfaceEstimator* groundEstimator,
                                                    Eigen::Matrix<float, 6, 1> desiredAcc,
                                                    Eigen::Matrix<bool, 4, 1> contacts,
                                                    Eigen::Matrix<float, 6, 1> accWeight,
@@ -215,7 +215,7 @@ namespace Quadruped {
     }
 
     /** @brief Writen by Zhu Yijie, in world frame. Used for climbing stairs or slopes. */ 
-    Eigen::Matrix<float, 3, 4> ComputeContactForce(Robot *robot,
+    Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
                                                     Eigen::Matrix<float, 6, 1> desiredAcc,
                                                     Eigen::Matrix<bool, 4, 1> contacts,
                                                     Eigen::Matrix<float, 6, 1> accWeight,
