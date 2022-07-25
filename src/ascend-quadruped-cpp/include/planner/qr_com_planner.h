@@ -1,14 +1,30 @@
-/*
-* Copyright (c) Huawei Technologies Co., Ltd. 2021-2022. All rights reserved.
-* Description: a interface of robot locomotion controller.
-* Author: Zhao Yao & Zhu Yijie
-* Create: 2021-10-25
-* Notes: xx
-* Modify: init the file. @ Zhu Yijie
-*/
 
-#ifndef ASCEND_QUADRUPED_CPP_INCLUDE_PLANNER_COM_ADJUSTER_H_
-#define ASCEND_QUADRUPED_CPP_INCLUDE_PLANNER_COM_ADJUSTER_H_
+// The MIT License
+
+// Copyright (c) 2022
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact:tophill.robotics@gmail.com
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#ifndef QR_COM_PLANNER_H
+#define QR_COM_PLANNER_H
 
 #include <iostream>
 #include <string>
@@ -18,13 +34,12 @@
 
 #include "robots/robot.h"
 #include "state_estimator/robot_estimator.h"
-#include "mpc_controller/openloop_gait_generator.h"
+#include "mpc_controller/qr_gait_generator.h"
 #include "utils/se3.h"
 
 namespace Quadruped {
-    class ComAdjuster {
+    class qrComPlanner  {
     private:
-        friend class FakeComAdjuster;
         /**
          * @brief the vector index of ADJEST_LEG means the order of the legs,
          *        the value of ADJEST_LEG means adjacent two legs of the indexed leg, 
@@ -37,7 +52,7 @@ namespace Quadruped {
         };
 
         Robot *robot;
-        OpenloopGaitGenerator *gaitGenerator;
+        qrGaitGenerator *gaitGenerator;
         RobotEstimator *robotEstimator;
 
         Eigen::Vector3f basePosition;
@@ -56,11 +71,11 @@ namespace Quadruped {
         float delta;
 
     public:
-        ComAdjuster(Robot *robotIn,
-                    OpenloopGaitGenerator *gaitGeneratorIn,
+        qrComPlanner (Robot *robotIn,
+                    qrGaitGenerator *gaitGeneratorIn,
                     RobotEstimator *robotEstimatorIn);
 
-        ~ComAdjuster() = default;
+        ~qrComPlanner () = default;
 
         /**
          * @brief Called during the start of a controller.

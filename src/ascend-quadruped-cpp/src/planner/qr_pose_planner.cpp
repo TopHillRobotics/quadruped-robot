@@ -7,12 +7,12 @@
 * Modify: init the file. @ Zhu Yijie
 */
 
-#include "planner/pose_planner.h"
+#include "planner/qr_pose_planner.h"
 #include "QuadProg++.hh"
 #include "Array.hh"
 
 namespace Quadruped {
-PosePlanner::PosePlanner(Robot *robotIn, RobotEstimator *robotEstimatorIn, GroundSurfaceEstimator *groundEstimatorIn, OpenloopGaitGenerator *gaitGeneratorIn)
+qrPosePlanner::qrPosePlanner(Robot *robotIn, RobotEstimator *robotEstimatorIn, GroundSurfaceEstimator *groundEstimatorIn, qrGaitGenerator *gaitGeneratorIn)
 : robot(robotIn), robotEstimator(robotEstimatorIn), groundEstimator(groundEstimatorIn), gaitGenerator(gaitGeneratorIn)
 {
     /// leg contact status  ///
@@ -50,7 +50,7 @@ PosePlanner::PosePlanner(Robot *robotIn, RobotEstimator *robotEstimatorIn, Groun
     segment.Reset(poseDest, poseDest);
 }
 
-Vec6<float> PosePlanner::Update(float currentTime)
+Vec6<float> qrPosePlanner::Update(float currentTime)
 {
     /// leg contact status  ///
     for (int legId = 0; legId < 4; legId++) {
@@ -216,7 +216,7 @@ Vec6<float> PosePlanner::Update(float currentTime)
     return poseDest;
 }
 
-std::tuple<Vec6<float>,Eigen::MatrixXf> PosePlanner::QpSolver(Mat6<float>& hessF,
+std::tuple<Vec6<float>,Eigen::MatrixXf> qrPosePlanner::QpSolver(Mat6<float>& hessF,
                                                             Mat6<float>& hessGSum,
                                                             Vec6<float>& gradientF,
                                                             Eigen::MatrixXf& gradientG,
@@ -261,7 +261,7 @@ std::tuple<Vec6<float>,Eigen::MatrixXf> PosePlanner::QpSolver(Mat6<float>& hessF
     return {p,larg};
 }
 
-Vec6<float> PosePlanner::ComputeGradientF()
+Vec6<float> qrPosePlanner::ComputeGradientF()
 {
     Vec6<float> gradient = Vec6<float>::Zero();
     for(int i : validContactPointId){
@@ -276,7 +276,7 @@ Vec6<float> PosePlanner::ComputeGradientF()
     return gradient;
 }
 
-Eigen::Matrix<float, 6, 6> PosePlanner::ComputeHessianF() 
+Eigen::Matrix<float, 6, 6> qrPosePlanner::ComputeHessianF() 
 {
     Eigen::Matrix<float, 6, 6> Hess = Eigen::Matrix<float, 6, 6>::Zero();
     for (int i : validContactPointId) {
@@ -306,7 +306,7 @@ Eigen::Matrix<float, 6, 6> PosePlanner::ComputeHessianF()
     return Hess;
 }
 
-Eigen::MatrixXf PosePlanner::ComputeGradientG()
+Eigen::MatrixXf qrPosePlanner::ComputeGradientG()
 {
     Eigen::MatrixXf gradient = Eigen::MatrixXf::Zero(3*N, 3+3);   
     gradient.block(0, 0, N, 3) = Asp;
@@ -325,7 +325,7 @@ Eigen::MatrixXf PosePlanner::ComputeGradientG()
     return gradient;
 }
 
-std::vector<Mat6<float>> PosePlanner::ComputeHessianG() 
+std::vector<Mat6<float>> qrPosePlanner::ComputeHessianG() 
 {
     std::vector<Mat6<float>> hessVec;
     Eigen::MatrixXf AspT = Asp.transpose();
@@ -363,7 +363,7 @@ std::vector<Mat6<float>> PosePlanner::ComputeHessianG()
     return hessVec;
 }
 
-Eigen::MatrixXf PosePlanner::ComputeG()
+Eigen::MatrixXf qrPosePlanner::ComputeG()
 {
     G.conservativeResize(3*N, Eigen::NoChange);
     Asp.conservativeResize(N, Eigen::NoChange);
@@ -423,7 +423,7 @@ Eigen::MatrixXf PosePlanner::ComputeG()
     return G;
 }
 
-float PosePlanner::ComputeF()
+float qrPosePlanner::ComputeF()
 {
     float f=0;
     for(int i : validContactPointId){
@@ -435,7 +435,7 @@ float PosePlanner::ComputeF()
     return f;
 }
 
-Vec3<float> PosePlanner::ProjectV(Vec3<float> v)
+Vec3<float> qrPosePlanner::ProjectV(Vec3<float> v)
 {
     // return {v[0], v[1], 0.f};
     return {v[0], v[1], v[2]};

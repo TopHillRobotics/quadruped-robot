@@ -11,7 +11,7 @@
 
 namespace Quadruped {
     RobotVelocityEstimator::RobotVelocityEstimator(Robot *robotIn,
-                                                   OpenloopGaitGenerator *gaitGeneratorIn,
+                                                   qrGaitGenerator *gaitGeneratorIn,
                                                    float accelerometerVarianceIn,
                                                    float sensorVarianceIn,
                                                    float initialVarianceIn,

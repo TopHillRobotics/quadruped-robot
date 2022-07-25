@@ -13,12 +13,12 @@ using namespace std;
 namespace Quadruped {
 
     TorqueStanceLegController::TorqueStanceLegController(Robot *robot,
-                                                         OpenloopGaitGenerator *gaitGenerator,
+                                                         qrGaitGenerator *gaitGenerator,
                                                          RobotEstimator *robotEstimator,
                                                          GroundSurfaceEstimator *groundEstimatorIn,
-                                                         ComAdjuster *comAdjuster,
-                                                         PosePlanner *posePlanner,
-                                                         FootholdPlanner *footholdPlanner,
+                                                         qrComPlanner  *comPlanner ,
+                                                         qrPosePlanner *posePlanner,
+                                                         qrFootholdPlanner *footholdPlanner,
                                                          Eigen::Matrix<float, 3, 1> desiredSpeed,
                                                          float desiredTwistingSpeed,
                                                          float desiredBodyHeight,
@@ -30,7 +30,7 @@ namespace Quadruped {
         this->gaitGenerator = gaitGenerator;
         this->robotEstimator = robotEstimator;
         groundEstimator = groundEstimatorIn;
-        this->comAdjuster = comAdjuster;
+        this->comPlanner  = comPlanner ;
         this->posePlanner = posePlanner;
         this->footholdPlanner = footholdPlanner;
         this->configFilepath = configFilepath;

@@ -1,24 +1,40 @@
-/*
-* Copyright (c) Huawei Technologies Co., Ltd. 2021-2022. All rights reserved.
-* Description: estimate the vel of quadruped.
-* Author: Zhao Yao & Zhu Yijie
-* Create: 2021-11-08
-* Notes: xx
-* Modify: init the file. @ Zhu Yijie
-*/
 
-#include "planner/foothold_planner.h"
+// The MIT License
+
+// Copyright (c) 2022
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact:tophill.robotics@gmail.com
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#include "planner/qr_foothold_planner.h"
 
 namespace Quadruped {
-    FootholdPlanner::FootholdPlanner(Robot *robotIn, GroundSurfaceEstimator *groundEsitmatorIn)
+    qrFootholdPlanner::qrFootholdPlanner(Robot *robotIn, GroundSurfaceEstimator *groundEsitmatorIn)
     : robot(robotIn), groundEsitmator(groundEsitmatorIn), terrain(groundEsitmator->terrain),
         timeSinceReset(0.f), stepCount(0)
     {
-        footstepper = new FootStepper(terrain, 0.10f, "optimal");
+        footstepper = new qrFootStepper (terrain, 0.10f, "optimal");
         Reset();
     }
 
-    void FootholdPlanner::Reset()
+    void qrFootholdPlanner::Reset()
     {
         resetTime = robot->GetTimeSinceReset();
         timeSinceReset = 0.f;
@@ -28,9 +44,9 @@ namespace Quadruped {
         desiredFootholdsOffset = Eigen::Matrix<float, 3, 4>::Zero();
     }
 
-    void FootholdPlanner::UpdateOnce(Eigen::Matrix<float, 3, 4> currentFootholds, std::vector<int> legIds)
+    void qrFootholdPlanner::UpdateOnce(Eigen::Matrix<float, 3, 4> currentFootholds, std::vector<int> legIds)
     {
-        // std::cout << "------------------------[FootholdPlanner::UpdateOnce]------------------------" << std::endl;
+        // std::cout << "------------------------[qrFootholdPlanner::UpdateOnce]------------------------" << std::endl;
         // std::cout << "current footholds: \n" << currentFootholds << std::endl;
         comPose << robot->GetBasePosition(), robot->GetBaseRollPitchYaw();
         desiredComPose << 0.f,0.f,0.f,0.f,0.f,0.f; //comPose;
@@ -51,10 +67,10 @@ namespace Quadruped {
             ComputeNextFootholds(currentFootholds, comPose, desiredComPose, legIds);
         }
         // std::cout << "desired footholds offset: \n" << desiredFootholdsOffset << std::endl;
-        // std::cout << "------------------------[FootholdPlanner::UpdateOnce Finished]------------------------" << std::endl;
+        // std::cout << "------------------------[qrFootholdPlanner::UpdateOnce Finished]------------------------" << std::endl;
     }
 
-    Eigen::Matrix<float, 3, 4> FootholdPlanner::ComputeFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds,
+    Eigen::Matrix<float, 3, 4> qrFootholdPlanner::ComputeFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds,
                                                                     Eigen::Matrix<float, 6, 1> currentComPose,
                                                                     Eigen::Matrix<float, 6, 1> desiredComPose,
                                                                     std::vector<int> legIds)
@@ -63,7 +79,7 @@ namespace Quadruped {
         return desiredFootholdsOffset;
     }
 
-    Eigen::Matrix<float, 3, 4> FootholdPlanner::ComputeNextFootholds(Eigen::Matrix<float, 3, 4>& currentFootholds,
+    Eigen::Matrix<float, 3, 4> qrFootholdPlanner::ComputeNextFootholds(Eigen::Matrix<float, 3, 4>& currentFootholds,
                                                                         Eigen::Matrix<float, 6, 1>& currentComPose,
                                                                         Eigen::Matrix<float, 6, 1>& desiredComPose,
                                                                         std::vector<int>& legIds)

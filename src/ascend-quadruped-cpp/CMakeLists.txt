@@ -119,8 +119,8 @@ if(${USE_GO1})
     add_dependencies(robot_runtime ${catkin_EXPORTED_TARGETS})
 
     ## Add Executable
-    add_executable(trot_go1 src/exec/trot_go1.cpp)
-    target_link_libraries(trot_go1 robot_runtime)
+    # add_executable(trot_go1 src/exec/trot_go1.cpp)
+    # target_link_libraries(trot_go1 robot_runtime)
 
 else() #A1 & AligenGo
     ## Add Runtime lib

@@ -10,15 +10,15 @@
 #include "mpc_controller/locomotion_controller.h"
 namespace Quadruped {
     LocomotionController::LocomotionController(Robot *robotIn,
-                                               OpenloopGaitGenerator *gaitGeneratorIn,
+                                               qrGaitGenerator *gaitGeneratorIn,
                                                RobotEstimator *stateEstimatorIn,
                                                GroundSurfaceEstimator *groundEstimatorIn,
-                                               ComAdjuster *comAdjusterIn,
-                                               PosePlanner *posePlannerIn,
+                                               qrComPlanner  *comPlannerIn,
+                                               qrPosePlanner *posePlannerIn,
                                                RaibertSwingLegController *swingLegControllerIn,
                                                TorqueStanceLegController *stanceLegControllerIn)
     :
-        robot(robotIn), gaitGenerator(gaitGeneratorIn), stateEstimator(stateEstimatorIn), groundEstimator(groundEstimatorIn), comAdjuster(comAdjusterIn),
+        robot(robotIn), gaitGenerator(gaitGeneratorIn), stateEstimator(stateEstimatorIn), groundEstimator(groundEstimatorIn), comPlanner (comPlannerIn),
         posePlanner(posePlannerIn), swingLegController(swingLegControllerIn), stanceLegController(stanceLegControllerIn)
     {
         resetTime = robot->GetTimeSinceReset();
@@ -32,7 +32,7 @@ namespace Quadruped {
         gaitGenerator->Reset(timeSinceReset);
         stateEstimator->Reset(timeSinceReset);
         groundEstimator->Reset(timeSinceReset);
-        comAdjuster->Reset(timeSinceReset);
+        comPlanner ->Reset(timeSinceReset);
         posePlanner->Reset(timeSinceReset);
         swingLegController->Reset(timeSinceReset);
         stanceLegController->Reset(timeSinceReset);

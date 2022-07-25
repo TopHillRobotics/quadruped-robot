@@ -35,8 +35,8 @@ std::string GetHomeDir(std::string homeName)
 
 LocomotionController *setUpController(Robot *quadruped, std::string homeDir, std::string robotName)
 {
-    OpenloopGaitGenerator *gaitGenerator;
-    gaitGenerator = new OpenloopGaitGenerator(quadruped, homeDir + "config/" + robotName
+    qrGaitGenerator *gaitGenerator;
+    gaitGenerator = new qrGaitGenerator(quadruped, homeDir + "config/" + robotName
                                                                          + "/openloop_gait_generator.yaml");
                                                                      
     std::cout << "init gaitGenerator finish\n" << std::endl;
@@ -48,13 +48,13 @@ LocomotionController *setUpController(Robot *quadruped, std::string homeDir, std
     RobotEstimator *stateEstimator = new RobotEstimator(quadruped, gaitGenerator, groundEsitmator);
     std::cout << "init robotEstimator finish\n" << std::endl;
      
-    ComAdjuster *comAdjuster = new ComAdjuster(quadruped, gaitGenerator, stateEstimator);
-    std::cout << "init comAdjuster finish\n" << std::endl;
+    qrComPlanner  *comPlanner  = new qrComPlanner (quadruped, gaitGenerator, stateEstimator);
+    std::cout << "init comPlanner  finish\n" << std::endl;
 
-    PosePlanner *posePlanner = new PosePlanner(quadruped, stateEstimator, groundEsitmator, gaitGenerator);
+    qrPosePlanner *posePlanner = new qrPosePlanner(quadruped, stateEstimator, groundEsitmator, gaitGenerator);
     std::cout << "init posePlanner finish\n" << std::endl;
 
-    FootholdPlanner *footholdPlanner = new FootholdPlanner(quadruped, groundEsitmator);
+    qrFootholdPlanner *footholdPlanner = new qrFootholdPlanner(quadruped, groundEsitmator);
     std::cout << "init footholdPlanner finish\n" << std::endl;
 
     RaibertSwingLegController *swingLegController = new RaibertSwingLegController(quadruped,
@@ -75,7 +75,7 @@ LocomotionController *setUpController(Robot *quadruped, std::string homeDir, std
                                                                                    gaitGenerator,
                                                                                    stateEstimator,
                                                                                    groundEsitmator,
-                                                                                   comAdjuster,
+                                                                                   comPlanner ,
                                                                                    posePlanner,
                                                                                    footholdPlanner,
                                                                                    desiredSpeed,
@@ -91,7 +91,7 @@ LocomotionController *setUpController(Robot *quadruped, std::string homeDir, std
                                                                           gaitGenerator,
                                                                           stateEstimator,
                                                                           groundEsitmator,
-                                                                          comAdjuster,
+                                                                          comPlanner ,
                                                                           posePlanner,
                                                                           swingLegController,
                                                                           stanceLegController);

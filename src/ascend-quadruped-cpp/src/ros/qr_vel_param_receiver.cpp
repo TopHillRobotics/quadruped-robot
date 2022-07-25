@@ -7,20 +7,19 @@
 * Modify: init the file. @ Zhu Yijie
 */
 
-#include "ros/cmd_vel_receiver.h"
+#include "ros/qr_vel_param_receiver.h"
 namespace Quadruped {
-    CmdVelReceiver::CmdVelReceiver(ros::NodeHandle &nhIn, ros::NodeHandle &privateNhIn)
+    qrVelocityParamReceiver::qrVelocityParamReceiver (ros::NodeHandle &nhIn, ros::NodeHandle &privateNhIn)
         : nh(nhIn), privateNh(privateNhIn)
     {
         ROS_INFO("command velocity topic: %s", cmdVelTopic.c_str());
-        cmdVelSub = nh.subscribe(cmdVelTopic, 10, &CmdVelReceiver::CmdVelCallback, this);
+        cmdVelSub = nh.subscribe(cmdVelTopic, 10, &qrVelocityParamReceiver::CmdVelCallback, this);
     }
 
-    void CmdVelReceiver::CmdVelCallback(const geometry_msgs::Twist::ConstPtr &input)
+    void qrVelocityParamReceiver::CmdVelCallback(const geometry_msgs::Twist::ConstPtr &input)
     {
         linearVel << input->linear.x, input->linear.y, input->linear.z;
         angularVel << input->angular.x, input->angular.y, input->angular.z;
-        // ROS_INFO_STREAM("[CmdVelReceiver] received velocity command:" << " linear=" << input->linear.x << " angular=" << input->angular.z);
     }
 } // namespace Quadruped
 

@@ -29,12 +29,12 @@
 // public:
 // };
 
-// class MockOpenloopGaitGenerator : public OpenloopGaitGenerator
+// class MockqrGaitGenerator : public qrGaitGenerator
 // {
 // public:
 //     // friend TEST_F(TestComAdjuster, Update);
-//     MockOpenloopGaitGenerator(Robot *robot, string configFilePath)
-//         : OpenloopGaitGenerator(robot, configFilePath)
+//     MockqrGaitGenerator(Robot *robot, string configFilePath)
+//         : qrGaitGenerator(robot, configFilePath)
 //     {
 //     }
 // };

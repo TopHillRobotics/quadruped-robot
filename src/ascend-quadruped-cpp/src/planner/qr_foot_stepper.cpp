@@ -1,17 +1,32 @@
-/*
-* Copyright (c) Huawei Technologies Co., Ltd. 2021-2022. All rights reserved.
-* Description: estimate the vel of quadruped.
-* Author: Zhao Yao & Zhu Yijie
-* Create: 2021-11-08
-* Notes: xx
-* Modify: init the file. @ Zhu Yijie
-*/
+// The MIT License
 
-#include "planner/foot_stepper.h"
+// Copyright (c) 2022
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact:tophill.robotics@gmail.com
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#include "planner/qr_foot_stepper.h"
 #include "QuadProg++.hh"
 #include "Array.hh"
 namespace Quadruped {
-    FootStepper::FootStepper(Terrain& terrain, float defaultFootholdOffset, std::string level)
+    qrFootStepper ::qrFootStepper (Terrain& terrain, float defaultFootholdOffset, std::string level)
     {
         // terrainType
         switch (terrain.terrainType)
@@ -66,7 +81,7 @@ namespace Quadruped {
         x[0] = 0.0;
     }
     
-    double  FootStepper::CheckSolution(Eigen::Matrix<float, 1, 4> currentFootholdsX, double front, double back, Gap frontGap, Gap backGap) {
+    double  qrFootStepper ::CheckSolution(Eigen::Matrix<float, 1, 4> currentFootholdsX, double front, double back, Gap frontGap, Gap backGap) {
         for (int i = 1; i < 5; ++i) {
             if (i <= 2) {
                 // cout << defaultFootholdDelta<< endl;
@@ -106,7 +121,7 @@ namespace Quadruped {
     }
 
 
-    int FootStepper::StepGenerator(Eigen::Matrix<float, 1, 4>& currentFootholdsX, Eigen::Matrix<float, 1, 4>& desiredFootholdsOffset) {
+    int qrFootStepper ::StepGenerator(Eigen::Matrix<float, 1, 4>& currentFootholdsX, Eigen::Matrix<float, 1, 4>& desiredFootholdsOffset) {
         Eigen::Matrix<float, 1, 4> defaultNextFootholdsX = currentFootholdsX.array() + defaultFootholdDelta;
         // std::cout << "defaultNextFootholdsX = " << defaultNextFootholdsX << std::endl;
         desiredFootholdsOffset << defaultFootholdDelta, defaultFootholdDelta, defaultFootholdDelta, defaultFootholdDelta;
@@ -172,7 +187,7 @@ namespace Quadruped {
         return 0;
     }
 
-    std::tuple<Eigen::Matrix<float,3,4>, Eigen::Matrix<float,3,4>> FootStepper::GetFootholdsInWorldFrame(
+    std::tuple<Eigen::Matrix<float,3,4>, Eigen::Matrix<float,3,4>> qrFootStepper ::GetFootholdsInWorldFrame(
                                                                     Eigen::Matrix<float, 3, 4>& currentFootholds,
                                                                     Eigen::Matrix<float, 6, 1>& currentComPose,
                                                                     Eigen::Matrix<float, 6, 1>& desiredComPose,
@@ -330,7 +345,7 @@ namespace Quadruped {
     }
 
     /*
-    Eigen::Matrix<float, 3, 4> FootStepper::GetOptimalFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds)
+    Eigen::Matrix<float, 3, 4> qrFootStepper ::GetOptimalFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds)
     {
         Eigen::Matrix<float, 1, 4> currentFootholdsX = currentFootholds.row(0);
         // std::cout << "currentFootholdsX = " << currentFootholdsX << std::endl;
@@ -474,7 +489,7 @@ namespace Quadruped {
     */
     // todo
 
-        Eigen::Matrix<float, 3, 4> FootStepper::GetOptimalFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds)
+        Eigen::Matrix<float, 3, 4> qrFootStepper ::GetOptimalFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds)
     {
         Eigen::Matrix<float, 1, 4> currentFootholdsX = currentFootholds.row(0);
         nextFootholdsOffset.row(0) << defaultFootholdDelta, defaultFootholdDelta, defaultFootholdDelta, defaultFootholdDelta;

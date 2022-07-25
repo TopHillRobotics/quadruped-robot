@@ -21,6 +21,7 @@ add_message_files(
   LowState.msg
   HighCmd.msg
   HighState.msg
+  GaitParameter.msg
 )
 
 generate_messages(

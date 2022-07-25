@@ -14,7 +14,7 @@
 #include <numeric>
 #include "utils/se3.h"
 #include "robots/robot.h"
-#include "mpc_controller/openloop_gait_generator.h"
+#include "mpc_controller/qr_gait_generator.h"
 #include "state_estimator/filter.h"
 #include "TinyEKF.h"
 
@@ -42,7 +42,7 @@ namespace Quadruped {
          * 2) A moving average filter to smooth out velocity readings
          */
         RobotVelocityEstimator(Robot *robot,
-                               OpenloopGaitGenerator *gaitGeneratorIn,
+                               qrGaitGenerator *gaitGeneratorIn,
                                float accelerometerVarianceIn = 0.1f,
                                float sensorVarianceIn = 0.1f,
                                float initialVarianceIn = 0.1f,
@@ -69,7 +69,7 @@ namespace Quadruped {
 
     private:
         Robot *robot;
-        OpenloopGaitGenerator *gaitGenerator;
+        qrGaitGenerator *gaitGenerator;
         int windowSize;
         float initialVariance;
         float lastTimestamp;

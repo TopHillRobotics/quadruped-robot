@@ -7,11 +7,11 @@
 * Modify: init the file. @ Zhu Linsen
 */
 
-#include "ros/robot_odom_estimator.h"
+#include "ros/qr_odom_param_receiver.h"
 
 namespace Quadruped {
 
-    RobotOdometryEstimator::RobotOdometryEstimator(Robot *robotIn,
+    qrOdometryParamReceiver::qrOdometryParamReceiver(Robot *robotIn,
                                                    LocomotionController *locomotionControllerIn,
                                                    ros::NodeHandle &nhIn)
         : robot(robotIn), nh(nhIn)
@@ -22,7 +22,7 @@ namespace Quadruped {
         ROS_INFO("robot_odom_estimator init success...");
     }
 
-    void RobotOdometryEstimator::PublishOdometry()
+    void qrOdometryParamReceiver::PublishOdometry()
     {
         currentTime = ros::Time::now();
         const Vec3<float> &estimatedVelocity = robotEstimator->GetEstimatedVelocity();

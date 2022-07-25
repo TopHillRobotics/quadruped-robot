@@ -49,10 +49,10 @@ namespace Quadruped {
     }
 
     RaibertSwingLegController::RaibertSwingLegController(Robot *robot,
-                                                         OpenloopGaitGenerator *gaitGenerator,
+                                                         qrGaitGenerator *gaitGenerator,
                                                          RobotEstimator *stateEstimator,
                                                          GroundSurfaceEstimator *groundEstimator,
-                                                         FootholdPlanner *footholdPlanner,
+                                                         qrFootholdPlanner *footholdPlanner,
                                                          Matrix<float, 3, 1> desiredSpeed,
                                                          float desiredTwistingSpeed,
                                                          float desiredHeight,

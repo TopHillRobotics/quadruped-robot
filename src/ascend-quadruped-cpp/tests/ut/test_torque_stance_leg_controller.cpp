@@ -26,15 +26,9 @@ protected:
     }
 
 public:
-<<<<<<< HEAD
-    Robot *robot;
-    OpenloopGaitGenerator *gaitGenerator;
-    RobotVelocityEstimator *robotVelocityEstimator;
-=======
     Robot* robot;
-    OpenloopGaitGenerator* gaitGenerator;
+    qrGaitGenerator* gaitGenerator;
     RobotVelocityEstimator* robotVelocityEstimator;
->>>>>>> origin/develop
     Eigen::Matrix<float, 3, 1> desiredSpeed;
     float desiredTwistingSpeed;
     float desiredBodyHeight;
@@ -42,13 +36,8 @@ public:
     std::vector<float> frictionCoeffs;
     std::string configFilepath = "../config/stance_leg_controller.yaml";
 
-<<<<<<< HEAD
-    TorqueStanceLegController *stanceLegPtr;
-    TorqueStanceLegController *build()
-=======
     TorqueStanceLegController* stanceLegPtr;
     TorqueStanceLegController* build()
->>>>>>> origin/develop
     {
         return new TorqueStanceLegController(robot,
                                              gaitGenerator,

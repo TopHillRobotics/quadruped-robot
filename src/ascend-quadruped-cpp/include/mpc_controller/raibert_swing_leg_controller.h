@@ -11,10 +11,10 @@
 #define ASCEND_QUADRUPED_CPP_RAIBERT_SWING_LEG_CONTROLLER_H
 
 #include "robots/motor.h"
-#include "openloop_gait_generator.h"
+#include "qr_gait_generator.h"
 #include "state_estimator/robot_estimator.h"
 #include "state_estimator/ground_estimator.h"
-#include "planner/foothold_planner.h"
+#include "planner/qr_foothold_planner.h"
 #include "mpc_controller/foot_trajectory_generator.h"
 
 namespace Quadruped {
@@ -22,10 +22,10 @@ namespace Quadruped {
 
     public:
         RaibertSwingLegController(Robot *robot,
-                                  OpenloopGaitGenerator *gaitGenerator,
+                                  qrGaitGenerator *gaitGenerator,
                                   RobotEstimator *stateEstimator,
                                   GroundSurfaceEstimator *groundEstimator,
-                                  FootholdPlanner *FootholdPlanner,
+                                  qrFootholdPlanner *qrFootholdPlanner,
                                   Eigen::Matrix<float, 3, 1> desiredSpeed,
                                   float desiredTwistingSpeed,
                                   float desiredHeight,
@@ -66,10 +66,10 @@ namespace Quadruped {
         float desiredTwistingSpeed; // appear in velocity mode usually.
 
         Robot *robot;
-        OpenloopGaitGenerator *gaitGenerator;
+        qrGaitGenerator *gaitGenerator;
         RobotEstimator *stateEstimator;
         GroundSurfaceEstimator *groundEstimator;
-        FootholdPlanner *footholdPlanner;
+        qrFootholdPlanner *footholdPlanner;
         Eigen::Matrix<int, 4, 1> lastLegState;
         Eigen::Matrix<float, 3, 1> desiredHeight;
         std::map<int, float> swigJointAngles;

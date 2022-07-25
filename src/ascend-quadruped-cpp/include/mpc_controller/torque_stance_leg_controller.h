@@ -12,12 +12,12 @@
 
 #include "utils/se3.h"
 #include "robots/robot.h"
-#include "mpc_controller/openloop_gait_generator.h"
+#include "mpc_controller/qr_gait_generator.h"
 #include "state_estimator/robot_estimator.h"
 #include "state_estimator/ground_estimator.h"
-#include "planner/com_adjuster.h"
-#include "planner/pose_planner.h"
-#include "planner/foothold_planner.h"
+#include "planner/qr_com_planner.h"
+#include "planner/qr_pose_planner.h"
+#include "planner/qr_foothold_planner.h"
 
 namespace Quadruped {
     /**
@@ -26,12 +26,12 @@ namespace Quadruped {
     class TorqueStanceLegController {
     public:
         TorqueStanceLegController(Robot *robot,
-                                  OpenloopGaitGenerator *gaitGenerator,
+                                  qrGaitGenerator *gaitGenerator,
                                   RobotEstimator *robotVelocityEstimator,
                                   GroundSurfaceEstimator *groundEstimatorIn,
-                                  ComAdjuster *comAdjuster,
-                                  PosePlanner *posePlanner,
-                                  FootholdPlanner *footholdPlanner,
+                                  qrComPlanner  *comPlanner ,
+                                  qrPosePlanner *posePlanner,
+                                  qrFootholdPlanner *footholdPlanner,
                                   Eigen::Matrix<float, 3, 1> desired_speed,
                                   float desiredTwistingSpeed,
                                   float desiredBodyHeight,
@@ -56,12 +56,12 @@ namespace Quadruped {
         virtual std::tuple<std::map<int, MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
 
         Robot *robot;
-        OpenloopGaitGenerator *gaitGenerator;
+        qrGaitGenerator *gaitGenerator;
         RobotEstimator *robotEstimator;
         GroundSurfaceEstimator *groundEstimator;
-        ComAdjuster *comAdjuster;
-        PosePlanner *posePlanner;                          
-        FootholdPlanner *footholdPlanner;
+        qrComPlanner  *comPlanner ;
+        qrPosePlanner *posePlanner;                          
+        qrFootholdPlanner *footholdPlanner;
         Eigen::Matrix<float, 3, 1> desiredSpeed = {0., 0., 0.};
         float desiredTwistingSpeed = 0.;
         float desiredBodyHeight = 0.45; //overwrite in the class constructor by robot->bodyHeight

@@ -1,6 +1,6 @@
 #include "exec/runtime.h"
 #include "sim/a1_sim.h"
-#include "ros/control2gazebo_msg.h"
+#include "ros/qr_visual_gazebo_msg.h"
 
 #include <gazebo_msgs/ModelState.h>
 #include <gazebo_msgs/SetModelState.h>
@@ -176,7 +176,7 @@ int main(int argc, char **argv)
     ROS_INFO("LocomotionController Reset Finished");
 
     // ros module init
-    CmdVelReceiver *cmdVelReceiver = new CmdVelReceiver(nh, privateNh);
+    qrVelocityParamReceiver *cmdVelReceiver = new qrVelocityParamReceiver (nh, privateNh);
     ROS_INFO("ROS Modules Init Finished");
 
     ROS_INFO("TimeSinceReset: %f", quadruped->GetTimeSinceReset());

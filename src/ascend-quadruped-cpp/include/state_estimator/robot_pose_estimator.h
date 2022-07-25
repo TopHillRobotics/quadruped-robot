@@ -11,7 +11,7 @@
 #define ASCEND_QUADRUPED_CPP_ROBOT_POSE_ESTIMATOR_H
 
 #include "robots/robot.h"
-#include "mpc_controller/openloop_gait_generator.h"
+#include "mpc_controller/qr_gait_generator.h"
 #include "state_estimator/robot_velocity_estimator.h"
 #include "state_estimator/ground_estimator.h"
 
@@ -22,7 +22,7 @@ namespace Quadruped {
     class RobotPoseEstimator {
     public:
         RobotPoseEstimator(Robot *robotIn,
-                           OpenloopGaitGenerator *gaitGeneratorIn,
+                           qrGaitGenerator *gaitGeneratorIn,
                            GroundSurfaceEstimator *groundEstimatorIn,
                            RobotVelocityEstimator *velocityEstimator);
 
@@ -49,7 +49,7 @@ namespace Quadruped {
         Robot *robot;
         float lastTimestamp;
         Vec6<float> estimatedPose;
-        OpenloopGaitGenerator *gaitGenerator;
+        qrGaitGenerator *gaitGenerator;
         GroundSurfaceEstimator *groundEstimator;
         RobotVelocityEstimator *velocityEstimator;
 

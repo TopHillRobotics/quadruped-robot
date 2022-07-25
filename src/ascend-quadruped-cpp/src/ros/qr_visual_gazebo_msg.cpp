@@ -1,17 +1,32 @@
-/*
-* Copyright (c) Huawei Technologies Co., Ltd. 2021-2022. All rights reserved.
-* Description: Publishing controller information over ROS to gazebo for vis.
-* Author: Zhu Yijie
-* Create: 2022-1-05
-* Notes: None.
-* Modify: init the file. @ Zhu Yijie
-*/
+// The MIT License
 
-#include "ros/control2gazebo_msg.h"
+// Copyright (c) 2022
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact:tophill.robotics@gmail.com
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#include "ros/qr_visual_gazebo_msg.h"
 
 namespace Quadruped {
 
-    Controller2GazeboMsg::Controller2GazeboMsg(Robot *robotIn,
+    qrVisualGazeboMsg::qrVisualGazeboMsg(Robot *robotIn,
                                                    LocomotionController *locomotionControllerIn,
                                                    ros::NodeHandle &nhIn)
         : robot(robotIn), nh(nhIn)
@@ -26,31 +41,11 @@ namespace Quadruped {
         baseStateClient = nh.serviceClient<gazebo_msgs::GetLinkState>("/gazebo/get_link_state");
     
         lastTime = ros::Time::now();
-        ROS_INFO("Controller2GazeboMsg init success...");
+        ROS_INFO("qrVisualGazeboMsg init success...");
     }
 
-    void Controller2GazeboMsg::PublishGazeboStateCallback()
+    void qrVisualGazeboMsg::PublishGazeboStateCallback()
     {
-        // auto cart = Convert::ToXpp(cart_msg);
-
-        // // transform feet from world -> base frame
-        // Eigen::Matrix3d B_R_W = cart.base_.ang.q.normalized().toRotationMatrix().inverse();
-        // EndeffectorsPos ee_B(cart.ee_motion_.GetEECount());
-        // for (auto ee : ee_B.GetEEsOrdered())
-        //     ee_B.at(ee) = B_R_W * (cart.ee_motion_.at(ee).p_ - cart.base_.lin.p_);
-
-        // Eigen::VectorXd q =  inverse_kinematics_->GetAllJointAngles(ee_B).ToVec();
-
-        // xpp_msgs::RobotStateJoint joint_msg;
-        // joint_msg.base            = cart_msg.base;
-        // joint_msg.ee_contact      = cart_msg.ee_contact;
-        // joint_msg.time_from_start = cart_msg.time_from_start;
-        // joint_msg.joint_state.position = std::vector<double>(q.data(), q.data()+q.size());
-        // // Attention: Not filling joint velocities or torques
-
-        // base and foot follow half a sine motion up and down
-        // Vec6<float> pose = posePlanner->GetBasePose();
-        // const auto & q = posePlanner->quat;
         auto curTime = ros::Time::now();
                 
         const auto & q = robot->GetBaseOrientation();

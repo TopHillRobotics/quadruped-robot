@@ -1,15 +1,29 @@
-/*
-* Copyright (c) Huawei Technologies Co., Ltd. 2021-2022. All rights reserved.
-* Description: estimate the vel of quadruped.
-* Author: Zhao Yao & Zhu Yijie
-* Create: 2021-11-08
-* Notes: xx
-* Modify: init the file. @ Zhu Yijie;
-*           
-*/
+// The MIT License
 
-#ifndef ASCEND_QUADRUPED_CPP_INCLUDE_PLANNER_FOOT_STEPPER_H_
-#define ASCEND_QUADRUPED_CPP_INCLUDE_PLANNER_FOOT_STEPPER_H_
+// Copyright (c) 2022
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact:tophill.robotics@gmail.com
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#ifndef QR_FOOT_STEPPER_H_
+#define QR_FOOT_STEPPER_H_
 
 #include <iostream>
 #include <string>
@@ -26,10 +40,10 @@
 
 namespace Quadruped {
     
-    // todo :different terrains may apply to different FootStepper, using factory method.
-    class FootStepper {
+    // todo :different terrains may apply to different qrFootStepper , using factory method.
+    class qrFootStepper  {
     public:
-        FootStepper(Terrain& terrain, float defaultFootholdOffset, std::string level);
+        qrFootStepper (Terrain& terrain, float defaultFootholdOffset, std::string level);
 
         void Reset(float timeSinceReset) {}
 

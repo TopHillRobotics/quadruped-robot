@@ -17,11 +17,11 @@
 #include "utils/cppTypes.h"
 #include "robots/robot.h"
 #include "robots/motor.h"
-#include "mpc_controller/openloop_gait_generator.h"
+#include "mpc_controller/qr_gait_generator.h"
 #include "mpc_controller/raibert_swing_leg_controller.h"
 #include "mpc_controller/torque_stance_leg_controller.h"
-#include "planner/com_adjuster.h"
-#include "planner/pose_planner.h"
+#include "planner/qr_com_planner.h"
+#include "planner/qr_pose_planner.h"
 #include "state_estimator/robot_estimator.h"
 #include "state_estimator/ground_estimator.h"
 
@@ -34,11 +34,11 @@ namespace Quadruped {
 
     public:
         LocomotionController(Robot *robot,
-                             OpenloopGaitGenerator *gaitGenerator,
+                             qrGaitGenerator *gaitGenerator,
                              RobotEstimator *stateEstimator,
                              GroundSurfaceEstimator *groundEstimator,
-                             ComAdjuster *comAdjuster,
-                             PosePlanner *posePlanner,
+                             qrComPlanner  *comPlanner ,
+                             qrPosePlanner *posePlanner,
                              RaibertSwingLegController *swingLegController,
                              TorqueStanceLegController *stanceLegController);
 
@@ -53,7 +53,7 @@ namespace Quadruped {
          */
         std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
     
-        inline OpenloopGaitGenerator *GetGaitGenerator()
+        inline qrGaitGenerator *GetGaitGenerator()
         {
             return gaitGenerator;
         }
@@ -78,7 +78,7 @@ namespace Quadruped {
             return groundEstimator;
         }
         
-        inline PosePlanner *GetPosePlanner()
+        inline qrPosePlanner *GetPosePlanner()
         {
             return posePlanner;
         }
@@ -93,11 +93,11 @@ namespace Quadruped {
         bool stop=false;
     private:
         Robot *robot;
-        OpenloopGaitGenerator *gaitGenerator;
+        qrGaitGenerator *gaitGenerator;
         RobotEstimator *stateEstimator;
         GroundSurfaceEstimator *groundEstimator;
-        ComAdjuster *comAdjuster;
-        PosePlanner *posePlanner;
+        qrComPlanner  *comPlanner ;
+        qrPosePlanner *posePlanner;
         std::vector<MotorCommand> action;
         double resetTime;
         double timeSinceReset;

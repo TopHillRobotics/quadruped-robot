@@ -1,14 +1,29 @@
-/*
-* Copyright (c) Huawei Technologies Co., Ltd. 2021-2022. All rights reserved.
-* Description: Openloop gait generator
-* Author: Xie Ming Cheng
-* Create: 2021-10-25
-* Notes: xx
-* Modify: add head comment and add some function comments. @ Xie_mingcheng 2021.11.22
-*/
+// The MIT License
 
-#ifndef ASCEND_QUADRUPED_CPP_OPENLOOP_GAIT_GENERATOR_H
-#define ASCEND_QUADRUPED_CPP_OPENLOOP_GAIT_GENERATOR_H
+// Copyright (c) 2022
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact:tophill.robotics@gmail.com
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#ifndef QR_GAIT_GENERATOR_H
+#define QR_GAIT_GENERATOR_H
 
 #include <math.h>
 #include <vector>
@@ -16,21 +31,21 @@
 #include "robots/robot.h"
 
 namespace Quadruped {
-    class OpenloopGaitGenerator {
+    class qrGaitGenerator {
     public:
 
-        OpenloopGaitGenerator();
+        qrGaitGenerator();
 
-        OpenloopGaitGenerator(Robot *robot, std::string configFilePath);
+        qrGaitGenerator(Robot *robot, std::string configFilePath);
 
-        OpenloopGaitGenerator(Robot *robot,
+        qrGaitGenerator(Robot *robot,
                               Eigen::Matrix<float, 4, 1> stanceDuration,
                               Eigen::Matrix<float, 4, 1> dutyFactor,
                               Eigen::Matrix<int, 4, 1> initialLegState,
                               Eigen::Matrix<float, 4, 1> initialLegPhase,
                               float contactDetectionPhaseThreshold=0.1f);
 
-        virtual ~OpenloopGaitGenerator() = default;
+        virtual ~qrGaitGenerator() = default;
 
         virtual void Reset(float currentTime);
 
@@ -73,4 +88,4 @@ namespace Quadruped {
     };
 } // namespace Quadruped
 
-#endif //ASCEND_QUADRUPED_CPP_OPENLOOP_GAIT_GENERATOR_H
+#endif //QR_GAIT_GENERATOR_H
