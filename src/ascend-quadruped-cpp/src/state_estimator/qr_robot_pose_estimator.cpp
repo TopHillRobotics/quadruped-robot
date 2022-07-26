@@ -7,27 +7,27 @@
 * Modify: init the file. @ Zhu Yijie
 */
 
-#include "state_estimator/robot_pose_estimator.h"
+#include "state_estimator/qr_robot_pose_estimator.h"
 
 namespace Quadruped {
 
-    RobotPoseEstimator::RobotPoseEstimator(Robot *robotIn,
+    qrRobotPoseEstimator::qrRobotPoseEstimator(qrRobot *robotIn,
                                            qrGaitGenerator *gaitGeneratorIn,
                                            qrGroundSurfaceEstimator *groundEstimatorIn,
-                                           RobotVelocityEstimator *velocityEstimatorIn)
+                                           qrRobotVelocityEstimator *velocityEstimatorIn)
         : robot(robotIn), gaitGenerator(gaitGeneratorIn), groundEstimator(groundEstimatorIn), velocityEstimator(velocityEstimatorIn)
     {
         lastTimestamp = 0.f;
         estimatedPose << robot->GetBasePosition(), robot->GetBaseRollPitchYaw();
     }
 
-    void RobotPoseEstimator::Reset(float currentTime)
+    void qrRobotPoseEstimator::Reset(float currentTime)
     {
         lastTimestamp = 0.f;
         estimatedPose << robot->GetBasePosition(), robot->GetBaseRollPitchYaw();
     }
 
-    float RobotPoseEstimator::ComputeDeltaTime(const LowState *robotState)
+    float qrRobotPoseEstimator::ComputeDeltaTime(const LowState *robotState)
     {
         float deltaTime;
         if (std::abs(lastTimestamp) < 1e-5) {
@@ -40,7 +40,7 @@ namespace Quadruped {
         return deltaTime;
     }
 
-    void RobotPoseEstimator::Update(float currentTime)
+    void qrRobotPoseEstimator::Update(float currentTime)
     {
         const RobotState &robotState = robot->state;
         // Propagate current state estimate with new accelerometer reading."""
@@ -61,7 +61,7 @@ namespace Quadruped {
         }
     }
 
-    float RobotPoseEstimator::EstimateRobotHeight()
+    float qrRobotPoseEstimator::EstimateRobotHeight()
     {
         Quat<float> baseOrientation;
         Eigen::Matrix<float, 3, 3> rotMat;
@@ -104,7 +104,7 @@ namespace Quadruped {
         }
     }
 
-    void RobotPoseEstimator::ComputePose(float deltaTime)
+    void qrRobotPoseEstimator::ComputePose(float deltaTime)
     {
         // currentTime = 0;//ros::Time::now();
         const Vec3<float> &estimatedVelocity = velocityEstimator->GetEstimatedVelocity();

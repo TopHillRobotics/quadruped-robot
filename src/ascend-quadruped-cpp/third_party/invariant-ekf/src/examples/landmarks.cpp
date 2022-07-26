@@ -65,7 +65,7 @@ int main() {
     InEKF filter(initial_state, noise_params);
     cout << "Noise parameters are initialized to: \n";
     cout << filter.getNoiseParams() << endl;
-    cout << "Robot's state is initialized to: \n";
+    cout << "qrRobot's state is initialized to: \n";
     cout << filter.getState() << endl;
 
     // --- Optionally initialize prior landmarks --- //

@@ -7,10 +7,10 @@
 * Modify: init the file. @ Zhu Yijie
 */
 
-#include "state_estimator/robot_estimator.h"
+#include "state_estimator/qr_robot_estimator.h"
 
 namespace Quadruped {
-    RobotEstimator::RobotEstimator(Robot *robotIn,
+    qrRobotEstimator::qrRobotEstimator(qrRobot *robotIn,
                                    qrGaitGenerator *gaitGeneratorIn,
                                    qrGroundSurfaceEstimator *groundEstimatorIn)
         : robot(robotIn), velocityEstimator(robotIn, gaitGeneratorIn),
@@ -25,7 +25,7 @@ namespace Quadruped {
         lastTimestamp = 0.0;
     }
 
-    void RobotEstimator::Reset(float currentTime)
+    void qrRobotEstimator::Reset(float currentTime)
     {
         timeSinceReset = robot->GetTimeSinceReset();
         velocityEstimator.Reset(currentTime);
@@ -39,7 +39,7 @@ namespace Quadruped {
         std::cout << "reset pos= " << estimatedPosition.transpose() << std::endl;
     }
 
-    float RobotEstimator::ComputeDeltaTime(const LowState *robotState)
+    float qrRobotEstimator::ComputeDeltaTime(const LowState *robotState)
     {
         float deltaTime;
         if (std::abs(lastTimestamp) < 1e-5) {
@@ -52,7 +52,7 @@ namespace Quadruped {
         return deltaTime;
     }
 
-    void RobotEstimator::Update(float currentTime)
+    void qrRobotEstimator::Update(float currentTime)
     {
         velocityEstimator.Update(currentTime);
         poseEstimator.Update(currentTime);

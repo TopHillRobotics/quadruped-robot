@@ -26,9 +26,9 @@ protected:
     }
 
 public:
-    MovingWindowFilter *winFilter;
+    qrMovingWindowFilter *winFilter;
     Timer timer;
-    MovingWindowFilter *build()
+    qrMovingWindowFilter *build()
 =======
     	cout << "test start" << endl;
     }
@@ -40,12 +40,12 @@ public:
     }
  
 public:
-    MovingWindowFilter* winFilter;
+    qrMovingWindowFilter* winFilter;
     Timer timer;
-    MovingWindowFilter* build() 
+    qrMovingWindowFilter* build() 
 >>>>>>> origin/develop
     {
-        return new MovingWindowFilter(120);
+        return new qrMovingWindowFilter(120);
     }
 
 };

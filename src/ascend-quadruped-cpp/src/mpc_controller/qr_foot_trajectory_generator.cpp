@@ -7,7 +7,7 @@
 * Modify: init the file. @ Zhu Yijie;
 */
 
-#include "mpc_controller/foot_trajectory_generator.h"
+#include "mpc_controller/qr_foot_trajectory_generator.h"
 
 namespace Quadruped {
 

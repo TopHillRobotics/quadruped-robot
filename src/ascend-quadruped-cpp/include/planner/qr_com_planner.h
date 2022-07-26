@@ -2,7 +2,7 @@
 // The MIT License
 
 // Copyright (c) 2022
-// Robot Motion and Vision Laboratory at East China Normal University
+// qrRobot Motion and Vision Laboratory at East China Normal University
 // Contact:tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -32,8 +32,8 @@
 #include <vector>
 #include <cmath>
 
-#include "robots/robot.h"
-#include "state_estimator/robot_estimator.h"
+#include "robots/qr_robot.h"
+#include "state_estimator/qr_robot_estimator.h"
 #include "mpc_controller/qr_gait_generator.h"
 #include "utils/se3.h"
 
@@ -51,9 +51,9 @@ namespace Quadruped {
                                                                  std::map<std::string, int>{{"cw", 1}, {"ccw", 2}}
         };
 
-        Robot *robot;
+        qrRobot *robot;
         qrGaitGenerator *gaitGenerator;
-        RobotEstimator *robotEstimator;
+        qrRobotEstimator *robotEstimator;
 
         Eigen::Vector3f basePosition;
         Eigen::Vector4f baseOrientation;
@@ -71,9 +71,9 @@ namespace Quadruped {
         float delta;
 
     public:
-        qrComPlanner (Robot *robotIn,
+        qrComPlanner (qrRobot *robotIn,
                     qrGaitGenerator *gaitGeneratorIn,
-                    RobotEstimator *robotEstimatorIn);
+                    qrRobotEstimator *robotEstimatorIn);
 
         ~qrComPlanner () = default;
 

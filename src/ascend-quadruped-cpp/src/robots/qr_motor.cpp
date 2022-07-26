@@ -8,14 +8,14 @@
 *       mv implementation of func to .cpp file. @ Zhu Yijie 2021-11-24;
 */
 
-#include "robots/motor.h"
+#include "robots/qr_motor.h"
 
 namespace Quadruped {
-    MotorCommand::MotorCommand(double pIn, double KpIn, double dIn, double KdIn, double tuaIn)
+    qrMotorCommand::qrMotorCommand(double pIn, double KpIn, double dIn, double KdIn, double tuaIn)
         : p(pIn), Kp(KpIn), d(dIn), Kd(KdIn), tua(tuaIn)
     {}
 
-    MotorCommand::MotorCommand(const Eigen::Matrix<float, 5, 1> &cmd)
+    qrMotorCommand::qrMotorCommand(const Eigen::Matrix<float, 5, 1> &cmd)
     {
         p = cmd[0];
         Kp = cmd[1];
@@ -24,14 +24,14 @@ namespace Quadruped {
         tua = cmd[4];
     }
 
-    Eigen::Matrix<float, 5, 1> MotorCommand::convertToVector() const
+    Eigen::Matrix<float, 5, 1> qrMotorCommand::convertToVector() const
     {
         Eigen::Matrix<float, 5, 1> HybridMotorCommandVector;
         HybridMotorCommandVector << p, Kp, d, Kd, tua;
         return HybridMotorCommandVector;
     }
 
-    std::ostream &operator<<(std::ostream &os, MotorCommand &data)
+    std::ostream &operator<<(std::ostream &os, qrMotorCommand &data)
     {
         os << data.p << " " << data.Kp << " " << data.d << " " << data.Kd <<
            " " << data.tua;

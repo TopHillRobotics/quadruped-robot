@@ -12,7 +12,7 @@
 #include "Array.hh"
 
 namespace Quadruped {
-qrPosePlanner::qrPosePlanner(Robot *robotIn, RobotEstimator *robotEstimatorIn, qrGroundSurfaceEstimator *groundEstimatorIn, qrGaitGenerator *gaitGeneratorIn)
+qrPosePlanner::qrPosePlanner(qrRobot *robotIn, qrRobotEstimator *robotEstimatorIn, qrGroundSurfaceEstimator *groundEstimatorIn, qrGaitGenerator *gaitGeneratorIn)
 : robot(robotIn), robotEstimator(robotEstimatorIn), groundEstimator(groundEstimatorIn), gaitGenerator(gaitGeneratorIn)
 {
     /// leg contact status  ///

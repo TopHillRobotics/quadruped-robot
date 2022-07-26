@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     //     rname = LeggedType::Aliengo;
     // else
     // {
-    //     std::cout << "Robot name error! Can only be A1 or Aliengo(not case sensitive)" << std::endl;
+    //     std::cout << "qrRobot name error! Can only be A1 or Aliengo(not case sensitive)" << std::endl;
     //     exit(-1);
     // }
 

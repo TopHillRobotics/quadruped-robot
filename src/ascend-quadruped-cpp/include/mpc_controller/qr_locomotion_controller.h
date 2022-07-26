@@ -13,17 +13,17 @@
 #include <iostream>
 #include <map>
 #include <Eigen/Dense>
-#include "robots/timer.h"
+#include "robots/qr_timer.h"
 #include "utils/cppTypes.h"
-#include "robots/robot.h"
-#include "robots/motor.h"
+#include "robots/qr_robot.h"
+#include "robots/qr_motor.h"
 #include "mpc_controller/qr_gait_generator.h"
-#include "mpc_controller/raibert_swing_leg_controller.h"
-#include "mpc_controller/torque_stance_leg_controller.h"
+#include "mpc_controller/qr_raibert_swing_leg_controller.h"
+#include "mpc_controller/qr_torque_stance_leg_controller.h"
 #include "planner/qr_com_planner.h"
 #include "planner/qr_pose_planner.h"
-#include "state_estimator/robot_estimator.h"
-#include "state_estimator/ground_estimator.h"
+#include "state_estimator/qr_robot_estimator.h"
+#include "state_estimator/qr_ground_estimator.h"
 
 namespace Quadruped {
 /** 
@@ -33,9 +33,9 @@ namespace Quadruped {
     class qrLocomotionController {
 
     public:
-        qrLocomotionController(Robot *robot,
+        qrLocomotionController(qrRobot *robot,
                              qrGaitGenerator *gaitGenerator,
-                             RobotEstimator *stateEstimator,
+                             qrRobotEstimator *stateEstimator,
                              qrGroundSurfaceEstimator *groundEstimator,
                              qrComPlanner *comPlanner,
                              qrPosePlanner *posePlanner,
@@ -51,7 +51,7 @@ namespace Quadruped {
         /** @brief Compute all motors' commands via subcontrollers.
          *  @return tuple<map, Matrix<3,4>> : return control ouputs (e.g. positions/torques) for all (12) motors.
          */
-        std::tuple<std::vector<MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
+        std::tuple<std::vector<qrMotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
     
         inline qrGaitGenerator *GetGaitGenerator()
         {
@@ -68,7 +68,7 @@ namespace Quadruped {
             return stanceLegController;
         }
 
-        inline RobotEstimator *GetRobotEstimator()
+        inline qrRobotEstimator *GetRobotEstimator()
         {
             return stateEstimator;
         }
@@ -92,13 +92,13 @@ namespace Quadruped {
         qrStanceLegController *stanceLegController;
         bool stop=false;
     private:
-        Robot *robot;
+        qrRobot *robot;
         qrGaitGenerator *gaitGenerator;
-        RobotEstimator *stateEstimator;
+        qrRobotEstimator *stateEstimator;
         qrGroundSurfaceEstimator *groundEstimator;
         qrComPlanner  *comPlanner ;
         qrPosePlanner *posePlanner;
-        std::vector<MotorCommand> action;
+        std::vector<qrMotorCommand> action;
         double resetTime;
         double timeSinceReset;
     };

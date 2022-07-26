@@ -1,5 +1,5 @@
-#ifndef ASCEND_QUADRUPED_CPP_TIMER_TIMER_H
-#define ASCEND_QUADRUPED_CPP_TIMER_TIMER_H
+#ifndef QR_TIMER_H
+#define QR_TIMER_H
 #include <time.h>
 
 class Timer {
@@ -69,4 +69,4 @@ private:
     unsigned long timeSinceResetUs;
 };
 */
-#endif // ASCEND_QUADRUPED_CPP_TIMER_TIMER_H
+#endif // QR_TIMER_H

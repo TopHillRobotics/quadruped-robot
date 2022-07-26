@@ -33,7 +33,7 @@
 // {
 // public:
 //     // friend TEST_F(TestComAdjuster, Update);
-//     MockqrGaitGenerator(Robot *robot, string configFilePath)
+//     MockqrGaitGenerator(qrRobot *robot, string configFilePath)
 //         : qrGaitGenerator(robot, configFilePath)
 //     {
 //     }
@@ -54,7 +54,7 @@
 // class FakePosePlanner : public PosePlanner
 // {
 // public:
-//     FakePosePlanner(Robot *robotIn, RobotEstimator *robotEstimatorIn)
+//     FakePosePlanner(qrRobot *robotIn, qrRobotEstimator *robotEstimatorIn)
 //     : PosePlanner(robotIn, robotEstimatorIn)
 //     {}
 
@@ -282,7 +282,7 @@
 //     // MockRobotVelocityEstimator *stateEstimator = new MockRobotVelocityEstimator(quadruped, 0.1f, 0.1f, 0.1f, 120);
 //     // cout << "init stateEstimator" << endl;
 //     qrLocomotionController *locomotionController = setUpController(&quadruped, homeDir, robotName);
-//     RobotEstimator* robotEstimator = locomotionController->GetRobotEstimator();
+//     qrRobotEstimator* robotEstimator = locomotionController->GetRobotEstimator();
 //     FakePosePlanner posePlanner(&quadruped, robotEstimator);
     
 //     // 定义函数行为

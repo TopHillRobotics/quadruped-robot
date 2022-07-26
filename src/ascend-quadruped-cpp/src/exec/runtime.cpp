@@ -33,7 +33,7 @@ std::string GetHomeDir(std::string homeName)
 }
 #endif
 
-qrLocomotionController *setUpController(Robot *quadruped, std::string homeDir, std::string robotName)
+qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, std::string robotName)
 {
     qrGaitGenerator *gaitGenerator;
     gaitGenerator = new qrGaitGenerator(quadruped, homeDir + "config/" + robotName
@@ -45,7 +45,7 @@ qrLocomotionController *setUpController(Robot *quadruped, std::string homeDir, s
                                                                                         + "/terrain.yaml");
     std::cout << "init groundEsitmator finish\n" << std::endl;
     
-    RobotEstimator *stateEstimator = new RobotEstimator(quadruped, gaitGenerator, groundEsitmator);
+    qrRobotEstimator *stateEstimator = new qrRobotEstimator(quadruped, gaitGenerator, groundEsitmator);
     std::cout << "init robotEstimator finish\n" << std::endl;
      
     qrComPlanner  *comPlanner  = new qrComPlanner (quadruped, gaitGenerator, stateEstimator);

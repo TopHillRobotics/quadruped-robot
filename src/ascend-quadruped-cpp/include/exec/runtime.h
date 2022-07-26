@@ -17,8 +17,8 @@
 #include <yaml-cpp/yaml.h>
 
 #include "sim/a1_sim.h"
-#include "state_estimator/robot_estimator.h"
-#include "mpc_controller/locomotion_controller.h"
+#include "state_estimator/qr_robot_estimator.h"
+#include "mpc_controller/qr_locomotion_controller.h"
 #include "planner/qr_com_planner.h"
 #include "planner/qr_pose_planner.h"
 #include "planner/qr_foothold_planner.h"
@@ -42,7 +42,7 @@ float footClearance = 0.01f;
  * @param quadruped : pointer to A1Robot.
  * @return pointer to qrLocomotionController.
  */
-qrLocomotionController *setUpController(Robot *quadruped, std::string homeDir, std::string robotName);
+qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, std::string robotName);
 
 /** @brief setup the desired speed for robot. */
 void updateControllerParams(qrLocomotionController *controller, Eigen::Vector3f linSpeed, float angSpeed);
@@ -55,7 +55,7 @@ std::string GetHomeDir(std::string homeName = "quadruped-robot/");
 std::string GetHomeDir(std::string homeName = "ascend-quadruped-cpp/");
 #endif
 
-qrLocomotionController *setUpController(Robot *quadruped, std::string homeDir, std::string robotName);
+qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, std::string robotName);
 
 void updateControllerParams(qrLocomotionController *controller, Eigen::Vector3f linSpeed, float angSpeed);
 #endif //ASCEND_QUADRUPED_CPP_RUNTIME_H

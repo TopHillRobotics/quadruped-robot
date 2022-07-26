@@ -7,10 +7,10 @@
 * Modify: init the file. @ Zhu Yijie
 */
 
-#include "state_estimator/robot_velocity_estimator.h"
+#include "state_estimator/qr_robot_velocity_estimator.h"
 
 namespace Quadruped {
-    RobotVelocityEstimator::RobotVelocityEstimator(Robot *robotIn,
+    qrRobotVelocityEstimator::qrRobotVelocityEstimator(qrRobot *robotIn,
                                                    qrGaitGenerator *gaitGeneratorIn,
                                                    float accelerometerVarianceIn,
                                                    float sensorVarianceIn,
@@ -25,24 +25,24 @@ namespace Quadruped {
         estimatedAngularVelocity << 0.f, 0.f, 0.f;
         windowSize = movingWindowFilterSizeIn;
         filter = new TinyEKF(0.f, initialVariance, accelerometerVarianceIn, sensorVarianceIn);
-        velocityFilterX = MovingWindowFilter(windowSize);
-        velocityFilterY = MovingWindowFilter(windowSize);
-        velocityFilterZ = MovingWindowFilter(windowSize);
+        velocityFilterX = qrMovingWindowFilter(windowSize);
+        velocityFilterY = qrMovingWindowFilter(windowSize);
+        velocityFilterZ = qrMovingWindowFilter(windowSize);
     }
 
-    void RobotVelocityEstimator::Reset(float currentTime)
+    void qrRobotVelocityEstimator::Reset(float currentTime)
     {
         // filter->Reset(0., initialVariance);
-        velocityFilterX = MovingWindowFilter(windowSize);
-        velocityFilterY = MovingWindowFilter(windowSize);
-        velocityFilterZ = MovingWindowFilter(windowSize);
+        velocityFilterX = qrMovingWindowFilter(windowSize);
+        velocityFilterY = qrMovingWindowFilter(windowSize);
+        velocityFilterZ = qrMovingWindowFilter(windowSize);
 
         lastTimestamp = 0.f;
         estimatedVelocity << 0.f, 0.f, 0.f;
         estimatedAngularVelocity << 0.f, 0.f, 0.f;
     }
 
-    float RobotVelocityEstimator::ComputeDeltaTime(const LowState *robotState)
+    float qrRobotVelocityEstimator::ComputeDeltaTime(const LowState *robotState)
     {
         float deltaTime = 0.001;
         if (std::abs(lastTimestamp) < 1e-5) {
@@ -55,7 +55,7 @@ namespace Quadruped {
         return deltaTime;
     }
 
-    void RobotVelocityEstimator::Update(float currentTime)
+    void qrRobotVelocityEstimator::Update(float currentTime)
     {
         const RobotState &state = robot->state;
         // Propagate current state estimate with new accelerometer reading."""

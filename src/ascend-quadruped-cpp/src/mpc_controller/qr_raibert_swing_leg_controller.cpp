@@ -8,7 +8,7 @@
 *       add position mode control API for foothold. @ Zhu Yijie 2021.11.24;
 */
 
-#include "mpc_controller/raibert_swing_leg_controller.h"
+#include "mpc_controller/qr_raibert_swing_leg_controller.h"
 
 using namespace Eigen;
 using namespace std;
@@ -48,9 +48,9 @@ namespace Quadruped {
         return Matrix<float, 3, 1>(x, y, z);
     }
 
-    qrSwingLegController::qrSwingLegController(Robot *robot,
+    qrSwingLegController::qrSwingLegController(qrRobot *robot,
                                                          qrGaitGenerator *gaitGenerator,
-                                                         RobotEstimator *stateEstimator,
+                                                         qrRobotEstimator *stateEstimator,
                                                          qrGroundSurfaceEstimator *groundEstimator,
                                                          qrFootholdPlanner *footholdPlanner,
                                                          Matrix<float, 3, 1> desiredSpeed,

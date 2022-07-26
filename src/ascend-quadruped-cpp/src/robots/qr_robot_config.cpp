@@ -1,4 +1,4 @@
-#include "robots/robotconfig.h"
+#include "robots/qr_robot_config.h"
 
 std::unordered_map<int, std::string> modeMap = {{0, "velocity"}, {1, "position"}, {2, "walk"}};
 

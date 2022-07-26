@@ -11,7 +11,7 @@
 #define ASCEND_QUADRUPED_CPP_GROUND_ESTIMATOR_H
 
 #include "utils/se3.h"
-#include "robots/robot.h"
+#include "robots/qr_robot.h"
 
 namespace Quadruped{
 
@@ -52,7 +52,7 @@ namespace Quadruped{
     class qrGroundSurfaceEstimator {
 
     public:
-        qrGroundSurfaceEstimator(Robot *robot, std::string terrainConfigPath, unsigned int windowSize=DEFAULT_WINDOW_SIZE);
+        qrGroundSurfaceEstimator(qrRobot *robot, std::string terrainConfigPath, unsigned int windowSize=DEFAULT_WINDOW_SIZE);
     
         void Loadterrain(std::string& terrainConfigPath);
     
@@ -93,7 +93,7 @@ namespace Quadruped{
         Vec3<double> controlFrameRPY;
         Quat<double> controlFrameOrientation;
     // private:
-        Robot *robot;
+        qrRobot *robot;
         qrTerrain terrain;
         Vec3<double> a; // coeffcient of plane equation
         Eigen::Matrix<double, 4, 3> W;

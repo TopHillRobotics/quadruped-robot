@@ -1,7 +1,7 @@
 // The MIT License
 
 // Copyright (c) 2022
-// Robot Motion and Vision Laboratory at East China Normal University
+// qrRobot Motion and Vision Laboratory at East China Normal University
 // Contact:tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,7 +30,7 @@
 #include <nav_msgs/Odometry.h>
 #include <tf/transform_broadcaster.h>
 
-#include "mpc_controller/locomotion_controller.h"
+#include "mpc_controller/qr_locomotion_controller.h"
 
 namespace Quadruped {
     /**
@@ -38,13 +38,13 @@ namespace Quadruped {
      */    
     class qrOdometryParamReceiver {
     public:
-        qrOdometryParamReceiver(Robot *robotIn, qrLocomotionController *locomotionController, ros::NodeHandle &nhIn);
+        qrOdometryParamReceiver(qrRobot *robotIn, qrLocomotionController *locomotionController, ros::NodeHandle &nhIn);
 
         void PublishOdometry();
         
     private:
-        Robot *robot;
-        RobotEstimator *robotEstimator;
+        qrRobot *robot;
+        qrRobotEstimator *robotEstimator;
         qrLocomotionController *locomotionController;
 
         ros::NodeHandle &nh;

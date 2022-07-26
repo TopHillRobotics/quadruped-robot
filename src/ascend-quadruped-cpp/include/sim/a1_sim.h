@@ -17,13 +17,13 @@
 #include "unitree_legged_msgs/LowState.h"
 #include "unitree_legged_msgs/MotorCmd.h"
 #include "unitree_legged_msgs/MotorState.h"
-#include "robots/robot.h"
+#include "robots/qr_robot.h"
 
 namespace Quadruped {
     /**
      * @brief a1 robot class in simulation.
      */
-    class A1Sim : public Robot {
+    class A1Sim : public qrRobot {
     public:
         A1Sim(ros::NodeHandle &nhIn, ros::NodeHandle &privateNhIn, std::string configFilePath);
 
@@ -69,7 +69,7 @@ namespace Quadruped {
 
         void ApplyAction(const Eigen::MatrixXf &motorCommands, MotorMode motorControlMode) override;
 
-        void ApplyAction(const std::vector<MotorCommand> &motorCommands,
+        void ApplyAction(const std::vector<qrMotorCommand> &motorCommands,
                          MotorMode motorControlMode);
 
         void Step(const Eigen::MatrixXf &action, MotorMode motorControlMode) override;

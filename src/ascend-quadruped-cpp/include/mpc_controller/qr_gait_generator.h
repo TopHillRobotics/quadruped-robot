@@ -1,7 +1,7 @@
 // The MIT License
 
 // Copyright (c) 2022
-// Robot Motion and Vision Laboratory at East China Normal University
+// qrRobot Motion and Vision Laboratory at East China Normal University
 // Contact:tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,7 +28,7 @@
 #include <math.h>
 #include <vector>
 #include "types.h"
-#include "robots/robot.h"
+#include "robots/qr_robot.h"
 
 namespace Quadruped {
     class qrGaitGenerator {
@@ -36,9 +36,9 @@ namespace Quadruped {
 
         qrGaitGenerator();
 
-        qrGaitGenerator(Robot *robot, std::string configFilePath);
+        qrGaitGenerator(qrRobot *robot, std::string configFilePath);
 
-        qrGaitGenerator(Robot *robot,
+        qrGaitGenerator(qrRobot *robot,
                               Eigen::Matrix<float, 4, 1> stanceDuration,
                               Eigen::Matrix<float, 4, 1> dutyFactor,
                               Eigen::Matrix<int, 4, 1> initialLegState,
@@ -58,7 +58,7 @@ namespace Quadruped {
 // private:
         std::string configFilePath;
         YAML::Node config; // load from config file
-        Robot *robot;
+        qrRobot *robot;
         Eigen::Matrix<float, 4, 1> stanceDuration;
         Eigen::Matrix<float, 4, 1> swingDuration;
         // the time period ratio for stance stage, i.e. stanceDur/(stanceDur+swingDur)

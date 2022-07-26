@@ -55,7 +55,7 @@ namespace py = pybind11;
 
 PYBIND11_MODULE(robot_interface, m) {
     m.doc() = R"pbdoc(
-          A1 Robot Interface Python Bindings
+          A1 qrRobot Interface Python Bindings
           -----------------------
           .. currentmodule:: a1_robot_interface
           .. autosummary::

@@ -12,8 +12,8 @@
 
 #include <math.h>
 #include <algorithm>
-#include "robots/robot.h"
-#include "mpc_controller/locomotion_controller.h"
+#include "robots/qr_robot.h"
+#include "mpc_controller/qr_locomotion_controller.h"
 
 /**
  * @brief namespace Quadruped is used for subdirectory of ascend-quadruped-cpp. \n
@@ -21,13 +21,13 @@
 namespace Quadruped {
     namespace Action {
 
-        void StandUp(Robot *robot, float standUpTime, float totalTime, float timeStep);
+        void StandUp(qrRobot *robot, float standUpTime, float totalTime, float timeStep);
 
-        void SitDown(Robot *robot, float sitDownTime, float timeStep);
+        void SitDown(qrRobot *robot, float sitDownTime, float timeStep);
 
-        void KeepStand(Robot *robot, float KeepStandTime = 1.0, float timeStep = 0.001);
+        void KeepStand(qrRobot *robot, float KeepStandTime = 1.0, float timeStep = 0.001);
     
-        void ControlFoot(Robot *robot, qrLocomotionController *locomotionController, float walkTime, float timeStep);
+        void ControlFoot(qrRobot *robot, qrLocomotionController *locomotionController, float walkTime, float timeStep);
         
     } // Action
 } // Quadruped

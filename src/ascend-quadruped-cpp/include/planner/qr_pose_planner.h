@@ -1,7 +1,7 @@
 // The MIT License
 
 // Copyright (c) 2022
-// Robot Motion and Vision Laboratory at East China Normal University
+// qrRobot Motion and Vision Laboratory at East China Normal University
 // Contact:tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,9 +28,9 @@
 #include <map>
 #include <set>
 
-#include "robots/robot.h"
-#include "state_estimator/robot_estimator.h"
-#include "state_estimator/ground_estimator.h"
+#include "robots/qr_robot.h"
+#include "state_estimator/qr_robot_estimator.h"
+#include "state_estimator/qr_ground_estimator.h"
 #include "mpc_controller/qr_gait_generator.h"
 #include "utils/se3.h"
 #include "utils/geometry.h"
@@ -38,7 +38,7 @@
 namespace Quadruped {
 class qrPosePlanner {
 public:
-    qrPosePlanner(Robot *robotIn, RobotEstimator *robotEstimatorIn, qrGroundSurfaceEstimator *groundEstimatorIn, qrGaitGenerator *gaitGeneratorIn);
+    qrPosePlanner(qrRobot *robotIn, qrRobotEstimator *robotEstimatorIn, qrGroundSurfaceEstimator *groundEstimatorIn, qrGaitGenerator *gaitGeneratorIn);
 
     ~qrPosePlanner() = default;
 
@@ -130,8 +130,8 @@ public:
     float resetTime;
     const int legIdMap2CounterwiseOrder[4] = {0, 3, 1, 2};
     const int invLegIdMap2CounterwiseOrder[4] = {0, 2, 3, 1};
-    Robot *robot;
-    RobotEstimator *robotEstimator;
+    qrRobot *robot;
+    qrRobotEstimator *robotEstimator;
     qrGroundSurfaceEstimator *groundEstimator;
     qrGaitGenerator *gaitGenerator;
 

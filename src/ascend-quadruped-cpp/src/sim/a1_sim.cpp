@@ -12,7 +12,7 @@ namespace Quadruped {
     static bool firstObservation = true;
 
     A1Sim::A1Sim(ros::NodeHandle &nhIn, ros::NodeHandle &privateNhIn, std::string configFilePath):
-        Robot(configFilePath), nh(nhIn), privateNh(privateNhIn)
+        qrRobot(configFilePath), nh(nhIn), privateNh(privateNhIn)
     {
         float standUpAbAngle, standUpHipAngle, standUpKneeAngle;
         standUpAbAngle = 0.f;
@@ -253,7 +253,7 @@ namespace Quadruped {
         SendCommand(motorCommandsArray);
     }
 
-    void A1Sim::ApplyAction(const std::vector<MotorCommand> &motorCommands,
+    void A1Sim::ApplyAction(const std::vector<qrMotorCommand> &motorCommands,
                             MotorMode motorControlMode)
     {
         // std::cout << "apply:\n" << motorCommands << std::endl;

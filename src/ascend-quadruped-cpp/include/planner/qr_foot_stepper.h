@@ -1,7 +1,7 @@
 // The MIT License
 
 // Copyright (c) 2022
-// Robot Motion and Vision Laboratory at East China Normal University
+// qrRobot Motion and Vision Laboratory at East China Normal University
 // Contact:tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -34,9 +34,9 @@
 
 #include "QuadProg++.hh"
 #include "Array.hh"
-#include "robots/robot.h"
+#include "robots/qr_robot.h"
 #include "utils/se3.h"
-#include "state_estimator/ground_estimator.h"
+#include "state_estimator/qr_ground_estimator.h"
 
 namespace Quadruped {
     

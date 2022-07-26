@@ -1,7 +1,7 @@
 // The MIT License
 
 // Copyright (c) 2022
-// Robot Motion and Vision Laboratory at East China Normal University
+// qrRobot Motion and Vision Laboratory at East China Normal University
 // Contact:tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,7 +29,7 @@ using namespace std;
 namespace Quadruped {
     qrGaitGenerator::qrGaitGenerator() {}
     
-    qrGaitGenerator::qrGaitGenerator(Robot *robot,
+    qrGaitGenerator::qrGaitGenerator(qrRobot *robot,
                                                  Eigen::Matrix<float, 4, 1> stanceDuration,
                                                  Eigen::Matrix<float, 4, 1> dutyFactor,
                                                  Eigen::Matrix<int, 4, 1> initialLegState,
@@ -57,7 +57,7 @@ namespace Quadruped {
         this->Reset(0);
     }
 
-    qrGaitGenerator::qrGaitGenerator(Robot *robot, string configFilePath)
+    qrGaitGenerator::qrGaitGenerator(qrRobot *robot, string configFilePath)
     {
 
         this->configFilePath = configFilePath;

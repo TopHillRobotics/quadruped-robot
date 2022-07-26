@@ -13,9 +13,9 @@
 #include <deque>
 #include <numeric>
 #include "utils/se3.h"
-#include "robots/robot.h"
+#include "robots/qr_robot.h"
 #include "mpc_controller/qr_gait_generator.h"
-#include "state_estimator/filter.h"
+#include "state_estimator/qr_filter.h"
 #include "TinyEKF.h"
 
 namespace Quadruped {
@@ -28,7 +28,7 @@ namespace Quadruped {
      * @param sensor_variance: noise estimation for motor velocity reading.
      * @param initial_covariance: covariance estimation of initial state.
      */    
-    class RobotVelocityEstimator {
+    class qrRobotVelocityEstimator {
     public:
         /**
          * @brief Estimates base velocity of A1 robot.
@@ -41,7 +41,7 @@ namespace Quadruped {
          *
          * 2) A moving average filter to smooth out velocity readings
          */
-        RobotVelocityEstimator(Robot *robot,
+        qrRobotVelocityEstimator(qrRobot *robot,
                                qrGaitGenerator *gaitGeneratorIn,
                                float accelerometerVarianceIn = 0.1f,
                                float sensorVarianceIn = 0.1f,
@@ -68,16 +68,16 @@ namespace Quadruped {
         }
 
     private:
-        Robot *robot;
+        qrRobot *robot;
         qrGaitGenerator *gaitGenerator;
         int windowSize;
         float initialVariance;
         float lastTimestamp;
         Vec3<float> estimatedVelocity; // expressed in base frame
         Vec3<float> estimatedAngularVelocity;
-        MovingWindowFilter velocityFilterX;
-        MovingWindowFilter velocityFilterY;
-        MovingWindowFilter velocityFilterZ;
+        qrMovingWindowFilter velocityFilterX;
+        qrMovingWindowFilter velocityFilterY;
+        qrMovingWindowFilter velocityFilterZ;
 
         TinyEKF *filter;
     };

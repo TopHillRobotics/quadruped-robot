@@ -7,24 +7,24 @@
 * Modify: init the file. @ Zhu Yijie
 */
 
-#ifndef ASCEND_QUADRUPED_CPP_ROBOT_POSE_ESTIMATOR_H
-#define ASCEND_QUADRUPED_CPP_ROBOT_POSE_ESTIMATOR_H
+#ifndef QR_ROBOT_POSE_ESTIMATOR_H
+#define QR_ROBOT_POSE_ESTIMATOR_H
 
-#include "robots/robot.h"
+#include "robots/qr_robot.h"
 #include "mpc_controller/qr_gait_generator.h"
-#include "state_estimator/robot_velocity_estimator.h"
-#include "state_estimator/ground_estimator.h"
+#include "state_estimator/qr_robot_velocity_estimator.h"
+#include "state_estimator/qr_ground_estimator.h"
 
 namespace Quadruped {
     /**
      * @brief estimates robot pose, currently the code implemented position in x-axis and y-axis.
      */
-    class RobotPoseEstimator {
+    class qrRobotPoseEstimator {
     public:
-        RobotPoseEstimator(Robot *robotIn,
+        qrRobotPoseEstimator(qrRobot *robotIn,
                            qrGaitGenerator *gaitGeneratorIn,
                            qrGroundSurfaceEstimator *groundEstimatorIn,
-                           RobotVelocityEstimator *velocityEstimator);
+                           qrRobotVelocityEstimator *velocityEstimator);
 
         void Reset(float currentTime);
 
@@ -46,15 +46,16 @@ namespace Quadruped {
         }
 
     private:
-        Robot *robot;
+        qrRobot *robot;
         float lastTimestamp;
         Vec6<float> estimatedPose;
         qrGaitGenerator *gaitGenerator;
         qrGroundSurfaceEstimator *groundEstimator;
-        RobotVelocityEstimator *velocityEstimator;
+        qrRobotVelocityEstimator *velocityEstimator;
 
     };
 
 } // namespace Quadruped
 
-#endif//ASCEND_QUADRUPED_CPP_ROBOT_VELOCITY_ESTIMATOR_H
+#endif //QR_ROBOT_POSE_ESTIMATOR_H
+

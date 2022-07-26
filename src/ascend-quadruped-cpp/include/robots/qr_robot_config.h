@@ -1,5 +1,5 @@
-#ifndef ROBOTCONFIG_H
-#define ROBOTCONFIG_H
+#ifndef QR_ROBOT_CONFIG_H
+#define QR_ROBOT_CONFIG_H
 
 #include <iostream>
 #include <unordered_map>
@@ -78,4 +78,4 @@ public:
                                                 Eigen::Matrix<float, 3, 1> footLocalVelocity);
 
 };
-#endif // ROBOTCONFIG_H
+#endif // QR_ROBOT_CONFIG_H

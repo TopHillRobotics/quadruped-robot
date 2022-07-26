@@ -11,10 +11,10 @@
 #define ASCEND_QUADRUPED_CPP_TORQUE_STANCE_LEG_CONTROLLER_H
 
 #include "utils/se3.h"
-#include "robots/robot.h"
+#include "robots/qr_robot.h"
 #include "mpc_controller/qr_gait_generator.h"
-#include "state_estimator/robot_estimator.h"
-#include "state_estimator/ground_estimator.h"
+#include "state_estimator/qr_robot_estimator.h"
+#include "state_estimator/qr_ground_estimator.h"
 #include "planner/qr_com_planner.h"
 #include "planner/qr_pose_planner.h"
 #include "planner/qr_foothold_planner.h"
@@ -25,9 +25,9 @@ namespace Quadruped {
      */
     class qrStanceLegController {
     public:
-        qrStanceLegController(Robot *robot,
+        qrStanceLegController(qrRobot *robot,
                                   qrGaitGenerator *gaitGenerator,
-                                  RobotEstimator *robotVelocityEstimator,
+                                  qrRobotEstimator *robotVelocityEstimator,
                                   qrGroundSurfaceEstimator *groundEstimatorIn,
                                   qrComPlanner *comPlanner,
                                   qrPosePlanner *posePlanner,
@@ -53,11 +53,11 @@ namespace Quadruped {
 
         void Update(float currentTime);
 
-        virtual std::tuple<std::map<int, MotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
+        virtual std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
 
-        Robot *robot;
+        qrRobot *robot;
         qrGaitGenerator *gaitGenerator;
-        RobotEstimator *robotEstimator;
+        qrRobotEstimator *robotEstimator;
         qrGroundSurfaceEstimator *groundEstimator;
         qrComPlanner *comPlanner;
         qrPosePlanner *posePlanner;                          

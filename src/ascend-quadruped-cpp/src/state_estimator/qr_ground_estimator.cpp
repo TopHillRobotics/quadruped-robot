@@ -6,11 +6,11 @@
 * Notes: xx
 * Modify: init the file. @ Zhu Yijie
 */
-#include "state_estimator/ground_estimator.h"
+#include "state_estimator/qr_ground_estimator.h"
 
 namespace Quadruped {
   
-    qrGroundSurfaceEstimator::qrGroundSurfaceEstimator(Robot *robotIn, std::string terrainConfigPath, unsigned int windowSize)
+    qrGroundSurfaceEstimator::qrGroundSurfaceEstimator(qrRobot *robotIn, std::string terrainConfigPath, unsigned int windowSize)
         : robot(robotIn)
     {
         // Loadterrain(terrainConfigPath);

@@ -65,7 +65,7 @@ public:
 
   /**
    * @brief Constructs the visualizer for a specific URDF %urdf_name.
-   * @param urdf_name  Robot description variable on the ROS parameter server.
+   * @param urdf_name  qrRobot description variable on the ROS parameter server.
    * @param joint_names_in_urdf  The names of the joints in the URDF file
    *        ordered in the same way as in the xpp convention
    *        (see inverse kinematics).

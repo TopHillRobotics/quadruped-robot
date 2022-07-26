@@ -88,7 +88,7 @@ private:
 };
 void INEKFInterface::printState()
 {
-    cout << "Robot's state is: \n";
+    cout << "qrRobot's state is: \n";
     cout << filter.getState() << endl;
 }
 const Eigen::MatrixXd INEKFInterface::getRobotStateX()
@@ -139,7 +139,7 @@ void INEKFInterface::Initialize(Eigen::Matrix3d _R0, Eigen::Vector3d _v0,
     filter.setNoiseParams(noise_params);
     cout << "Noise parameters are initialized to: \n";
     cout << filter.getNoiseParams() << endl;
-    cout << "Robot's state is initialized to: \n";
+    cout << "qrRobot's state is initialized to: \n";
     cout << filter.getState() << endl;
  
     // // Landmark 1
@@ -312,7 +312,7 @@ namespace py = pybind11;
 // TODO: Expose all of comm.h and the inekf_interface Class.
 PYBIND11_MODULE(inekf_interface, m) {
     m.doc() = R"pbdoc(
-          A1 Robot Interface Python Bindings
+          A1 qrRobot Interface Python Bindings
           -----------------------
           .. currentmodule:: a1_robot_interface
           .. autosummary::

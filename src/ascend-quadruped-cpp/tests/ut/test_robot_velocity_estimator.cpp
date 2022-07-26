@@ -6,7 +6,7 @@
 
 // int main()
 // {
-//     Robot* robot = new A1Robot("../../config/a1_robot.yaml");
+//     qrRobot* robot = new A1Robot("../../config/a1_robot.yaml");
 //     printf("time = %f\n",robot->timeStep);
 //     return 1;     
 // }
@@ -34,9 +34,9 @@ protected:
     }
 
 public:
-    MovingWindowFilter *winFilter;
-    RobotVelocityEstimator *est;
-    MovingWindowFilter *build()
+    qrMovingWindowFilter *winFilter;
+    qrRobotVelocityEstimator *est;
+    qrMovingWindowFilter *build()
 =======
     	cout << "test start" << endl;
     }
@@ -48,12 +48,12 @@ public:
     }
  
 public:
-    MovingWindowFilter* winFilter;
-    RobotVelocityEstimator* est;
-    MovingWindowFilter* build() 
+    qrMovingWindowFilter* winFilter;
+    qrRobotVelocityEstimator* est;
+    qrMovingWindowFilter* build() 
 >>>>>>> origin/develop
     {
-        return new MovingWindowFilter(120);
+        return new qrMovingWindowFilter(120);
     }
 };
 <<<<<<< HEAD
@@ -89,7 +89,7 @@ TEST_F(TestEstimator, TestCalculateAverage)
 TEST_F(TestEstimator, TestComputeDeltaTime)
 {
     A1Robot* robot = new A1Robot("../../config/a1_robot.yaml");
-    est = new RobotVelocityEstimator(robot, 0.01, 0.01, 0.01, 120);
+    est = new qrRobotVelocityEstimator(robot, 0.01, 0.01, 0.01, 120);
     LowState state;
     int cycle = 5;
     float Values[5] = {0.03528129*1000, 0.74184424*1000, 0.75014373*1000, 0.90864498*1000, 0.99092506*1000};
@@ -107,7 +107,7 @@ TEST_F(TestEstimator, TestKalmanFilter
 )
 {
     A1Robot *robot = new A1Robot("../../config/a1_robot.yaml");
-    est = new RobotVelocityEstimator(robot, 0.1, 0.1, 0.1, 120);
+    est = new qrRobotVelocityEstimator(robot, 0.1, 0.1, 0.1, 120);
     LowState state;
     int cycle = 5;
     float Values[5] = {0.03528129 * 1000, 0.74184424 * 1000, 0.75014373 * 1000, 0.90864498 * 1000, 0.99092506 * 1000};
@@ -133,7 +133,7 @@ int main(int argc, char **argv)
 TEST_F(TestEstimator, TestKalmanFilter)
 {
     A1Robot* robot = new A1Robot("../../config/a1_robot.yaml");
-    est = new RobotVelocityEstimator(robot, 0.1, 0.1, 0.1, 120);
+    est = new qrRobotVelocityEstimator(robot, 0.1, 0.1, 0.1, 120);
     LowState state;
     int cycle = 5;
     float Values[5] = {0.03528129*1000, 0.74184424*1000, 0.75014373*1000, 0.90864498*1000, 0.99092506*1000};

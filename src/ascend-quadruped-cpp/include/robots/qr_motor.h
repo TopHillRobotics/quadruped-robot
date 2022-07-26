@@ -8,8 +8,8 @@
 *       mv implementation of func to .cpp file. @ Zhu Yijie 2021-11-24;
 */
 
-#ifndef ASCEND_QUADRUPED_CPP_MOTOR_MOTOR_H
-#define ASCEND_QUADRUPED_CPP_MOTOR_MOTOR_H
+#ifndef QR_MOTOR_H
+#define QR_MOTOR_H
 
 #include <iostream>
 #include <vector>
@@ -24,25 +24,25 @@ namespace Quadruped {
      * @param Kd double, velocity factor
      * @param tua double, torque
      */
-    struct MotorCommand {
+    struct qrMotorCommand {
         double p;
         double Kp;
         double d;
         double Kd;
         double tua;
 
-        MotorCommand()
+        qrMotorCommand()
         {}
 
-        MotorCommand(double pIn, double KpIn, double dIn, double KdIn, double tuaIn);
+        qrMotorCommand(double pIn, double KpIn, double dIn, double KdIn, double tuaIn);
 
-        MotorCommand(const Eigen::Matrix<float, 5, 1> &cmd);
+        qrMotorCommand(const Eigen::Matrix<float, 5, 1> &cmd);
 
         Eigen::Matrix<float, 5, 1> convertToVector() const;
 
-        friend std::ostream &operator<<(std::ostream &os, MotorCommand &data);
+        friend std::ostream &operator<<(std::ostream &os, qrMotorCommand &data);
 
-        static Eigen::Matrix<float, 5, 12> convertToMatix(const std::vector<MotorCommand> &MotorCommands)
+        static Eigen::Matrix<float, 5, 12> convertToMatix(const std::vector<qrMotorCommand> &MotorCommands)
         {
             Eigen::Matrix<float, 5, 12> MotorCommandMatrix;
             int i = 0;
@@ -56,4 +56,4 @@ namespace Quadruped {
     };
 } // Quadruped
 
-#endif // ASCEND_QUADRUPED_CPP_MOTOR_MOTOR_H
+#endif // QR_MOTOR_H

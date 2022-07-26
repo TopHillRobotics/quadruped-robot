@@ -47,7 +47,7 @@ int main()
     RobotState state(X);
     InEKF filter(state);
 
-    cout << "Robot's state is initialized to: \n";
+    cout << "qrRobot's state is initialized to: \n";
     cout << filter.getState() << endl;
 
     ifstream infile("../src/data/propagation_speed_test_data.txt");

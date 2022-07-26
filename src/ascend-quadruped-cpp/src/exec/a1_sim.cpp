@@ -156,7 +156,7 @@ int main(int argc, char **argv)
 
     // bool flag = ResetRobot(modelStateClient, jointStateClient);
     ResetRobotBySystem();
-    ROS_INFO("Reset the Robot pose");
+    ROS_INFO("Reset the qrRobot pose");
 
     startControllers(nh, "/a1_gazebo/controller_manager/switch_controller", controllerList);
 
@@ -164,7 +164,7 @@ int main(int argc, char **argv)
     spinner.start();
     std::cout << "---------ROS node init finished---------" << std::endl;
 
-    Robot *quadruped = new A1Sim(nh, privateNh, homeDir + "config/a1_sim/a1_sim.yaml");
+    qrRobot *quadruped = new A1Sim(nh, privateNh, homeDir + "config/a1_sim/a1_sim.yaml");
     quadruped->ReceiveObservation();
     std::cout << "BaseOrientation:\n" << quadruped->GetBaseOrientation().transpose() << std::endl;
 
@@ -201,7 +201,7 @@ int main(int argc, char **argv)
     
         locomotionController->Update();
         auto [hybridAction, qpSol] = locomotionController->GetAction();
-        quadruped->Step(MotorCommand::convertToMatix(hybridAction), HYBRID_MODE);
+        quadruped->Step(qrMotorCommand::convertToMatix(hybridAction), HYBRID_MODE);
 
         currentTime = quadruped->GetTimeSinceReset();
         if (abs(quadruped->GetBaseRollPitchYaw()[0]) > 0.5f || abs(quadruped->GetBaseRollPitchYaw()[1]) > 0.5f) {

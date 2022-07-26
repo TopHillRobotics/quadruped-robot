@@ -6,9 +6,9 @@
 * Notes: xx
 * Modify: init the file. @ Zhao Yao 2021.11.19
 */
-#include "robots/robot.h"
+#include "robots/qr_robot.h"
 namespace Quadruped {
-    Robot::Robot(std::string path):config(new RobotConfig(path)),state(RobotState(config))
+    qrRobot::qrRobot(std::string path):config(new RobotConfig(path)),state(RobotState(config))
     {
     }
 } // namespace Quadruped

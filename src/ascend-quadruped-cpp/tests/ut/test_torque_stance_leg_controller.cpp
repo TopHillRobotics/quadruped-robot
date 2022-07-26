@@ -26,9 +26,9 @@ protected:
     }
 
 public:
-    Robot* robot;
+    qrRobot* robot;
     qrGaitGenerator* gaitGenerator;
-    RobotVelocityEstimator* robotVelocityEstimator;
+    qrRobotVelocityEstimator* robotVelocityEstimator;
     Eigen::Matrix<float, 3, 1> desiredSpeed;
     float desiredTwistingSpeed;
     float desiredBodyHeight;
@@ -56,13 +56,13 @@ TEST_F(TestStanceLeg, TestGetAction
 )
 {
     stanceLegPtr = build();
-    std::tuple<std::map<int, MotorCommand>, Eigen::Matrix<float, 3, 4>> actionContactForce;
+    std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> actionContactForce;
 =======
 
 TEST_F(TestStanceLeg, TestGetAction)
 {
     stanceLegPtr = build();
-    std::tuple<std::map<int, MotorCommand>,  Eigen::Matrix<float, 3, 4>> actionContactForce;
+    std::tuple<std::map<int, qrMotorCommand>,  Eigen::Matrix<float, 3, 4>> actionContactForce;
 >>>>>>> origin/develop
 
     Eigen::Matrix<float, 4, 1> desiredLegStates;
@@ -144,9 +144,9 @@ TEST_F(TestStanceLeg, TestGetAction)
                                                          contactForces,
                                                          motorTorques4);
     }
-    std::map<int, MotorCommand> action;
+    std::map<int, qrMotorCommand> action;
     action = std::get<0>(actionContactForce);
-    std::map<int, MotorCommand> actionTrue;
+    std::map<int, qrMotorCommand> actionTrue;
 <<<<<<< HEAD
     actionTrue = {{0, {0, 0, 0, 0, 2.6939936984577613}},
                   {1, {0, 0, 0, 0, -0.22165711639465652}},
@@ -163,7 +163,7 @@ TEST_F(TestStanceLeg, TestGetAction)
     cout << "Test action!" <<
          endl;
     for (
-        map<int, MotorCommand>::iterator it = action.begin();
+        map<int, qrMotorCommand>::iterator it = action.begin();
         it != action.
             end();
         ++it) {
@@ -183,7 +183,7 @@ TEST_F(TestStanceLeg, TestGetAction)
                    {10, {0, 0, 0, 0, -0.4335804019389013}},
                    {11, {0, 0, 0, 0, 4.587360482280456}} };
     cout<< "Test action!" <<endl;
-    for(map<int, MotorCommand>::iterator it = action.begin(); it!=action.end(); ++it) {
+    for(map<int, qrMotorCommand>::iterator it = action.begin(); it!=action.end(); ++it) {
         EXPECT_NEAR(it->second.tua, actionTrue[it->first].tua, 1E-3);
 >>>>>>> origin/develop
     }

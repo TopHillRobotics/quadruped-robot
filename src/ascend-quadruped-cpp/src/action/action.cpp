@@ -13,7 +13,7 @@
 namespace Quadruped {
     namespace Action {
 
-        void StandUp(Robot *robot, float standUpTime, float totalTime, float timeStep)
+        void StandUp(qrRobot *robot, float standUpTime, float totalTime, float timeStep)
         {
             float startTime = robot->GetTimeSinceReset();
             float endTime = startTime + standUpTime;
@@ -37,7 +37,7 @@ namespace Quadruped {
             std::cout << "---------------------Stand Up Finished---------------------" << std::endl;
         }
 
-        void SitDown(Robot *robot, float sitDownTime, float timeStep)
+        void SitDown(qrRobot *robot, float sitDownTime, float timeStep)
         {
             float startTime = robot->GetTimeSinceReset();
             float endTime = startTime + sitDownTime;
@@ -54,7 +54,7 @@ namespace Quadruped {
             }
         }
 
-        void KeepStand(Robot *robot, float KeepStandTime, float timeStep)
+        void KeepStand(qrRobot *robot, float KeepStandTime, float timeStep)
         {
             float startTime = robot->GetTimeSinceReset();
             float endTime = startTime + KeepStandTime;
@@ -75,7 +75,7 @@ namespace Quadruped {
             }
         }
 
-        void ControlFoot(Robot *robot, qrLocomotionController *locomotionController, float walkTime, float timeStep)
+        void ControlFoot(qrRobot *robot, qrLocomotionController *locomotionController, float walkTime, float timeStep)
         {
             const float FREQ = 1;   
             float startTime = robot->GetTimeSinceReset();
@@ -120,7 +120,7 @@ namespace Quadruped {
                 robot->Step(action, MotorMode::POSITION_MODE);
                 Eigen::Matrix<float, 12, 1> motor_angles = robot->GetMotorAngles();
                 // auto [hybridAction, qpSol] = locomotionController->GetAction();
-                // robot->Step(MotorCommand::convertToMatix(hybridAction), MotorMode::HYBRID_MODE);
+                // robot->Step(qrMotorCommand::convertToMatix(hybridAction), MotorMode::HYBRID_MODE);
                 currentTime = robot->GetTimeSinceReset();
                 total_time += currentTime - startTimeWall;
                 i += 1;

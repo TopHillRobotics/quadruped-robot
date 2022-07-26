@@ -42,7 +42,7 @@ int stoi98(const std::string &s) {
 int main() {
     // Initialize filter
     InEKF filter;
-    cout << "Robot's state is initialized to: \n";
+    cout << "qrRobot's state is initialized to: \n";
     cout << filter.getState() << endl;
 
     ifstream infile("../src/data/correction_speed_test_data.txt");

@@ -1,9 +1,9 @@
-﻿#ifndef ROBOTSTATE_H
-#define ROBOTSTATE_H
+﻿#ifndef QR_ROBOT_STATE_H
+#define QR_ROBOT_STATE_H
 
 #include <Eigen/Dense>
 #include "utils/se3.h"
-#include "robotconfig.h"
+#include "qr_robot_config.h"
 
 struct IMU{
     std::array<float, 4> quaternion;               // quaternion, normalized, (w,x,y,z)
@@ -59,4 +59,4 @@ private:
     float CalibrateYaw();
 };
 
-#endif // ROBOTSTATE_H
+#endif // QR_ROBOT_STATE_H

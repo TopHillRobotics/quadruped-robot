@@ -6,25 +6,25 @@
 * Notes: xx
 * Modify: init the file. @ Zhu Yijie
 */
-#include "state_estimator/filter.h"
+#include "state_estimator/qr_filter.h"
 
 namespace Quadruped {
 
-    MovingWindowFilter::MovingWindowFilter()
+    qrMovingWindowFilter::qrMovingWindowFilter()
     {
         moveWindowSize = DEFAULT_WINDOW_SIZE;
         sum = 0.;
         correction = 0.;
     }
 
-    MovingWindowFilter::MovingWindowFilter(unsigned int windowSizeIn)
+    qrMovingWindowFilter::qrMovingWindowFilter(unsigned int windowSizeIn)
     {
         moveWindowSize = windowSizeIn;
         sum = 0.;
         correction = 0.;
     }
 
-    void MovingWindowFilter::NeumaierSum(const double &value)
+    void qrMovingWindowFilter::NeumaierSum(const double &value)
     {
         double newSum = sum + value;
         if (std::abs(sum) >= std::abs(value)) {
@@ -45,7 +45,7 @@ namespace Quadruped {
      * @return Returns:
      *   The average of the values in the window.
      */
-    double MovingWindowFilter::CalculateAverage(const double &newValue)
+    double qrMovingWindowFilter::CalculateAverage(const double &newValue)
     {
         auto dequeLen = valueDeque.size();
         if (dequeLen >= moveWindowSize) {

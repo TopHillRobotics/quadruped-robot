@@ -7,8 +7,8 @@
 * Modify: init the file. @ Zhao Yao 2021.11.19
 */
 
-#ifndef ASCEND_QUADRUPED_CPP_ROBOT_H
-#define ASCEND_QUADRUPED_CPP_ROBOT_H
+#ifndef QR_ROBOT_H
+#define QR_ROBOT_H
 
 #include <iostream>
 #include <string>
@@ -19,38 +19,38 @@
 
 #include "config.h"
 #include "types.h"
-#include "robots/timer.h"
-#include "robots/motor.h"
+#include "robots/qr_timer.h"
+#include "robots/qr_motor.h"
 #include "utils/se3.h"
 #include "utils/tools.h"
-#include "robotconfig.h"
-#include "robotstate.h"
+#include "qr_robot_config.h"
+#include "qr_robot_state.h"
 #include "unitree_legged_sdk/unitree_interface.h"
 
 namespace Quadruped {
     /**
      * @brief base class of robot.
      */
-    class Robot {
+    class qrRobot {
 
     public:
-        Robot() = default;
+        qrRobot() = default;
 
-        Robot(std::string path);
+        qrRobot(std::string path);
 
-        virtual ~Robot() = default;
+        virtual ~qrRobot() = default;
 
         /** @brief update observation in each loop. */
         virtual void ReceiveObservation() = 0;
 
         virtual void ApplyAction(const Eigen::MatrixXf &motorCommands, MotorMode motorControlMode) = 0;
 
-        virtual void ApplyAction(const std::vector<MotorCommand> &motorCommands, MotorMode motorControlMode)
+        virtual void ApplyAction(const std::vector<qrMotorCommand> &motorCommands, MotorMode motorControlMode)
         {};
 
         virtual void Step(const Eigen::MatrixXf &action, MotorMode motorControlMode) = 0;
 
-        virtual void Step(const std::vector<MotorCommand> &motorCommands,
+        virtual void Step(const std::vector<qrMotorCommand> &motorCommands,
                           MotorMode motorControlMode)
         {};
 
@@ -148,4 +148,4 @@ namespace Quadruped {
     };
 } // namespace Quadruped
 
-#endif //ASCEND_QUADRUPED_CPP_ROBOT_H
+#endif //QR_ROBOT_H

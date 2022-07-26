@@ -262,7 +262,7 @@ ostream& operator<<(ostream& os, const RobotState& s) {
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(s.mutex_);
 #endif
-    os << "--------- Robot State -------------" << endl;
+    os << "--------- qrRobot State -------------" << endl;
     os << "X:\n" << s.X_ << endl << endl;
     os << "Theta:\n" << s.Theta_ << endl << endl;
     os << "P:\n" << s.P_ << endl;

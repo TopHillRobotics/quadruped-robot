@@ -12,8 +12,8 @@
 
 #include <tuple>
 #include <Eigen/Dense>
-#include "robots/robot.h"
-#include "state_estimator/ground_estimator.h"
+#include "robots/qr_robot.h"
+#include "state_estimator/qr_ground_estimator.h"
 
 namespace Quadruped {
     Eigen::Matrix<float, 6, 12> ComputeMassMatrix(float robotMass,
@@ -41,9 +41,9 @@ namespace Quadruped {
         float regWeight,
         Eigen::Matrix<float, 6, 1> g);
 
-    Eigen::Matrix<float,12,12> ComputeWeightMatrix(Robot *robot, const Eigen::Matrix<bool, 4, 1>& contacts);
+    Eigen::Matrix<float,12,12> ComputeWeightMatrix(qrRobot *robot, const Eigen::Matrix<bool, 4, 1>& contacts);
 
-    Eigen::Matrix<float, 3, 4> ComputeContactForce(Robot *robot,
+    Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
                                                    qrGroundSurfaceEstimator* groundEstimator,
                                                    Eigen::Matrix<float, 6, 1> desiredAcc,
                                                    Eigen::Matrix<bool, 4, 1> contacts,
@@ -56,7 +56,7 @@ namespace Quadruped {
                                                 //    float fMinRatio=0.01f,
                                                 //    float fMaxRatio=10.f);
 
-    Eigen::Matrix<float, 3, 4> ComputeContactForce(Robot *robot,
+    Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
                                                     Eigen::Matrix<float, 6, 1> desiredAcc,
                                                     Eigen::Matrix<bool, 4, 1> contacts,
                                                     Eigen::Matrix<float, 6, 1> accWeight,

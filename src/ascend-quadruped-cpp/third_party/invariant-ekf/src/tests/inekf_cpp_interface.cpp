@@ -18,7 +18,7 @@ namespace inekf {
 
 void INEKFInterface::printState()
 {
-    cout << "Robot's state is: \n";
+    cout << "qrRobot's state is: \n";
     cout << filter.getState() << endl;
 }
 
@@ -89,7 +89,7 @@ void INEKFInterface::Initialize(Eigen::Matrix3d _R0, Eigen::Vector3d _v0,
     filter.setNoiseParams(noise_params);
     cout << "Noise parameters are initialized to: \n";
     cout << filter.getNoiseParams() << endl;
-    cout << "Robot's state is initialized to: \n";
+    cout << "qrRobot's state is initialized to: \n";
     cout << filter.getState() << endl;
     cout << robotics::math::rotationMatrixToRPY(filter.getState().getRotation().transpose())<<endl; 
 

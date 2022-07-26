@@ -1,7 +1,7 @@
 // The MIT License
 
 // Copyright (c) 2022
-// Robot Motion and Vision Laboratory at East China Normal University
+// qrRobot Motion and Vision Laboratory at East China Normal University
 // Contact:tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,9 +25,9 @@
 #include "planner/qr_com_planner.h"
 
 namespace Quadruped {
-    qrComPlanner ::qrComPlanner (Robot *robotIn,
+    qrComPlanner ::qrComPlanner (qrRobot *robotIn,
                              qrGaitGenerator *gaitGeneratorIn,
-                             RobotEstimator *robotEstimatorIn)
+                             qrRobotEstimator *robotEstimatorIn)
         : robot(robotIn), gaitGenerator(gaitGeneratorIn), robotEstimator(robotEstimatorIn), delta(1.0f)
     {
         Reset(0.f);

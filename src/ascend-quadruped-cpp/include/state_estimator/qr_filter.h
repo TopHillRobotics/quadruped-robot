@@ -18,11 +18,11 @@
 
 namespace Quadruped {
     /** @brief filtering a sequence of noisy measurment data. */
-    class MovingWindowFilter {
+    class qrMovingWindowFilter {
     public:
-        MovingWindowFilter();
+        qrMovingWindowFilter();
 
-        MovingWindowFilter(unsigned int windowSize);
+        qrMovingWindowFilter(unsigned int windowSize);
 
         /**
          * @brief Update the moving window sum using Neumaier's algorithm.

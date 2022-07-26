@@ -10,20 +10,20 @@
 #ifndef ASCEND_QUADRUPED_CPP_RAIBERT_SWING_LEG_CONTROLLER_H
 #define ASCEND_QUADRUPED_CPP_RAIBERT_SWING_LEG_CONTROLLER_H
 
-#include "robots/motor.h"
+#include "robots/qr_motor.h"
 #include "qr_gait_generator.h"
-#include "state_estimator/robot_estimator.h"
-#include "state_estimator/ground_estimator.h"
+#include "state_estimator/qr_robot_estimator.h"
+#include "state_estimator/qr_ground_estimator.h"
 #include "planner/qr_foothold_planner.h"
-#include "mpc_controller/foot_trajectory_generator.h"
+#include "mpc_controller/qr_foot_trajectory_generator.h"
 
 namespace Quadruped {
     class qrSwingLegController {
 
     public:
-        qrSwingLegController(Robot *robot,
+        qrSwingLegController(qrRobot *robot,
                                   qrGaitGenerator *gaitGenerator,
-                                  RobotEstimator *stateEstimator,
+                                  qrRobotEstimator *stateEstimator,
                                   qrGroundSurfaceEstimator *groundEstimator,
                                   qrFootholdPlanner *FootholdPlanner,
                                   Eigen::Matrix<float, 3, 1> desiredSpeed,
@@ -65,9 +65,9 @@ namespace Quadruped {
         Eigen::Matrix<float, 3, 1> desiredSpeed; // appear in velocity mode usually.
         float desiredTwistingSpeed; // appear in velocity mode usually.
 
-        Robot *robot;
+        qrRobot *robot;
         qrGaitGenerator *gaitGenerator;
-        RobotEstimator *stateEstimator;
+        qrRobotEstimator *stateEstimator;
         qrGroundSurfaceEstimator *groundEstimator;
         qrFootholdPlanner *footholdPlanner;
         Eigen::Matrix<int, 4, 1> lastLegState;

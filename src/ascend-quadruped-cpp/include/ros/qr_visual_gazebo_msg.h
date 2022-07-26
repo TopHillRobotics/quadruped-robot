@@ -1,7 +1,7 @@
 // The MIT License
 
 // Copyright (c) 2022
-// Robot Motion and Vision Laboratory at East China Normal University
+// qrRobot Motion and Vision Laboratory at East China Normal University
 // Contact:tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -41,7 +41,7 @@
 #include "xpp_states/convert.h"
 #include "xpp_states/robot_state_cartesian.h"
 
-#include "mpc_controller/locomotion_controller.h"
+#include "mpc_controller/qr_locomotion_controller.h"
 
 namespace Quadruped {
     /**
@@ -49,11 +49,11 @@ namespace Quadruped {
      */
     class qrVisualGazeboMsg {
     public:
-        qrVisualGazeboMsg(Robot *robotIn, qrLocomotionController *locomotionController, ros::NodeHandle &nhIn);
+        qrVisualGazeboMsg(qrRobot *robotIn, qrLocomotionController *locomotionController, ros::NodeHandle &nhIn);
         // void PublishPose();
         void PublishGazeboStateCallback();
     private:
-        Robot *robot;
+        qrRobot *robot;
         qrLocomotionController *locomotionController;
         qrPosePlanner *posePlanner;
 
