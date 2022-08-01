@@ -85,7 +85,6 @@ namespace Quadruped {
         footHoldInWorldFrame.row(2) << 0.f, 0.f, 0.f, 0.f;
         footHoldInWorldFrame(0, 0) -= 0.05;
         footHoldInWorldFrame(0, 3) -= 0.05;
-        footHoldInControlFrame = phaseSwitchFootLocalPos;
         swingJointAnglesVelocities.clear();
     }
 
