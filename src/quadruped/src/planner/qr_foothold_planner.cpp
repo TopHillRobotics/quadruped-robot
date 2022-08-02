@@ -28,7 +28,7 @@
 namespace Quadruped {
     qrFootholdPlanner::qrFootholdPlanner(qrRobot *robotIn, qrGroundSurfaceEstimator *groundEsitmatorIn)
     : robot(robotIn), groundEsitmator(groundEsitmatorIn), terrain(groundEsitmator->terrain),
-        timeSinceReset(0.f), stepCount(0)
+        timeSinceReset(0.f)
     {
         footstepper = new qrFootStepper(terrain, 0.10f, "optimal");
         Reset();

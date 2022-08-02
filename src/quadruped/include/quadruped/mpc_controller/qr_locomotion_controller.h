@@ -32,11 +32,11 @@
 #include "utils/cppTypes.h"
 #include "robots/qr_robot.h"
 #include "robots/qr_motor.h"
-#include "mpc_controller/qr_gait_generator.h"
+#include "planner/qr_gait_generator.h"
 #include "mpc_controller/qr_raibert_swing_leg_controller.h"
 #include "mpc_controller/qr_torque_stance_leg_controller.h"
 #include "planner/qr_com_planner.h"
-#include "planner/qr_pose_planner.h"
+
 #include "state_estimator/qr_robot_estimator.h"
 #include "state_estimator/qr_ground_estimator.h"
 
@@ -52,19 +52,17 @@ namespace Quadruped {
          * @brief Constructor of qrLocomotionController.
          * @param robot The robot object pointer.
          * @param gaitGenerator The gait generator 
-         * @param stateEstimator The gait estimator
+         * @param stateEstimator The state estimator
          * @param groundEstimator The ground estimator
-         * @param comPlanner The foothold planner
-         * @param posePlanner The foothold planner
-         * @param swingLegController The foothold planner
-         * @param stanceLegController The foothold planner
+         * @param comPlanner The com planner
+         * @param swingLegController The swing controller
+         * @param stanceLegController The stance controller
          */
         qrLocomotionController(qrRobot *robot,
                              qrGaitGenerator *gaitGenerator,
                              qrRobotEstimator *stateEstimator,
                              qrGroundSurfaceEstimator *groundEstimator,
                              qrComPlanner *comPlanner,
-                             qrPosePlanner *posePlanner,
                              qrSwingLegController *swingLegController,
                              qrStanceLegController *stanceLegController);
 
@@ -135,15 +133,6 @@ namespace Quadruped {
         }
         
         /** 
-         * @brief Get pose planner object.
-         *  @return posePlanner.
-         */
-        inline qrPosePlanner *GetPosePlanner()
-        {
-            return posePlanner;
-        }
-
-        /** 
          * @brief Get time since reset.
          *  @return time.
          */
@@ -192,11 +181,6 @@ namespace Quadruped {
          * @brief qrComPlanner object.
          */
         qrComPlanner  *comPlanner ;
-
-        /** 
-         * @brief qrComPlanner object.
-         */
-        qrPosePlanner *posePlanner;
 
         /** 
          * @brief joint command list.

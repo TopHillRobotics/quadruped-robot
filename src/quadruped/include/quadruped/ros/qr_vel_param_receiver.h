@@ -36,22 +36,43 @@
 
 namespace Quadruped {
     /**
-     * @brief receive command velocity from high level planning module.
-     */
+    * @brief A qrVelocityParamReceiver object recieves the velocity parameters from a ROS topic
+    * 
+    */
     class qrVelocityParamReceiver {
 
     public:
-        qrVelocityParamReceiver (ros::NodeHandle &nhIn);
-
+        /**
+         * @brief Construct a qrVelocityParamReceiver object using a  ROS nodeHandle.
+         * @param nhIn specifies the ROS node to communicate
+         */
+        qrVelocityParamReceiver(ros::NodeHandle &nhIn);
+        
+        
+        /**
+         * @brief Deconstruct a qrVelocityParamReceiver object.
+         */
         ~qrVelocityParamReceiver () = default;
 
+        /**
+        * @brief Receive the updated information from a ROS topic
+        * @param msg the vel  msg from a ROS topic
+        */
         void CmdVelCallback(const geometry_msgs::Twist::ConstPtr &input);
 
+        /**
+        * @brief Get the linear velocity.
+        * @return Eigen::Matrix<float, 3, 1>: linearVel  
+        */
         inline Eigen::Matrix<float, 3, 1> GetLinearVelocity()
         {
             return linearVel;
         }
 
+        /**
+        * @brief Get the angular velocity.
+        * @return Vec3<float>: angularVel  
+        */
         inline float GetAngularVelocity()
         {
             return angularVel[2]; // z component.
@@ -61,6 +82,7 @@ namespace Quadruped {
         ros::NodeHandle &nh;
         ros::Subscriber cmdVelSub;
         std::string cmdVelTopic = "/velocity_param";
+        
     private:
         Eigen::Matrix<float, 3, 1> linearVel = Eigen::Matrix<float, 3, 1>::Zero();
         Eigen::Matrix<float, 3, 1> angularVel = Eigen::Matrix<float, 3, 1>::Zero();

@@ -29,12 +29,11 @@ namespace Quadruped {
                                                qrRobotEstimator *stateEstimatorIn,
                                                qrGroundSurfaceEstimator *groundEstimatorIn,
                                                qrComPlanner *comPlannerIn,
-                                               qrPosePlanner *posePlannerIn,
                                                qrSwingLegController *swingLegControllerIn,
                                                qrStanceLegController *stanceLegControllerIn)
     :
         robot(robotIn), gaitGenerator(gaitGeneratorIn), stateEstimator(stateEstimatorIn), groundEstimator(groundEstimatorIn), comPlanner(comPlannerIn),
-        posePlanner(posePlannerIn), swingLegController(swingLegControllerIn), stanceLegController(stanceLegControllerIn)
+        swingLegController(swingLegControllerIn), stanceLegController(stanceLegControllerIn)
     {
         resetTime = robot->GetTimeSinceReset();
         timeSinceReset = 0.;
@@ -48,7 +47,6 @@ namespace Quadruped {
         stateEstimator->Reset(timeSinceReset);
         groundEstimator->Reset(timeSinceReset);
         comPlanner->Reset(timeSinceReset);
-        posePlanner->Reset(timeSinceReset);
         swingLegController->Reset(timeSinceReset);
         stanceLegController->Reset(timeSinceReset);
     }

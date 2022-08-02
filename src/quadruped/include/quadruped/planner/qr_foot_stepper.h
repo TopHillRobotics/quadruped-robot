@@ -49,30 +49,32 @@ namespace Quadruped {
 
         inline Eigen::Matrix<float, 3, 1> GetDefaultFootholdOffset(int legId)
         {
-            return {defaultFootholdDelta, 0.f, 0.f}; // todo : 1 DIM
+            return {defaultFootholdDelta, 0.f, 0.f};
         }
 
-        /**
+         /**
          * @brief Find a optimal foot placement for swing legs, usually larger then zero.
-         * @param Eigen::Matrix<float, 3, 4> feet positions in world frame when all stance at ground.
+         * @param Matrix<float, 3, 4> feet positions in world frame when all stance at ground.
          * @note Assuming that foot offset L = L0 + x, gap width is W,
-         *         the cost objective is F = x^T * G * x + a^T * x = x^2,
-         *          this means we want the increment for default offset to be small.
-         *        the constrain inequalities is denoted as :
-         *          C^T * x >= b
-         *      Case 1: if front leg is possible to meet the gap with default offset,
-         *              then x should statifies condition: L0 - d(foot, center of gap) + x >= W/2 or <=-W/2;
-         *              This means the front leg either (1.a)walk through the gap or (1.b)not, respectively.
-         *              At the mean time, the back legs DO NOT walk over the gap.
-         *              To express (1.b) in matrix form,
-         *                  [1, -1, -1, -1, -1]^T * x = [x   >= b = [ -L0
-         *                                               -x
-         *                                               -x           L0-p(gap)+p(foot)
-         *                                               -x
-         *                                               -x]         ]
+         * the cost objective is F = x^T * G * x + a^T * x = x^2,
+         * this means we want the increment for default offset to be small.
+         * the constrain inequalities is denoted as :C^T * x >= b
+         * 
+         * Case 1: if front leg is possible to meet the gap with default offset,
+         * then x should statifies condition: L0 - d(foot, center of gap) + x >= W/2 or <=-W/2;
+         * This means the front leg either (1.a)walk through the gap or (1.b)not, respectively.
+         * At the mean time, the back legs do not walk over the gap.
          */
         Eigen::Matrix<float, 3, 4> GetOptimalFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds);
 
+        
+        /**
+         * @brief compute desired foot-end position in walk mode
+         * @param currentFootholds current foot-end position of all the leg
+         * @param currentComPose current com postion and pose
+         * @param desiredComPose desired com postion and pose
+         * @param legIds the order of legs
+         */
         std::tuple<Eigen::Matrix<float,3,4>, Eigen::Matrix<float,3,4>> GetFootholdsInWorldFrame(
                                                         Eigen::Matrix<float, 3, 4>& currentFootholds,
                                                         Eigen::Matrix<float, 6, 1>& currentComPose,
@@ -86,7 +88,7 @@ namespace Quadruped {
          * @param frontGap
          * @param backGap
          * @return if solution valid, return x; otherwise, return -1;
-         */        
+         */    
         double CheckSolution(Eigen::Matrix<float, 1, 4> currentFootholdsX, double front, double back, qrGap frontGap, qrGap backGap);        
 
         /**
@@ -96,18 +98,57 @@ namespace Quadruped {
         int StepGenerator(Eigen::Matrix<float, 1, 4>& currentFootholds, Eigen::Matrix<float, 1, 4>& desiredFootholdsOffset);
 
     protected:
+         /**
+         * @brief the size of gaps
+         */
         std::vector<qrGap> gaps;
+
+        /**
+         * @brief describe stair information of the map
+         */
         qrStair stairUp, stairDown;
-        std::queue<Eigen::Matrix<float, 1, 4>> steps; // contains the step offset alone x-axis for legs in future to pass the plum piles.
-        bool generatorFlag = false; // if false means has not generate the step
-        bool gaitFlag = false; // if true means has changed the gait
-        bool meetGpa; // are any feet meet gap?
+
+        /**
+         * @brief contains the step offset alone x-axis for legs in future to pass the plum piles. 
+         */
+        std::queue<Eigen::Matrix<float, 1, 4>> steps; 
+
+        /**
+         * @brief if false means has not generate the step
+         */
+        bool generatorFlag = false;
+
+        /**
+         * @brief if true means has changed the gait
+         */
+        bool gaitFlag = false;
+
+        /**
+         * @brief are any feet meet gap
+         */
+        bool meetGap;
+
+        /**
+         * @brief default foot-end position delta
+         */
         float defaultFootholdDelta;
+
+        /**
+         * @brief the foot-end position delta for the next step
+         */
         Eigen::Matrix<float, 3, 4> nextFootholdsOffset;
+
+
         Eigen::Matrix<float, 3, 4> lastFootholdsOffset;
-        Vec4<float> dZ; // offset along Z-axis
-        Vec4<int> count = Vec4<int>::Zero();
-        // for QP param
+
+        /**
+         * @brief offset along Z-axis
+         */
+        Vec4<float> dZ;
+
+        /**
+         * @brief params for Qp solve 
+         */
         quadprogpp::Matrix<double> G;
         quadprogpp::Vector<double> a;
         quadprogpp::Matrix<double> CE;
@@ -117,4 +158,4 @@ namespace Quadruped {
         quadprogpp::Vector<double> x;
     };
 } // namespace Quadruped
-#endif //ASCEND_QUADRUPED_CPP_INCLUDE_PLANNER_FOOT_STEPPER_H_
+#endif //QR_FOOT_STEPPER_H_

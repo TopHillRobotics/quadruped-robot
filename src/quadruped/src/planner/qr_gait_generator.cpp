@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "mpc_controller/qr_gait_generator.h"
+#include "planner/qr_gait_generator.h"
 
 using namespace Eigen;
 using namespace std;
@@ -115,8 +115,6 @@ namespace Quadruped {
     {
         Eigen::Matrix<bool, 4, 1> contactState = robot->GetFootContacts();
         float fullCyclePeriod, augmentedTime, phaseInFullCycle, ratio;
-        
-        count++;
 
         for (int legId = 0; legId < initialLegState.size(); legId++) {
             if (initialLegState[legId] == LegState::USERDEFINED_SWING) {

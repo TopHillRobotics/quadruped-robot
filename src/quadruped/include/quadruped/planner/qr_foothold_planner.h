@@ -44,34 +44,53 @@ namespace Quadruped {
         void Update()
         {}
         /**
-         * @brief only be called at the moment right before lift up legs.
-         */
+        * @brief only be called at the moment right before lift up legs.
+        */
         void UpdateOnce(Eigen::Matrix<float, 3, 4> currentFootholds, std::vector<int> legIds={});
 
         bool Loadterrain( std::string& configPathIn);
 
-        // for postion mode 
+        /**
+         * @brief compute desired foot-end position in walk mode
+         * @param currentFootholds current foot-end position of all the leg
+         * @param currentComPose current com postion and pose
+         * @param desiredComPose desired com postion and pose
+         * @param legIds the order of legs
+         */
         Eigen::Matrix<float, 3, 4> ComputeNextFootholds(Eigen::Matrix<float, 3, 4>& currentFootholds,
                                                         Eigen::Matrix<float, 6, 1>& currentComPose,
                                                         Eigen::Matrix<float, 6, 1>& desiredComPose,
                                                         std::vector<int>& legIds);
 
-        // for walk mode 
+        /**
+         * @brief compute desired foot-end position delta in position mode
+         * @param currentFootholds current foot-end position of all the leg
+         */
         Eigen::Matrix<float, 3, 4> ComputeFootholdsOffset(Eigen::Matrix<float, 3, 4> currentFootholds,
                                                           Eigen::Matrix<float, 6, 1> currentComPose,
                                                           Eigen::Matrix<float, 6, 1> desiredComPose,
                                                           std::vector<int> legIds);
-
+        
+        /**
+         * @brief get desired com position and rpy
+         */
         inline const Eigen::Matrix<float, 6, 1> &GetDesiredComPose() const
         {
             return desiredComPose;
         }
 
+        /**
+        * @brief get desired foot-end position delta
+        * i.e. currentFootholds + desiredFootholdsOffset = desiredFootholds
+        */
         inline const Eigen::Matrix<float, 3, 4> &GetFootholdsOffset() const
         {
             return desiredFootholdsOffset;
         }
 
+        /**
+        * @brief get desired com position and rpy
+        */
         inline Eigen::Matrix<float, 6, 1> GetComGoal(Eigen::Matrix<float, 6, 1> currentComPose)
         {
             desiredComPose << 0.f, 0.f, 0.f, 0.f, 0.f, 0.f;
@@ -79,7 +98,7 @@ namespace Quadruped {
         }
 
         /**
-         * @brief for walk mode in world frame
+         * @brief return foot-end position for walk mode in world frame
          */
         inline Vec3<float> GetFootholdInWorldFrame(int legId) {
             return desiredFootholds.col(legId);
@@ -91,20 +110,48 @@ namespace Quadruped {
         qrGroundSurfaceEstimator *groundEsitmator;
         qrFootStepper *footstepper;
 
+        /**
+         * @brief current time from robot when call the reset fuction
+         * 
+         */
         float resetTime;
+
+        /**
+         * @brief reset time for footStepper
+         * 
+         */
         float timeSinceReset;
 
+        /**
+         * @brief the config of footStepper
+         * 
+         */
         YAML::Node footStepperConfig;
-        float gapWidth;
-        float footHoldOffset;
-        std::vector<float> gaps;
+
+        /**
+         * @brief describe terrain information of the map
+         * 
+         */
         qrTerrain& terrain;
-        constexpr static int N = 50; // default map size
         
-        long long unsigned stepCount;
+        /**
+         * @brief current com position and rpy
+         */
         Eigen::Matrix<float, 6, 1> comPose;
+
+        /**
+         * @brief desired com position and rpy
+         */
         Eigen::Matrix<float, 6, 1> desiredComPose;
+
+        /**
+         * @brief desired foot-end position delta for position mode
+         */
         Eigen::Matrix<float, 3, 4> desiredFootholdsOffset;
+
+        /**
+         * @brief desired foot-end position for walk mode 
+         */
         Eigen::Matrix<float, 3, 4> desiredFootholds;
     };
 } // namespace Quadruped

@@ -34,12 +34,32 @@
 
 #include "robots/qr_robot.h"
 #include "state_estimator/qr_robot_estimator.h"
-#include "mpc_controller/qr_gait_generator.h"
+#include "planner/qr_gait_generator.h"
 #include "utils/se3.h"
 
 namespace Quadruped {
     class qrComPlanner  {
-    private:
+        public:
+        qrComPlanner (qrRobot *robotIn,qrGaitGenerator *gaitGeneratorIn,qrRobotEstimator *robotEstimatorIn);
+
+        ~qrComPlanner () = default;
+
+        /**
+         * @brief Called during the start of a controller.
+         * @param current_time: The wall time in seconds.
+         */
+        void Reset(float currentTime);
+
+        Eigen::Matrix<float, 3, 1> Update(float currentTime);
+
+        /**
+         * @brief
+         * @return Eigen::Matrix<float,3,1>: comPosInBaseFrame
+         */
+        inline Eigen::Matrix<float, 3, 1> &GetComPosInBaseFrame()
+        {
+            return comPosInBaseFrame;
+        }
         /**
          * @brief the vector index of ADJEST_LEG means the order of the legs,
          *        the value of ADJEST_LEG means adjacent two legs of the indexed leg, 
@@ -55,42 +75,72 @@ namespace Quadruped {
         qrGaitGenerator *gaitGenerator;
         qrRobotEstimator *robotEstimator;
 
-        Eigen::Vector3f basePosition;
+        /**
+         * @brief com pose from robot state
+         */
         Eigen::Vector4f baseOrientation;
-        Eigen::Vector3f inverseTranslation;
-        Eigen::Matrix3f inverseRotation;
-        Eigen::Matrix<float, 3, 1> comPosInBaseFrame;
-        Eigen::Matrix<float, 3, 1> comPosInWorldFrame;
-        Eigen::Matrix<int, 4, 1> legState;
-        Eigen::Matrix<float, 4, 1> normalizedPhase;
-        Eigen::Matrix<float, 3, 4> footPosition; // in base frame
-        float contactK[4]; // is the foot contact with ground.
-        float swingK[4]; // is it a swing foot ?
-        float weightFactor[4]; // weight factors of vertices.
-        Eigen::Matrix<float, 3, 4> supportPolygonVertices;
-        float delta;
-
-    public:
-        qrComPlanner (qrRobot *robotIn,
-                    qrGaitGenerator *gaitGeneratorIn,
-                    qrRobotEstimator *robotEstimatorIn);
-
-        ~qrComPlanner () = default;
 
         /**
-         * @brief Called during the start of a controller.
-         * @param current_time: The wall time in seconds.
+         * @brief com position from robot state
          */
-        void Reset(float currentTime);
+        Eigen::Vector3f basePosition;
 
-        Eigen::Matrix<float, 3, 1> Update(float currentTime);
+        /**
+         * @brief com positon after ajusted in base frame
+         */
+        Eigen::Matrix<float, 3, 1> comPosInBaseFrame;
 
-        Eigen::Matrix<float, 3, 1> TestUpdate(float currentTime);
+        /**
+         * @brief com position after ajusted in world frame
+         *
+         */
+        Eigen::Matrix<float, 3, 1> comPosInWorldFrame;
 
-        inline Eigen::Matrix<float, 3, 1> &GetComPosInBaseFrame()
-        {
-            return comPosInBaseFrame;
-        }
+        /**
+         * @brief the state of each leg from qrGaitGenerator class
+         * e.g. SWING/STAND
+         */
+        Eigen::Matrix<int, 4, 1> legState;
+
+        /**
+         * @brief the relative phase for the desired state.
+         */
+        Eigen::Matrix<float, 4, 1> normalizedPhase;
+
+        /**
+         * @brief the foot-end position from robot state in base frame
+         */
+        Eigen::Matrix<float, 3, 4> footPosition;
+
+        /**
+         * @brief the probability of foot end touching the ground(range:0.~1.)
+         */
+        float contactK[4];
+
+        /**
+         * @brief the probability of each leg being the swing leg
+         */
+        float swingK[4];
+
+        /**
+         * @brief the probability of leg contact
+         * i.e weightFactor[legId] = contactK[legId] + swingK[legId]
+         */
+        float weightFactor[4];
+
+        /**
+         * @brief coordinates of each point in the support polygon
+         * 
+         */
+
+        Eigen::Matrix<float, 3, 4> supportPolygonVertices;
+
+        /**
+         * @brief used to caculate contactK and swingK
+         */
+        float delta;
+
+    
     };
 } //namespace Quadruped
 

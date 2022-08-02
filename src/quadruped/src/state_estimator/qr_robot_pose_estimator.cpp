@@ -72,15 +72,7 @@ namespace Quadruped {
         Eigen::Matrix<int, 1, 4> contacts;
         for (int legId = 0; legId < 4; legId++) {
             int desLegState = gaitGenerator->desiredLegState[legId];
-            int legState = gaitGenerator->detectedLegState[legId];
-            bool flag;
-            if (robot->controlParams["mode"] == LocomotionMode::WALK_LOCOMOTION) {
-                flag = (desLegState!=SubLegState::TRUE_SWING 
-                        || desLegState == LegState::STANCE
-                        || (desLegState==SubLegState::TRUE_SWING && legState == LegState::EARLY_CONTACT));
-            } else {
-                flag = (desLegState == LegState::STANCE);
-            }
+            bool flag = (desLegState == LegState::STANCE);
             if (flag) {
                 contacts[legId] = true;
             } else {

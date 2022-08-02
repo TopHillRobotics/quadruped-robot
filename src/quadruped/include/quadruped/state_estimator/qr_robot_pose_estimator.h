@@ -11,7 +11,7 @@
 #define QR_ROBOT_POSE_ESTIMATOR_H
 
 #include "robots/qr_robot.h"
-#include "mpc_controller/qr_gait_generator.h"
+#include "planner/qr_gait_generator.h"
 #include "state_estimator/qr_robot_velocity_estimator.h"
 #include "state_estimator/qr_ground_estimator.h"
 

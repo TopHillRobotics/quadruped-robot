@@ -1,26 +1,11 @@
-// The MIT License
-
-// Copyright (c) 2022 
-// Robot Motion and Vision Laboratory at East China Normal University
-// Contact: tophill.robotics@gmail.com
-
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE. 
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2021-2022. All rights reserved.
+* Description: Stance controller for stance foot.
+* Author: Zang Yaohua & Zhao Yao
+* Create: 2021-10-25
+* Notes: xx
+* Modify: init the file. @ Zang Yaohua
+*/
 
 #include "mpc_controller/qr_torque_stance_leg_controller.h"
 #include "mpc_controller/qr_qp_torque_optimizer.h"
@@ -32,7 +17,6 @@ namespace Quadruped {
                                                          qrRobotEstimator *robotEstimator,
                                                          qrGroundSurfaceEstimator *groundEstimatorIn,
                                                          qrComPlanner *comPlanner,
-                                                         qrPosePlanner *posePlanner,
                                                          qrFootholdPlanner *footholdPlanner,
                                                          Eigen::Matrix<float, 3, 1> desiredSpeed,
                                                          float desiredTwistingSpeed,
@@ -46,7 +30,6 @@ namespace Quadruped {
         this->robotEstimator = robotEstimator;
         this->groundEstimator = groundEstimatorIn;
         this->comPlanner = comPlanner;
-        this->posePlanner = posePlanner;
         this->footholdPlanner = footholdPlanner;
         this->configFilepath = configFilepath;
         this->desiredSpeed = desiredSpeed;
@@ -104,12 +87,11 @@ namespace Quadruped {
             contacts << true, true, true, true;
             N = 4; 
             return;
-        } else if (robot->controlParams["mode"] != LocomotionMode::WALK_LOCOMOTION) {
+        } else {
             fMaxRatio << 10., 10., 10., 10.;
             fMinRatio << 0.01, 0.01, 0.01, 0.01;
-            for (int legId=0; legId<NumLeg; ++legId){
+            for (int legId=0; legId<NumLeg; ++legId) {
                 if (gaitGenerator->desiredLegState[legId] == LegState::STANCE) {
-                // if (gaitGenerator->legState[legId] == LegState::STANCE || gaitGenerator->legState[legId] == LegState::EARLY_CONTACT) {
                     contacts[legId] = true;
                     N++;
                 } else {
@@ -117,51 +99,7 @@ namespace Quadruped {
                 }
             }
             return;
-        } else {
-            for (int legId = 0; legId < NumLeg; ++legId) {
-                int desiredLegState = gaitGenerator->desiredLegState[legId];
-                int detectedLegState = gaitGenerator->detectedLegState[legId];
-                float phase = gaitGenerator->normalizedPhase[legId];
-                
-                if (detectedLegState == LegState::STANCE || detectedLegState == LegState::LOSE_CONTACT) {
-                    contacts[legId] = true;
-                    N++;
-                    fMaxRatio[legId] = 10.0;
-                    fMinRatio[legId] = 0.001;
-                } else if(detectedLegState == LegState::EARLY_CONTACT) { // plan is swing, actual is stand
-                        contacts[legId] = true;
-                        N++;
-                        float tempRatio = abs(phase-0.8);///(1.0-detectedEventTickPhase[legId]);
-                        fMaxRatio[legId] = 10.0 * std::min(0.01f, tempRatio);
-                        fMinRatio[legId] = 0.001;
-                } else { // Swing STATE in plan
-                    moveBasePhase = gaitGenerator->moveBasePhase;
-                    if (desiredLegState==SubLegState::LOAD_FORCE) {
-                        contacts[legId] = true;
-                        N++;
-                        fMaxRatio[legId] = 10.0 * std::max(0.001f, phase);
-                        fMinRatio[legId] = 0.001;
-                    } else if (desiredLegState==SubLegState::UNLOAD_FORCE){
-                        contacts[legId] = true;
-                        N++;
-                        phase = phase / (3.f/4.0); // todo
-                        fMaxRatio[legId] = 10.0 * std::max(0.001, 1.0-phase);
-                        fMinRatio[legId] = 0.001;
-                    } else if (desiredLegState==SubLegState::TRUE_SWING) {
-                        contacts[legId] = false;
-                        fMaxRatio[legId] = 0.002;
-                        fMinRatio[legId] = 0.001;
-                    }  else if (desiredLegState==SubLegState::FULL_STANCE) {
-                        contacts[legId] = true;
-                        N++;
-                        fMaxRatio[legId] = 10.0;
-                        fMinRatio[legId] = 0.001;
-                    } else {
-                        throw std::invalid_argument("no this leg state");
-                    }
-                }
-            }
-        }
+        } 
     }
     
     std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLegController::GetAction()
@@ -191,7 +129,6 @@ namespace Quadruped {
         Vec6<float> pose;
         Vec6<float> twist; // v, wb
         bool computeForceInWorldFrame = false;       
-        // pose[0] = max(pose[0], robot->GetBasePosition()[0]);
         Eigen::Matrix<float, 3, 4> com2FootInWorld = footPoseWorld.colwise() - pose.head(3);
         Eigen::Matrix<float, 3, 4> footJointAngles = Eigen::Matrix<float,3,4>::Zero();
         Eigen::Matrix<int, 3, 4> jointIdxs;

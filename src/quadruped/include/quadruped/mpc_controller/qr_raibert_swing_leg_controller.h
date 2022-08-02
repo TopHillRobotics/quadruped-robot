@@ -26,7 +26,7 @@
 #define QR_SWING_LEG_CONTROLLER_H
 
 #include "robots/qr_motor.h"
-#include "qr_gait_generator.h"
+#include "planner/qr_gait_generator.h"
 #include "state_estimator/qr_robot_estimator.h"
 #include "state_estimator/qr_ground_estimator.h"
 #include "planner/qr_foothold_planner.h"

@@ -1,16 +1,29 @@
-/*
-* Copyright (c) Huawei Technologies Co., Ltd. 2021-2022. All rights reserved.
-* Description: The robot runtime used to lanuch the robot
-* Author: Zhu Yijie & Zhao Yao
-* Create: 2021-10-25
-* Notes: xx
-* Modify: init the file. @ Zhao Yao;
-*       mv implementation of func as runtime.h. @ Zhu Yijie 2021-11-24;
-*       add switch mode @ Zhu Linsen 2022-01-30;
-*/
+// The MIT License
 
-#ifndef ASCEND_QUADRUPED_CPP_RUNTIME_H
-#define ASCEND_QUADRUPED_CPP_RUNTIME_H
+// Copyright (c) 2022
+// qrRobot Motion and Vision Laboratory at East China Normal University
+// Contact:tophill.robotics@gmail.com
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#ifndef QR_RUNTIME_H
+#define QR_RUNTIME_H
 
 #include <iostream>
 #include <typeinfo>
@@ -19,7 +32,7 @@
 
 #include "mpc_controller/qr_locomotion_controller.h"
 #include "planner/qr_com_planner.h"
-#include "planner/qr_pose_planner.h"
+
 #include "planner/qr_foothold_planner.h"
 #include "action/action.h"
 #include "ros/qr_vel_param_receiver.h"
@@ -37,7 +50,7 @@ float footClearance = 0.01f;
 
 /**
  * @brief launch all controllers, planners  and esimators.
- * @param quadruped : pointer to A1Robot.
+ * @param quadruped: pointer to A1Robot.
  * @return pointer to qrLocomotionController.
  */
 qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, std::string robotName);
@@ -48,4 +61,4 @@ void updateControllerParams(qrLocomotionController *controller, Eigen::Vector3f 
 qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, std::string robotName);
 
 void updateControllerParams(qrLocomotionController *controller, Eigen::Vector3f linSpeed, float angSpeed);
-#endif //ASCEND_QUADRUPED_CPP_RUNTIME_H
+#endif //QR_RUNTIME_H

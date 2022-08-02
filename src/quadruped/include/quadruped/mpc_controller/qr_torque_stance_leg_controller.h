@@ -27,11 +27,10 @@
 
 #include "utils/se3.h"
 #include "robots/qr_robot.h"
-#include "mpc_controller/qr_gait_generator.h"
+#include "planner/qr_gait_generator.h"
 #include "state_estimator/qr_robot_estimator.h"
 #include "state_estimator/qr_ground_estimator.h"
 #include "planner/qr_com_planner.h"
-#include "planner/qr_pose_planner.h"
 #include "planner/qr_foothold_planner.h"
 
 namespace Quadruped {
@@ -47,8 +46,7 @@ namespace Quadruped {
          * @param gaitGenerator The gait generator object pointer.
          * @param robotVelocityEstimator The robot estimator object pointer.
          * @param groundEstimatorIn The ground estimator object pointer.
-         * @param comPlanner The COM planner object pointer.
-         * @param posePlanner The pose planner object pointer.
+         * @param comPlanner The com planner object pointer.
          * @param footholdPlanner The foothold planner object pointer.
          * @param desired_speed The robot desired speed in velocity control.
          * @param desiredTwistingSpeed The robot desired twisting speed in velocity control.
@@ -62,7 +60,6 @@ namespace Quadruped {
                                 qrRobotEstimator *robotVelocityEstimator,
                                 qrGroundSurfaceEstimator *groundEstimatorIn,
                                 qrComPlanner *comPlanner,
-                                qrPosePlanner *posePlanner,
                                 qrFootholdPlanner *footholdPlanner,
                                 Eigen::Matrix<float, 3, 1> desired_speed,
                                 float desiredTwistingSpeed,
@@ -128,11 +125,6 @@ namespace Quadruped {
          *        in position locomotion.
          */
         qrComPlanner *comPlanner;
-
-        /**
-         * @brief Robot pose planner obejct pointer. Get the intermediate base pose.
-         */
-        qrPosePlanner *posePlanner;
 
         /**
          * @brief Robot's foothold planner. Get desired COM pose when in walk locomotion.

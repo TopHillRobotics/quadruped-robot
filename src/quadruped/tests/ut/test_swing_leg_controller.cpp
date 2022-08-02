@@ -3,7 +3,7 @@
 //
 
 #include "gtest/gtest.h"
-#include "mpc_controller/qr_gait_generator.h
+#include "planner/qr_gait_generator.h
 #include "state_estimator/robot_velocity_estimator.h"
 #include "mpc_controller/raibert_swing_leg_controller.h"
 

@@ -14,7 +14,7 @@
 #include <numeric>
 #include "utils/se3.h"
 #include "robots/qr_robot.h"
-#include "mpc_controller/qr_gait_generator.h"
+#include "planner/qr_gait_generator.h"
 #include "state_estimator/qr_filter.h"
 #include "TinyEKF.h"
 
