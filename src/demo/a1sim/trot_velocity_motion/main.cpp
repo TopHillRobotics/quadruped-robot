@@ -14,14 +14,13 @@ int main(int argc, char **argv)
     std::string pathToPackage = ros::package::getPath("a1sim");
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
     std::string robotName = "a1_sim";
-    stopControllers(nh, "/a1_gazebo/controller_manager/switch_controller");
-    ResetRobotBySystem();
-    startControllers(nh, "/a1_gazebo/controller_manager/switch_controller");
+    
+    ResetRobotBySystem(nh);
     ros::AsyncSpinner spinner(1); // one threads
     spinner.start();
     qrVelocityParamReceiver *cmdVelReceiver = new qrVelocityParamReceiver(nh);
 
-    std::cout << "---------ROS node init finished---------" << std::endl;
+    std::cout << "---------Ros Module Init finished---------" << std::endl;
 
 
     YAML::Node mainConfig = YAML::LoadFile(pathToNode + "/config/main.yaml");
@@ -39,13 +38,13 @@ int main(int argc, char **argv)
     locomotionController->Reset();
     updateControllerParams(locomotionController, {0., 0., 0.}, 0.);
 
-    std::cout << "---------LocomotionController Init Finished---------" << std::endl;
+    std::cout << "---------Locomotion Module Init Finished---------" << std::endl;
 
     float startTime = quadruped->GetTimeSinceReset();
     float currentTime = startTime;
     float startTimeWall = startTime;
 
-    std::cout << "----------------start control loop------------------" << std::endl;
+    std::cout << "----------------Main Loop Starting------------------" << std::endl;
 
     while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS) {
         startTimeWall = quadruped->GetTimeSinceReset();

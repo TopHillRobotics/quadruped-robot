@@ -67,8 +67,8 @@ bool stopControllers(ros::NodeHandle &nodeHandle, std::string serviceName) {
     }
 }
 
-bool ResetRobotBySystem() {
-
+bool ResetRobotBySystem(ros::NodeHandle &nodeHandle) {
+    stopControllers(nodeHandle, "/a1_gazebo/controller_manager/switch_controller");
     int deleteModelId = system("rosservice call gazebo/delete_model '{model_name: a1_gazebo}'");
     ROS_INFO("delete state: %d", deleteModelId);
 
@@ -81,12 +81,14 @@ bool ResetRobotBySystem() {
           "RL_hip_controller RL_thigh_controller RL_calf_controller "\
           "RR_hip_controller RR_thigh_controller RR_calf_controller &");
     ROS_INFO("controller statu: %d", controllersStateId);
-
     sleep(1);
+    startControllers(nodeHandle, "/a1_gazebo/controller_manager/switch_controller");
     return true;
 }
 
-bool ResetRobotByService(ros::ServiceClient &modelStateClient, ros::ServiceClient &jointStateClient) {
+bool ResetRobotByService(ros::NodeHandle &nodeHandle,ros::ServiceClient &modelStateClient, ros::ServiceClient &jointStateClient) {
+    stopControllers(nodeHandle, "/a1_gazebo/controller_manager/switch_controller");
+    bool state = false;
     gazebo_msgs::ModelState modelState;
     gazebo_msgs::SetModelState setmodelstate;
     gazebo_msgs::SetModelConfiguration setjointstate;
@@ -135,10 +137,11 @@ bool ResetRobotByService(ros::ServiceClient &modelStateClient, ros::ServiceClien
     if (jointStateClient.call(setjointstate))
     {
         ROS_INFO("BRILLIANT!!!");
-        return true;
+        state = true;
     } else
     {
         ROS_ERROR("Failed to set joints");
-        return false;
     }
+    stopControllers(nodeHandle, "/a1_gazebo/controller_manager/switch_controller");
+    return state;
 }
