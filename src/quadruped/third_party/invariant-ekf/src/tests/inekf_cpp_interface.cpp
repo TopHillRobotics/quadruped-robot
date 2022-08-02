@@ -230,7 +230,7 @@ void INEKFInterface::UpdateContact(Eigen::Matrix<bool, 4, 1> is_contacts)
     filter.setContacts(contacts);
 }
 
-RobotState INEKFInterface::Update_1(Vec3<double> vInBaseFrame)
+qrRobotState INEKFInterface::Update_1(Vec3<double> vInBaseFrame)
 {
     // Propagate
     // Propagate using IMU data
@@ -249,17 +249,17 @@ RobotState INEKFInterface::Update_1(Vec3<double> vInBaseFrame)
     // t_prev = t;
     imu_measurement_prev = imu_measurement;
     // Print Propagated state
-    const RobotState& state = filter.getState();
+    const qrRobotState& state = filter.getState();
     // cout << state << endl;
     return state;
 }
 
-RobotState INEKFInterface::Update_2()
+qrRobotState INEKFInterface::Update_2()
 {
     // Correct
     filter.CorrectKinematics(measured_kinematics);
     // Print final state
-    const RobotState& state = filter.getState();
+    const qrRobotState& state = filter.getState();
     // cout << state << endl;
     return state;
 }

@@ -1,19 +1,29 @@
-/*! @file orientation_tools.h
- *  @brief Utility functions for 3D rotations
- *
- *  This file contains rotation utilities.  We generally use "coordinate
- * transformations" as opposed to the displacement transformations that are
- * commonly found in graphics.  To describe the orientation of a body, we use a
- * rotation matrix which transforms from world to body coordinates. This is the
- * transpose of the matrix which would rotate the body itself into the correct
- * orientation.
- *
- *  This follows the convention of Roy Featherstone's excellent book, Rigid Body
- * Dynamics Algorithms and the spatial_v2 MATLAB library that comes with it.
- * Note that we don't use the spatial_v2 convention for quaternions!
- */
-// THIS FILE combines DWL and CHEETAH's math Lib.
+// The MIT License
 
+// Copyright (c) 2022
+// qrRobot Motion and Vision Laboratory at East China Normal University
+// Contact:tophill.robotics@gmail.com
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
+// THIS FILE combines DWL and CHEETAH's math Lib.
 #ifndef ASCEND_MATH_SE3_H
 #define ASCEND_MATH_SE3_H
 
@@ -28,15 +38,16 @@
 namespace robotics {
     static constexpr double quaternionDerviativeStabilization = 0.1;
     namespace math {
+
         enum class CoordinateAxis {
             X,
             Y,
             Z
         };
 
-        /*!
-        * Convert radians to degrees
-        */
+        /**
+         * @brief convert radians to degrees
+         */
         template<typename T>
         T rad2deg(T rad)
         {
@@ -45,9 +56,9 @@ namespace robotics {
             return rad * T(180) / T(M_PI);
         }
 
-        /*!
-        * Convert degrees to radians
-        */
+        /**
+         * @brief convert degrees to radians
+         */
         template<typename T>
         T deg2rad(T deg)
         {
@@ -56,11 +67,11 @@ namespace robotics {
             return deg * T(M_PI) / T(180);
         }
 
-        /*!
-        * Compute rotation matrix for coordinate transformation. Note that
-        * coordinateRotation(CoordinateAxis:X, .1) * v will rotate v by -.1 radians -
-        * this transforms into a frame rotated by .1 radians!.
-        */
+        /**
+         * @brief Compute rotation matrix for coordinate transformation. Note that
+         * coordinateRotation(CoordinateAxis:X, .1) * v will rotate v by -.1 radians -
+         * this transforms into a frame rotated by .1 radians!.
+         */
         template<typename T>
         Mat3<T> coordinateRotation(CoordinateAxis axis, T theta)
         {
@@ -82,6 +93,9 @@ namespace robotics {
             return R;
         }
 
+        /**
+         * @brief convert vector to cross matrix
+         */
         template<typename T>
         Mat3<typename T::Scalar> crossMatrix(const Eigen::MatrixBase<T> &v)
         {
@@ -94,9 +108,9 @@ namespace robotics {
             return m;
         }
 
-        /*!
-        * Go from rpy to rotation matrix.
-        */
+        /**
+         * @brief convert from rpy to rotation matrix.
+         */
         template<typename T>
         Mat3<typename T::Scalar> rpyToRotMat(const Eigen::MatrixBase<T> &v)
         {
@@ -108,9 +122,9 @@ namespace robotics {
             return m;
         }
 
-        /*!
-        * Convert a 3x1 vector to a skew-symmetric 3x3 matrix
-        */
+        /**
+         * @brief convert a 3x1 vector to a skew-symmetric 3x3 matrix
+         */
         template<typename T>
         Mat3<typename T::Scalar> vectorToSkewMat(const Eigen::MatrixBase<T> &v)
         {
@@ -123,9 +137,9 @@ namespace robotics {
             return m;
         }
 
-        /*!
-        * Put the skew-symmetric component of 3x3 matrix m into a 3x1 vector
-        */
+        /**
+         * @brief put the skew-symmetric component of 3x3 matrix m into a 3x1 vector
+         */
         template<typename T>
         Vec3<typename T::Scalar> matToSkewVec(const Eigen::MatrixBase<T> &m)
         {
@@ -134,9 +148,9 @@ namespace robotics {
             return 0.5 * Vec3<typename T::Scalar>(m(2, 1) - m(1, 2), m(0, 2) - m(2, 0), (m(1, 0) - m(0, 1)));
         }
 
-        /*!
-        * Convert a coordinate transformation matrix to an orientation quaternion.
-        */
+        /**
+         * @brief Convert a coordinate transformation matrix to an orientation quaternion.
+         */
         template<typename T>
         Quat<typename T::Scalar> rotationMatrixToQuaternion(
             const Eigen::MatrixBase<T> &r1)
@@ -174,11 +188,11 @@ namespace robotics {
             return q;
         }
 
-        /*!
-        * Convert a quaternion to a rotation matrix.  This matrix represents a
-        * coordinate transformation into the frame which has the orientation specified
-        * by the quaternion
-        */
+        /**
+         * @brief Convert a quaternion to a rotation matrix.  This matrix represents a
+         * coordinate transformation into the frame which has the orientation specified
+         * by the quaternion
+         */
         template<typename T>
         Mat3<typename T::Scalar> quaternionToRotationMatrix(
             const Eigen::MatrixBase<T> &q)
@@ -201,10 +215,10 @@ namespace robotics {
             return R;
         }
 
-        /*!
-        * Convert a quaternion to RPY.  Uses ZYX order (yaw-pitch-roll), but returns
-        * angles in (roll, pitch, yaw).
-        */
+        /**
+         * @brief Convert a quaternion to RPY.  Uses ZYX order (yaw-pitch-roll), but returns
+         * angles in (roll, pitch, yaw).
+         */
         template<typename T>
         Vec3<typename T::Scalar> quatToRPY(const Eigen::MatrixBase<T> &q)
         {
@@ -222,6 +236,9 @@ namespace robotics {
             return rpy;
         }
 
+        /**
+         *  @brief convert roll pitch yaw to quaternion
+         */
         template<typename T>
         Quat<typename T::Scalar> rpyToQuat(const Eigen::MatrixBase<T> &rpy)
         {
@@ -232,9 +249,9 @@ namespace robotics {
             return q;
         }
 
-        /*!
-        * Convert a quaternion to so3.
-        */
+        /**
+         * @brief Convert a quaternion to so3.
+         */
         template<typename T>
         Vec3<typename T::Scalar> quatToso3(const Eigen::MatrixBase<T> &q)
         {
@@ -248,6 +265,9 @@ namespace robotics {
             return so3;
         }
 
+        /**
+         * @brief convert rotation matrix to roll pitch yaw
+         */
         template<typename T>
         Vec3<typename T::Scalar> rotationMatrixToRPY(const Eigen::MatrixBase<T> &R)
         {
@@ -258,13 +278,10 @@ namespace robotics {
             return rpy;
         }
 
-        /*!
-        * Quaternion derivative calculation, like rqd(q, omega) in MATLAB.
-        * the omega is expressed in body frame
-        * @param q
-        * @param omega
-        * @return
-        */
+        /**
+         * @brief Quaternion derivative calculation, like rqd(q, omega) in MATLAB.
+         * the omega is expressed in body frame
+         */
         template<typename T, typename T2>
         Quat<typename T::Scalar> quatDerivative(const Eigen::MatrixBase<T> &q,
                                                 const Eigen::MatrixBase<T2> &omega)
@@ -285,9 +302,9 @@ namespace robotics {
             return dq;
         }
 
-        /*!
-        * Take the product of two quaternions
-        */
+        /**
+         * @brief Take the product of two quaternions
+         */
         template<typename T>
         Quat<typename T::Scalar> quatProduct(const Eigen::MatrixBase<T> &q1,
                                              const Eigen::MatrixBase<T> &q2)
@@ -303,6 +320,9 @@ namespace robotics {
             return q;
         }
 
+        /**
+         * @brief get the inverse of a quaternion
+         */
         template<typename T>
         Quat<typename T::Scalar> quatInverse(const Eigen::MatrixBase<T> &q)
         {
@@ -312,13 +332,13 @@ namespace robotics {
             return qInverse;
         }
 
-        /*!
-        * Compute new quaternion given:
-        * @param quat The old quaternion
-        * @param omega The angular velocity (IN INERTIAL COORDINATES!)
-        * @param dt The timestep
-        * @return
-        */
+        /**
+         * @brief compute new quaternion given:
+         * @param quat The old quaternion
+         * @param omega The angular velocity (IN INERTIAL COORDINATES!)
+         * @param dt The timestep
+         * @return new quaternion
+         */
         template<typename T, typename T2, typename T3>
         Quat<typename T::Scalar> integrateQuat(const Eigen::MatrixBase<T> &quat,
                                                const Eigen::MatrixBase<T2> &omega,
@@ -345,13 +365,13 @@ namespace robotics {
             return quatNew;
         }
 
-        /*!
-        * Compute new quaternion given:
-        * @param quat The old quaternion
-        * @param omega The angular velocity (IN INERTIAL COORDINATES!)
-        * @param dt The timestep
-        * @return
-        */
+        /**
+         * @brief Compute new quaternion given:
+         * @param quat The old quaternion
+         * @param omega The angular velocity (IN INERTIAL COORDINATES!)
+         * @param dt The timestep
+         * @return new quaternion
+         */
         template<typename T, typename T2, typename T3>
         Quat<typename T::Scalar> integrateQuatImplicit(
             const Eigen::MatrixBase<T> &quat, const Eigen::MatrixBase<T2> &omega,
@@ -378,24 +398,9 @@ namespace robotics {
             return quatNew;
         }
 
-        template<typename T>
-        void quaternionToso3(const Quat<T> quat, Vec3<T> &so3)
-        {
-            so3[0] = quat[1];
-            so3[1] = quat[2];
-            so3[2] = quat[3];
-
-            T theta =
-                2.0 * asin(sqrt(so3[0] * so3[0] + so3[1] * so3[1] + so3[2] * so3[2]));
-
-            if (fabs(theta) < 0.0000001) {
-                so3.setZero();
-                return;
-            }
-            so3 /= sin(theta / 2.0);
-            so3 *= theta;
-        }
-
+        /**
+         * @brief convert so3 to quaternion
+         */
         template<typename T>
         Quat<T> so3ToQuat(Vec3<T> &so3)
         {
@@ -483,6 +488,9 @@ namespace robotics {
             return r_a;
         }
 
+        /**
+         * @brief concatenation of two quaternion
+         */
         template<typename T>
         Quat<T> ConcatenationTwoQuats(Quat<T> quat_CB,Quat<T> quat_BA)
         {
@@ -496,6 +504,9 @@ namespace robotics {
             return res; 
         }
 
+        /**
+         * @brief log of quaternion
+         */
         template<typename T>
         Vec3<T> LogQuat(Quat<T> q)
         {
@@ -506,6 +517,9 @@ namespace robotics {
             return so3;
         }
 
+        /**
+         * @brief convert rotation matrix to axis angle
+         */
         template<typename T>
         Vec3<typename T::Scalar> rotationMatrixToAxisAngle(const Eigen::MatrixBase<T> &r)
         {
@@ -523,10 +537,8 @@ namespace robotics {
             } else {
                 return axis * 0.5 / sin(theta) * theta;
             }
-            
         } 
-
-    } // namespace math
-} // namespace robotics
+    }
+}
 
 #endif//ASCEND_MATH_SE3_H

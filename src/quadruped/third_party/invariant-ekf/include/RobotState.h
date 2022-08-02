@@ -5,9 +5,9 @@
  * -------------------------------------------------------------------------- */
 
 /**
- *  @file   RobotState.h
+ *  @file   qrRobotState.h
  *  @author Ross Hartley
- *  @brief  Header file for RobotState
+ *  @brief  Header file for qrRobotState
  *  @date   September 25, 2018
  **/
 
@@ -21,20 +21,20 @@
 
 namespace inekf {
 
-class RobotState {
+class qrRobotState {
 
     public:
         // EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-        RobotState();
-        RobotState(const Eigen::MatrixXd& X);
-        RobotState(const Eigen::MatrixXd& X, const Eigen::VectorXd& Theta);
-        RobotState(const Eigen::MatrixXd& X, const Eigen::VectorXd& Theta, const Eigen::MatrixXd& P);
+        qrRobotState();
+        qrRobotState(const Eigen::MatrixXd& X);
+        qrRobotState(const Eigen::MatrixXd& X, const Eigen::VectorXd& Theta);
+        qrRobotState(const Eigen::MatrixXd& X, const Eigen::VectorXd& Theta, const Eigen::MatrixXd& P);
         
 #if INEKF_USE_MUTEX
-        // RobotState(RobotState&& other); // Move initialization
-        RobotState(const RobotState& other); // Copy initialization
-        // RobotState& operator=(RobotState&& other); // Move assignment
-        RobotState& operator=(const RobotState& other); // Copy assignment
+        // qrRobotState(qrRobotState&& other); // Move initialization
+        qrRobotState(const qrRobotState& other); // Copy initialization
+        // qrRobotState& operator=(qrRobotState&& other); // Move assignment
+        qrRobotState& operator=(const qrRobotState& other); // Copy assignment
 #endif
         
         const Eigen::MatrixXd getX();
@@ -60,7 +60,7 @@ class RobotState {
 
         void copyDiagX(int n, Eigen::MatrixXd& BigX);
 
-        friend std::ostream& operator<<(std::ostream& os, const RobotState& s);  
+        friend std::ostream& operator<<(std::ostream& os, const qrRobotState& s);  
 
     private:
         Eigen::MatrixXd X_;

@@ -42,7 +42,7 @@ namespace Quadruped {
 
     void qrRobotPoseEstimator::Update(float currentTime)
     {
-        const RobotState &robotState = robot->state;
+        const qrRobotState &robotState = robot->state;
         // Propagate current state estimate with new accelerometer reading."""
         // float deltaTime = ComputeDeltaTime(&robotState);
         float deltaTime = 0.001f;

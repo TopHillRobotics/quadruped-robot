@@ -36,7 +36,7 @@ int stoi98(const std::string &s) {
 
 int main() {
     //  ---- Initialize invariant extended Kalman filter ----- //
-    RobotState initial_state; 
+    qrRobotState initial_state; 
 
     // Initialize state mean
     Eigen::Matrix3d R0;

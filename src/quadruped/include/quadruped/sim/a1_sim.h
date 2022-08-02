@@ -23,11 +23,11 @@ namespace Quadruped {
     /**
      * @brief a1 robot class in simulation.
      */
-    class A1Sim : public qrRobot {
+    class qrRobotA1Sim : public qrRobot {
     public:
-        A1Sim(ros::NodeHandle &nhIn, ros::NodeHandle &privateNhIn, std::string configFilePath);
+        qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath);
 
-        ~A1Sim() = default;
+        ~qrRobotA1Sim() = default;
 
         void SendCommand(const std::array<float, 60> motorcmd);
 
@@ -65,21 +65,44 @@ namespace Quadruped {
 
         void RLfootCallback(const geometry_msgs::WrenchStamped &msg);
 
+        /**
+         * @brief override the method in qrRobot
+         */
         void ReceiveObservation() override;
 
+        /**
+         * @brief override the method in qrRobot
+         */
         void ApplyAction(const Eigen::MatrixXf &motorCommands, MotorMode motorControlMode) override;
 
+        /**
+         * @brief override the method in qrRobot
+         */
         void Step(const Eigen::MatrixXf &action, MotorMode motorControlMode) override;
 
         ros::NodeHandle & nh;
-        ros::NodeHandle & privateNh;
 
         unitree_legged_msgs::LowCmd lowCmd;
         //unitree_legged_msgs::LowState lowState;
 
+        /**
+         * @brief ROS joint commander publisher
+         */
         ros::Publisher jointCmdPub[12];
+
+        /**
+         * @brief ROS joint state subscriber
+         */
         ros::Subscriber jointStateSub[12];
+
+        /**
+         * @brief ROS foot force subscriber
+         */
         ros::Subscriber footForceSub[4];
+
+        /**
+         * @brief ROS IMU state subscriber
+         */
         ros::Subscriber imuSub;
     };
 } // namespace Quadruped

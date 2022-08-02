@@ -134,7 +134,6 @@ int main(int argc, char **argv)
 
     ros::init(argc, argv, "trot_velocity_motion");
     ros::NodeHandle nh;
-    ros::NodeHandle privateNh("~");
 
     std::string pathToPackage = ros::package::getPath("a1sim");
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
@@ -169,7 +168,7 @@ int main(int argc, char **argv)
     spinner.start();
     std::cout << "---------ROS node init finished---------" << std::endl;
 
-    qrRobot *quadruped = new A1Sim(nh, privateNh, pathToNode + "/config/a1_sim.yaml");
+    qrRobot *quadruped = new qrRobotA1Sim(nh, pathToNode + "/config/a1_sim.yaml");
     quadruped->ReceiveObservation();
     std::cout << "BaseOrientation:\n" << quadruped->GetBaseOrientation().transpose() << std::endl;
 
@@ -181,7 +180,7 @@ int main(int argc, char **argv)
     ROS_INFO("qrLocomotionController Reset Finished");
 
     // ros module init
-    qrVelocityParamReceiver *cmdVelReceiver = new qrVelocityParamReceiver (nh, privateNh);
+    qrVelocityParamReceiver *cmdVelReceiver = new qrVelocityParamReceiver(nh);
     ROS_INFO("ROS Modules Init Finished");
 
     ROS_INFO("TimeSinceReset: %f", quadruped->GetTimeSinceReset());

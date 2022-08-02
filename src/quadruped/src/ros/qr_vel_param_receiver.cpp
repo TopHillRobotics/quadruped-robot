@@ -9,8 +9,8 @@
 
 #include "ros/qr_vel_param_receiver.h"
 namespace Quadruped {
-    qrVelocityParamReceiver::qrVelocityParamReceiver (ros::NodeHandle &nhIn, ros::NodeHandle &privateNhIn)
-        : nh(nhIn), privateNh(privateNhIn)
+    qrVelocityParamReceiver::qrVelocityParamReceiver (ros::NodeHandle &nhIn)
+        : nh(nhIn)
     {
         ROS_INFO("command velocity topic: %s", cmdVelTopic.c_str());
         cmdVelSub = nh.subscribe(cmdVelTopic, 10, &qrVelocityParamReceiver::CmdVelCallback, this);

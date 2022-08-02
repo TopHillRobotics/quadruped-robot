@@ -44,7 +44,7 @@ int main()
 {
     // Initialize filter
     Eigen::MatrixXd X = Eigen::MatrixXd::Identity(10,10);
-    RobotState state(X);
+    qrRobotState state(X);
     InEKF filter(state);
 
     cout << "qrRobot's state is initialized to: \n";

@@ -1,8 +1,32 @@
+// The MIT License
+
+// Copyright (c) 2022
+// qrRobot Motion and Vision Laboratory at East China Normal University
+// Contact:tophill.robotics@gmail.com
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 #include "robots/qr_robot_state.h"
 
 static bool firstObservation = true;
 
-RobotState::RobotState(qrRobotConfig*& config):config(config)
+qrRobotState::qrRobotState(qrRobotConfig*& config):config(config)
 {
     Eigen::Matrix<float, 3, 1> basePosition = {0.f, 0.f, config->bodyHeight};
     baseOrientation << 1.f, 0.f, 0.f, 0.f;
@@ -14,7 +38,7 @@ RobotState::RobotState(qrRobotConfig*& config):config(config)
     std::cout <<" robot state initialized" << std::endl;
 }
 
-void RobotState::Update()
+void qrRobotState::Update()
 {
     if(firstObservation){
         yawOffset = imu.rpy[2]; // todo
@@ -33,7 +57,7 @@ void RobotState::Update()
 }
 
 
-float RobotState::CalibrateYaw()
+float qrRobotState::CalibrateYaw()
 {
     float calibratedYaw = imu.rpy[2] - yawOffset;
     if (calibratedYaw >= M_PI) {
@@ -44,12 +68,12 @@ float RobotState::CalibrateYaw()
     return calibratedYaw;
 }
 
-Eigen::Matrix<float, 3, 4> RobotState::GetFootPositionsInBaseFrame()
+Eigen::Matrix<float, 3, 4> qrRobotState::GetFootPositionsInBaseFrame()
 {
     return config->FootPositionsInBaseFrame(this->motorAngles);
 }
 
-Eigen::Matrix<float, 3, 4> RobotState::GetFootPositionsInWorldFrame(bool useInput, Vec3<float> basePositionIn, Quat<float> baseOrientationIn)
+Eigen::Matrix<float, 3, 4> qrRobotState::GetFootPositionsInWorldFrame(bool useInput, Vec3<float> basePositionIn, Quat<float> baseOrientationIn)
 {
     Eigen::Matrix<float, 3, 4> footPositionsInBaseFrame = GetFootPositionsInBaseFrame(); // base to  world frame
     if (!useInput) {
@@ -59,14 +83,14 @@ Eigen::Matrix<float, 3, 4> RobotState::GetFootPositionsInWorldFrame(bool useInpu
     }
 }
 
-Eigen::Matrix<float, 3, 3> RobotState::ComputeJacobian(int legId)
+Eigen::Matrix<float, 3, 3> qrRobotState::ComputeJacobian(int legId)
 {
     Eigen::Matrix<float, 3, 1> legMotorAngles;
     legMotorAngles << this->motorAngles.block(legId * 3, 0, 3, 1);
     return config->AnalyticalLegJacobian(legMotorAngles, legId);
 }
 
-std::map<int, float> RobotState::MapContactForceToJointTorques(int legId, Eigen::Matrix<float, 3, 1> contractForce)
+std::map<int, float> qrRobotState::MapContactForceToJointTorques(int legId, Eigen::Matrix<float, 3, 1> contractForce)
 {
     Eigen::Matrix<float, 3, 3> jv = ComputeJacobian(legId);
     Eigen::Matrix<float, 3, 1> motorTorquesPerLeg = jv.transpose() * contractForce; // TODO TEST

@@ -5,13 +5,13 @@
  * -------------------------------------------------------------------------- */
 
 /**
- *  @file   RobotState.h
+ *  @file   qrRobotState.h
  *  @author Ross Hartley
- *  @brief  Source file for RobotState (thread-safe)
+ *  @brief  Source file for qrRobotState (thread-safe)
  *  @date   September 25, 2018
  **/
 
-#include "RobotState.h"
+#include "qrRobotState.h"
 #include "LieGroup.h"
 
 namespace inekf {
@@ -19,7 +19,7 @@ namespace inekf {
 using namespace std;
 
 // Default constructor
-RobotState::RobotState() :
+qrRobotState::qrRobotState() :
     X_(Eigen::MatrixXd::Identity(5,5)), Theta_(Eigen::MatrixXd::Zero(6,1)), P_(Eigen::MatrixXd::Identity(15,15)) 
 {
     cout << "creating a robot state 1 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
@@ -49,7 +49,7 @@ RobotState::RobotState() :
     // }
 }
 // Initialize with Xs
-RobotState::RobotState(const Eigen::MatrixXd& X) : 
+qrRobotState::qrRobotState(const Eigen::MatrixXd& X) : 
     X_(X), Theta_(Eigen::MatrixXd::Zero(6,1)) 
 {
     // cout << "creating a robot state" << endl;
@@ -77,18 +77,18 @@ RobotState::RobotState(const Eigen::MatrixXd& X) :
     }
 }
 // Initialize with X and Theta
-RobotState::RobotState(const Eigen::MatrixXd& X, const Eigen::VectorXd& Theta) : 
+qrRobotState::qrRobotState(const Eigen::MatrixXd& X, const Eigen::VectorXd& Theta) : 
     X_(X), Theta_(Theta) {
     P_ = Eigen::MatrixXd::Identity(3*this->dimX()+this->dimTheta()-6, 3*this->dimX()+this->dimTheta()-6);
 }
 // Initialize with X, Theta and P
-RobotState::RobotState(const Eigen::MatrixXd& X, const Eigen::VectorXd& Theta, const Eigen::MatrixXd& P) : 
+qrRobotState::qrRobotState(const Eigen::MatrixXd& X, const Eigen::VectorXd& Theta, const Eigen::MatrixXd& P) : 
     X_(X), Theta_(Theta), P_(P) {}
 // TODO: error checking to make sure dimensions are correct and supported
 
 
 // // Move initialization
-// RobotState::RobotState(RobotState&& other) {
+// qrRobotState::qrRobotState(qrRobotState&& other) {
 //     lock_guard<mutex> lock(other.mutex_);
 //     X_ = std::move(other.X_);
 //     other.X_ = Eigen::MatrixXd;
@@ -96,7 +96,7 @@ RobotState::RobotState(const Eigen::MatrixXd& X, const Eigen::VectorXd& Theta, c
 
 #if INEKF_USE_MUTEX
 // Copy initialization
-RobotState::RobotState(const RobotState& other) {
+qrRobotState::qrRobotState(const qrRobotState& other) {
     lock_guard<mutex> other_lock(other.mutex_);
     X_ = other.X_;
     Theta_ = other.Theta_;
@@ -104,7 +104,7 @@ RobotState::RobotState(const RobotState& other) {
 }
 
 // // Move assignment
-// RobotState::RobotState& operator = (RobotState&& other) {
+// qrRobotState::qrRobotState& operator = (qrRobotState&& other) {
 //     std::lock(mtx, other.mtx);
 //     std::lock_guard<std::mutex> self_lock(mtx, std::adopt_lock);
 //     std::lock_guard<std::mutex> other_lock(other.mtx, std::adopt_lock);
@@ -114,7 +114,7 @@ RobotState::RobotState(const RobotState& other) {
 // }
 
 // Copy assignment
-RobotState& RobotState::operator = (const RobotState& other) {
+qrRobotState& qrRobotState::operator = (const qrRobotState& other) {
     lock(mutex_, other.mutex_);
     lock_guard<mutex> self_lock(mutex_, adopt_lock);
     lock_guard<mutex> other_lock(other.mutex_, adopt_lock);
@@ -126,116 +126,116 @@ RobotState& RobotState::operator = (const RobotState& other) {
 #endif
 
 
-const Eigen::MatrixXd RobotState::getX() { 
+const Eigen::MatrixXd qrRobotState::getX() { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     return X_; 
 }
-const Eigen::VectorXd RobotState::getTheta() { 
+const Eigen::VectorXd qrRobotState::getTheta() { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     return Theta_; 
 }
-const Eigen::MatrixXd RobotState::getP() { 
+const Eigen::MatrixXd qrRobotState::getP() { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     return P_; 
 }
-const Eigen::Matrix3d RobotState::getRotation() { 
+const Eigen::Matrix3d qrRobotState::getRotation() { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     return X_.block<3,3>(0,0); 
 }
-const Eigen::Vector3d RobotState::getVelocity() { 
+const Eigen::Vector3d qrRobotState::getVelocity() { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     return X_.block<3,1>(0,3); 
 }
-const Eigen::Vector3d RobotState::getPosition() { 
+const Eigen::Vector3d qrRobotState::getPosition() { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     return X_.block<3,1>(0,4); 
 }
-const Eigen::Vector3d RobotState::getGyroscopeBias() { 
+const Eigen::Vector3d qrRobotState::getGyroscopeBias() { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     return Theta_.head(3); 
 }
-const Eigen::Vector3d RobotState::getAccelerometerBias() { 
+const Eigen::Vector3d qrRobotState::getAccelerometerBias() { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     return Theta_.tail(3); 
 }
-const int RobotState::dimX() { 
+const int qrRobotState::dimX() { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     return X_.cols(); 
 }
-const int RobotState::dimTheta() {
+const int qrRobotState::dimTheta() {
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     return Theta_.rows();
 }
-const int RobotState::dimP() { 
+const int qrRobotState::dimP() { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     return P_.cols(); 
 }
 
-void RobotState::setX(const Eigen::MatrixXd& X) { 
+void qrRobotState::setX(const Eigen::MatrixXd& X) { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     X_ = X; 
 }
-void RobotState::setTheta(const Eigen::VectorXd& Theta) { 
+void qrRobotState::setTheta(const Eigen::VectorXd& Theta) { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     Theta_ = Theta; 
 }
-void RobotState::setP(const Eigen::MatrixXd& P) { 
+void qrRobotState::setP(const Eigen::MatrixXd& P) { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     P_ = P; 
 }
-void RobotState::setRotation(const Eigen::Matrix3d& R) { 
+void qrRobotState::setRotation(const Eigen::Matrix3d& R) { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     X_.block<3,3>(0,0) = R; 
 }
-void RobotState::setVelocity(const Eigen::Vector3d& v) { 
+void qrRobotState::setVelocity(const Eigen::Vector3d& v) { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     X_.block<3,1>(0,3) = v; 
 }
-void RobotState::setPosition(const Eigen::Vector3d& p) { 
+void qrRobotState::setPosition(const Eigen::Vector3d& p) { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     X_.block<3,1>(0,4) = p; 
 }
-void RobotState::setGyroscopeBias(const Eigen::Vector3d& bg) { 
+void qrRobotState::setGyroscopeBias(const Eigen::Vector3d& bg) { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
     Theta_.head(3) = bg; 
 }
-void RobotState::setAccelerometerBias(const Eigen::Vector3d& ba) { 
+void qrRobotState::setAccelerometerBias(const Eigen::Vector3d& ba) { 
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(mutex_);
 #endif
@@ -243,7 +243,7 @@ void RobotState::setAccelerometerBias(const Eigen::Vector3d& ba) {
 }
 
 
-void RobotState::copyDiagX(int n, Eigen::MatrixXd& BigX) {
+void qrRobotState::copyDiagX(int n, Eigen::MatrixXd& BigX) {
     int dimX = this->dimX();
     for(int i=0; i<n; ++i) {
         int startIndex = BigX.rows();
@@ -258,7 +258,7 @@ void RobotState::copyDiagX(int n, Eigen::MatrixXd& BigX) {
     return;
 }
 
-ostream& operator<<(ostream& os, const RobotState& s) {  
+ostream& operator<<(ostream& os, const qrRobotState& s) {  
 #if INEKF_USE_MUTEX
     unique_lock<mutex> mlock(s.mutex_);
 #endif

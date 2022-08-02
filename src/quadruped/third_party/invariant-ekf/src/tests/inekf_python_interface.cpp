@@ -50,8 +50,8 @@ public:
     void ReceiveImuDataInSim(double T, const pybind11::dict& dictionary);
     void ReceiveImuData(double T, const IMU& imu);
     void ReceiveLandmarkData(double T, mapIntVector3d& prior_landmarks){ ;};
-    RobotState Update_1();
-    RobotState Update_2();
+    qrRobotState Update_1();
+    qrRobotState Update_2();
     void UpdateContact(std::array<bool, 4> is_contacts);
 
     const Eigen::MatrixXd getRobotStateX();
@@ -68,7 +68,7 @@ private:
     // Initialize state mean
     Eigen::Matrix3d R0;
     Eigen::Vector3d v0, p0, bg0, ba0;
-    RobotState initial_state;
+    qrRobotState initial_state;
     NoiseParams noise_params;
     InEKF filter;
     Eigen::Matrix<double,6,1> imu_measurement = Eigen::Matrix<double,6,1>::Zero();
@@ -277,7 +277,7 @@ void INEKFInterface::UpdateContact(std::array<bool, 4> is_contacts){
 }
 
 
-RobotState INEKFInterface::Update_1(){
+qrRobotState INEKFInterface::Update_1(){
     // Propagate
     // Propagate using IMU data
     double dt = t - t_prev;
@@ -292,16 +292,16 @@ RobotState INEKFInterface::Update_1(){
     t_prev = t;
     imu_measurement_prev = imu_measurement;
     // Print Propagated state
-    const RobotState& state = filter.getState();
+    const qrRobotState& state = filter.getState();
     // cout << state << endl;
     return state;
 }
 
-RobotState INEKFInterface::Update_2(){
+qrRobotState INEKFInterface::Update_2(){
     // Correct
     filter.CorrectKinematics(measured_kinematics);
     // Print final state
-    const RobotState& state = filter.getState();
+    const qrRobotState& state = filter.getState();
     // cout << state << endl;
     return state;
 }
@@ -320,16 +320,16 @@ PYBIND11_MODULE(inekf_interface, m) {
       )pbdoc";
     // py::bind_vector<std::vector<Eigen::Quaterniond>>(m, "quatVector");
     // py::bind_vector<std::vector<Eigen::MatrixXd>>(m, "matVector");
-    py::class_<RobotState>(m, "RobotState")
+    py::class_<qrRobotState>(m, "qrRobotState")
         .def(py::init<>())
-        .def("getP", &RobotState::getP)
-        .def("getTheta", &RobotState::getTheta)
-        .def("getX", &RobotState::getX)
-        .def("getRotation", &RobotState::getRotation)
-        .def("getVelocity", &RobotState::getVelocity)
-        .def("getPosition", &RobotState::getPosition)
-        .def("getGyroscopeBias", &RobotState::getGyroscopeBias)
-        .def("getAccelerometerBias", &RobotState::getAccelerometerBias);        
+        .def("getP", &qrRobotState::getP)
+        .def("getTheta", &qrRobotState::getTheta)
+        .def("getX", &qrRobotState::getX)
+        .def("getRotation", &qrRobotState::getRotation)
+        .def("getVelocity", &qrRobotState::getVelocity)
+        .def("getPosition", &qrRobotState::getPosition)
+        .def("getGyroscopeBias", &qrRobotState::getGyroscopeBias)
+        .def("getAccelerometerBias", &qrRobotState::getAccelerometerBias);        
     
     py::class_<INEKFInterface>(m, "INEKFInterface")
         .def(py::init<>())

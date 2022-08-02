@@ -41,7 +41,7 @@ namespace Quadruped {
     class qrVelocityParamReceiver {
 
     public:
-        qrVelocityParamReceiver (ros::NodeHandle &nhIn, ros::NodeHandle &privateNhIn);
+        qrVelocityParamReceiver (ros::NodeHandle &nhIn);
 
         ~qrVelocityParamReceiver () = default;
 
@@ -59,7 +59,6 @@ namespace Quadruped {
 
         geometry_msgs::Twist cmdVel;
         ros::NodeHandle &nh;
-        ros::NodeHandle &privateNh;
         ros::Subscriber cmdVelSub;
         std::string cmdVelTopic = "/velocity_param";
     private:

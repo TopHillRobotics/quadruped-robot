@@ -60,9 +60,9 @@ public:
     
     void ReceiveLandmarkData(double T, mapIntVector3d& prior_landmarks){ ;}
     
-    RobotState Update_1(Vec3<double> v);
+    qrRobotState Update_1(Vec3<double> v);
     
-    RobotState Update_2();
+    qrRobotState Update_2();
     
     void UpdateContact(Eigen::Matrix<bool, 4, 1> isContacts);
 
@@ -88,7 +88,7 @@ private:
     // Initialize state mean
     Eigen::Matrix3d R0;
     Eigen::Vector3d v0, p0, bg0, ba0;
-    RobotState initial_state;
+    qrRobotState initial_state;
     NoiseParams noise_params;
     InEKF filter;
     Eigen::Matrix<double,6,1> imu_measurement = Eigen::Matrix<double,6,1>::Zero();

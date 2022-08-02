@@ -47,18 +47,18 @@ InEKF::InEKF() : g_((Eigen::VectorXd(3) << 0,0,-9.81).finished()){
 InEKF::InEKF(NoiseParams params) : g_((Eigen::VectorXd(3) << 0,0,-9.81).finished()), noise_params_(params) {}
 
 // Constructor with initial state
-InEKF::InEKF(RobotState state) : g_((Eigen::VectorXd(3) << 0,0,-9.81).finished()), state_(state) {}
+InEKF::InEKF(qrRobotState state) : g_((Eigen::VectorXd(3) << 0,0,-9.81).finished()), state_(state) {}
 
 // Constructor with initial state and noise params
-InEKF::InEKF(RobotState state, NoiseParams params) : g_((Eigen::VectorXd(3) << 0,0,-9.81).finished()), state_(state), noise_params_(params) {}
+InEKF::InEKF(qrRobotState state, NoiseParams params) : g_((Eigen::VectorXd(3) << 0,0,-9.81).finished()), state_(state), noise_params_(params) {}
 
 // Return robot's current state
-RobotState InEKF::getState() { 
+qrRobotState InEKF::getState() { 
     return state_; 
 }
 
 // Sets the robot's current state
-void InEKF::setState(RobotState state) { 
+void InEKF::setState(qrRobotState state) { 
     state_ = state;
 }
 

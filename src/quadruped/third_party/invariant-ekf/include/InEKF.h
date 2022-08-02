@@ -21,7 +21,7 @@
 #include <mutex>
 #endif
 #include <algorithm>
-#include "RobotState.h"
+#include "qrRobotState.h"
 #include "NoiseParams.h"
 #include "LieGroup.h"
 
@@ -78,16 +78,16 @@ class InEKF {
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
         InEKF();
         InEKF(NoiseParams params);
-        InEKF(RobotState state);
-        InEKF(RobotState state, NoiseParams params);
+        InEKF(qrRobotState state);
+        InEKF(qrRobotState state, NoiseParams params);
 
-        RobotState getState();
+        qrRobotState getState();
         NoiseParams getNoiseParams();
         mapIntVector3d getPriorLandmarks();
         std::map<int,int> getEstimatedLandmarks();
         std::map<int,bool> getContacts();
         std::map<int,int> getEstimatedContactPositions();
-        void setState(RobotState state);
+        void setState(qrRobotState state);
         void setOrientation(Eigen::Matrix3d ori) {
             state_.setRotation(ori);
         }
@@ -106,7 +106,7 @@ class InEKF {
         }
     private:
         long long sCount=0;
-        RobotState state_;
+        qrRobotState state_;
         NoiseParams noise_params_;
         const Eigen::Vector3d g_; // Gravity
         mapIntVector3d prior_landmarks_;

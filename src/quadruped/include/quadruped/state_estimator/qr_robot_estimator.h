@@ -65,7 +65,7 @@ namespace Quadruped {
         Vec3<float> estimatedRPY;
         Vec3<float> estimatedVelocity;
         Vec3<float> estimatedAngularVelocity;
-        // inekf::RobotState estimatedState; 
+        // inekf::qrRobotState estimatedState; 
         // inekf::INEKFInterface inekf_;
         // IMU imuData;
         float lastTimestamp;
