@@ -2,45 +2,42 @@
 
 std::unordered_map<int, std::string> modeMap = {{0, "velocity"}, {1, "position"}, {2, "walk"}};
 
-RobotConfig::RobotConfig(std::string path)
+qrRobotConfig::qrRobotConfig(std::string path)
 {
     Load(path);
 }
 
-void RobotConfig::Load(std::string path)
+void qrRobotConfig::Load(std::string path)
 {
-    configFilePath = path;
-    robotConfig = YAML::LoadFile(configFilePath);
+    YAML::Node qrRobotConfig = YAML::LoadFile(path);
 
-    robotName = robotConfig["name"].as<std::string>();
-
-    bodyMass = robotConfig["robot_params"]["body_mass"].as<float>();
-    std::vector<float> bodyInertiaList = robotConfig["robot_params"]["body_inertia"].as<std::vector<float >>();
+    bodyMass = qrRobotConfig["robot_params"]["body_mass"].as<float>();
+    std::vector<float> bodyInertiaList = qrRobotConfig["robot_params"]["body_inertia"].as<std::vector<float >>();
     bodyInertia = Eigen::MatrixXf::Map(&bodyInertiaList[0], 3, 3);
-    bodyHeight = robotConfig["robot_params"]["body_height"].as<float>();
+    bodyHeight = qrRobotConfig["robot_params"]["body_height"].as<float>();
 
-    hipLength = robotConfig["robot_params"]["hip_l"].as<float>();
-    upperLegLength = robotConfig["robot_params"]["upper_l"].as<float>();
-    lowerLegLength = robotConfig["robot_params"]["lower_l"].as<float>();
-    controlParams["mode"] = robotConfig["controller_params"]["mode"].as<int>(); // types.h: enum
+    hipLength = qrRobotConfig["robot_params"]["hip_l"].as<float>();
+    upperLegLength = qrRobotConfig["robot_params"]["upper_l"].as<float>();
+    lowerLegLength = qrRobotConfig["robot_params"]["lower_l"].as<float>();
+    controlParams["mode"] = qrRobotConfig["controller_params"]["mode"].as<int>(); // types.h: enum
 
-    LoadComOffset(robotConfig);
-    LoadHipOffset(robotConfig);
-    LoadHipPosition(robotConfig);
-    LoadKps(robotConfig);
-    LoadKds(robotConfig);
+    LoadComOffset(qrRobotConfig);
+    LoadHipOffset(qrRobotConfig);
+    LoadHipPosition(qrRobotConfig);
+    LoadKps(qrRobotConfig);
+    LoadKds(qrRobotConfig);
 
 //    std::vector<float>
-//        jointDirectionList = robotConfig["motor_params"]["joint_directions"].as<std::vector<float >>();
+//        jointDirectionList = qrRobotConfig["motor_params"]["joint_directions"].as<std::vector<float >>();
 //    std::vector<float>
-//        jointOffsetList = robotConfig["motor_params"]["joint_offsets"].as<std::vector<float >>();
+//        jointOffsetList = qrRobotConfig["motor_params"]["joint_offsets"].as<std::vector<float >>();
 //    jointDirection = Eigen::MatrixXf::Map(&jointDirectionList[0], 12, 1);
 //    jointOffset = Eigen::MatrixXf::Map(&jointOffsetList[0], 12, 1);
 
-    isSim = robotConfig["is_sim"].as<bool>();
+    isSim = qrRobotConfig["is_sim"].as<bool>();
 }
 
-void RobotConfig::LoadKps(YAML::Node &node)
+void qrRobotConfig::LoadKps(YAML::Node &node)
 {
     float abadKp, hipKp, kneeKp;
     abadKp = node["motor_params"]["abad_p"].as<float>();
@@ -50,7 +47,7 @@ void RobotConfig::LoadKps(YAML::Node &node)
     motorKps << kps, kps, kps, kps;
 }
 
-void RobotConfig::LoadKds(YAML::Node &node)
+void qrRobotConfig::LoadKds(YAML::Node &node)
 {
     float abadKd, hipKd, kneeKd;
     abadKd = node["motor_params"]["abad_d"].as<float>();
@@ -60,13 +57,13 @@ void RobotConfig::LoadKds(YAML::Node &node)
     motorKds << kds, kds, kds, kds;
 }
 
-void RobotConfig::LoadComOffset(YAML::Node &node)
+void qrRobotConfig::LoadComOffset(YAML::Node &node)
 {
     std::vector<float> comOffsetList = node["robot_params"][modeMap[controlParams["mode"]]]["com_offset"].as<std::vector<float >>();
     comOffset = -Eigen::MatrixXf::Map(&comOffsetList[0], 3, 1);
 }
 
-void RobotConfig::LoadHipOffset(YAML::Node &node)
+void qrRobotConfig::LoadHipOffset(YAML::Node &node)
 {
     std::vector<std::vector<float >> hipOffsetList =
         node["robot_params"]["hip_offset"].as<std::vector<std::vector<float>>>();
@@ -77,7 +74,7 @@ void RobotConfig::LoadHipOffset(YAML::Node &node)
     hipOffset << hipOffsetFR, hipOffsetFL, hipOffsetRL, hipOffsetRR;
 }
 
-void RobotConfig::LoadHipPosition(YAML::Node &node)
+void qrRobotConfig::LoadHipPosition(YAML::Node &node)
 {
     std::vector<std::vector<float>> defaultHipPositionList =
         node["robot_params"]["default_hip_positions"].as<std::vector<std::vector<float>>>();
@@ -88,7 +85,7 @@ void RobotConfig::LoadHipPosition(YAML::Node &node)
     defaultHipPosition << defaultHipPositionFR, defaultHipPositionFL, defaultHipPositionRL, defaultHipPositionRR;
 }
 
-Eigen::Matrix<float, 3, 1> RobotConfig::FootPositionInHipFrameToJointAngle(Eigen::Matrix<float, 3, 1> &footPosition, int hipSign)
+Eigen::Matrix<float, 3, 1> qrRobotConfig::FootPositionInHipFrameToJointAngle(Eigen::Matrix<float, 3, 1> &footPosition, int hipSign)
 {
     float signedHipLength = hipLength * hipSign;
     Eigen::Matrix<float, 3, 1> xyz(footPosition[0], footPosition[1], footPosition[2]);
@@ -106,7 +103,7 @@ Eigen::Matrix<float, 3, 1> RobotConfig::FootPositionInHipFrameToJointAngle(Eigen
     return Eigen::Matrix<float, 3, 1>(thetaAB, thetaHip, thetaKnee);
 }
 
-Eigen::Matrix<float, 3, 1> RobotConfig::FootPositionInHipFrame(Eigen::Matrix<float, 3, 1> &angles, int hipSign)
+Eigen::Matrix<float, 3, 1> qrRobotConfig::FootPositionInHipFrame(Eigen::Matrix<float, 3, 1> &angles, int hipSign)
 {
     float thetaAB = angles[0], thetaHip = angles[1], thetaKnee = angles[2];
     float signedHipLength = hipLength * hipSign;
@@ -125,7 +122,7 @@ Eigen::Matrix<float, 3, 1> RobotConfig::FootPositionInHipFrame(Eigen::Matrix<flo
     return Eigen::Matrix<float, 3, 1>(offX, offY, offZ);
 }
 
-Eigen::Matrix<float, 3, 3> RobotConfig::AnalyticalLegJacobian(Eigen::Matrix<float, 3, 1> &legAngles, int legId)
+Eigen::Matrix<float, 3, 3> qrRobotConfig::AnalyticalLegJacobian(Eigen::Matrix<float, 3, 1> &legAngles, int legId)
 {
     float signedHipLength = hipLength * pow(-1, legId + 1);
     Eigen::Matrix<float, 3, 1> t = legAngles;
@@ -151,12 +148,12 @@ Eigen::Matrix<float, 3, 3> RobotConfig::AnalyticalLegJacobian(Eigen::Matrix<floa
     return J;
 }
 
-Eigen::Matrix<float, 3, 4> RobotConfig::FootPositionsInBaseFrame(Eigen::Matrix<float, 12, 1> footAngles)
+Eigen::Matrix<float, 3, 4> qrRobotConfig::FootPositionsInBaseFrame(Eigen::Matrix<float, 12, 1> footAngles)
 {
     Eigen::Map<Eigen::MatrixXf> reshapedFootAngles(footAngles.data(), 3, 4);
 
     Eigen::MatrixXf footPositions = Eigen::Matrix<float, 3, 4>::Zero();
-    for (int legId = 0; legId < RobotConfig::numLegs; legId++) {
+    for (int legId = 0; legId < qrRobotConfig::numLegs; legId++) {
         Eigen::Matrix<float, 3, 1> singleFootAngles;
         singleFootAngles << reshapedFootAngles.col(legId);
         footPositions.col(legId) = FootPositionInHipFrame(singleFootAngles, pow((-1), legId + 1));
@@ -164,12 +161,12 @@ Eigen::Matrix<float, 3, 4> RobotConfig::FootPositionsInBaseFrame(Eigen::Matrix<f
     return footPositions + hipOffset;
 }
 
-void RobotConfig::ComputeMotorAnglesFromFootLocalPosition(int legId,
+void qrRobotConfig::ComputeMotorAnglesFromFootLocalPosition(int legId,
                                                     Eigen::Matrix<float, 3, 1> footLocalPosition,
                                                     Eigen::Matrix<int, 3, 1> &jointIdx,
                                                     Eigen::Matrix<float, 3, 1> &jointAngles)
 {
-    int motorPreLeg = RobotConfig::dofPerLeg;
+    int motorPreLeg = qrRobotConfig::dofPerLeg;
     jointIdx << motorPreLeg * legId, motorPreLeg * legId + 1, motorPreLeg * legId + 2;
 
     Eigen::Matrix<float, 3, 1> singleHipOffset;
@@ -179,7 +176,7 @@ void RobotConfig::ComputeMotorAnglesFromFootLocalPosition(int legId,
 
 }
 
-Eigen::Matrix<float, 3, 1> RobotConfig::ComputeMotorVelocityFromFootLocalVelocity(int legId,
+Eigen::Matrix<float, 3, 1> qrRobotConfig::ComputeMotorVelocityFromFootLocalVelocity(int legId,
                                                 Eigen::Matrix<float, 3, 1> legAngles,
                                                 Eigen::Matrix<float, 3, 1> footLocalVelocity)
 {

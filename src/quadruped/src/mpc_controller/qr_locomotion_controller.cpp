@@ -75,7 +75,7 @@ namespace Quadruped {
         auto [stanceAction, qpSol] = stanceLegController->GetAction(); // map<int, qrMotorCommand>
         std::vector<qrMotorCommand> action;
         // copy motors' actions from subcontrollers to output variable.         
-        for (int joint_id = 0; joint_id < RobotConfig::numMotors; ++joint_id) {
+        for (int joint_id = 0; joint_id < qrRobotConfig::numMotors; ++joint_id) {
             auto it = swingAction.find(joint_id);
             if (it != swingAction.end()) {
                 action.push_back(it->second);

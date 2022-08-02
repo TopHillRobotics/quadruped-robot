@@ -2,7 +2,7 @@
 
 static bool firstObservation = true;
 
-RobotState::RobotState(RobotConfig*& config):config(config)
+RobotState::RobotState(qrRobotConfig*& config):config(config)
 {
     Eigen::Matrix<float, 3, 1> basePosition = {0.f, 0.f, config->bodyHeight};
     baseOrientation << 1.f, 0.f, 0.f, 0.f;
@@ -23,11 +23,11 @@ void RobotState::Update()
     baseRollPitchYaw << imu.rpy[0], imu.rpy[1], CalibrateYaw();
     baseOrientation = robotics::math::rpyToQuat(baseRollPitchYaw);
     baseRollPitchYawRate << imu.gyroscope[0], imu.gyroscope[1], imu.gyroscope[2];
-    for (int motorId = 0; motorId < RobotConfig::numMotors; motorId++) {
+    for (int motorId = 0; motorId < qrRobotConfig::numMotors; motorId++) {
         motorAngles[motorId] = motorState[motorId].q;
         motorVelocities[motorId] = motorState[motorId].dq;
     }
-    for (int footId = 0; footId < RobotConfig::numLegs; footId++) {
+    for (int footId = 0; footId < qrRobotConfig::numLegs; footId++) {
         footContact[footId] = footForce[footId] > 5 ? true : false;
     }
 }
@@ -72,7 +72,7 @@ std::map<int, float> RobotState::MapContactForceToJointTorques(int legId, Eigen:
     Eigen::Matrix<float, 3, 1> motorTorquesPerLeg = jv.transpose() * contractForce; // TODO TEST
     std::map<int, float> motorTorquesDict;
     for (int torqueIndex = 0; torqueIndex < motorTorquesPerLeg.size(); torqueIndex++) {
-        int jointIndex = torqueIndex + legId * RobotConfig::dofPerLeg;
+        int jointIndex = torqueIndex + legId * qrRobotConfig::dofPerLeg;
         motorTorquesDict[jointIndex] = motorTorquesPerLeg[torqueIndex];
     }
     return motorTorquesDict;

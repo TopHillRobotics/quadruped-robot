@@ -56,7 +56,7 @@ qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir,
                                                                                    desiredSpeed,
                                                                                    desiredTwistingSpeed,
                                                                                    quadruped->config->bodyHeight,
-                                                                                   RobotConfig::numLegs,
+                                                                                   qrRobotConfig::numLegs,
                                                                                    homeDir + "/config/stance_leg_controller.yaml");
 
     std::cout << "init stanceLegController finish\n" << std::endl;

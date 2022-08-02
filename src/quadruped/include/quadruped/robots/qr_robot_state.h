@@ -27,7 +27,7 @@ struct MotorState
 class RobotState{
 public:
 
-    RobotState(RobotConfig*& config);
+    RobotState(qrRobotConfig*& config);
 
     Eigen::Matrix<float, 3, 1> basePosition; //robot base position in world frame
     Eigen::Matrix<float, 4, 1> baseOrientation; //robot base orientation in world frame
@@ -40,7 +40,7 @@ public:
     Eigen::Matrix<bool, 4, 1> footContact;
 
     float yawOffset = 0.f;
-    RobotConfig* &config;
+    qrRobotConfig* &config;
     IMU imu;
     std::array<MotorState, 20> motorState;
 

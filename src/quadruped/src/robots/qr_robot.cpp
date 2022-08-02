@@ -8,7 +8,7 @@
 */
 #include "robots/qr_robot.h"
 namespace Quadruped {
-    qrRobot::qrRobot(std::string path):config(new RobotConfig(path)),state(RobotState(config))
+    qrRobot::qrRobot(std::string path):config(new qrRobotConfig(path)),state(RobotState(config))
     {
     }
 } // namespace Quadruped

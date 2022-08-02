@@ -28,7 +28,7 @@ namespace Quadruped {
         Eigen::Matrix<float, 3, 1> defaultSitDownAngle(sitDownAbAngle, sitDownHipAngle, sitDownKneeAngle);
         sitDownMotorAngles << defaultSitDownAngle, defaultSitDownAngle, defaultSitDownAngle, defaultSitDownAngle;
 
-        // controlParams["mode"] = robotConfig["controller_params"]["mode"].as<int>(); //types.h: enum
+        // controlParams["mode"] = qrRobotConfig["controller_params"]["mode"].as<int>(); //types.h: enum
 
         imuSub = nh.subscribe("/trunk_imu", 1, &A1Sim::ImuCallback, this);
         jointStateSub[0] = nh.subscribe("a1_gazebo/FR_hip_controller/state", 1, &A1Sim::FRhipCallback, this);
@@ -216,7 +216,7 @@ namespace Quadruped {
         std::array<float, 60> motorCommandsArray = {0};
         if (motorControlMode == POSITION_MODE) {
             Eigen::Matrix<float, 1, 12> motorCommandsShaped = motorCommands.transpose();
-            for (int motorId = 0; motorId < RobotConfig::numMotors; motorId++) {
+            for (int motorId = 0; motorId < qrRobotConfig::numMotors; motorId++) {
                 motorCommandsArray[motorId * 5] = motorCommandsShaped[motorId];
                 motorCommandsArray[motorId * 5 + 1] = config->motorKps[motorId];
                 motorCommandsArray[motorId * 5 + 2] = 0;
@@ -225,7 +225,7 @@ namespace Quadruped {
             }
         } else if (motorControlMode == TORQUE_MODE) {
             Eigen::Matrix<float, 1, 12> motorCommandsShaped = motorCommands.transpose();
-            for (int motorId = 0; motorId < RobotConfig::numMotors; motorId++) {
+            for (int motorId = 0; motorId < qrRobotConfig::numMotors; motorId++) {
                 motorCommandsArray[motorId * 5] = 0;
                 motorCommandsArray[motorId * 5 + 1] = 0;
                 motorCommandsArray[motorId * 5 + 2] = 0;
@@ -234,7 +234,7 @@ namespace Quadruped {
             }
         } else if (motorControlMode == HYBRID_MODE) {
             Eigen::Matrix<float, 5, 12> motorCommandsShaped = motorCommands;
-            for (int motorId = 0; motorId < RobotConfig::numMotors; motorId++) {
+            for (int motorId = 0; motorId < qrRobotConfig::numMotors; motorId++) {
                 motorCommandsArray[motorId * 5] = motorCommandsShaped(POSITION, motorId);
                 motorCommandsArray[motorId * 5 + 1] = motorCommandsShaped(KP, motorId);
                 motorCommandsArray[motorId * 5 + 2] =

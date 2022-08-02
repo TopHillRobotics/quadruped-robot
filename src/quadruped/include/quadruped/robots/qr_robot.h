@@ -33,31 +33,63 @@ namespace Quadruped {
     class qrRobot {
 
     public:
-        qrRobot() = default;
-
+      /**
+         * @brief constructor of qrRobot
+         * @param path: path to config file
+         */
         qrRobot(std::string path);
 
         virtual ~qrRobot() = default;
 
-        /** @brief update observation in each loop. */
+        /**
+         * @brief update observation in each loop.
+         */
         virtual void ReceiveObservation() = 0;
 
+        /**
+         * @brief set and execute commands
+         * @param motorCommands: matrix of commands to execute
+         * @param motorControlMode: control mode
+         */
         virtual void ApplyAction(const Eigen::MatrixXf &motorCommands, MotorMode motorControlMode) = 0;
 
+        /**
+         * @brief set and execute commands
+         * @param motorCommands: vector of commands to execute
+         * @param motorControlMode: control mode
+         */
         virtual void ApplyAction(const std::vector<qrMotorCommand> &motorCommands, MotorMode motorControlMode)
         {};
 
+        /**
+         * @brief observe and apply action
+         * @param action: commands to execute
+         * @param motorControlMode: control mode
+         */
         virtual void Step(const Eigen::MatrixXf &action, MotorMode motorControlMode) = 0;
 
+        /**
+         * @brief observe and apply action
+         * @param motorCommands: commands to execute
+         * @param motorControlMode: control mode
+         */
         virtual void Step(const std::vector<qrMotorCommand> &motorCommands,
                           MotorMode motorControlMode)
         {};
 
+        /**
+         * @brief get current 12 motor angles
+         * @return vector of current motor angles
+         */
         inline Eigen::Matrix<float, 12, 1> GetMotorAngles()
         {
             return state.motorAngles;
         }
 
+        /**
+         * @brief get current 12 motor velocities
+         * @return vector of current motor velocities
+         */
         inline Eigen::Matrix<float, 12, 1> GetMotorVelocities() const
         {
             return state.motorVelocities;
@@ -99,39 +131,71 @@ namespace Quadruped {
             return state.baseRollPitchYawRate;
         }
 
+        /**
+         * @brief get contact state of 4 feet
+         * @return vector of foot contact
+         */
         inline Eigen::Matrix<bool, 4, 1> GetFootContacts() const
         {
             return state.footContact;
         }
 
+        /**
+         * @brief get current time of one step
+         * @return time step
+         */
         inline float GetTimeStep()
         { return timeStep; }
 
+        /**
+         * @brief get robot timer
+         * @return timer
+         */
         inline Timer &GetTimer()
         { return timer; }
 
+        /**
+         * @brief reset the timer
+         */
         void ResetTimer()
         {
             timer.ResetStartTime();
         }
 
+        /**
+         * @brief get time passed since robot reset
+         * @return time after reset
+         */
         float GetTimeSinceReset()
         {
             return timer.GetTimeSinceReset();
         }
 
+        /**
+         * @brief motor angles after robot stands up
+         */
         Eigen::Matrix<float, 12, 1> standUpMotorAngles; // default motor angle when robot stands.
 
+        /**
+         * @brief motor angles after robot sits down
+         */
         Eigen::Matrix<float, 12, 1> sitDownMotorAngles;
 
+        /**
+         * @brief control parameters
+         */
         std::map<std::string, int> controlParams;
 
         Timer timer;
+
         float timeStep;
+
         float lastResetTime = GetTimeSinceReset();
+
         bool initComplete = false;
 
-        RobotConfig *config;
+        qrRobotConfig *config;
+
         RobotState  state;
 
         bool stop = false;
