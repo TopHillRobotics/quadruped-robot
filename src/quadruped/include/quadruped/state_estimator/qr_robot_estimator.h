@@ -17,61 +17,58 @@
 #include "state_estimator/qr_robot_velocity_estimator.h"
 #include "state_estimator/qr_ground_estimator.h"
 
-namespace Quadruped {
-    /**
-     * @brief estimate robot state including pose and velocity
-     */
-    class qrRobotEstimator {
-    public:
-        qrRobotEstimator(qrRobot *robotIn,
-                       qrGaitGenerator *gaitGeneratorIn,
-                       qrGroundSurfaceEstimator *groundEstimatorIn);
+/**
+ * @brief estimate robot state including pose and velocity
+ */
+class qrRobotEstimator {
+public:
+    qrRobotEstimator(qrRobot *robotIn,
+                    qrGaitGenerator *gaitGeneratorIn,
+                    qrGroundSurfaceEstimator *groundEstimatorIn);
 
-        void Reset(float currentTime);
+    void Reset(float currentTime);
 
-        float ComputeDeltaTime(const LowState *robotState);
+    float ComputeDeltaTime(const LowState *robotState);
 
-        void Update(float currentTime);
+    void Update(float currentTime);
 
-        /** @brief get com velocity expressed in base frame. */
-        inline const Vec3<float> &GetEstimatedVelocity() const
-        {
-            return estimatedVelocity;
-        }
+    /** @brief get com velocity expressed in base frame. */
+    inline const Vec3<float> &GetEstimatedVelocity() const
+    {
+        return estimatedVelocity;
+    }
 
-        inline const Vec3<float> &GetEstimatedAngularVelocity() const
-        {
-            return estimatedAngularVelocity;
-        }
+    inline const Vec3<float> &GetEstimatedAngularVelocity() const
+    {
+        return estimatedAngularVelocity;
+    }
 
-        inline const Vec3<float> &GetEstimatedPosition() const
-        {
-            return estimatedPosition;
-        }
+    inline const Vec3<float> &GetEstimatedPosition() const
+    {
+        return estimatedPosition;
+    }
 
-        inline const Vec3<float> &GetEstimatedRPY()
-        {
-            // return inekf_.getRotation().cast<float>();
-            return estimatedRPY;
-        }
+    inline const Vec3<float> &GetEstimatedRPY()
+    {
+        // return inekf_.getRotation().cast<float>();
+        return estimatedRPY;
+    }
 
-    private:
-        qrRobot *robot;
-        qrRobotVelocityEstimator velocityEstimator;
-        qrRobotPoseEstimator poseEstimator;
+private:
+    qrRobot *robot;
+    qrRobotVelocityEstimator velocityEstimator;
+    qrRobotPoseEstimator poseEstimator;
 
-        float timeSinceReset;
-        Vec3<float> estimatedPosition;
-        Vec3<float> estimatedRPY;
-        Vec3<float> estimatedVelocity;
-        Vec3<float> estimatedAngularVelocity;
-        // inekf::qrRobotState estimatedState; 
-        // inekf::INEKFInterface inekf_;
-        // IMU imuData;
-        float lastTimestamp;
+    float timeSinceReset;
+    Vec3<float> estimatedPosition;
+    Vec3<float> estimatedRPY;
+    Vec3<float> estimatedVelocity;
+    Vec3<float> estimatedAngularVelocity;
+    // inekf::qrRobotState estimatedState; 
+    // inekf::INEKFInterface inekf_;
+    // IMU imuData;
+    float lastTimestamp;
 
-    };
-
-} // namespace Quadruped
+};
 
 #endif//ASCEND_QUADRUPED_CPP_ROBOT_ESTIMATOR_H

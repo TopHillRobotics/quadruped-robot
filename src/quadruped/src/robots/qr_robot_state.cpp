@@ -45,7 +45,7 @@ void qrRobotState::Update()
         firstObservation = false;
     }
     baseRollPitchYaw << imu.rpy[0], imu.rpy[1], CalibrateYaw();
-    baseOrientation = robotics::math::rpyToQuat(baseRollPitchYaw);
+    baseOrientation = math::rpyToQuat(baseRollPitchYaw);
     baseRollPitchYawRate << imu.gyroscope[0], imu.gyroscope[1], imu.gyroscope[2];
     for (int motorId = 0; motorId < qrRobotConfig::numMotors; motorId++) {
         motorAngles[motorId] = motorState[motorId].q;
@@ -77,9 +77,9 @@ Eigen::Matrix<float, 3, 4> qrRobotState::GetFootPositionsInWorldFrame(bool useIn
 {
     Eigen::Matrix<float, 3, 4> footPositionsInBaseFrame = GetFootPositionsInBaseFrame(); // base to  world frame
     if (!useInput) {
-        return robotics::math::invertRigidTransform(basePosition, baseOrientation, footPositionsInBaseFrame);
+        return math::invertRigidTransform(basePosition, baseOrientation, footPositionsInBaseFrame);
     } else {
-        return robotics::math::invertRigidTransform(basePositionIn, baseOrientationIn, footPositionsInBaseFrame);
+        return math::invertRigidTransform(basePositionIn, baseOrientationIn, footPositionsInBaseFrame);
     }
 }
 

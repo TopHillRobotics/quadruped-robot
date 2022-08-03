@@ -19,92 +19,90 @@
 #include "unitree_legged_msgs/MotorState.h"
 #include "robots/qr_robot.h"
 
-namespace Quadruped {
+/**
+ * @brief a1 robot class in simulation.
+ */
+class qrRobotA1Sim : public qrRobot {
+public:
+    qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath);
+
+    ~qrRobotA1Sim() = default;
+
+    void SendCommand(const std::array<float, 60> motorcmd);
+
+    void ImuCallback(const sensor_msgs::Imu &msg);
+
+    void FRhipCallback(const unitree_legged_msgs::MotorState &msg);
+
+    void FRthighCallback(const unitree_legged_msgs::MotorState &msg);
+
+    void FRcalfCallback(const unitree_legged_msgs::MotorState &msg);
+
+    void FLhipCallback(const unitree_legged_msgs::MotorState &msg);
+
+    void FLthighCallback(const unitree_legged_msgs::MotorState &msg);
+
+    void FLcalfCallback(const unitree_legged_msgs::MotorState &msg);
+
+    void RRhipCallback(const unitree_legged_msgs::MotorState &msg);
+
+    void RRthighCallback(const unitree_legged_msgs::MotorState &msg);
+
+    void RRcalfCallback(const unitree_legged_msgs::MotorState &msg);
+
+    void RLhipCallback(const unitree_legged_msgs::MotorState &msg);
+
+    void RLthighCallback(const unitree_legged_msgs::MotorState &msg);
+
+    void RLcalfCallback(const unitree_legged_msgs::MotorState &msg);
+
+    void FRfootCallback(const geometry_msgs::WrenchStamped &msg);
+
+    void FLfootCallback(const geometry_msgs::WrenchStamped &msg);
+
+    void RRfootCallback(const geometry_msgs::WrenchStamped &msg);
+
+    void RLfootCallback(const geometry_msgs::WrenchStamped &msg);
+
     /**
-     * @brief a1 robot class in simulation.
+     * @brief override the method in qrRobot
      */
-    class qrRobotA1Sim : public qrRobot {
-    public:
-        qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath);
+    void ReceiveObservation() override;
 
-        ~qrRobotA1Sim() = default;
+    /**
+     * @brief override the method in qrRobot
+     */
+    void ApplyAction(const Eigen::MatrixXf &motorCommands, MotorMode motorControlMode) override;
 
-        void SendCommand(const std::array<float, 60> motorcmd);
+    /**
+     * @brief override the method in qrRobot
+     */
+    void Step(const Eigen::MatrixXf &action, MotorMode motorControlMode) override;
 
-        void ImuCallback(const sensor_msgs::Imu &msg);
+    ros::NodeHandle & nh;
 
-        void FRhipCallback(const unitree_legged_msgs::MotorState &msg);
+    unitree_legged_msgs::LowCmd lowCmd;
+    //unitree_legged_msgs::LowState lowState;
 
-        void FRthighCallback(const unitree_legged_msgs::MotorState &msg);
+    /**
+     * @brief ROS joint commander publisher
+     */
+    ros::Publisher jointCmdPub[12];
 
-        void FRcalfCallback(const unitree_legged_msgs::MotorState &msg);
+    /**
+     * @brief ROS joint state subscriber
+     */
+    ros::Subscriber jointStateSub[12];
 
-        void FLhipCallback(const unitree_legged_msgs::MotorState &msg);
+    /**
+     * @brief ROS foot force subscriber
+     */
+    ros::Subscriber footForceSub[4];
 
-        void FLthighCallback(const unitree_legged_msgs::MotorState &msg);
-
-        void FLcalfCallback(const unitree_legged_msgs::MotorState &msg);
-
-        void RRhipCallback(const unitree_legged_msgs::MotorState &msg);
-
-        void RRthighCallback(const unitree_legged_msgs::MotorState &msg);
-
-        void RRcalfCallback(const unitree_legged_msgs::MotorState &msg);
-
-        void RLhipCallback(const unitree_legged_msgs::MotorState &msg);
-
-        void RLthighCallback(const unitree_legged_msgs::MotorState &msg);
-
-        void RLcalfCallback(const unitree_legged_msgs::MotorState &msg);
-
-        void FRfootCallback(const geometry_msgs::WrenchStamped &msg);
-
-        void FLfootCallback(const geometry_msgs::WrenchStamped &msg);
-
-        void RRfootCallback(const geometry_msgs::WrenchStamped &msg);
-
-        void RLfootCallback(const geometry_msgs::WrenchStamped &msg);
-
-        /**
-         * @brief override the method in qrRobot
-         */
-        void ReceiveObservation() override;
-
-        /**
-         * @brief override the method in qrRobot
-         */
-        void ApplyAction(const Eigen::MatrixXf &motorCommands, MotorMode motorControlMode) override;
-
-        /**
-         * @brief override the method in qrRobot
-         */
-        void Step(const Eigen::MatrixXf &action, MotorMode motorControlMode) override;
-
-        ros::NodeHandle & nh;
-
-        unitree_legged_msgs::LowCmd lowCmd;
-        //unitree_legged_msgs::LowState lowState;
-
-        /**
-         * @brief ROS joint commander publisher
-         */
-        ros::Publisher jointCmdPub[12];
-
-        /**
-         * @brief ROS joint state subscriber
-         */
-        ros::Subscriber jointStateSub[12];
-
-        /**
-         * @brief ROS foot force subscriber
-         */
-        ros::Subscriber footForceSub[4];
-
-        /**
-         * @brief ROS IMU state subscriber
-         */
-        ros::Subscriber imuSub;
-    };
-} // namespace Quadruped
+    /**
+     * @brief ROS IMU state subscriber
+     */
+    ros::Subscriber imuSub;
+};
 
 #endif //ROBOTS_A1_SIM_H

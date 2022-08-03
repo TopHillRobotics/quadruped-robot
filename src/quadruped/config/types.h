@@ -24,53 +24,51 @@
 
 #ifndef QR_TYPES_H
 #define QR_TYPES_H
-namespace Quadruped {
-    enum MotorMode {
-        POSITION_MODE,
-        TORQUE_MODE,
-        HYBRID_MODE
-    };
+enum MotorMode {
+    POSITION_MODE,
+    TORQUE_MODE,
+    HYBRID_MODE
+};
 
-    enum HybridCmd {
-        POSITION,
-        KP,
-        VELOCITY,
-        KD,
-        TORQUE
-    };
+enum HybridCmd {
+    POSITION,
+    KP,
+    VELOCITY,
+    KD,
+    TORQUE
+};
 
-    enum LegState {
-        SWING=0,
-        STANCE,
-        EARLY_CONTACT,
-        LOSE_CONTACT,
-        USERDEFINED_SWING,
-    };
-    enum SubLegState { // for walk
-        LOAD_FORCE=5,
-        UNLOAD_FORCE,
-        FULL_STANCE,
-        TRUE_SWING,
-    };
+enum LegState {
+    SWING=0,
+    STANCE,
+    EARLY_CONTACT,
+    LOSE_CONTACT,
+    USERDEFINED_SWING,
+};
+enum SubLegState { // for walk
+    LOAD_FORCE=5,
+    UNLOAD_FORCE,
+    FULL_STANCE,
+    TRUE_SWING,
+};
 
 /** @brief high level control mode */
-    enum LocomotionMode {
-        VELOCITY_LOCOMOTION,
-        POSITION_LOCOMOTION,
-        WALK_LOCOMOTION
-    };
+enum LocomotionMode {
+    VELOCITY_LOCOMOTION,
+    POSITION_LOCOMOTION,
+    WALK_LOCOMOTION
+};
 
-    enum TerrainType {
-        PLANE=0,
-        PLUM_PILES,
-        STAIRS
-    };
+enum TerrainType {
+    PLANE=0,
+    PLUM_PILES,
+    STAIRS
+};
 
 /** @brief main function gets vel commands by which mode */
-    enum TwistMode {
-        CONST,
-        ROS,
-    };
-} // namespace Quadruped
+enum TwistMode {
+    CONST,
+    ROS,
+};
 
 #endif //QR_TYPES_H
