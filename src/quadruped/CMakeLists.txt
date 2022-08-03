@@ -14,6 +14,7 @@ option(ENABLE_TEST                        "UNIT TEST"                   OFF)
 find_package(catkin REQUIRED COMPONENTS
         roscpp
         unitree_legged_msgs
+        tinyekf
         )
 
 find_package(yaml-cpp REQUIRED)
@@ -22,7 +23,7 @@ find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 catkin_package(
     INCLUDE_DIRS include
     LIBRARIES ${PROJECT_NAME}
-    CATKIN_DEPENDS roscpp unitree_legged_msgs
+    CATKIN_DEPENDS roscpp unitree_legged_msgs tinyekf
 )
 
 EXECUTE_PROCESS( COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE )
@@ -45,10 +46,10 @@ link_directories(${CMAKE_CURRENT_BINARY_DIR}/third_party/unitree_legged_sdk)
 link_directories(${UNITREE_SDK_DIR}/lib)
 
 
-# TinyEKF
-set(TinyEKF_DIR ${PROJECT_SOURCE_DIR}/third_party/TinyEKF)
-include_directories("${TinyEKF_DIR}/src")
-file(GLOB_RECURSE TinyEKF_SRC "${TinyEKF_DIR}/src/*.c")
+## TinyEKF
+#set(TinyEKF_DIR ${PROJECT_SOURCE_DIR}/third_party/TinyEKF)
+#include_directories("${TinyEKF_DIR}/src")
+#file(GLOB_RECURSE TinyEKF_SRC "${TinyEKF_DIR}/src/*.c")
 
 # TinyNURBS
 add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/tinynurbs)
@@ -67,10 +68,7 @@ link_directories(${CMAKE_CURRENT_BINARY_DIR}/third_party/QuadProgpp)
 
 ###########
 file(GLOB_RECURSE sources "src/*.cpp")       # common library cpp files
-#include_directories("include/quadruped/")     # common includes
-#include_directories("config/")                 # common includes
-#include_directories(${catkin_INCLUDE_DIRS})
-add_library(quadruped ${sources} ${TinyEKF_SRC})
+add_library(quadruped ${sources})
 
 target_include_directories(quadruped PUBLIC
     include/quadruped/
