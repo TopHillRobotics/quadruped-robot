@@ -15,47 +15,45 @@
 #include "state_estimator/qr_robot_velocity_estimator.h"
 #include "state_estimator/qr_ground_estimator.h"
 
-namespace Quadruped {
-    /**
-     * @brief estimates robot pose, currently the code implemented position in x-axis and y-axis.
-     */
-    class qrRobotPoseEstimator {
-    public:
-        qrRobotPoseEstimator(qrRobot *robotIn,
-                           qrGaitGenerator *gaitGeneratorIn,
-                           qrGroundSurfaceEstimator *groundEstimatorIn,
-                           qrRobotVelocityEstimator *velocityEstimator);
 
-        void Reset(float currentTime);
+/**
+ * @brief estimates robot pose, currently the code implemented position in x-axis and y-axis.
+ */
+class qrRobotPoseEstimator {
+public:
+    qrRobotPoseEstimator(qrRobot *robotIn,
+                        qrGaitGenerator *gaitGeneratorIn,
+                        qrGroundSurfaceEstimator *groundEstimatorIn,
+                        qrRobotVelocityEstimator *velocityEstimator);
 
-        float ComputeDeltaTime(const LowState *robotState);
+    void Reset(float currentTime);
 
-        void Update(float currentTime);
+    float ComputeDeltaTime(const LowState *robotState);
 
-        /** 
-         * @brief caculate position of foot toe in base frame, then represent this vector in world frame, 
-                  is not absolute height of body in world frame. 
-        */
-        float EstimateRobotHeight();
+    void Update(float currentTime);
 
-        void ComputePose(float deltaTime);
+    /** 
+     * @brief caculate position of foot toe in base frame, then represent this vector in world frame, 
+                 is not absolute height of body in world frame. 
+    */
+    float EstimateRobotHeight();
 
-        const Vec6<float> &GetEstimatedPose() const
-        {
-            return estimatedPose;
-        }
+    void ComputePose(float deltaTime);
 
-    private:
-        qrRobot *robot;
-        float lastTimestamp;
-        Vec6<float> estimatedPose;
-        qrGaitGenerator *gaitGenerator;
-        qrGroundSurfaceEstimator *groundEstimator;
-        qrRobotVelocityEstimator *velocityEstimator;
+    const Vec6<float> &GetEstimatedPose() const
+    {
+        return estimatedPose;
+    }
 
-    };
+private:
+    qrRobot *robot;
+    float lastTimestamp;
+    Vec6<float> estimatedPose;
+    qrGaitGenerator *gaitGenerator;
+    qrGroundSurfaceEstimator *groundEstimator;
+    qrRobotVelocityEstimator *velocityEstimator;
 
-} // namespace Quadruped
+};
 
 #endif //QR_ROBOT_POSE_ESTIMATOR_H
 

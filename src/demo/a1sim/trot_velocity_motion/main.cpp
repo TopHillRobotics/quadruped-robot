@@ -3,7 +3,6 @@
 #include "quadruped/sim/a1_sim.h"
 #include "quadruped/ros/qr_gazebo_controller_manager.h"
 using namespace std;
-using namespace Quadruped;
 
 int main(int argc, char **argv)
 {
@@ -18,16 +17,9 @@ int main(int argc, char **argv)
     ResetRobotBySystem(nh);
     ros::AsyncSpinner spinner(1); // one threads
     spinner.start();
-    qrVelocityParamReceiver *cmdVelReceiver = new qrVelocityParamReceiver(nh);
-
+    qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
     std::cout << "---------Ros Module Init finished---------" << std::endl;
 
-
-    YAML::Node mainConfig = YAML::LoadFile(pathToNode + "/config/main.yaml");
-    int twistMode = mainConfig["speed_update_mode"].as<int>();
-    vector<float> linearVel = mainConfig["const_twist"]["linear"].as<vector<float >>();
-    desiredSpeed = Eigen::MatrixXf::Map(&linearVel[0], 3, 1);
-    desiredTwistingSpeed = mainConfig["const_twist"]["angular"].as<float>();
     qrRobot *quadruped = new qrRobotA1Sim(nh, pathToNode + "/config/a1_sim.yaml");
     quadruped->ReceiveObservation();
     std::cout << "BaseOrientation:\n" << quadruped->GetBaseOrientation().transpose() << std::endl;
@@ -36,7 +28,9 @@ int main(int argc, char **argv)
 
     qrLocomotionController *locomotionController = setUpController(quadruped, pathToNode, robotName);
     locomotionController->Reset();
-    updateControllerParams(locomotionController, {0., 0., 0.}, 0.);
+    float desiredTwistingSpeed = 0.;
+    Eigen::Matrix<float, 3, 1> desiredSpeed = {0.0, 0.0, 0.0};
+    updateControllerParams(locomotionController, desiredSpeed, desiredTwistingSpeed);
 
     std::cout << "---------Locomotion Module Init Finished---------" << std::endl;
 
@@ -49,10 +43,9 @@ int main(int argc, char **argv)
     while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS) {
         startTimeWall = quadruped->GetTimeSinceReset();
 
-        if (twistMode == TwistMode::ROS) {
-            desiredSpeed = cmdVelReceiver->GetLinearVelocity();
-            desiredTwistingSpeed = cmdVelReceiver->GetAngularVelocity(); 
-        }
+        desiredSpeed = cmdVelReceiver->GetLinearVelocity();
+        desiredTwistingSpeed = cmdVelReceiver->GetAngularVelocity();
+         
         updateControllerParams(locomotionController,
                                 desiredSpeed,
                                 desiredTwistingSpeed);

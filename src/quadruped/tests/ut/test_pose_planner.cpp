@@ -76,7 +76,7 @@
 //         cout << rBH <<endl;
 //         rBCOM = robot->comOffset; // rICOM = rIB + Phi(rBCOM);
 //         rBCOM << 0., 0., 0.;
-//         rICOMoffset = robotics::math::TransformVecByQuat(quat, rBCOM);
+//         rICOMoffset = math::TransformVecByQuat(quat, rBCOM);
 //         rICOMoffset << 0., 0., 0.;
 //         rICOMoffset_ = ProjectV(rICOMoffset);
 //         rSP_ << 0, 0, 0 ;
@@ -92,7 +92,7 @@
 //                 Vec3<float> r = rIF.col(i); 
 //                 supportPolygonVertices.push_back(r);
 //                 rSP_ += r;    
-//                 g.push_back(rIB + robotics::math::TransformVecByQuat<float>(quat, rBH.col(i)) - r);       
+//                 g.push_back(rIB + math::TransformVecByQuat<float>(quat, rBH.col(i)) - r);       
 //             }
 //         }
 //         rSP_ = ProjectV(rSP_ / contactLegNumber);
@@ -184,17 +184,17 @@
             
 //             rIB += p.head(3);
 //             so3Phi = p.tail(3);
-//             Quat<float> dQuat = robotics::math::so3ToQuat(so3Phi);
-//             quat = robotics::math::ConcatenationTwoQuats(dQuat, quat);
+//             Quat<float> dQuat = math::so3ToQuat(so3Phi);
+//             quat = math::ConcatenationTwoQuats(dQuat, quat);
 //             cout << "rIB = "<< rIB << " quat" << quat.transpose() << endl;
 //             rIB_ = ProjectV(rIB);
 //             rBF = rIF.colwise() - rIB;
-//             rICOMoffset = robotics::math::TransformVecByQuat(quat, rBCOM);
+//             rICOMoffset = math::TransformVecByQuat(quat, rBCOM);
 //             rICOMoffset_ = ProjectV(rICOMoffset);
 //             g.clear();
 //             for(int i : validContactPointId) { // i is counterwise order leg index (started from FR-leg).
 //                 Vec3<float> r = rIF.col(i); 
-//                 g.push_back(rIB + robotics::math::TransformVecByQuat<float>(quat, rBH.col(i)) - r);
+//                 g.push_back(rIB + math::TransformVecByQuat<float>(quat, rBH.col(i)) - r);
 //             }
         
 //             // todo : update Lambda
@@ -231,8 +231,8 @@
 //     quat << 0.8,0.6,0.4,0.2;
 //     quat.normalize();
 //     Vec3<float> v = {1,2,3};
-//     Vec3<float> res1 = robotics::math::TransformVecByQuat(quat, v);
-//     Mat3<float> mat = robotics::math::quaternionToRotationMatrix(quat).transpose();
+//     Vec3<float> res1 = math::TransformVecByQuat(quat, v);
+//     Mat3<float> mat = math::quaternionToRotationMatrix(quat).transpose();
 //     Vec3<float> res2 = mat*v;
 //     for(int i=0; i<3; ++i) {
 //         EXPECT_NEAR(res1[i], res2[i], 1E-3);
@@ -241,17 +241,17 @@
 //     Quat<float> quat2;
 //     quat2 << 0.3,0.4,0.6,0.8;
 //     quat2.normalize();
-//     Mat3<float> mat2 = robotics::math::quaternionToRotationMatrix(quat2).transpose();
-//     Quat<float> quat3 = robotics::math::ConcatenationTwoQuats(quat2, quat);
-//     Quat<float> quat3_ = robotics::math::rotationMatrixToQuaternion((mat2*mat).transpose());
-//     Quat<float> quat3_3 = robotics::math::quatProduct(quat2, quat);
+//     Mat3<float> mat2 = math::quaternionToRotationMatrix(quat2).transpose();
+//     Quat<float> quat3 = math::ConcatenationTwoQuats(quat2, quat);
+//     Quat<float> quat3_ = math::rotationMatrixToQuaternion((mat2*mat).transpose());
+//     Quat<float> quat3_3 = math::quatProduct(quat2, quat);
 //     for(int i=0; i < 4; ++i){
 //         EXPECT_NEAR(quat3[i], quat3_[i], 1E-3);
 //         EXPECT_NEAR(quat3_[i], quat3_3[i], 1E-3);
 //     }
 
-//     Vec3<float> so3 = robotics::math::LogQuat(quat);
-//     Quat<float> quat_ = robotics::math::so3ToQuat(so3);
+//     Vec3<float> so3 = math::LogQuat(quat);
+//     Quat<float> quat_ = math::so3ToQuat(so3);
 //     for(int i=0; i < 4; ++i){
 //         EXPECT_NEAR(quat[i], quat_[i], 1E-3);
 //     }
@@ -366,7 +366,7 @@
 // {
 //     qpTest();
 //     Vec3<float> rpy(0.2,0,0); // roll=11.5
-//     Quat<float> qq = robotics::math::rpyToQuat(rpy);
+//     Quat<float> qq = math::rpyToQuat(rpy);
 //     // cout << qq<<endl; // 0.995, 0.0998,0,0
 // }
 

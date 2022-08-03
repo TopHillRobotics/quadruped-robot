@@ -13,97 +13,96 @@
 #include "utils/se3.h"
 #include "robots/qr_robot.h"
 
-namespace Quadruped{
 
-    struct qrGap {
-        float distance; // between COM and center of the gap.
-        float width; // of the gap
-        Eigen::Matrix<float, 3, 1> startPoint; // the closest point on the gap margin in base frame.
+struct qrGap {
+    float distance; // between COM and center of the gap.
+    float width; // of the gap
+    Eigen::Matrix<float, 3, 1> startPoint; // the closest point on the gap margin in base frame.
 
-        qrGap(float d, float w, Eigen::Matrix<float, 3, 1> p) : distance(d), width(w), startPoint(p)
-        {}
-    };
+    qrGap(float d, float w, Eigen::Matrix<float, 3, 1> p) : distance(d), width(w), startPoint(p)
+    {}
+};
 
-    struct qrStair {
-        float height;
-        float width; 
-        float length=1.0; 
-        Eigen::Matrix<float, 3, 1> startPoint; // the closest point on the gap margin in base frame.
-        int k=3;
-        qrStair() {}
-        qrStair(float h, float w, float l, Eigen::Matrix<float, 3, 1> p)
-            : height(h), width(w), length(l), startPoint(p)
-        {}
-    };
+struct qrStair {
+    float height;
+    float width; 
+    float length=1.0; 
+    Eigen::Matrix<float, 3, 1> startPoint; // the closest point on the gap margin in base frame.
+    int k=3;
+    qrStair() {}
+    qrStair(float h, float w, float l, Eigen::Matrix<float, 3, 1> p)
+        : height(h), width(w), length(l), startPoint(p)
+    {}
+};
 
-    struct qrTerrain {
-        TerrainType terrainType;
-        float footHoldOffset = 0.1f;
-        std::vector<qrGap*> gaps;
-        // float gapWidth = 0.14f;
-        qrStair* stair;
-        Eigen::MatrixXf costMap;
-    };
+struct qrTerrain {
+    TerrainType terrainType;
+    float footHoldOffset = 0.1f;
+    std::vector<qrGap*> gaps;
+    // float gapWidth = 0.14f;
+    qrStair* stair;
+    Eigen::MatrixXf costMap;
+};
+
+/**
+ * @brief As descriped in MIT CHEETAH3 paper the 3D plane is z(x,y) = a0+ a1*x +a2*y
+ * @param a  Vec3<float>, coefficients for ground surface plane, z= a0+a1*x+a2*y
+ */
+class qrGroundSurfaceEstimator {
+
+public:
+    qrGroundSurfaceEstimator(qrRobot *robot, std::string terrainConfigPath, unsigned int windowSize=DEFAULT_WINDOW_SIZE);
+
+    void Loadterrain(std::string& terrainConfigPath);
+
+    void Reset(float currentTime);
 
     /**
-     * @brief As descriped in MIT CHEETAH3 paper the 3D plane is z(x,y) = a0+ a1*x +a2*y
-     * @param a  Vec3<float>, coefficients for ground surface plane, z= a0+a1*x+a2*y
+     * @brief compute the plane equation when four feet are all in contact with ground.
      */
-    class qrGroundSurfaceEstimator {
+    void Update(float currentTime);
 
-    public:
-        qrGroundSurfaceEstimator(qrRobot *robot, std::string terrainConfigPath, unsigned int windowSize=DEFAULT_WINDOW_SIZE);
+    /** @brief compute or return the normal of ground surface represent in (initial) world frame. */
+    Eigen::Matrix<double, 3, 1> GetNormalVector(bool update);
     
-        void Loadterrain(std::string& terrainConfigPath);
+
+    /**
+     * @brief control frame is the frame origin at COM, and x axis is algined with body COM frame's X-axis,
+     * as well as its z-axis is normal to estimated ground surface and y-axis is parrell
+     * with the local surface plane.
+     * @return the result is presented in the world frame.
+     */
+    Eigen::Matrix<double, 4, 4> ComputeControlFrame();
+
+    float GetZ(float x, float y);
     
-        void Reset(float currentTime);
+    /** @brief three direction vectors present in world frame when compute the GRF */
+    Eigen::Matrix<float, 3, 3> GetAlignedDirections();
 
-        /**
-         * @brief compute the plane equation when four feet are all in contact with ground.
-         */
-        void Update(float currentTime);
+    Quat<float> GetControlFrameOrientation() const
+    {
+        return controlFrameOrientation.cast<float>();
+    }
+    
+    Vec3<float> GetControlFrameRPY() const
+    {
+        return controlFrameRPY.cast<float>();
+    }
 
-        /** @brief compute or return the normal of ground surface represent in (initial) world frame. */
-        Eigen::Matrix<double, 3, 1> GetNormalVector(bool update);
-        
+    Vec3<double> controlFrameRPY;
+    Quat<double> controlFrameOrientation;
+// private:
+    qrRobot *robot;
+    qrTerrain terrain;
+    Vec3<double> a; // coeffcient of plane equation
+    Eigen::Matrix<double, 4, 3> W;
+    Vec4<double> pZ; // z position
+    Vec3<double> n; // normal vector of plane equation
 
-        /**
-         * @brief control frame is the frame origin at COM, and x axis is algined with body COM frame's X-axis,
-         * as well as its z-axis is normal to estimated ground surface and y-axis is parrell
-         * with the local surface plane.
-         * @return the result is presented in the world frame.
-         */
-        Eigen::Matrix<double, 4, 4> ComputeControlFrame();
+    Mat4<double> controlFrame;
+    Eigen::Matrix<bool, 4, 1> lastContactState;
+    
+    YAML::Node footStepperConfig;
+};
 
-        float GetZ(float x, float y);
-        
-        /** @brief three direction vectors present in world frame when compute the GRF */
-        Eigen::Matrix<float, 3, 3> GetAlignedDirections();
-
-        Quat<float> GetControlFrameOrientation() const
-        {
-            return controlFrameOrientation.cast<float>();
-        }
-        
-        Vec3<float> GetControlFrameRPY() const
-        {
-            return controlFrameRPY.cast<float>();
-        }
-
-        Vec3<double> controlFrameRPY;
-        Quat<double> controlFrameOrientation;
-    // private:
-        qrRobot *robot;
-        qrTerrain terrain;
-        Vec3<double> a; // coeffcient of plane equation
-        Eigen::Matrix<double, 4, 3> W;
-        Vec4<double> pZ; // z position
-        Vec3<double> n; // normal vector of plane equation
-
-        Mat4<double> controlFrame;
-        Eigen::Matrix<bool, 4, 1> lastContactState;
-        
-        YAML::Node footStepperConfig;
-    };
-}
 #endif // ASCEND_QUADRUPED_CPP_GROUND_ESTIMATOR_H

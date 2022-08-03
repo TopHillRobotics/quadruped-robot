@@ -284,7 +284,7 @@ qrRobotState INEKFInterface::Update_1(){
     if (dt > DT_MIN && dt < DT_MAX) {
         filter.Propagate(imu_measurement_prev, dt);
     }
-    Eigen::Matrix3d oritationMatrix = robotics::math::quaternionToRotationMatrix(IMUquat);
+    Eigen::Matrix3d oritationMatrix = math::quaternionToRotationMatrix(IMUquat);
     if (cycle%5==0)
         filter.setOrientation(oritationMatrix);
     cycle++;

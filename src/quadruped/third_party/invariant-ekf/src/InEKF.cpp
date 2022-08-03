@@ -151,8 +151,8 @@ void InEKF::Propagate(const Eigen::Matrix<double,6,1>& m, double dt) {
     Eigen::Vector3d p_pred = p + v*dt + 0.5*(R*a + g_)*dt*dt;
     
     if ( sCount %1000==0) {
-        // std::cout << "R 0= "<< robotics::math::rotationMatrixToRPY(R.transpose())<<std::endl;
-        // std::cout << "R pred= "<< robotics::math::rotationMatrixToRPY(R_pred.transpose())<<std::endl;
+        // std::cout << "R 0= "<< math::rotationMatrixToRPY(R.transpose())<<std::endl;
+        // std::cout << "R pred= "<< math::rotationMatrixToRPY(R_pred.transpose())<<std::endl;
         std::cout << "v= "<< v.transpose();
         std::cout << ",    p= "<< p.transpose() <<std::endl;
         // std::cout << "p pred= "<< p_pred <<std::endl;
