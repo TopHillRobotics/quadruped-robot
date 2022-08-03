@@ -41,7 +41,7 @@ Vec3<double> INEKFInterface::getPosition()
 
 Vec3<double> INEKFInterface::getRotation()
 {
-    Vec3<double> rpy = robotics::math::rotationMatrixToRPY(filter.getState().getRotation().transpose());
+    Vec3<double> rpy = math::rotationMatrixToRPY(filter.getState().getRotation().transpose());
     return rpy;
 }
 
@@ -91,7 +91,7 @@ void INEKFInterface::Initialize(Eigen::Matrix3d _R0, Eigen::Vector3d _v0,
     cout << filter.getNoiseParams() << endl;
     cout << "qrRobot's state is initialized to: \n";
     cout << filter.getState() << endl;
-    cout << robotics::math::rotationMatrixToRPY(filter.getState().getRotation().transpose())<<endl; 
+    cout << math::rotationMatrixToRPY(filter.getState().getRotation().transpose())<<endl; 
 
     
     /*
@@ -234,7 +234,7 @@ qrRobotState INEKFInterface::Update_1(Vec3<double> vInBaseFrame)
 {
     // Propagate
     // Propagate using IMU data
-    Eigen::Matrix3d oritationMatrix = robotics::math::quaternionToRotationMatrix(IMUquat);
+    Eigen::Matrix3d oritationMatrix = math::quaternionToRotationMatrix(IMUquat);
     
     // double dt = t - t_prev;
     if (dt > DT_MIN && dt < DT_MAX) {

@@ -29,10 +29,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 
-namespace robotics {
-    namespace geometry {
+namespace geometry {
 
-    }// namespace geometry
-}// namespace robotics
+}// namespace geometry
 
 #endif // BSPLINEVOLUME_H

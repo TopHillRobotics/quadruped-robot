@@ -30,17 +30,15 @@
 #include "robots/qr_robot.h"
 #include "controller/qr_locomotion_controller.h"
 
-namespace Quadruped {
-    namespace Action {
-        
-        void StandUp(qrRobot *robot, float standUpTime, float totalTime, float timeStep);
-
-        void SitDown(qrRobot *robot, float sitDownTime, float timeStep);
-
-        void KeepStand(qrRobot *robot, float KeepStandTime = 1.0, float timeStep = 0.001);
+namespace Action {
     
-        void ControlFoot(qrRobot *robot, qrLocomotionController *locomotionController, float walkTime, float timeStep);
-        
-    } // Action
-} // Quadruped
+    void StandUp(qrRobot *robot, float standUpTime, float totalTime, float timeStep);
+
+    void SitDown(qrRobot *robot, float sitDownTime, float timeStep);
+
+    void KeepStand(qrRobot *robot, float KeepStandTime = 1.0, float timeStep = 0.001);
+
+    void ControlFoot(qrRobot *robot, qrLocomotionController *locomotionController, float walkTime, float timeStep);
+    
+} // Action
 #endif //QR_ACTION_H
