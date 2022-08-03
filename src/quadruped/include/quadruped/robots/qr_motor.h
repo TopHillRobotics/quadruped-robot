@@ -29,85 +29,82 @@
 #include <vector>
 #include <Eigen/Dense>
 
-namespace Quadruped {
+/**
+ * @brief send motor commond to uitree_sdk
+ * @param p double, position, joint angle
+ * @param Kp double, position factor
+ * @param d double, joint velocity
+ * @param Kd double, velocity factor
+ * @param tua double, torque
+ */
+struct qrMotorCommand {
+
+    friend std::ostream &operator<<(std::ostream &os, qrMotorCommand &data);
 
     /**
-     * @brief send motor commond to uitree_sdk
-     * @param p double, position, joint angle
-     * @param Kp double, position factor
-     * @param d double, joint velocity
-     * @param Kd double, velocity factor
-     * @param tua double, torque
+     * @brief joint angle (unit: radian)
      */
-    struct qrMotorCommand {
+    double p;
 
-        friend std::ostream &operator<<(std::ostream &os, qrMotorCommand &data);
+    /**
+     * @brief position stiffness (unit: N.m/rad )
+     */
+    double Kp;
 
-        /**
-         * @brief joint angle (unit: radian)
-         */
-        double p;
+    /**
+     * @brief joint velocity ( unit: radian/second)
+     */
+    double d;
 
-        /**
-         * @brief position stiffness (unit: N.m/rad )
-         */
-        double Kp;
+    /**
+     * @brief velocity stiffness (unit: N.m/(rad/s) )
+     */
+    double Kd;
 
-        /**
-         * @brief joint velocity ( unit: radian/second)
-         */
-        double d;
+    /**
+     * @brief torque (unit: N.m)
+     */
+    double tua;
 
-        /**
-         * @brief velocity stiffness (unit: N.m/(rad/s) )
-         */
-        double Kd;
+    qrMotorCommand(){}
 
-        /**
-         * @brief torque (unit: N.m)
-         */
-        double tua;
+    /**
+     * @brief constructor of qrMotorCommand
+     * @param pIn: joint angle input
+     * @param KpIn: position stiffness input
+     * @param dIn: joint velocity input
+     * @param KdIn: velocity stiffness input
+     * @param tuaIn:torque input
+     */
+    qrMotorCommand(double pIn, double KpIn, double dIn, double KdIn, double tuaIn);
 
-        qrMotorCommand(){}
+    /**
+     * @brief constructor of qrMotorCommand
+     * @param cmd: vector of p, Kp, d, Kd and tau
+     */
+    qrMotorCommand(const Eigen::Matrix<float, 5, 1> &cmd);
 
-        /**
-         * @brief constructor of qrMotorCommand
-         * @param pIn: joint angle input
-         * @param KpIn: position stiffness input
-         * @param dIn: joint velocity input
-         * @param KdIn: velocity stiffness input
-         * @param tuaIn:torque input
-         */
-        qrMotorCommand(double pIn, double KpIn, double dIn, double KdIn, double tuaIn);
+    /**
+     * @brief convert p, Kp, d, Kd and tau to Vector
+     * @return vector of < p, Kp, d, Kd and tau >
+     */
+    Eigen::Matrix<float, 5, 1> convertToVector() const;
 
-        /**
-         * @brief constructor of qrMotorCommand
-         * @param cmd: vector of p, Kp, d, Kd and tau
-         */
-        qrMotorCommand(const Eigen::Matrix<float, 5, 1> &cmd);
-
-        /**
-         * @brief convert p, Kp, d, Kd and tau to Vector
-         * @return vector of < p, Kp, d, Kd and tau >
-         */
-        Eigen::Matrix<float, 5, 1> convertToVector() const;
-
-        /**
-         * @brief convert vector of commands to eigen matrix
-         * @param MotorCommands: vector of cmds
-         * @return command matrix
-         */
-        static Eigen::Matrix<float, 5, 12> convertToMatix(const std::vector<qrMotorCommand> &MotorCommands)
-        {
-            Eigen::Matrix<float, 5, 12> MotorCommandMatrix;
-            int i = 0;
-            for (auto &cmd: MotorCommands) {
-                MotorCommandMatrix.col(i) = cmd.convertToVector();
-                ++i;
-            }
-            return MotorCommandMatrix;
+    /**
+     * @brief convert vector of commands to eigen matrix
+     * @param MotorCommands: vector of cmds
+     * @return command matrix
+     */
+    static Eigen::Matrix<float, 5, 12> convertToMatix(const std::vector<qrMotorCommand> &MotorCommands)
+    {
+        Eigen::Matrix<float, 5, 12> MotorCommandMatrix;
+        int i = 0;
+        for (auto &cmd: MotorCommands) {
+            MotorCommandMatrix.col(i) = cmd.convertToVector();
+            ++i;
         }
-    };
-} // Quadruped
+        return MotorCommandMatrix;
+    }
+};
 
 #endif // QR_MOTOR_H

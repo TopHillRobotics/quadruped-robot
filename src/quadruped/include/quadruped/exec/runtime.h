@@ -39,8 +39,6 @@
 #include "sim/a1_sim.h"
 #include "state_estimator/qr_robot_estimator.h"
 
-using namespace Quadruped;
-// using namespace std;
 
 #define MAX_TIME_SECONDS 1000.0f
 

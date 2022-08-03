@@ -3,7 +3,6 @@
 #include "quadruped/sim/a1_sim.h"
 #include "quadruped/ros/qr_gazebo_controller_manager.h"
 using namespace std;
-using namespace Quadruped;
 
 int main(int argc, char **argv)
 {

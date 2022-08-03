@@ -24,31 +24,29 @@
 
 #include "robots/qr_motor.h"
 
-namespace Quadruped {
-    qrMotorCommand::qrMotorCommand(double pIn, double KpIn, double dIn, double KdIn, double tuaIn)
-        : p(pIn), Kp(KpIn), d(dIn), Kd(KdIn), tua(tuaIn)
-    {}
+qrMotorCommand::qrMotorCommand(double pIn, double KpIn, double dIn, double KdIn, double tuaIn)
+    : p(pIn), Kp(KpIn), d(dIn), Kd(KdIn), tua(tuaIn)
+{}
 
-    qrMotorCommand::qrMotorCommand(const Eigen::Matrix<float, 5, 1> &cmd)
-    {
-        p = cmd[0];
-        Kp = cmd[1];
-        d = cmd[2];
-        Kd = cmd[3];
-        tua = cmd[4];
-    }
+qrMotorCommand::qrMotorCommand(const Eigen::Matrix<float, 5, 1> &cmd)
+{
+    p = cmd[0];
+    Kp = cmd[1];
+    d = cmd[2];
+    Kd = cmd[3];
+    tua = cmd[4];
+}
 
-    Eigen::Matrix<float, 5, 1> qrMotorCommand::convertToVector() const
-    {
-        Eigen::Matrix<float, 5, 1> HybridMotorCommandVector;
-        HybridMotorCommandVector << p, Kp, d, Kd, tua;
-        return HybridMotorCommandVector;
-    }
+Eigen::Matrix<float, 5, 1> qrMotorCommand::convertToVector() const
+{
+    Eigen::Matrix<float, 5, 1> HybridMotorCommandVector;
+    HybridMotorCommandVector << p, Kp, d, Kd, tua;
+    return HybridMotorCommandVector;
+}
 
-    std::ostream &operator<<(std::ostream &os, qrMotorCommand &data)
-    {
-        os << data.p << " " << data.Kp << " " << data.d << " " << data.Kd <<
-           " " << data.tua;
-        return os;
-    }
-} // Quadruped
+std::ostream &operator<<(std::ostream &os, qrMotorCommand &data)
+{
+    os << data.p << " " << data.Kp << " " << data.d << " " << data.Kd <<
+        " " << data.tua;
+    return os;
+}

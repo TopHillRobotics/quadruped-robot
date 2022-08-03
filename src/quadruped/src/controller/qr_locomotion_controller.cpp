@@ -23,64 +23,63 @@
 // SOFTWARE. 
 
 #include "controller/qr_locomotion_controller.h"
-namespace Quadruped {
-    qrLocomotionController::qrLocomotionController(qrRobot *robotIn,
-                                               qrGaitGenerator *gaitGeneratorIn,
-                                               qrRobotEstimator *stateEstimatorIn,
-                                               qrGroundSurfaceEstimator *groundEstimatorIn,
-                                               qrComPlanner *comPlannerIn,
-                                               qrSwingLegController *swingLegControllerIn,
-                                               qrStanceLegController *stanceLegControllerIn)
-    :
-        robot(robotIn), gaitGenerator(gaitGeneratorIn), stateEstimator(stateEstimatorIn), groundEstimator(groundEstimatorIn), comPlanner(comPlannerIn),
-        swingLegController(swingLegControllerIn), stanceLegController(stanceLegControllerIn)
-    {
-        resetTime = robot->GetTimeSinceReset();
-        timeSinceReset = 0.;
-    }
 
-    void qrLocomotionController::Reset()
-    {
-        resetTime = robot->GetTimeSinceReset();
-        timeSinceReset = 0.;
-        gaitGenerator->Reset(timeSinceReset);
-        stateEstimator->Reset(timeSinceReset);
-        groundEstimator->Reset(timeSinceReset);
-        comPlanner->Reset(timeSinceReset);
-        swingLegController->Reset(timeSinceReset);
-        stanceLegController->Reset(timeSinceReset);
-    }
+qrLocomotionController::qrLocomotionController(qrRobot *robotIn,
+                                            qrGaitGenerator *gaitGeneratorIn,
+                                            qrRobotEstimator *stateEstimatorIn,
+                                            qrGroundSurfaceEstimator *groundEstimatorIn,
+                                            qrComPlanner *comPlannerIn,
+                                            qrSwingLegController *swingLegControllerIn,
+                                            qrStanceLegController *stanceLegControllerIn)
+:
+    robot(robotIn), gaitGenerator(gaitGeneratorIn), stateEstimator(stateEstimatorIn), groundEstimator(groundEstimatorIn), comPlanner(comPlannerIn),
+    swingLegController(swingLegControllerIn), stanceLegController(stanceLegControllerIn)
+{
+    resetTime = robot->GetTimeSinceReset();
+    timeSinceReset = 0.;
+}
 
-    void qrLocomotionController::Update()
-    {
-        if (!robot->stop) { // not stop = (swingSemaphore > 0) or  (swingSemaphore=0 but not switchToSwing)
-            timeSinceReset = robot->GetTimeSinceReset() - resetTime;
+void qrLocomotionController::Reset()
+{
+    resetTime = robot->GetTimeSinceReset();
+    timeSinceReset = 0.;
+    gaitGenerator->Reset(timeSinceReset);
+    stateEstimator->Reset(timeSinceReset);
+    groundEstimator->Reset(timeSinceReset);
+    comPlanner->Reset(timeSinceReset);
+    swingLegController->Reset(timeSinceReset);
+    stanceLegController->Reset(timeSinceReset);
+}
+
+void qrLocomotionController::Update()
+{
+    if (!robot->stop) { // not stop = (swingSemaphore > 0) or  (swingSemaphore=0 but not switchToSwing)
+        timeSinceReset = robot->GetTimeSinceReset() - resetTime;
+    }
+    
+    // std::cout << "-------locomotion time -------- " << timeSinceReset << std::endl;
+    gaitGenerator->Update(timeSinceReset);
+    groundEstimator->Update(timeSinceReset);
+    stateEstimator->Update(timeSinceReset);
+    swingLegController->Update(timeSinceReset);
+    stanceLegController->Update(robot->GetTimeSinceReset() - resetTime);
+}
+
+std::tuple<std::vector<qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrLocomotionController::GetAction()
+{
+    action.clear();
+    // Returns the control ouputs (e.g. positions/torques) for all motors. type: map
+    auto swingAction = swingLegController->GetAction();
+    auto [stanceAction, qpSol] = stanceLegController->GetAction(); // map<int, qrMotorCommand>
+    std::vector<qrMotorCommand> action;
+    // copy motors' actions from subcontrollers to output variable.         
+    for (int joint_id = 0; joint_id < qrRobotConfig::numMotors; ++joint_id) {
+        auto it = swingAction.find(joint_id);
+        if (it != swingAction.end()) {
+            action.push_back(it->second);
+        } else {
+            action.push_back(stanceAction[joint_id]);
         }
-        
-        // std::cout << "-------locomotion time -------- " << timeSinceReset << std::endl;
-        gaitGenerator->Update(timeSinceReset);
-        groundEstimator->Update(timeSinceReset);
-        stateEstimator->Update(timeSinceReset);
-        swingLegController->Update(timeSinceReset);
-        stanceLegController->Update(robot->GetTimeSinceReset() - resetTime);
     }
-
-    std::tuple<std::vector<qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrLocomotionController::GetAction()
-    {
-        action.clear();
-        // Returns the control ouputs (e.g. positions/torques) for all motors. type: map
-        auto swingAction = swingLegController->GetAction();
-        auto [stanceAction, qpSol] = stanceLegController->GetAction(); // map<int, qrMotorCommand>
-        std::vector<qrMotorCommand> action;
-        // copy motors' actions from subcontrollers to output variable.         
-        for (int joint_id = 0; joint_id < qrRobotConfig::numMotors; ++joint_id) {
-            auto it = swingAction.find(joint_id);
-            if (it != swingAction.end()) {
-                action.push_back(it->second);
-            } else {
-                action.push_back(stanceAction[joint_id]);
-            }
-        }
-        return {action, qpSol};
-    }
-} // namespace Quadruped
+    return {action, qpSol};
+}

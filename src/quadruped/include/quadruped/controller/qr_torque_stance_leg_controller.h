@@ -33,179 +33,177 @@
 #include "planner/qr_com_planner.h"
 #include "planner/qr_foothold_planner.h"
 
-namespace Quadruped {
+/**
+ * @brief Control stance leg of robot
+ */
+class qrStanceLegController {
+public:
+
     /**
-     * @brief Control stance leg of robot
+     * @brief Constructor of qrStanceLegController using given many object pointers and attributes.
+     * @param robot The robot object pointer.
+     * @param gaitGenerator The gait generator object pointer.
+     * @param robotVelocityEstimator The robot estimator object pointer.
+     * @param groundEstimatorIn The ground estimator object pointer.
+     * @param comPlanner The com planner object pointer.
+     * @param footholdPlanner The foothold planner object pointer.
+     * @param desired_speed The robot desired speed in velocity control.
+     * @param desiredTwistingSpeed The robot desired twisting speed in velocity control.
+     * @param desiredBodyHeight The robot desired body height.
+     * @param numLegs The number of leg.
+     * @param configFilepath The stance leg config file path.
+     * @param frictionCoeffs The coefficients of friction.
      */
-    class qrStanceLegController {
-    public:
+    qrStanceLegController(qrRobot *robot,
+                            qrGaitGenerator *gaitGenerator,
+                            qrRobotEstimator *robotVelocityEstimator,
+                            qrGroundSurfaceEstimator *groundEstimatorIn,
+                            qrComPlanner *comPlanner,
+                            qrFootholdPlanner *footholdPlanner,
+                            Eigen::Matrix<float, 3, 1> desired_speed,
+                            float desiredTwistingSpeed,
+                            float desiredBodyHeight,
+                            int numLegs,
+                            std::string configFilepath,
+                            std::vector<float> frictionCoeffs = {0.45, 0.45, 0.45, 0.45});
 
-        /**
-         * @brief Constructor of qrStanceLegController using given many object pointers and attributes.
-         * @param robot The robot object pointer.
-         * @param gaitGenerator The gait generator object pointer.
-         * @param robotVelocityEstimator The robot estimator object pointer.
-         * @param groundEstimatorIn The ground estimator object pointer.
-         * @param comPlanner The com planner object pointer.
-         * @param footholdPlanner The foothold planner object pointer.
-         * @param desired_speed The robot desired speed in velocity control.
-         * @param desiredTwistingSpeed The robot desired twisting speed in velocity control.
-         * @param desiredBodyHeight The robot desired body height.
-         * @param numLegs The number of leg.
-         * @param configFilepath The stance leg config file path.
-         * @param frictionCoeffs The coefficients of friction.
-         */
-        qrStanceLegController(qrRobot *robot,
-                                qrGaitGenerator *gaitGenerator,
-                                qrRobotEstimator *robotVelocityEstimator,
-                                qrGroundSurfaceEstimator *groundEstimatorIn,
-                                qrComPlanner *comPlanner,
-                                qrFootholdPlanner *footholdPlanner,
-                                Eigen::Matrix<float, 3, 1> desired_speed,
-                                float desiredTwistingSpeed,
-                                float desiredBodyHeight,
-                                int numLegs,
-                                std::string configFilepath,
-                                std::vector<float> frictionCoeffs = {0.45, 0.45, 0.45, 0.45});
+    /**
+     * @brief Default desconstructor of qrStanceLegController
+     */
+    virtual ~qrStanceLegController() = default;
 
-        /**
-         * @brief Default desconstructor of qrStanceLegController
-         */
-        virtual ~qrStanceLegController() = default;
+    /**
+     * @brief Reset the parameters of the qrStanceLegController.
+     * @param currentTime Current run time
+     */
+    void Reset(float currentTime);
 
-        /**
-         * @brief Reset the parameters of the qrStanceLegController.
-         * @param currentTime Current run time
-         */
-        void Reset(float currentTime);
+    /**
+     * @brief update the ratio of the friction force to robot gravity
+     * @param contacts Vec4<bool>&,  descripte the contact status of four feet
+     * @param N int&, the number of contact feet
+     * @param normalizedPhase float&, the phase of swing leg
+     */
+    void UpdateFRatio(Vec4<bool> &contacts, int &N, float &normalizedPhase);
 
-        /**
-         * @brief update the ratio of the friction force to robot gravity
-         * @param contacts Vec4<bool>&,  descripte the contact status of four feet
-         * @param N int&, the number of contact feet
-         * @param normalizedPhase float&, the phase of swing leg
-         */
-        void UpdateFRatio(Vec4<bool> &contacts, int &N, float &normalizedPhase);
+    /**
+     * @brief Update the parameters of the qrStanceLegController.
+     * @param currentTime Current run time
+     */
+    void Update(float currentTime);
 
-        /**
-         * @brief Update the parameters of the qrStanceLegController.
-         * @param currentTime Current run time
-         */
-        void Update(float currentTime);
+    /** 
+     * @brief Compute all motors' commands via controllers.
+     *  @return tuple<map, Matrix<3,4>> : 
+     *          return control ouputs (e.g. positions/torques) for all (12) motors.
+     */
+    virtual std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
 
-        /** 
-         * @brief Compute all motors' commands via controllers.
-         *  @return tuple<map, Matrix<3,4>> : 
-         *          return control ouputs (e.g. positions/torques) for all (12) motors.
-         */
-        virtual std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
+    /**
+     * @brief The robot object pointer.
+     */
+    qrRobot *robot;
 
-        /**
-         * @brief The robot object pointer.
-         */
-        qrRobot *robot;
+    /**
+     * @brief Gait Generator object pointer.
+     */
+    qrGaitGenerator *gaitGenerator;
 
-        /**
-         * @brief Gait Generator object pointer.
-         */
-        qrGaitGenerator *gaitGenerator;
+    /**
+     * @brief Robot estimator pointre. Get the estimated velocity.
+     */
+    qrRobotEstimator *robotEstimator;
 
-        /**
-         * @brief Robot estimator pointre. Get the estimated velocity.
-         */
-        qrRobotEstimator *robotEstimator;
+    /**
+     * @brief Ground estimator pointer.
+     */
+    qrGroundSurfaceEstimator *groundEstimator;
 
-        /**
-         * @brief Ground estimator pointer.
-         */
-        qrGroundSurfaceEstimator *groundEstimator;
+    /**
+     * @brief The center of mass adjuster pointer. Get the position of COM in base frame
+     *        in position locomotion.
+     */
+    qrComPlanner *comPlanner;
 
-        /**
-         * @brief The center of mass adjuster pointer. Get the position of COM in base frame
-         *        in position locomotion.
-         */
-        qrComPlanner *comPlanner;
+    /**
+     * @brief Robot's foothold planner. Get desired COM pose when in walk locomotion.
+     */
+    qrFootholdPlanner *footholdPlanner;
 
-        /**
-         * @brief Robot's foothold planner. Get desired COM pose when in walk locomotion.
-         */
-        qrFootholdPlanner *footholdPlanner;
+    /**
+     * @brief Desired speed of the robot in walk or position locomotion.
+     */
+    Eigen::Matrix<float, 3, 1> desiredSpeed = {0., 0., 0.};
 
-        /**
-         * @brief Desired speed of the robot in walk or position locomotion.
-         */
-        Eigen::Matrix<float, 3, 1> desiredSpeed = {0., 0., 0.};
+    /**
+     * @brief The speed message of twist command given by gamepad.
+     */
+    float desiredTwistingSpeed = 0.;
 
-        /**
-         * @brief The speed message of twist command given by gamepad.
-         */
-        float desiredTwistingSpeed = 0.;
+    /**
+     * @brief Desired robot's body height. Overwrite in the class constructor by robot->bodyHeight
+     */
+    float desiredBodyHeight = 0.45; //overwrite in the class constructor by robot->bodyHeight
+    
+    /**
+     * @brief The number of legs.
+     */
+    int numLegs = 4;
 
-        /**
-         * @brief Desired robot's body height. Overwrite in the class constructor by robot->bodyHeight
-         */
-        float desiredBodyHeight = 0.45; //overwrite in the class constructor by robot->bodyHeight
-        
-        /**
-         * @brief The number of legs.
-         */
-        int numLegs = 4;
+    /**
+     * @brief The coefficients of friction.
+     */
+    std::vector<float> frictionCoeffs = {0.45, 0.45, 0.45, 0.45};
 
-        /**
-         * @brief The coefficients of friction.
-         */
-        std::vector<float> frictionCoeffs = {0.45, 0.45, 0.45, 0.45};
+    /**
+     * @brief File path of stance_leg_controller.yaml.
+     */
+    std::string configFilepath;
 
-        /**
-         * @brief File path of stance_leg_controller.yaml.
-         */
-        std::string configFilepath;
+    /**
+     * @brief The dimension of force.
+     */
+    int force_dim;
 
-        /**
-         * @brief The dimension of force.
-         */
-        int force_dim;
+    /**
+     * @brief The parameter KP in stance_leg_controller.yaml.
+     */
+    Eigen::Matrix<float, 6, 1> KP;
 
-        /**
-         * @brief The parameter KP in stance_leg_controller.yaml.
-         */
-        Eigen::Matrix<float, 6, 1> KP;
+    /**
+     * @brief The parameter KD in stance_leg_controller.yaml.
+     */
+    Eigen::Matrix<float, 6, 1> KD;
 
-        /**
-         * @brief The parameter KD in stance_leg_controller.yaml.
-         */
-        Eigen::Matrix<float, 6, 1> KD;
+    /**
+     * @brief The parameter maxDdq in stance_leg_controller.yaml.
+     */
+    Eigen::Matrix<float, 6, 1> maxDdq;
 
-        /**
-         * @brief The parameter maxDdq in stance_leg_controller.yaml.
-         */
-        Eigen::Matrix<float, 6, 1> maxDdq;
+    /**
+     * @brief The parameter minDdq in stance_leg_controller.yaml.
+     */
+    Eigen::Matrix<float, 6, 1> minDdq;
 
-        /**
-         * @brief The parameter minDdq in stance_leg_controller.yaml.
-         */
-        Eigen::Matrix<float, 6, 1> minDdq;
+    /**
+     * @brief The parameter accWeight in stance_leg_controller.yaml.
+     */
+    Eigen::Matrix<float, 6, 1> accWeight;
 
-        /**
-         * @brief The parameter accWeight in stance_leg_controller.yaml.
-         */
-        Eigen::Matrix<float, 6, 1> accWeight;
+    /**
+     * @brief The minimum ratio.
+     */
+    Vec4<float> fMinRatio; // the minimum ratio
 
-        /**
-         * @brief The minimum ratio.
-         */
-        Vec4<float> fMinRatio; // the minimum ratio
+    /**
+     * @brief The maximum ratio.
+     */
+    Vec4<float> fMaxRatio; // the maximum ratio
 
-        /**
-         * @brief The maximum ratio.
-         */
-        Vec4<float> fMaxRatio; // the maximum ratio
-
-        /**
-         * @brief Current time.
-         */
-        float currentTime;
-    };
-} // namespace Quadruped
+    /**
+     * @brief Current time.
+     */
+    float currentTime;
+};
 
 #endif //QR_STANCE_LEG_CONTROLLER_H

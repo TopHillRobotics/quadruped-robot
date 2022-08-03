@@ -35,12 +35,11 @@
 #include <geometry_msgs/Pose.h>
 #include <nav_msgs/Odometry.h>
 
-namespace Quadruped {
-    /**
-    * @brief A qrVelocityParamReceiver object recieves the velocity parameters from a ROS topic
-    * 
-    */
-    class qrVelocityParamReceiver {
+/**
+* @brief A qrVelocityParamReceiver object recieves the velocity parameters from a ROS topic
+* 
+*/
+class qrVelocityParamReceiver {
 
     public:
         /**
@@ -55,40 +54,39 @@ namespace Quadruped {
          */
         ~qrVelocityParamReceiver () = default;
 
-        /**
-        * @brief Receive the updated information from a ROS topic
-        * @param msg the vel  msg from a ROS topic
-        */
-        void CmdVelCallback(const geometry_msgs::Twist::ConstPtr &input);
+    /**
+    * @brief Receive the updated information from a ROS topic
+    * @param msg the vel  msg from a ROS topic
+    */
+    void CmdVelCallback(const geometry_msgs::Twist::ConstPtr &input);
 
-        /**
-        * @brief Get the linear velocity.
-        * @return Eigen::Matrix<float, 3, 1>: linearVel  
-        */
-        inline Eigen::Matrix<float, 3, 1> GetLinearVelocity()
-        {
-            return linearVel;
-        }
+    /**
+    * @brief Get the linear velocity.
+    * @return Eigen::Matrix<float, 3, 1>: linearVel  
+    */
+    inline Eigen::Matrix<float, 3, 1> GetLinearVelocity()
+    {
+        return linearVel;
+    }
 
-        /**
-        * @brief Get the angular velocity.
-        * @return Vec3<float>: angularVel  
-        */
-        inline float GetAngularVelocity()
-        {
-            return angularVel[2]; // z component.
-        }
+    /**
+    * @brief Get the angular velocity.
+    * @return Vec3<float>: angularVel  
+    */
+    inline float GetAngularVelocity()
+    {
+        return angularVel[2]; // z component.
+    }
 
-        geometry_msgs::Twist cmdVel;
-        ros::NodeHandle &nh;
-        ros::Subscriber cmdVelSub;
-        std::string cmdVelTopic = "/velocity_param";
-        
-    private:
-        Eigen::Matrix<float, 3, 1> linearVel = Eigen::Matrix<float, 3, 1>::Zero();
-        Eigen::Matrix<float, 3, 1> angularVel = Eigen::Matrix<float, 3, 1>::Zero();
+    geometry_msgs::Twist cmdVel;
+    ros::NodeHandle &nh;
+    ros::Subscriber cmdVelSub;
+    std::string cmdVelTopic = "/velocity_param";
+    
+private:
+    Eigen::Matrix<float, 3, 1> linearVel = Eigen::Matrix<float, 3, 1>::Zero();
+    Eigen::Matrix<float, 3, 1> angularVel = Eigen::Matrix<float, 3, 1>::Zero();
 
-    };
-} // namespace Quadruped
+};
 
 #endif //QR_VEL_PARAM_RECEIVER_H
