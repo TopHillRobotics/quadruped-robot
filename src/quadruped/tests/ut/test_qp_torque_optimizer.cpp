@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include "gtest/gtest.h"
 #include "utils/se3.h"
-#include "mpc_controller/qp_torque_optimizer.h"
+#include "controller/qp_torque_optimizer.h"
 
 using namespace robotics;
 using namespace std;

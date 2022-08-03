@@ -30,7 +30,7 @@
 #include "state_estimator/qr_robot_estimator.h"
 #include "state_estimator/qr_ground_estimator.h"
 #include "planner/qr_foothold_planner.h"
-#include "mpc_controller/qr_foot_trajectory_generator.h"
+#include "controller/qr_foot_trajectory_generator.h"
 
 namespace Quadruped {
     class qrSwingLegController {

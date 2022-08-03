@@ -24,7 +24,7 @@
 
 #include "robots/qr_robot_config.h"
 
-std::unordered_map<int, std::string> modeMap = {{0, "velocity"}, {1, "position"}, {2, "walk"}};
+std::unordered_map<int, std::string> modeMap = {{LocomotionMode::VELOCITY_LOCOMOTION, "velocity"}, {LocomotionMode::POSITION_LOCOMOTION, "position"}, {LocomotionMode::WALK_LOCOMOTION, "walk"}};
 
 qrRobotConfig::qrRobotConfig(std::string path)
 {
@@ -50,13 +50,6 @@ void qrRobotConfig::Load(std::string path)
     LoadHipPosition(qrRobotConfig);
     LoadKps(qrRobotConfig);
     LoadKds(qrRobotConfig);
-
-//    std::vector<float>
-//        jointDirectionList = qrRobotConfig["motor_params"]["joint_directions"].as<std::vector<float >>();
-//    std::vector<float>
-//        jointOffsetList = qrRobotConfig["motor_params"]["joint_offsets"].as<std::vector<float >>();
-//    jointDirection = Eigen::MatrixXf::Map(&jointDirectionList[0], 12, 1);
-//    jointOffset = Eigen::MatrixXf::Map(&jointOffsetList[0], 12, 1);
 
     isSim = qrRobotConfig["is_sim"].as<bool>();
 }

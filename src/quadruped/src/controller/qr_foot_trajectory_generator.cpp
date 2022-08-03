@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE. 
 
-#include "mpc_controller/qr_foot_trajectory_generator.h"
+#include "controller/qr_foot_trajectory_generator.h"
 
 namespace Quadruped {
 

@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include "gtest/gtest.h"
 #include "utils/se3.h"
-#include "mpc_controller/torque_stance_leg_controller.h"
+#include "controller/torque_stance_leg_controller.h"
 
 using namespace robotics;
 using namespace std;

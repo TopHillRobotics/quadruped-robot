@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "robots/timer.h"
-#include "mpc_controller/locomotion_controller.h"
+#include "controller/locomotion_controller.h"
 
 using namespace std;
 

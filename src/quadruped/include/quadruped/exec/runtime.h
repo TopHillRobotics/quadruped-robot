@@ -30,7 +30,7 @@
 #include <yaml-cpp/yaml.h>
 
 
-#include "mpc_controller/qr_locomotion_controller.h"
+#include "controller/qr_locomotion_controller.h"
 #include "planner/qr_com_planner.h"
 
 #include "planner/qr_foothold_planner.h"

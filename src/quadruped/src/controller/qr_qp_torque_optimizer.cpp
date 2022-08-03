@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "mpc_controller/qr_qp_torque_optimizer.h"
+#include "controller/qr_qp_torque_optimizer.h"
 #include "QuadProg++.hh"
 #include "Array.hh"
 namespace Quadruped {

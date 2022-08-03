@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE. 
 
-#include "mpc_controller/qr_locomotion_controller.h"
+#include "controller/qr_locomotion_controller.h"
 namespace Quadruped {
     qrLocomotionController::qrLocomotionController(qrRobot *robotIn,
                                                qrGaitGenerator *gaitGeneratorIn,

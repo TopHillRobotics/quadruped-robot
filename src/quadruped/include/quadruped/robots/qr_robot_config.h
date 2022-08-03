@@ -31,6 +31,7 @@
 #include <Eigen/Dense>
 #include "utils/cppTypes.h"
 #include "utils/se3.h"
+#include "types.h"
 
 class qrRobotConfig
 {

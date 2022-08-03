@@ -1,14 +1,29 @@
-/*
-* Copyright (c) Huawei Technologies Co., Ltd. 2021-2022. All rights reserved.
-* Description: Stance controller for stance foot.
-* Author: Zang Yaohua & Zhao Yao
-* Create: 2021-10-25
-* Notes: xx
-* Modify: init the file. @ Zang Yaohua
-*/
+// The MIT License
 
-#include "mpc_controller/qr_torque_stance_leg_controller.h"
-#include "mpc_controller/qr_qp_torque_optimizer.h"
+// Copyright (c) 2022
+// qrRobot Motion and Vision Laboratory at East China Normal University
+// Contact:tophill.robotics@gmail.com
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#include "controller/qr_torque_stance_leg_controller.h"
+#include "controller/qr_qp_torque_optimizer.h"
 using namespace std;
 namespace Quadruped {
 
@@ -42,21 +57,13 @@ namespace Quadruped {
 
     void qrStanceLegController::Reset(float currentTime_)
     {   
-        string controlModeStr;        
-        switch (robot->controlParams["mode"])
-        {
-            case LocomotionMode::VELOCITY_LOCOMOTION:
-                controlModeStr = "velocity";
-                break; 
-            case LocomotionMode::POSITION_LOCOMOTION:
-                controlModeStr = "position";
-                break; 
-            case LocomotionMode::WALK_LOCOMOTION:
-                controlModeStr = "walk";
-                break;                                                
-            default:
-                break;
-        }
+        std::unordered_map<int, std::string> modeMap = {{LocomotionMode::VELOCITY_LOCOMOTION, "velocity"}, 
+                                                        {LocomotionMode::POSITION_LOCOMOTION, "position"}, 
+                                                        {LocomotionMode::WALK_LOCOMOTION, "walk"}};
+        string controlModeStr;
+        if (modeMap.count(robot->controlParams["mode"]) > 0) {
+            controlModeStr = modeMap[robot->controlParams["mode"]];
+        }     
         YAML::Node param = YAML::LoadFile(configFilepath);
         this->force_dim = param["stance_leg_params"]["force_dim"].as<int>();        
         vector<float> v = param["stance_leg_params"][controlModeStr]["KD"].as<vector<float>>();

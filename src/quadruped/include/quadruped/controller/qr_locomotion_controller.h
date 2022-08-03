@@ -33,8 +33,8 @@
 #include "robots/qr_robot.h"
 #include "robots/qr_motor.h"
 #include "planner/qr_gait_generator.h"
-#include "mpc_controller/qr_raibert_swing_leg_controller.h"
-#include "mpc_controller/qr_torque_stance_leg_controller.h"
+#include "controller/qr_raibert_swing_leg_controller.h"
+#include "controller/qr_torque_stance_leg_controller.h"
 #include "planner/qr_com_planner.h"
 
 #include "state_estimator/qr_robot_estimator.h"

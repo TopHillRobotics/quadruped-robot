@@ -28,7 +28,7 @@
 #include <math.h>
 #include <algorithm>
 #include "robots/qr_robot.h"
-#include "mpc_controller/qr_locomotion_controller.h"
+#include "controller/qr_locomotion_controller.h"
 
 namespace Quadruped {
     namespace Action {
