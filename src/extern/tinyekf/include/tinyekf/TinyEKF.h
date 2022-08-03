@@ -9,6 +9,9 @@
 #ifndef TINYEKF_TINYEKF_TINYEKF_H
 #define TINYEKF_TINYEKF_TINYEKF_H
 
+#define Nsta 3 // dimension of state
+#define Mobs 3 // dimension of observation
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "tiny_ekf_struct.h"

@@ -1,6 +1,0 @@
-package lcmtest2;
-
-struct another_type_t
-{
-    int32_t val;
-}

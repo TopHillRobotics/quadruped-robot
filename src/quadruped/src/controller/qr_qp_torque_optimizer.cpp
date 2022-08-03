@@ -23,8 +23,8 @@
 // SOFTWARE.
 
 #include "controller/qr_qp_torque_optimizer.h"
-#include "QuadProg++.hh"
-#include "Array.hh"
+#include "quadprogpp/QuadProg++.hh"
+#include "quadprogpp/Array.hh"
 
 /** @brief
  * @param robotMass : float, ture mass of robot.

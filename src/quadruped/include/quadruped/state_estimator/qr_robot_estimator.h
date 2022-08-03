@@ -10,7 +10,7 @@
 #ifndef QR_ROBOT_ESTIMATOR_H
 #define QR_ROBOT_ESTIMATOR_H
 
-#include "utils/se3.h"
+#include "common/se3.h"
 #include "robots/qr_robot.h"
 // #include "inekf_cpp_interface.h"
 #include "state_estimator/qr_robot_pose_estimator.h"

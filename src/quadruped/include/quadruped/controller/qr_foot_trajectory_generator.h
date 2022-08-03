@@ -26,8 +26,10 @@
 #define QR_FOOT_TRAJECTORY_GENERATOR_H
 
 #include <Eigen/Dense>
-#include "utils/geometry.h"
-#include "utils/BSpline.h"
+
+#include "tinynurbs/tinynurbs.h"
+#include "common/qr_geometry.h"
+#include "common/qr_BSpline.h"
 #include "config.h"
 
 struct qrStepParameters {

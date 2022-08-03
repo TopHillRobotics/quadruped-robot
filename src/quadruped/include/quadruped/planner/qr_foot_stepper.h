@@ -32,10 +32,10 @@
 #include <tuple>
 #include <queue>
 
-#include "QuadProg++.hh"
-#include "Array.hh"
+#include "quadprogpp/QuadProg++.hh"
+#include "quadprogpp/Array.hh"
 #include "robots/qr_robot.h"
-#include "utils/se3.h"
+#include "common/se3.h"
 #include "state_estimator/qr_ground_estimator.h"
 
     
