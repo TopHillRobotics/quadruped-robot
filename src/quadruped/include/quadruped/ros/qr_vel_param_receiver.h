@@ -26,6 +26,7 @@
 #ifndef QR_VEL_PARAM_RECEIVER_H
 #define QR_VEL_PARAM_RECEIVER_H
 
+#include <yaml-cpp/yaml.h>
 #include <iostream>
 #include <string>
 #include <Eigen/Dense>
@@ -46,7 +47,7 @@ namespace Quadruped {
          * @brief Construct a qrVelocityParamReceiver object using a  ROS nodeHandle.
          * @param nhIn specifies the ROS node to communicate
          */
-        qrVelocityParamReceiver(ros::NodeHandle &nhIn);
+        qrVelocityParamReceiver(ros::NodeHandle &nhIn, std::string FilePath);
         
         
         /**
