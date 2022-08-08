@@ -66,16 +66,22 @@ qrGaitGenerator::qrGaitGenerator(qrRobot *robot, string configFilePath)
     this->robot = robot;
     string gait = config["gait_params"]["gait"].as<string>();
     cout << "qrGaitGenerator Set gait: " << gait << endl;
+    this->CreateGait(gait);
+    // std::cout << "initialLegState" << initialLegState <<std::endl;
+    Reset(0);
+}
+void qrGaitGenerator::CreateGait(string gaitType) {
 
-    vector<float> stanceDurationList = config["gait_params"][gait]["stance_duration"].as<vector<float >>();
+    this->curGaitType = gaitType;
+    vector<float> stanceDurationList = config["gait_params"][gaitType]["stance_duration"].as<vector<float >>();
     stanceDuration = Eigen::MatrixXf::Map(&stanceDurationList[0], 4, 1);
-    vector<float> dutyFactorList = config["gait_params"][gait]["duty_factor"].as<vector<float >>();
+    vector<float> dutyFactorList = config["gait_params"][gaitType]["duty_factor"].as<vector<float >>();
     dutyFactor = Eigen::MatrixXf::Map(&dutyFactorList[0], 4, 1);
-    vector<int> initialLegStateList = config["gait_params"][gait]["initial_leg_state"].as<vector<int >>();
+    vector<int> initialLegStateList = config["gait_params"][gaitType]["initial_leg_state"].as<vector<int >>();
     initialLegState = Eigen::MatrixXi::Map(&initialLegStateList[0], 4, 1);
-    vector<float> initialLegPhaseList = config["gait_params"][gait]["init_phase_full_cycle"].as<vector<float >>();
+    vector<float> initialLegPhaseList = config["gait_params"][gaitType]["init_phase_full_cycle"].as<vector<float >>();
     initialLegPhase = Eigen::MatrixXf::Map(&initialLegPhaseList[0], 4, 1);
-    contactDetectionPhaseThreshold = config["gait_params"][gait]["contact_detection_phase_threshold"].as<float>();
+    contactDetectionPhaseThreshold = config["gait_params"][gaitType]["contact_detection_phase_threshold"].as<float>();
     
     for (int legId = 0; legId < initialLegState.size(); legId++) {
         // when dutyFactor is about 0, this leg stay in air.
@@ -98,10 +104,16 @@ qrGaitGenerator::qrGaitGenerator(qrRobot *robot, string configFilePath)
             }
         }
     }
-    // std::cout << "initialLegState" << initialLegState <<std::endl;
-    Reset(0);
+    this->nextGaitType = this->curGaitType;
+
 }
 
+void qrGaitGenerator::ModifyGait() {
+    if (this->nextGaitType != this->curGaitType) {
+        this->curGaitType = this->nextGaitType;
+        this->CreateGait(this->curGaitType);
+    }
+}
 void qrGaitGenerator::Reset(float currentTime)
 {
     normalizedPhase = Eigen::Matrix<float, 4, 1>::Zero();
@@ -113,6 +125,7 @@ void qrGaitGenerator::Reset(float currentTime)
 
 void qrGaitGenerator::Update(float currentTime)
 {
+    this->ModifyGait();
     Eigen::Matrix<bool, 4, 1> contactState = robot->GetFootContacts();
     float fullCyclePeriod, augmentedTime, phaseInFullCycle, ratio;
 

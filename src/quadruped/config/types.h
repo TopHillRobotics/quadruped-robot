@@ -71,4 +71,10 @@ enum TwistMode {
     ROS,
 };
 
+enum GaitType {
+    STAND,
+    STATIC_WALK,
+    AMBLE,
+    TROT
+};
 #endif //QR_TYPES_H

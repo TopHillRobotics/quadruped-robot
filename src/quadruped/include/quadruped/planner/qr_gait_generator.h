@@ -80,6 +80,10 @@ public:
     */
     virtual void Update(float currentTime);
 
+    virtual void CreateGait(std::string gaitType);
+
+    virtual void ModifyGait();
+
     qrRobot *robot;
 
     /**
@@ -174,6 +178,10 @@ public:
     *
     */
     float contactDetectionPhaseThreshold;
+
+    std::string curGaitType;
+
+    std::string nextGaitType;
 };
 
 #endif //QR_GAIT_GENERATOR_H

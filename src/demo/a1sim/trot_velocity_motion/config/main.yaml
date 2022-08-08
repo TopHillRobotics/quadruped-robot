@@ -2,7 +2,7 @@ name: a1_sim
 
 speed_update_mode: 0 # const twist
 const_twist:
-  linear: [0.1, 0., 0.]
+  linear: [0.2, 0., 0.]
   angular: 0. # 0.2
 
 #speed_update_mode: 1 # ros cmd_vel twist
