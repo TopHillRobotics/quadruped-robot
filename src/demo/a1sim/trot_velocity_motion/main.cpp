@@ -1,5 +1,8 @@
+#include <thread>
+#include <typeinfo>
 
 #include "quadruped/exec/runtime.h"
+#include "quadruped/ros/qr_telekeyboard.h"
 #include "quadruped/robots/qr_robot_a1_sim.h"
 #include "quadruped/ros/qr_gazebo_controller_manager.h"
 using namespace std;
@@ -13,7 +16,22 @@ int main(int argc, char **argv)
     std::string pathToPackage = ros::package::getPath("a1sim");
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
     std::string robotName = "a1_sim";
+    std::string useKeyboard = "no";
+    // nh.param<std::string>("usekeyboard", useKeyboard, "n");
     
+    // listen the matters of keyboard
+    std::cout << "argc:" << argc << " argv[0]:" << argv[0] << std::endl;
+    if(argc == 2){
+        std::cout << "argv[1]: " <<argv[1] << std::endl;
+        useKeyboard = argv[1];
+    }
+    qrTeleKeyboard keyboard(nh);
+    if(useKeyboard == "yes"){
+        std::cout << "Keyboard start receving..." << std::endl;
+        thread keyboardTh(&qrTeleKeyboard::main, keyboard);
+        keyboardTh.detach();
+    }
+
     ResetRobotBySystem(nh);
     ros::AsyncSpinner spinner(1); // one threads
     spinner.start();
