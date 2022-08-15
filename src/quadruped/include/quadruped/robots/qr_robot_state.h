@@ -26,10 +26,10 @@
 #define QR_ROBOT_STATE_H
 
 #include <Eigen/Dense>
-#include "utils/se3.h"
+#include "common/se3.h"
 #include "qr_robot_config.h"
 
-struct IMU{
+struct qrIMU{
     /**
      * @brief quaternion of the IMU ( w,x,y,z )
      */
@@ -51,7 +51,7 @@ struct IMU{
     std::array<float, 3> rpy;
 };
 
-struct MotorState
+struct qrMotorState
 {
     /**
      * @brief current angle (unit: radian)
@@ -68,7 +68,7 @@ struct MotorState
      */
     float tauEst;
 
-    void operator=(const MotorState &state){
+    void operator=(const qrMotorState &state){
         this->q = state.q;
         this->dq = state.dq;
         this->tauEst = state.tauEst;
@@ -136,12 +136,12 @@ public:
     /**
      * @brief imu information
      */
-    IMU imu;
+    qrIMU imu;
 
     /**
      * @brief state of 12 motors
      */
-    std::array<MotorState, 12> motorState;
+    std::array<qrMotorState, 12> motorState;
 
     /**
      * @brief update current robot states

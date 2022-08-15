@@ -22,41 +22,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef QR_RUNTIME_H
-#define QR_RUNTIME_H
+#ifndef QR_TELEKEYBOARD_H
+#define QR_TELEKEYBOARD_H
 
-#include <iostream>
-#include <typeinfo>
-#include <yaml-cpp/yaml.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <termios.h>
+#include <map>
+#include <vector>
 
+#include <ros/ros.h>
+#include <sensor_msgs/Joy.h>
+#include <geometry_msgs/Twist.h>
 
-#include "controller/qr_locomotion_controller.h"
-#include "planner/qr_com_planner.h"
+class qrTeleKeyboard
+{
+public:
+    qrTeleKeyboard(ros::NodeHandle &nhIn);
+    ~qrTeleKeyboard(){}
+    int getch();
+    void main();
+private:
+    std::string cmdTopic = "/velocity_param";
+    ros::NodeHandle &nh;
+};
 
-#include "planner/qr_foothold_planner.h"
-#include "action/qr_action.h"
-#include "ros/qr_vel_param_receiver.h"
-#include "robots/qr_robot_a1_sim.h"
-#include "state_estimator/qr_robot_estimator.h"
-
-
-#define MAX_TIME_SECONDS 1000.0f
-
-Eigen::Matrix<float, 3, 1> desiredSpeed = {0.f, 0.f, 0.f};
-float desiredTwistingSpeed = 0.f;
-float footClearance = 0.01f;
-
-/**
- * @brief launch all controllers, planners  and esimators.
- * @param quadruped: pointer to A1Robot.
- * @return pointer to qrLocomotionController.
- */
-qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, std::string robotName);
-
-/** @brief setup the desired speed for robot. */
-void updateControllerParams(qrLocomotionController *controller, Eigen::Vector3f linSpeed, float angSpeed);
-
-qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, std::string robotName);
-
-void updateControllerParams(qrLocomotionController *controller, Eigen::Vector3f linSpeed, float angSpeed);
-#endif //QR_RUNTIME_H
+#endif //QR_TELEKEYBOARD_H

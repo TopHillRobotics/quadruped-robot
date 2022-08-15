@@ -73,9 +73,8 @@ void qrRobotVelocityEstimator::Update(float currentTime)
 {
     const qrRobotState &state = robot->state;
     // Propagate current state estimate with new accelerometer reading."""
-
-    //float deltaTime = ComputeDeltaTime(&robotState);
-    float deltaTime = 0.001f;
+    const LowState lowstate = robot->lowstate;
+    float deltaTime = ComputeDeltaTime(&lowstate);
     const auto &acc = state.imu.accelerometer;
     Vec3<float> sensorAcc(acc[0], acc[1], acc[2]);
     Quat<float> baseOrientation = robot->GetBaseOrientation(); // w,x,y,z

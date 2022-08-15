@@ -29,8 +29,8 @@
 #include <unordered_map>
 #include <yaml-cpp/yaml.h>
 #include <Eigen/Dense>
-#include "utils/cppTypes.h"
-#include "utils/se3.h"
+#include "common/qr_cppTypes.h"
+#include "common/se3.h"
 #include "types.h"
 
 class qrRobotConfig

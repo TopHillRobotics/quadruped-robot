@@ -29,7 +29,7 @@
 #include <map>
 #include <Eigen/Dense>
 #include "robots/qr_timer.h"
-#include "utils/cppTypes.h"
+#include "common/qr_cppTypes.h"
 #include "robots/qr_robot.h"
 #include "robots/qr_motor.h"
 #include "planner/qr_gait_generator.h"

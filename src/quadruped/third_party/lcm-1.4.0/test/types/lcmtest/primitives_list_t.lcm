@@ -1,7 +1,0 @@
-package lcmtest;
-
-struct primitives_list_t
-{
-    int32_t num_items;
-    lcmtest.primitives_t items[num_items];
-}

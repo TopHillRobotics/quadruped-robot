@@ -22,41 +22,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef QR_RUNTIME_H
-#define QR_RUNTIME_H
+#ifndef QR_MSG_CONVERTER_H
+#define QR_MSG_CONVERTER_H
 
-#include <iostream>
-#include <typeinfo>
+#include <stdio.h>
+#include <unistd.h>
+#include <termios.h>
 #include <yaml-cpp/yaml.h>
+#include <map>
+#include <vector>
 
+#include <ros/ros.h>
+#include <sensor_msgs/Joy.h>
+#include <geometry_msgs/Twist.h>
+#include <geometry_msgs/Pose.h>
+#include <nav_msgs/Odometry.h>
 
-#include "controller/qr_locomotion_controller.h"
-#include "planner/qr_com_planner.h"
+class qrJoy2Twist
+{
+public:
+    qrJoy2Twist(ros::NodeHandle &nh, std::string pathToNode);
+    ~qrJoy2Twist();
+    void JoyCmdCallback(const sensor_msgs::Joy::ConstPtr &joyMsg);
+private:
+    ros::NodeHandle &nh;
+    std::string cmdVelTopic = "/velocity_param";
+    std::string joyCmdTopic = "/joy";
+    ros::Subscriber joySubscriber;
+    ros::Publisher twistPublisher;
+    geometry_msgs::Twist msg;
+    double joyCmdVelXMax;
+    double joyCmdVelYMax;
+    double joyCmdVelZMax;
+    double joyCmdVelRollMax;
+    double joyCmdVelPitchMax;
+    double joyCmdVelYawMax;
+};
 
-#include "planner/qr_foothold_planner.h"
-#include "action/qr_action.h"
-#include "ros/qr_vel_param_receiver.h"
-#include "robots/qr_robot_a1_sim.h"
-#include "state_estimator/qr_robot_estimator.h"
-
-
-#define MAX_TIME_SECONDS 1000.0f
-
-Eigen::Matrix<float, 3, 1> desiredSpeed = {0.f, 0.f, 0.f};
-float desiredTwistingSpeed = 0.f;
-float footClearance = 0.01f;
-
-/**
- * @brief launch all controllers, planners  and esimators.
- * @param quadruped: pointer to A1Robot.
- * @return pointer to qrLocomotionController.
- */
-qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, std::string robotName);
-
-/** @brief setup the desired speed for robot. */
-void updateControllerParams(qrLocomotionController *controller, Eigen::Vector3f linSpeed, float angSpeed);
-
-qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, std::string robotName);
-
-void updateControllerParams(qrLocomotionController *controller, Eigen::Vector3f linSpeed, float angSpeed);
-#endif //QR_RUNTIME_H
+#endif //QR_MSG_CONVERTER_H

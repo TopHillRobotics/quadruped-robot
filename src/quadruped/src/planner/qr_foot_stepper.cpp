@@ -23,8 +23,8 @@
 // SOFTWARE.
 
 #include "planner/qr_foot_stepper.h"
-#include "QuadProg++.hh"
-#include "Array.hh"
+#include "quadprogpp/QuadProg++.hh"
+#include "quadprogpp/Array.hh"
 
 qrFootStepper ::qrFootStepper (qrTerrain& terrain, float defaultFootholdOffset, std::string level)
 {

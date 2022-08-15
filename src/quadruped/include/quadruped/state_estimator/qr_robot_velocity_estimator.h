@@ -12,11 +12,14 @@
 
 #include <deque>
 #include <numeric>
-#include "utils/se3.h"
+
+#include "tinyekf/TinyEKF.h"
+
+#include "common/se3.h"
 #include "robots/qr_robot.h"
 #include "planner/qr_gait_generator.h"
 #include "state_estimator/qr_filter.h"
-#include "TinyEKF.h"
+
 
 /** @brief Initiates the velocity estimator.
  *  See filterpy documentation in the link below for more details.

@@ -31,14 +31,15 @@
 #include <Eigen/Dense>
 #include <yaml-cpp/yaml.h>
 
+#include "unitree_legged_sdk/unitree_interface.h"
 #include "config.h"
 #include "types.h"
 #include "robots/qr_timer.h"
 #include "robots/qr_motor.h"
-#include "utils/se3.h"
+#include "common/se3.h"
 #include "qr_robot_config.h"
 #include "qr_robot_state.h"
-#include "unitree_legged_sdk/unitree_interface.h"
+
 
 /**
  * @brief base class of robot.
@@ -208,6 +209,8 @@ public:
     bool initComplete = false;
 
     qrRobotConfig *config;
+
+    LowState lowstate;
 
     qrRobotState  state;
 

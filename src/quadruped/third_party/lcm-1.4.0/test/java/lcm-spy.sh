@@ -1,1 +1,0 @@
-CLASSPATH=$CLASSPATH:. lcm-spy

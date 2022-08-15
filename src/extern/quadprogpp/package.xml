@@ -1,13 +1,11 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>tinyekf</name>
+  <name>quadprogpp</name>
   <version>0.1.0</version>
-  <description>The tinyekf package</description>
+  <description>The Quadprogpp package</description>
   <maintainer email="sherman@todo.todo">sherman</maintainer>
   <license>MIT</license>
-  <author >Zhenyu Xu</author>
   <buildtool_depend>catkin</buildtool_depend>
-
   <export>
   </export>
 </package>

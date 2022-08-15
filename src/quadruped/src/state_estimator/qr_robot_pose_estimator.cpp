@@ -56,9 +56,9 @@ float qrRobotPoseEstimator::ComputeDeltaTime(const LowState *robotState)
 void qrRobotPoseEstimator::Update(float currentTime)
 {
     const qrRobotState &robotState = robot->state;
+    const LowState state = robot->lowstate;
     // Propagate current state estimate with new accelerometer reading."""
-    // float deltaTime = ComputeDeltaTime(&robotState);
-    float deltaTime = 0.001f;
+    float deltaTime = ComputeDeltaTime(&state);
     float height = EstimateRobotHeight();
     estimatedPose[2] = height;
     robot->state.basePosition[2] = height;
