@@ -40,7 +40,7 @@
         <!-- environment blocks, obstacles or stairs -->
         <model name="static_environment">
         <static>true</static>
-            <link name="static_box">
+            <!-- <link name="static_box">
                 <pose>-2 2 0.5 0 0 0</pose>
                 <collision name="static_box_collision">
                     <geometry>
@@ -60,7 +60,7 @@
                         <diffuse>.421 0.225 0.0 1.0</diffuse>
                     </material>
                 </visual>
-            </link>
+            </link> -->
         </model>
 
     </world>
