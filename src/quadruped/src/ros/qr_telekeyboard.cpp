@@ -66,6 +66,14 @@ void qrTeleKeyboard::main()
     ros::Publisher pub = nh.advertise<geometry_msgs::Twist>(cmdTopic, 1);
     // sensor_msgs::Joy joyMsg;
     geometry_msgs::Twist twMsg;
+    // initialize speed.
+    twMsg.linear.x = 0;
+    twMsg.linear.y = 0;
+    twMsg.linear.z = 0;
+    twMsg.angular.x = 0;
+    twMsg.angular.y = 0;
+    twMsg.angular.z = 0;
+    pub.publish(twMsg);
 
     std::map<char, std::vector<double>> moveBindings;
     moveBindings['w'] = std::vector<double>{1, 0, 0};
@@ -91,16 +99,22 @@ void qrTeleKeyboard::main()
     while(true){
         key = getch();
 
+        // for(int i = 0; i < 4; ++i){
+        //     moveCmd[i] = 0;
+        // }
+        // for(int i = 0; i < 3; ++i){
+        //     rotationCmd[i] = 0;
+        // }
         if(moveBindings.count(key) == 1){
             for(int i = 0; i < 3; ++i){
                 moveCmd[i] = l_alpha * moveBindings[key][i] + (1 - l_alpha) * moveCmd[i];
             }
-            std::cout << "receive key: " << key;
+            std::cout << "receive key: " << key << " ";
         } else if(rotationBindings.count(key) == 1){
             for(int i = 0; i < 3; ++i){
                 rotationCmd[i] = r_alpha * rotationBindings[key][i] + (1 - r_alpha) * rotationCmd[i];
             }
-            std::cout << "receive key: " << key;
+            std::cout << "receive key: " << key << " ";
         } else {
             for(int i = 0; i < 4; ++i){
                 moveCmd[i] = 0;
