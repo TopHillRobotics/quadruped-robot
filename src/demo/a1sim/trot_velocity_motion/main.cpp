@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     updateControllerParams(locomotionController, desiredSpeed, desiredTwistingSpeed);
 
     std::cout << "---------Locomotion Module Init Finished---------" << std::endl;
-
+    locomotionController->GetsSwingLegController()->Reset(0);
     float startTime = quadruped->GetTimeSinceReset();
     float currentTime = startTime;
     float startTimeWall = startTime;
