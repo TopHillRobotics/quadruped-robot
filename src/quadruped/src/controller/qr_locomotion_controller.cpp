@@ -61,6 +61,7 @@ void qrLocomotionController::Update()
     gaitGenerator->Update(timeSinceReset);
     groundEstimator->Update(timeSinceReset);
     stateEstimator->Update(timeSinceReset);
+    comPlanner->Update(timeSinceReset);
     swingLegController->Update(timeSinceReset);
     stanceLegController->Update(robot->GetTimeSinceReset() - resetTime);
 }
