@@ -216,24 +216,16 @@ map<int, Matrix<float, 5, 1>> qrSwingLegController::GetAction()
         } else {
             dR = math::quaternionToRotationMatrix(controlFrameOrientation) * robotBaseR;
         }
-        // switch (robot->config->controlParams["mode"]) {
-        //     case LocomotionMode::VELOCITY_LOCOMOTION:
-        //         VelocityLocomotionProcess(dR, footPositionInBaseFrame, legId);
-        //         break;
-        //     case LocomotionMode::POSITION_LOCOMOTION:
-        //         PositionLocomotionProcess(footPositionInWorldFrame, footPositionInBaseFrame, legId);
-        //         break;
-        //     default:
-        //         break;
-        // }
-
-        footPositionInWorldFrame = GenSwingFootTrajectory(gaitGenerator->normalizedPhase[legId],
-                                                        phaseSwitchFootGlobalPos.col(legId),
-                                                        footHoldInWorldFrame.col(legId)); // interpolation in world frame
-        footPositionInBaseFrame = math::RigidTransform(robot->state.basePosition,
-                                                    robot->state.baseOrientation,
-                                                    footPositionInWorldFrame); // transfer to base frame
-
+        switch (robot->config->controlParams["mode"]) {
+            case LocomotionMode::VELOCITY_LOCOMOTION:
+                VelocityLocomotionProcess(dR, footPositionInBaseFrame, legId);
+                break;
+            case LocomotionMode::POSITION_LOCOMOTION:
+                PositionLocomotionProcess(footPositionInWorldFrame, footPositionInBaseFrame, legId);
+                break;
+            default:
+                break;
+        }
         // compute joint position & joint velocity
         robot->config->ComputeMotorAnglesFromFootLocalPosition(legId, footPositionInBaseFrame, jointIdx, jointAngles);
         Vec3<float> motorVelocity = robot->config->ComputeMotorVelocityFromFootLocalVelocity(

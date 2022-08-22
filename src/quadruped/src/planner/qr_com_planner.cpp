@@ -98,7 +98,7 @@ Eigen::Matrix<float, 3, 1> qrComPlanner ::Update(float current_time)
     }
 
     comPosInBaseFrame = supportPolygonVertices.rowwise().mean(); // shape = (3,1)
-    std::cout << "comPosInBaseFrame:" <<comPosInBaseFrame<<std::endl;
+    // std::cout << "comPosInBaseFrame:" <<comPosInBaseFrame<<std::endl;
 
     return comPosInBaseFrame;
 }

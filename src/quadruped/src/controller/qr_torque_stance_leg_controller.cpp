@@ -198,44 +198,31 @@ std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLe
     robotComVelocity = robotEstimator->GetEstimatedVelocity();  // base frame
     robotComRpy = robot->GetBaseRollPitchYaw(); // world frame
     robotComRpyRate = robot->GetBaseRollPitchYawRate();  // base frame
-    // switch(robot->config->controlParams["mode"]){
-    //     case LocomotionMode::VELOCITY_LOCOMOTION: {
-    //         VelocityLocomotionProcess(robotComOrientation,
-    //                                     robotComPosition,
-    //                                     robotComVelocity,
-    //                                     robotComRpy,
-    //                                     robotComRpyRate,
-    //                                     desiredComPosition,
-    //                                     desiredComVelocity,
-    //                                     desiredComRpy,
-    //                                     desiredComAngularVelocity);
-    //     }
-    //         break;
-    //     case LocomotionMode::POSITION_LOCOMOTION: {
-    //         PositionLocomotionProcess(robotComPosition,
-    //                                     desiredComPosition,
-    //                                     desiredComVelocity,
-    //                                     desiredComRpy,
-    //                                     desiredComAngularVelocity);
-    //     }
-    //         break;
-    // }
-
-    robotComPosition = {0., 0., robot->state.basePosition[2]};
+    switch(robot->config->controlParams["mode"]){
+        case LocomotionMode::VELOCITY_LOCOMOTION: {
+            VelocityLocomotionProcess(robotComOrientation,
+                                        robotComPosition,
+                                        robotComVelocity,
+                                        robotComRpy,
+                                        robotComRpyRate,
+                                        desiredComPosition,
+                                        desiredComVelocity,
+                                        desiredComRpy,
+                                        desiredComAngularVelocity);
+        }
+            break;
+        case LocomotionMode::POSITION_LOCOMOTION: {
+            PositionLocomotionProcess(robotComPosition,
+                                        desiredComPosition,
+                                        desiredComVelocity,
+                                        desiredComRpy,
+                                        desiredComAngularVelocity);
+        }
+            break;
+    }
 
     robotQ << robotComPosition, robotComRpy;
     robotDq << robotComVelocity, robotComRpyRate;
-
-    auto &comAdjPosInBaseFrame = comPlanner->GetComPosInBaseFrame();
-    desiredComPosition = {comAdjPosInBaseFrame[0], comAdjPosInBaseFrame[1],
-                        desiredBodyHeight}; // get goal com position from comAdjuster, base frame
-    desiredComVelocity = {desiredSpeed[0], desiredSpeed[1], 0.f};
-    // get goal rpy from footholdPlanner, in world frame
-    desiredComRpy = footholdPlanner->GetDesiredComPose().tail(3);
-    desiredComAngularVelocity = {0.f, 0.f, 0.f};
-
-    // robotQ << robotComPosition, robotComRpy;
-    // robotDq << robotComVelocity, robotComRpyRate;
     desiredQ << desiredComPosition, desiredComRpy;
     // std::cout << "desiredQ" << desiredQ.transpose() << std::endl;
     // std::cout << "robotQ" << robotQ.transpose() << std::endl;
