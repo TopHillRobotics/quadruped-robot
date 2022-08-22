@@ -47,8 +47,8 @@ motor_params:
   knee_d: 2.0
 
 controller_params:
-  mode: 0 # VEL_MODE
-  # mode: 1 # POS_MODE
+  # mode: 0 # VEL_MODE
+  mode: 1 # POS_MODE
   #mode: 2 # WALK_LOCOMOTION
 
 # is simulate or not

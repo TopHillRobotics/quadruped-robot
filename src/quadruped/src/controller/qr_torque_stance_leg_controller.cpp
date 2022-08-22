@@ -108,6 +108,57 @@ void qrStanceLegController::UpdateFRatio(Vec4<bool> &contacts, int &N, float &mo
     } 
 }
 
+void qrStanceLegController::VelocityLocomotionProcess(Quat<float> &robotComOrientation,
+                                                        Eigen::Matrix<float, 3, 1> &robotComPosition, 
+                                                        Eigen::Matrix<float, 3, 1> &robotComVelocity,
+                                                        Eigen::Matrix<float, 3, 1> &robotComRpy,
+                                                        Eigen::Matrix<float, 3, 1> &robotComRpyRate,
+                                                        Eigen::Matrix<float, 3, 1> &desiredComPosition,
+                                                        Eigen::Matrix<float, 3, 1> &desiredComVelocity,
+                                                        Eigen::Matrix<float, 3, 1> &desiredComRpy,
+                                                        Eigen::Matrix<float, 3, 1> &desiredComAngularVelocity)
+{
+    Mat3<float> Rb = math::quaternionToRotationMatrix(robotComOrientation).transpose();
+    Quat<float> controlFrameOrientation = groundEstimator->GetControlFrameOrientation();
+    Mat3<float> Rc = math::quaternionToRotationMatrix(controlFrameOrientation).transpose();
+    Vec3<float> groundRPY = groundEstimator->GetControlFrameRPY();
+    Mat3<float> Rcb = Rc.transpose() * Rb;
+
+    robotComPosition = {0., 0., robot->state.basePosition[2]}; // vel mode in base frame, height is in world frame.
+    robotComRpy[2] = 0.f;
+    if (groundEstimator->terrain.terrainType>=2) { // not horizontal plane
+        robotComPosition = math::TransformVecByQuat(math::quatInverse(controlFrameOrientation), robotComPosition);      
+        robotComPosition[0] = 0.f;
+        robotComPosition[1] = 0.f;
+        robotComVelocity = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComVelocity); // in world frame
+        robotComVelocity = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComVelocity); // in control frame
+        robotComRpy = math::rotationMatrixToRPY(Rcb.transpose()); // body orientation in control frame.
+        robotComRpyRate = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComRpyRate); // in world frame
+        robotComRpyRate = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComRpyRate); // in control frame
+    }
+    desiredComPosition << 0.f, 0.f, desiredBodyHeight;
+    desiredComRpy << -groundRPY[0], 0, -groundRPY[2]; // not control roll/yaw
+    desiredComVelocity = {desiredSpeed[0], desiredSpeed[1], 0.f}; // in base/control frame
+    desiredComAngularVelocity = {0.f, 0.f, desiredTwistingSpeed};
+}
+
+void qrStanceLegController::PositionLocomotionProcess(Eigen::Matrix<float, 3, 1> &robotComPosition,
+                                                        Eigen::Matrix<float, 3, 1> &desiredComPosition,
+                                                        Eigen::Matrix<float, 3, 1> &desiredComVelocity,
+                                                        Eigen::Matrix<float, 3, 1> &desiredComRpy,
+                                                        Eigen::Matrix<float, 3, 1> &desiredComAngularVelocity)
+{
+    robotComPosition = {0., 0., robot->state.basePosition[2]};
+
+    auto &comAdjPosInBaseFrame = comPlanner->GetComPosInBaseFrame();
+    desiredComPosition = {comAdjPosInBaseFrame[0], comAdjPosInBaseFrame[1],
+                        desiredBodyHeight}; // get goal com position from comAdjuster, base frame
+    desiredComVelocity = {desiredSpeed[0], desiredSpeed[1], 0.f};
+    // get goal rpy from footholdPlanner, in world frame
+    desiredComRpy = footholdPlanner->GetDesiredComPose().tail(3);
+    desiredComAngularVelocity = {0.f, 0.f, 0.f};
+}
+
 std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLegController::GetAction()
 {
     Eigen::Matrix<float, 3, 1> robotComPosition;
@@ -142,41 +193,49 @@ std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLe
     Eigen::Matrix<float, 3, 1> jointAngles;
     
     Quat<float> robotComOrientation = robot->GetBaseOrientation();
-    Mat3<float> Rb = math::quaternionToRotationMatrix(robotComOrientation).transpose();
-    Quat<float> controlFrameOrientation = groundEstimator->GetControlFrameOrientation();
-    Mat3<float> Rc = math::quaternionToRotationMatrix(controlFrameOrientation).transpose();
-    Vec3<float> groundRPY = groundEstimator->GetControlFrameRPY();
-    Mat3<float> Rcb = Rc.transpose() * Rb;
     
     /// current robot status  ///
     robotComVelocity = robotEstimator->GetEstimatedVelocity();  // base frame
     robotComRpy = robot->GetBaseRollPitchYaw(); // world frame
     robotComRpyRate = robot->GetBaseRollPitchYawRate();  // base frame
-    robotComPosition = {0., 0., robot->state.basePosition[2]}; // vel mode in base frame, height is in world frame.
-    robotComRpy[2] = 0.f;
-    if (groundEstimator->terrain.terrainType>=2) { // not horizontal plane
-        robotComPosition = math::TransformVecByQuat(math::quatInverse(controlFrameOrientation), robotComPosition);      
-        robotComPosition[0] = 0.f;
-        robotComPosition[1] = 0.f;
-        robotComVelocity = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComVelocity); // in world frame
-        robotComVelocity = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComVelocity); // in control frame
-        robotComRpy = math::rotationMatrixToRPY(Rcb.transpose()); // body orientation in control frame.
-        robotComRpyRate = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComRpyRate); // in world frame
-        robotComRpyRate = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComRpyRate); // in control frame
-    }
-    // std::cout << "robotComPosition" <<robotComPosition << std::endl;
-    // std::cout << "robotHeightInControlFrame" <<robot->heightInControlFrame << std::endl;
-    // std::cout << "groundRPY = " << groundRPY.transpose() / 3.1415 *180 <<std::endl;
-    // std::cout << "robotComRpy = " << robotComRpy.transpose() / 3.1415*180 << std::endl;
-    
+    // switch(robot->config->controlParams["mode"]){
+    //     case LocomotionMode::VELOCITY_LOCOMOTION: {
+    //         VelocityLocomotionProcess(robotComOrientation,
+    //                                     robotComPosition,
+    //                                     robotComVelocity,
+    //                                     robotComRpy,
+    //                                     robotComRpyRate,
+    //                                     desiredComPosition,
+    //                                     desiredComVelocity,
+    //                                     desiredComRpy,
+    //                                     desiredComAngularVelocity);
+    //     }
+    //         break;
+    //     case LocomotionMode::POSITION_LOCOMOTION: {
+    //         PositionLocomotionProcess(robotComPosition,
+    //                                     desiredComPosition,
+    //                                     desiredComVelocity,
+    //                                     desiredComRpy,
+    //                                     desiredComAngularVelocity);
+    //     }
+    //         break;
+    // }
+
+    robotComPosition = {0., 0., robot->state.basePosition[2]};
+
     robotQ << robotComPosition, robotComRpy;
     robotDq << robotComVelocity, robotComRpyRate;
-            
-    /// desired robot status  ///
-    desiredComPosition << 0.f, 0.f, desiredBodyHeight;
-    desiredComRpy << -groundRPY[0], 0, -groundRPY[2]; // not control roll/yaw
-    desiredComVelocity = {desiredSpeed[0], desiredSpeed[1], 0.f}; // in base/control frame
-    desiredComAngularVelocity = {0.f, 0.f, desiredTwistingSpeed};
+
+    auto &comAdjPosInBaseFrame = comPlanner->GetComPosInBaseFrame();
+    desiredComPosition = {comAdjPosInBaseFrame[0], comAdjPosInBaseFrame[1],
+                        desiredBodyHeight}; // get goal com position from comAdjuster, base frame
+    desiredComVelocity = {desiredSpeed[0], desiredSpeed[1], 0.f};
+    // get goal rpy from footholdPlanner, in world frame
+    desiredComRpy = footholdPlanner->GetDesiredComPose().tail(3);
+    desiredComAngularVelocity = {0.f, 0.f, 0.f};
+
+    // robotQ << robotComPosition, robotComRpy;
+    // robotDq << robotComVelocity, robotComRpyRate;
     desiredQ << desiredComPosition, desiredComRpy;
     // std::cout << "desiredQ" << desiredQ.transpose() << std::endl;
     // std::cout << "robotQ" << robotQ.transpose() << std::endl;

@@ -92,6 +92,29 @@ public:
      */
     void Update(float currentTime);
 
+    /**
+     * @brief The process of velocity locomotion.
+     * @param 
+     */
+    void VelocityLocomotionProcess(Quat<float> &robotComOrientation,
+                                    Eigen::Matrix<float, 3, 1> &robotComPosition, 
+                                    Eigen::Matrix<float, 3, 1> &robotComVelocity,
+                                    Eigen::Matrix<float, 3, 1> &robotComRpy,
+                                    Eigen::Matrix<float, 3, 1> &robotComRpyRate,
+                                    Eigen::Matrix<float, 3, 1> &desiredComPosition,
+                                    Eigen::Matrix<float, 3, 1> &desiredComVelocity,
+                                    Eigen::Matrix<float, 3, 1> &desiredComRpy,
+                                    Eigen::Matrix<float, 3, 1> &desiredComAngularVelocity);
+
+    /**
+     * @brief The process of position locomotion.
+     */
+    void PositionLocomotionProcess(Eigen::Matrix<float, 3, 1> &robotComPosition,
+                                    Eigen::Matrix<float, 3, 1> &desiredComPosition,
+                                    Eigen::Matrix<float, 3, 1> &desiredComVelocity,
+                                    Eigen::Matrix<float, 3, 1> &desiredComRpy,
+                                    Eigen::Matrix<float, 3, 1> &desiredComAngularVelocity);
+
     /** 
      * @brief Compute all motors' commands via controllers.
      *  @return tuple<map, Matrix<3,4>> : 

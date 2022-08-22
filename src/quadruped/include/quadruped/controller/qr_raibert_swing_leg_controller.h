@@ -89,6 +89,20 @@ public:
                                                         Eigen::Matrix<float, 3, 1> endPos);
 
     /**
+     * @brief The process of velocity locomotion.
+     */
+    void VelocityLocomotionProcess(const Eigen::Matrix<float, 3, 3> &dR, 
+                                    Eigen::Matrix<float, 3, 1> &footPositionInBaseFrame, 
+                                    int legId);
+
+    /**
+     * @brief The process of position locomotion.
+     */
+    void PositionLocomotionProcess(Eigen::Matrix<float, 3, 1> &footPositionInWorldFrame, 
+                                    Eigen::Matrix<float, 3, 1> &footPositionInBaseFrame, 
+                                    int legId);
+
+    /**
      * @brief Reset the controller parameters.
      */
     void Reset(float currentTime);
