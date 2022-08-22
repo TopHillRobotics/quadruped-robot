@@ -1,0 +1,6 @@
+name: a1_sim
+gap_width: 0.14
+foothold_offset: 0.1
+terrain_type: 0 # plane:0, plum_piles:1, stairs:2
+# gaps: [0.51,1.31,1.91]
+gaps: []

@@ -28,6 +28,11 @@
 #include <iostream>
 #include <map>
 #include <Eigen/Dense>
+
+#include <ros/ros.h>
+#include <gazebo_msgs/GetLinkState.h>
+#include <geometry_msgs/Pose.h>
+
 #include "robots/qr_timer.h"
 #include "common/qr_cppTypes.h"
 #include "robots/qr_robot.h"
@@ -36,7 +41,6 @@
 #include "controller/qr_raibert_swing_leg_controller.h"
 #include "controller/qr_torque_stance_leg_controller.h"
 #include "planner/qr_com_planner.h"
-
 #include "state_estimator/qr_robot_estimator.h"
 #include "state_estimator/qr_ground_estimator.h"
 
@@ -74,6 +78,11 @@ public:
      * @brief Reset the planners, estimatiors and controllers.
      */
     void Reset();
+
+    /**
+     * @brief 
+     */
+    void GetComPositionInWorldFrame(ros::ServiceClient& baseStateClient);
 
     /** 
      * @brief Update the planners, estimatiors and controllers.

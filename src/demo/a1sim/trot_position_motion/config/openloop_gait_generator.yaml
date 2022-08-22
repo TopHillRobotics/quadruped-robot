@@ -1,0 +1,30 @@
+name: a1_sim
+gait_params:
+  gait: "trot" # trot or walk, reserved param, fixed config by code, modificate here dose not take effect.
+  trot:
+    stance_duration: [ 0.3, 0.3, 0.3, 0.3 ]
+    duty_factor: [ 0.6, 0.6, 0.6, 0.6 ]
+    init_phase_full_cycle: [ 0.9, 0., 0., 0.9 ]
+    initial_leg_state: [ 0, 1, 1, 0 ]  # STANCE: 1, SWING: 0
+    contact_detection_phase_threshold: 0.1
+  stand:
+    stance_duration: [ 0.3, 0.3, 0.3, 0.3 ]
+    duty_factor: [ 1., 1, 1., 1. ]
+    init_phase_full_cycle: [ 0., 0., 0., 0. ]
+    initial_leg_state: [ 1, 1, 1, 1 ]  # STANCE: 1, SWING: 0
+    contact_detection_phase_threshold: 0.1
+  threestand:
+    stance_duration: [ 0.3, 0.3, 0, 0.3 ]
+    duty_factor: [ 1., 1., 0, 1 ]
+    init_phase_full_cycle: [ 0., 0., 0., 0. ]
+    initial_leg_state: [ 1, 1, 0, 1 ]  # STANCE: 1, SWING: 0
+    contact_detection_phase_threshold: 0.1
+  walk:
+    stance_duration: [ 7.5, 7.5, 7.5, 7.5 ]
+    duty_factor: [ 0.75, 0.75, 0.75, 0.75 ]
+    init_phase_full_cycle: [ 0.5, 0., 0.75, 0.25 ] # RR 
+    initial_leg_state: [ 1, 1, 1, 1]  # STANCE: 1, SWING: 0
+    contact_detection_phase_threshold: 0.1
+    state_switch_que: ["full_stance", "unload_force", "true_swing", "load_force"] # processes in total swing phase for a leg
+    state_ratio: [0.2, 0.3, 0.3, 0.2] # full_stance + unload/load force = stance duty_factor
+    move_base_ratio_point: [0.75, 0.875]
