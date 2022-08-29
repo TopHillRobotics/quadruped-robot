@@ -63,11 +63,6 @@ void qrGroundSurfaceEstimator::Update(float currentTime)
 
 void qrGroundSurfaceEstimator::Reset(float currentTime) {
     terrain.terrainType = static_cast<TerrainType>(footStepperConfig["terrain_type"].as<int>());
-    if (robot->controlParams["mode"] == LocomotionMode::POSITION_LOCOMOTION) {
-        terrain.terrainType = TerrainType::PLUM_PILES;
-    } else if (robot->controlParams["mode"] == LocomotionMode::VELOCITY_LOCOMOTION) {
-        terrain.terrainType = TerrainType::PLANE;
-    }
 
     terrain.footHoldOffset = footStepperConfig["foothold_offset"].as<float>();
     robot->config->footHoldOffset = terrain.footHoldOffset;
