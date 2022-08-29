@@ -1,7 +1,9 @@
 <?xml version="1.0" ?>
 <sdf version="1.5">
     <world name="default">
-
+        <gui>
+      	    <plugin name="gaitParameterGui" filename="libGaitParameterGuiPlugin.so"/>
+    	</gui>
         <physics type="ode">
         <max_step_size>0.001</max_step_size>
         <real_time_factor>1</real_time_factor>

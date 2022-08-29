@@ -1,47 +1,28 @@
-/************************************************************************
-Copyright (c) 2018-2019, Unitree Robotics.Co.Ltd. All rights reserved.
-Use of this source code is governed by the MPL-2.0 license, see LICENSE.
-************************************************************************/
+// The MIT License
 
-#include <ros/ros.h>
-#include <geometry_msgs/Wrench.h>
-#include <signal.h>
-#include <termios.h>
-#include <stdio.h>
+// Copyright (c) 2022
+// qrRobot Motion and Vision Laboratory at East China Normal University
+// Contact:tophill.robotics@gmail.com
 
-#define KEYCODE_UP    0x41
-#define KEYCODE_DOWN  0x42
-#define KEYCODE_LEFT  0x44
-#define KEYCODE_RIGHT 0x43
-#define KEYCODE_SPACE 0x20
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 
-int mode = 1; // pulsed mode or continuous mode
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
 
-class teleForceCmd
-{
-public:
-    teleForceCmd();
-    void keyLoop();
-    void pubForce(double x, double y, double z);
-private:
-    double Fx, Fy, Fz;
-    ros::NodeHandle n;
-    ros::Publisher force_pub;
-    geometry_msgs::Wrench Force;
-};
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
 
-teleForceCmd::teleForceCmd()
-{
-    Fx = 0;
-    Fy = 0;
-    Fz = 0;
-    force_pub = n.advertise<geometry_msgs::Wrench>("/apply_force/trunk", 20);
-    sleep(1);
-    pubForce(Fx, Fy, Fz);
-}
-
-int kfd = 0;
-struct termios cooked, raw;
+#include "ros/qr_external_force.h"
 
 void quit(int sig)
 {
@@ -50,16 +31,16 @@ void quit(int sig)
     exit(0);
 }
 
-int main(int argc, char** argv)
+qrTeleForceCmd::qrTeleForceCmd()
 {
-    ros::init(argc, argv, "external_force");
-    teleForceCmd remote;
-    signal(SIGINT,quit);
-    remote.keyLoop();
-    return(0);
+    Fx = 0;
+    Fy = 0;
+    Fz = 0;
+    force_pub = n.advertise<geometry_msgs::Wrench>("/apply_force/trunk", 20);
+    sleep(1);
+    pubForce(Fx, Fy, Fz);
 }
-
-void teleForceCmd::pubForce(double x, double y, double z)
+void qrTeleForceCmd::pubForce(double x, double y, double z)
 {
     Force.force.x = Fx;
     Force.force.y = Fy;
@@ -68,7 +49,7 @@ void teleForceCmd::pubForce(double x, double y, double z)
     ros::spinOnce();
 }
 
-void teleForceCmd::keyLoop()
+void qrTeleForceCmd::keyLoop()
 {
     char c;
     bool dirty=false;
@@ -164,3 +145,4 @@ void teleForceCmd::keyLoop()
     }
     return;
 }
+

@@ -1,6 +1,6 @@
 name: a1_sim
 gait_params:
-  gait: "walk" # trot or walk, reserved param, fixed config by code, modificate here dose not take effect.
+  gait: "trot" # trot or walk, reserved param, fixed config by code, modificate here dose not take effect.
   trot:
     stance_duration: [ 0.3, 0.3, 0.3, 0.3 ]
     duty_factor: [ 0.6, 0.6, 0.6, 0.6 ]
