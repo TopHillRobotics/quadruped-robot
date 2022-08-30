@@ -35,15 +35,48 @@
 #include <sensor_msgs/Joy.h>
 #include <geometry_msgs/Twist.h>
 
+/**
+ * @brief Class qrTeleKeyboard is used to convert the message received from the keyboard
+ *        to Twist message which could be received by qrVelocityParamReceiver.
+ */
 class qrTeleKeyboard
 {
 public:
+
+    /**
+     * @brief Constructor of qrTeleKeyboard.
+     * @param nh The ros node which this class create from.
+     */
     qrTeleKeyboard(ros::NodeHandle &nhIn);
+
+    /**
+     * @brief Default destructor of qrJoy2Twist.
+     */
     ~qrTeleKeyboard(){}
+
+    /**
+     * @brief Get the event from the keyboard and convert it to corresponding char.
+     *        For non-blocking keyboard inputs.
+     * @return The number of the event's index.
+     */
     int getch();
-    void main();
+
+    /**
+     * @brief Keep receiving the event from the keyboard. Keep running until input 
+     *        CTRL + v.
+     */
+    void run();
+
 private:
+
+    /**
+     * @brief The topic which the converted message to publish to.
+     */
     std::string cmdTopic = "/velocity_param";
+
+    /**
+     * @brief The ros node which this class create from.
+     */
     ros::NodeHandle &nh;
 };
 

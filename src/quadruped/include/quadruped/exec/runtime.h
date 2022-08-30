@@ -47,16 +47,19 @@ float desiredTwistingSpeed = 0.f;
 float footClearance = 0.01f;
 
 /**
- * @brief launch all controllers, planners  and esimators.
- * @param quadruped: pointer to A1Robot.
+ * @brief Launch all controllers, planners  and esimators.
+ * @param quadruped Pointer to A1Robot.
+ * @param homeDir Package path.
  * @return pointer to qrLocomotionController.
  */
-qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, std::string robotName);
+qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir);
 
-/** @brief setup the desired speed for robot. */
+/** 
+ * @brief Setup the desired speed for robot.
+ * @param controller The locomotion controller.
+ * @param linSpeed The desired linear speed.
+ * @param angSpeed The desired angular speed.
+ */
 void updateControllerParams(qrLocomotionController *controller, Eigen::Vector3f linSpeed, float angSpeed);
 
-qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, std::string robotName);
-
-void updateControllerParams(qrLocomotionController *controller, Eigen::Vector3f linSpeed, float angSpeed);
 #endif //QR_RUNTIME_H

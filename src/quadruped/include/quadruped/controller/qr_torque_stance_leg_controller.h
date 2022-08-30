@@ -94,7 +94,15 @@ public:
 
     /**
      * @brief The process of velocity locomotion.
-     * @param 
+     * @param robotComOrientation The orientation of the robot's COM.
+     * @param robotComPosition The position of the robot's COM.
+     * @param robotComVelocity The velocity of the robot's COM.
+     * @param robotComRpy The rpy of the robot's COM.
+     * @param robotComRpyRate The pry rate of the robot's COM.
+     * @param desiredComPosition The desired position of the robot's COM.
+     * @param desiredComVelocity The desired velocity of the robot's COM.
+     * @param desiredComRpy The desired rpy of the robot's COM.
+     * @param desiredComAngularVelocity The desired angular velocity of the robot's COM.
      */
     void VelocityLocomotionProcess(Quat<float> &robotComOrientation,
                                     Eigen::Matrix<float, 3, 1> &robotComPosition, 
@@ -108,6 +116,11 @@ public:
 
     /**
      * @brief The process of position locomotion.
+     * @param robotComPosition The current position of the robot's COM.
+     * @param robotComPosition The position of the robot's COM.
+     * @param robotComVelocity The velocity of the robot's COM.
+     * @param robotComRpy The rpy of the robot's COM.
+     * @param desiredComAngularVelocity The desired angular velocity of the robot's COM.
      */
     void PositionLocomotionProcess(Eigen::Matrix<float, 3, 1> &robotComPosition,
                                     Eigen::Matrix<float, 3, 1> &desiredComPosition,

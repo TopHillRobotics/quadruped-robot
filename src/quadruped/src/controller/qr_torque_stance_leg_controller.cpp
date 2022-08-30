@@ -85,7 +85,7 @@ void qrStanceLegController::Update(float currentTime_)
 
 void qrStanceLegController::UpdateFRatio(Vec4<bool> &contacts, int &N, float &moveBasePhase)
 {
-    /// leg contact status  ///
+    // leg contact status
     if (robot->stop) {
         printf("robot->stop");
         fMaxRatio << 10., 10., 10., 10.;
@@ -124,21 +124,30 @@ void qrStanceLegController::VelocityLocomotionProcess(Quat<float> &robotComOrien
     Vec3<float> groundRPY = groundEstimator->GetControlFrameRPY();
     Mat3<float> Rcb = Rc.transpose() * Rb;
 
-    robotComPosition = {0., 0., robot->state.basePosition[2]}; // vel mode in base frame, height is in world frame.
+    // Velocity mode in base frame, height is in world frame.
+    robotComPosition = {0., 0., robot->state.basePosition[2]}; 
     robotComRpy[2] = 0.f;
-    if (groundEstimator->terrain.terrainType>=2) { // not horizontal plane
+    // Not horizontal plane
+    if (groundEstimator->terrain.terrainType>=2) { 
         robotComPosition = math::TransformVecByQuat(math::quatInverse(controlFrameOrientation), robotComPosition);      
         robotComPosition[0] = 0.f;
         robotComPosition[1] = 0.f;
-        robotComVelocity = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComVelocity); // in world frame
-        robotComVelocity = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComVelocity); // in control frame
-        robotComRpy = math::rotationMatrixToRPY(Rcb.transpose()); // body orientation in control frame.
-        robotComRpyRate = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComRpyRate); // in world frame
-        robotComRpyRate = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComRpyRate); // in control frame
+        // In world frame
+        robotComVelocity = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComVelocity); 
+        // In control frame
+        robotComVelocity = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComVelocity); 
+        // Body orientation in control frame.
+        robotComRpy = math::rotationMatrixToRPY(Rcb.transpose());
+        // In world frame
+        robotComRpyRate = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComRpyRate); 
+        // In control frame
+        robotComRpyRate = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComRpyRate); 
     }
     desiredComPosition << 0.f, 0.f, desiredBodyHeight;
-    desiredComRpy << -groundRPY[0], 0, -groundRPY[2]; // not control roll/yaw
-    desiredComVelocity = {desiredSpeed[0], desiredSpeed[1], 0.f}; // in base/control frame
+    // Not control roll/yaw
+    desiredComRpy << -groundRPY[0], 0, -groundRPY[2]; 
+    // In base/control frame
+    desiredComVelocity = {desiredSpeed[0], desiredSpeed[1], 0.f}; 
     desiredComAngularVelocity = {0.f, 0.f, desiredTwistingSpeed};
 }
 
@@ -151,10 +160,10 @@ void qrStanceLegController::PositionLocomotionProcess(Eigen::Matrix<float, 3, 1>
     robotComPosition = {0., 0., robot->state.basePosition[2]};
 
     auto &comAdjPosInBaseFrame = comPlanner->GetComPosInBaseFrame();
-    desiredComPosition = {comAdjPosInBaseFrame[0], comAdjPosInBaseFrame[1],
-                        desiredBodyHeight}; // get goal com position from comAdjuster, base frame
+    // Get goal com position from comAdjuster, base frame
+    desiredComPosition = {comAdjPosInBaseFrame[0], comAdjPosInBaseFrame[1], desiredBodyHeight}; 
     desiredComVelocity = {desiredSpeed[0], desiredSpeed[1], 0.f};
-    // get goal rpy from footholdPlanner, in world frame
+    // Get goal rpy from footholdPlanner, in world frame
     desiredComRpy = footholdPlanner->GetDesiredComPose().tail(3);
     desiredComAngularVelocity = {0.f, 0.f, 0.f};
 }
@@ -184,7 +193,7 @@ std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLe
     Eigen::Matrix<float, 3, 4> footPoseWorld = robot->state.GetFootPositionsInWorldFrame();
     
     Vec6<float> pose;
-    Vec6<float> twist; // v, wb
+    Vec6<float> twist;
     bool computeForceInWorldFrame = false;       
     Eigen::Matrix<float, 3, 4> com2FootInWorld = footPoseWorld.colwise() - pose.head(3);
     Eigen::Matrix<float, 3, 4> footJointAngles = Eigen::Matrix<float,3,4>::Zero();
@@ -195,9 +204,12 @@ std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLe
     Quat<float> robotComOrientation = robot->GetBaseOrientation();
     
     /// current robot status  ///
-    robotComVelocity = robotEstimator->GetEstimatedVelocity();  // base frame
-    robotComRpy = robot->GetBaseRollPitchYaw(); // world frame
-    robotComRpyRate = robot->GetBaseRollPitchYawRate();  // base frame
+    // base frame
+    robotComVelocity = robotEstimator->GetEstimatedVelocity();
+    // world frame
+    robotComRpy = robot->GetBaseRollPitchYaw(); 
+    // base frame
+    robotComRpyRate = robot->GetBaseRollPitchYawRate();  
     switch(robot->config->controlParams["mode"]){
         case LocomotionMode::VELOCITY_LOCOMOTION: {
             VelocityLocomotionProcess(robotComOrientation,
@@ -224,27 +236,19 @@ std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLe
     robotQ << robotComPosition, robotComRpy;
     robotDq << robotComVelocity, robotComRpyRate;
     desiredQ << desiredComPosition, desiredComRpy;
-    // std::cout << "desiredQ" << desiredQ.transpose() << std::endl;
-    // std::cout << "robotQ" << robotQ.transpose() << std::endl;
     Vec6<float> dq = desiredQ - robotQ;
     desiredDq << desiredComVelocity, desiredComAngularVelocity;
     Vec6<float> ddq = desiredDq - robotDq;
-    // std::cout << "desiredDq" << desiredDq.transpose() << std::endl;
-    // std::cout << "robotDq" << robotDq.transpose() << std::endl;
 
     //
     desiredDdq = KP.cwiseProduct(dq) + KD.cwiseProduct(ddq);
-    desiredDdq = desiredDdq.cwiseMin(maxDdq).cwiseMax(minDdq); // Clip
-    // std::cout << "desiredDdq" << desiredDdq.transpose() << std::endl;
-        
-    /// Compute Contact Force  ///
-    Mat3<float> directionVectors = Mat3<float>::Identity(); // friction cone direction in xyz axises
-    // Mat3<float> directionVectors = groundEstimator->GetAlignedDirections();
-    // std::cout << "directionVectors = " << directionVectors << std::endl;      
-    contactForces << ComputeContactForce(robot, groundEstimator, desiredDdq, contacts, accWeight); // compute the force in control/base frame        
-    // std::cout << "contactForces" << contactForces << std::endl;
-    // std::cout << "fMaxRatio " << fMaxRatio.transpose() << std::endl;
-    // std::cout << "contact for force compute " << contacts.transpose() << std::endl;
+    desiredDdq = desiredDdq.cwiseMin(maxDdq).cwiseMax(minDdq);
+
+    /// Compute Contact Force ///
+    // friction cone direction in xyz axises
+    Mat3<float> directionVectors = Mat3<float>::Identity(); 
+    // compute the force in control/base frame
+    contactForces << ComputeContactForce(robot, groundEstimator, desiredDdq, contacts, accWeight);
     
     map<int, qrMotorCommand> action;
     map<int, float> motorTorques;

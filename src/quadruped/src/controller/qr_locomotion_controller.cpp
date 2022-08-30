@@ -57,7 +57,6 @@ void qrLocomotionController::GetComPositionInWorldFrame(ros::ServiceClient& base
     if (baseStateClient.exists()) { 
         gls_request.request.link_name = std::string("a1_gazebo::base");
         gls_request.request.reference_frame=std::string("world"); 
-        // ros::service::waitForService("/gazebo/get_link_state", -1);
         baseStateClient.call(gls_request);
         if (!gls_request.response.success) {
                 ROS_INFO("Get Gazebo link state not success!\n");      
@@ -71,9 +70,6 @@ void qrLocomotionController::GetComPositionInWorldFrame(ros::ServiceClient& base
     Quat<double> OrientationIn = {pose_.orientation.w,pose_.orientation.x,pose_.orientation.y,pose_.orientation.z};
     robot->gazeboBasePosition = posIn.cast<float>(); 
     robot->gazeboBaseOrientation = OrientationIn.cast<float>();
-    // Eigen::Matrix<float,3,4> trueFootPositionInWorldFrame = robot->GetFootPositionsInWorldFrame(true, posIn.cast<float>(), OrientationIn.cast<float>());
-    // cout << "trueFootPositionInWorldFrame=" << trueFootPositionInWorldFrame <<endl;
-    // std::cout << "gazeboBasePos = " << robot->gazeboBasePosition << std::endl;
 }
 
 void qrLocomotionController::Update()
@@ -82,7 +78,6 @@ void qrLocomotionController::Update()
         timeSinceReset = robot->GetTimeSinceReset() - resetTime;
     }
     
-    // std::cout << "-------locomotion time -------- " << timeSinceReset << std::endl;
     gaitGenerator->Update(timeSinceReset);
     groundEstimator->Update(timeSinceReset);
     stateEstimator->Update(timeSinceReset);

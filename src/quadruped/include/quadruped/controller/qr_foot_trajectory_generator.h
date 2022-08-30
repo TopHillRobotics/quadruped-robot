@@ -196,19 +196,19 @@ public:
     virtual ~qrFootBSplinePatternGenerator() = default;
 
     /** 
-     * @brief Destructor function.
+     * @brief Set parameters of spline.
      * @param initial_time The initial time.
      * @param initial_pos The initial position of the foot.
      * @param target_pos The target position of the foot
      * @param params qrStepParameters object.
      */
     virtual void SetParameters(const float initial_time,
-                        const Eigen::Vector3f &initial_pos,
-                        const Eigen::Vector3f &target_pos,
-                        const qrStepParameters &params);
+                            const Eigen::Vector3f &initial_pos,
+                            const Eigen::Vector3f &target_pos,
+                            const qrStepParameters &params);
 
     /** 
-     * @brief Destructor function.
+     * @brief Generate trajectory via spline.
      * @param foot_pos The foot position.
      * @param foot_vel The foot velocity.
      * @param foot_acc The foot acceleration.
@@ -220,7 +220,7 @@ public:
                                     float time);
 
     /** 
-     * @brief Destructor function.
+     * @brief Update the information of the spline.
      * @param initial_time The initial time.
      * @param duration Duration of the swing trajectory.
      * @param initial_pos The initial position of the foot.
@@ -244,7 +244,7 @@ public:
     qrSwingFootTrajectory() {};
 
     /** 
-     * @brief init func
+     * @brief Constructor function.
      * @param splineInfoIn spline information.
      * @param startPosIn foot start position.
      * @param endPosIn foot end position.
@@ -282,7 +282,7 @@ public:
                                     bool phaseModule = false);
 
     /** 
-     * @brief a new cycle begining of the swing foot. 
+     * @brief A new cycle begining of the swing foot. 
      * @param duration Duration of the swing trajectory
      * @param initialPos The initial position of the foot.
      * @param targetPos The target position of the foot.

@@ -24,7 +24,7 @@
 
 #include "exec/runtime.h"
 
-qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, std::string robotName)
+qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir)
 {
     qrGaitGenerator *gaitGenerator;
     gaitGenerator = new qrGaitGenerator(quadruped, homeDir + "/config/openloop_gait_generator.yaml");

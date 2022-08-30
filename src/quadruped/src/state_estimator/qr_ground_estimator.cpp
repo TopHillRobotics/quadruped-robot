@@ -27,7 +27,6 @@
 qrGroundSurfaceEstimator::qrGroundSurfaceEstimator(qrRobot *robotIn, std::string terrainConfigPath, unsigned int windowSize)
     : robot(robotIn)
 {
-    // Loadterrain(terrainConfigPath);
     footStepperConfig = YAML::LoadFile(terrainConfigPath);
     Reset(0.f);
 }
@@ -111,7 +110,6 @@ Eigen::Matrix<double, 3, 1> qrGroundSurfaceEstimator::GetNormalVector(bool updat
         n /= factor;
     }
 
-    // std::cout << "n=" << n.transpose() << std::endl;
     return n; // in base frame
 }
 

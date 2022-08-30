@@ -39,7 +39,6 @@ qrFootBSplinePatternGenerator::qrFootBSplinePatternGenerator(qrSplineInfo &splin
                         };
     crv.knots = {0., 0., 0., 0.,
                 1./6, 2./6, 3./6, 4./6, 5./6,
-                // 0.5/6, 1.0/6, 2.0/6, 3.0/6, 4.5/6,
                 1, 1, 1, 1
                 };
     crv.degree = 3;
@@ -80,15 +79,15 @@ void qrFootBSplinePatternGenerator::UpdateSpline(float initial_time, float durat
     startPos = initial_pos * 100.f;
     endPos = target_pos * 100.f;
     float xRatio = abs(endPos[0] - startPos[0]) /20.f;
-    if (endPos[2] >= startPos[2]) { // walk up
-        float z_length_left = target_appex;// - endPos[2]; // > 0
+    // walk up
+    if (endPos[2] >= startPos[2]) { 
+        float z_length_left = target_appex;
         float z_length_right = target_appex - (endPos[2] - startPos[2]);
         float zRatio = abs(z_length_left) / 8.f;
         float x_mid = (endPos[0] + startPos[0])/2;
         float z_offset = startPos[2];
         for(auto &point : controlPoints) {
             point.x = point.x * xRatio + x_mid;
-            // point.y = point.y * yRatio;
             point.z = point.z * zRatio + z_offset;
 
         }
@@ -99,21 +98,20 @@ void qrFootBSplinePatternGenerator::UpdateSpline(float initial_time, float durat
         controlPoints[5].z = controlPoints[8].z + 7.0/8 *z_length_right;
     
     } else { // walk down
-        float z_length_left = target_appex - (startPos[2] - endPos[2]) ;// - endPos[2]; // > 0
+        float z_length_left = target_appex - (startPos[2] - endPos[2]);
         float z_length_right = target_appex ;
         float zRatio = abs(z_length_right) / 8.f;
-        float x_mid = (endPos[0] + startPos[0])/2;
+        float x_mid = (endPos[0] + startPos[0]) / 2;
         float z_offset = endPos[2];
         for(auto &point : controlPoints) {
             point.x = point.x * xRatio + x_mid;
-            // point.y = point.y * yRatio;
             point.z = point.z * zRatio + z_offset;
 
         }
         controlPoints[0].z = startPos[2];
-        controlPoints[1].z = controlPoints[0].z + 0.2 /8 *z_length_left;
-        controlPoints[2].z = controlPoints[0].z + 2.0/8 *z_length_left;
-        controlPoints[3].z = controlPoints[0].z + 7.0/8 *z_length_left; 
+        controlPoints[1].z = controlPoints[0].z + 0.2 / 8 *z_length_left;
+        controlPoints[2].z = controlPoints[0].z + 2.0 / 8 *z_length_left;
+        controlPoints[3].z = controlPoints[0].z + 7.0 / 8 *z_length_left; 
     }
 }
 
@@ -123,17 +121,19 @@ bool qrFootBSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
                                                     float time)
 { 
     float dt = time - initial_time_;
-    
-    if (dt < - 1e-3 || dt >= duration_ + 1e-3)  // the float number is not exactly representation, so add 1e-3.
-        return false; // duration it's always positive, and makes sense when
+
+    // The float number is not exactly representation, so add 1e-3.
+    if (dt < - 1e-3 || dt >= duration_ + 1e-3)  
+        // Duration it's always positive, and makes sense when
+        return false; 
     
     // Setting the foot state
     glm::vec3 pt1 = tinynurbs::curvePoint(crv, dt);
-    foot_pos[0] = pt1.x/100; // cm --> m
-    foot_pos[1] = pt1.y/100;
-    foot_pos[2] = pt1.z/100;
+    foot_pos[0] = pt1.x / 100;
+    foot_pos[1] = pt1.y / 100;
+    foot_pos[2] = pt1.z / 100;
 
-    foot_pos[1] = (1.f - dt) * startPos(1, 0)/100 + dt * endPos(1, 0)/100;
+    foot_pos[1] = (1.f - dt) * startPos(1, 0) / 100 + dt * endPos(1, 0) / 100;
     
     return true;
 }
@@ -185,9 +185,9 @@ void qrFootSplinePatternGenerator::SetParameters(const float initial_time,
                                     initial_pos(2),
                                     target_appex);
     foot_spliner_down_z_.setBoundary(initial_time + params.duration / 2.0f,
-                                        params.duration / 2.0f,
-                                        target_appex,
-                                        target_pos(2) - params.penetration);
+                                    params.duration / 2.0f,
+                                    target_appex,
+                                    target_pos(2) - params.penetration);
 }
 
 bool qrFootSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
@@ -195,9 +195,11 @@ bool qrFootSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
                                                     Vec3<float> &foot_acc,
                                                     float time)
 {
-    if (time < initial_time_ - 1e-3)  // the float number is not exactly representation, so add 1e-3.
-        return false; // duration it's always positive, and makes sense when
-    // is bigger than the sample time
+    // the float number is not exactly representation, so add 1e-3.
+    if (time < initial_time_ - 1e-3) {
+        // duration it's always positive, and makes sense when is bigger than the sample time
+        return false;
+    }
     // Computing the time that allows us to discriminate the swing-up or swing-down phase
     math::Spline::Point swing_traj_x, swing_traj_y, swing_traj_z;
     float dt = time - initial_time_;
@@ -235,7 +237,6 @@ qrSwingFootTrajectory::qrSwingFootTrajectory(qrSplineInfo splineInfoIn,
         footTarjGen = new qrFootBSplinePatternGenerator(splineInfo);
     } else {
         std::cout << "swing CubicPolygon\n";
-        // stepParams.height = maxClearance;  // todo
         stepParams = qrStepParameters(duration, mid, 0.);
         footTarjGen = new qrFootSplinePatternGenerator();
     }
@@ -255,7 +256,7 @@ bool qrSwingFootTrajectory::GenerateTrajectoryPoint(Vec3<float> &footPos,
                                                     float t,
                                                     bool phaseModule)
 {
-    float inputPhase = t;  // 0<=t<=1
+    float inputPhase = t;
     float phase;
     if (phaseModule) {
         if (inputPhase <= 0.5) {
@@ -268,6 +269,6 @@ bool qrSwingFootTrajectory::GenerateTrajectoryPoint(Vec3<float> &footPos,
     }
     bool flag;
     flag = footTarjGen->GenerateTrajectory(footPos, footV, footA, phase);
-    return flag; // return # p,v,a
+    return flag;
 }
 

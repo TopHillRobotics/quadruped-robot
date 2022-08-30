@@ -84,7 +84,6 @@ qrSwingLegController::qrSwingLegController(qrRobot *robot,
     swingLegConfig = YAML::LoadFile(configPath);
     footInitPose = swingLegConfig["swing_leg_params"]["foot_in_world"].as<std::vector<std::vector<float>>>();
     footOffset = swingLegConfig["swing_leg_params"]["foot_offset"].as<float>();
-    // this->Reset(0);
 }
 
 void qrSwingLegController::Reset(float currentTime)
@@ -105,10 +104,9 @@ void qrSwingLegController::Reset(float currentTime)
 
 void qrSwingLegController::Update(float currentTime)
 {
-    // swingJointAnglesVelocities.clear();
     const Vec4<int>& newLegState = gaitGenerator->desiredLegState;
     const Vec4<int>& curLegState = gaitGenerator->curLegState;
-    // the footHoldOffset is first init at robot.h, then update it at groundEstimator.cpp 
+    // The footHoldOffset is first init at robot.h, then update it at groundEstimator.cpp 
     Eigen::Matrix<float, 3, 1> constOffset = {robot->config->footHoldOffset, 0.f, 0.f};
     
     // Detects phase switch for each leg so we can remember the feet position at
@@ -129,8 +127,10 @@ void qrSwingLegController::Update(float currentTime)
             
                         phaseSwitchFootLocalPos.col(legId) = robot->state.GetFootPositionsInBaseFrame().col(legId);
                         phaseSwitchFootGlobalPos.col(legId) = robot->state.GetFootPositionsInWorldFrame().col(legId);
-                        if (legId == 0) { //update four leg footholds
-                            footholdPlanner->UpdateOnce(footHoldInWorldFrame); // based on the last foothold position
+                        // Update four leg footholds
+                        if (legId == 0) { 
+                            // Based on the last foothold position
+                            footholdPlanner->UpdateOnce(footHoldInWorldFrame); 
                         }
                         footHoldInWorldFrame.col(legId) += footholdPlanner->GetFootholdsOffset().col(legId);
                     }
@@ -162,10 +162,13 @@ void qrSwingLegController::VelocityLocomotionProcess(const Eigen::Matrix<float, 
     comVelocity = stateEstimator->GetEstimatedVelocity();
 
     twistingVector = Matrix<float, 3, 1>(-hipOffset[1], hipOffset[0], 0);
-    hipHorizontalVelocity = comVelocity + yawDot * twistingVector; // in base frame
-    hipHorizontalVelocity = dR * hipHorizontalVelocity; // in control frame
+    // In base frame
+    hipHorizontalVelocity = comVelocity + yawDot * twistingVector; 
+    // In control frame
+    hipHorizontalVelocity = dR * hipHorizontalVelocity; 
     hipHorizontalVelocity[2] = 0.f;
-    targetHipHorizontalVelocity = desiredSpeed + desiredTwistingSpeed * twistingVector; // in control frame
+    // In control frame
+    targetHipHorizontalVelocity = desiredSpeed + desiredTwistingSpeed * twistingVector; 
         
     footTargetPosition = dR.transpose() * (hipHorizontalVelocity * gaitGenerator->stanceDuration[legId] / 2.0 -
         swingKp.cwiseProduct(targetHipHorizontalVelocity - hipHorizontalVelocity))
@@ -180,12 +183,14 @@ void qrSwingLegController::PositionLocomotionProcess(Matrix<float, 3, 1> &footPo
                                                     Matrix<float, 3, 1> &footPositionInBaseFrame, 
                                                     int legId)
 {
+    // Interpolation in world frame
     footPositionInWorldFrame = GenSwingFootTrajectory(gaitGenerator->normalizedPhase[legId],
                                                     phaseSwitchFootGlobalPos.col(legId),
-                                                    footHoldInWorldFrame.col(legId)); // interpolation in world frame
+                                                    footHoldInWorldFrame.col(legId)); 
+    // Transfer to base frame
     footPositionInBaseFrame = math::RigidTransform(robot->state.basePosition,
                                                     robot->state.baseOrientation,
-                                                    footPositionInWorldFrame); // transfer to base frame
+                                                    footPositionInWorldFrame); 
 }
 
 map<int, Matrix<float, 5, 1>> qrSwingLegController::GetAction()
@@ -202,14 +207,15 @@ map<int, Matrix<float, 5, 1>> qrSwingLegController::GetAction()
         if (tempState == LegState::STANCE || tempState == LegState::EARLY_CONTACT) {
             continue;
         }
-        // printf("[leg %d] swing, normal phase = %f \n", legId, gaitGenerator->normalizedPhase[legId]);
+
         footVelocityInBaseFrame = Vec3<float>::Zero();
         footVelocityInWorldFrame = Vec3<float>::Zero();
         footVelocityInControlFrame = Vec3<float>::Zero();
         Quat<float> robotComOrientation = robot->GetBaseOrientation();
         Mat3<float> robotBaseR = math::quaternionToRotationMatrix(robotComOrientation).transpose();
         Quat<float> controlFrameOrientation = groundEstimator->GetControlFrameOrientation();
-        Mat3<float> dR; // represent base frame in control frame
+        // Represent base frame in control frame
+        Mat3<float> dR; 
         if (groundEstimator->terrain.terrainType < 2) {
             dR = Mat3<float>::Identity();
             robotBaseR = Mat3<float>::Identity();
@@ -226,11 +232,11 @@ map<int, Matrix<float, 5, 1>> qrSwingLegController::GetAction()
             default:
                 break;
         }
-        // compute joint position & joint velocity
+        // Compute joint position & joint velocity
         robot->config->ComputeMotorAnglesFromFootLocalPosition(legId, footPositionInBaseFrame, jointIdx, jointAngles);
         Vec3<float> motorVelocity = robot->config->ComputeMotorVelocityFromFootLocalVelocity(
             legId, jointAngles, footVelocityInBaseFrame);
-        // check nan value
+        // Check nan value
         int invalidAngleNum = 0;
         for (int i = 0; i < numMotorOfOneLeg; ++i) {
             if(isnan(jointAngles[i])) {

@@ -90,6 +90,9 @@ public:
 
     /**
      * @brief The process of velocity locomotion.
+     * @param dR Represent base frame in control frame.
+     * @param footPositionInBaseFrame The the foot position in base frame.
+     * @param legId The id of processing leg.
      */
     void VelocityLocomotionProcess(const Eigen::Matrix<float, 3, 3> &dR, 
                                     Eigen::Matrix<float, 3, 1> &footPositionInBaseFrame, 
@@ -97,6 +100,9 @@ public:
 
     /**
      * @brief The process of position locomotion.
+     * @param footPositionInWorldFrame The the foot position in world frame.
+     * @param footPositionInBaseFrame The the foot position in base frame.
+     * @param legId The id of processing leg.
      */
     void PositionLocomotionProcess(Eigen::Matrix<float, 3, 1> &footPositionInWorldFrame, 
                                     Eigen::Matrix<float, 3, 1> &footPositionInBaseFrame, 
@@ -122,12 +128,12 @@ public:
     /**
      * @brief The desired linear velocity. This memeber variable appears in velocity mode.
      */
-    Eigen::Matrix<float, 3, 1> desiredSpeed; // appear in velocity mode usually.
+    Eigen::Matrix<float, 3, 1> desiredSpeed;
 
     /**
      * @brief The desired angular velocity. This memeber variable appears in velocity mode.
      */
-    float desiredTwistingSpeed; // appear in velocity mode usually.
+    float desiredTwistingSpeed;
 
     /**
      * @brief the robot object to which the controller is associated.

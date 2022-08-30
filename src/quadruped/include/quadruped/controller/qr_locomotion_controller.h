@@ -80,7 +80,8 @@ public:
     void Reset();
 
     /**
-     * @brief 
+     * @brief Update the pose of the robot's COM.
+     * @param baseStateClient The service client which is used to receive the link state from gazebo.
      */
     void GetComPositionInWorldFrame(ros::ServiceClient& baseStateClient);
 

@@ -38,24 +38,92 @@
 #include <geometry_msgs/Pose.h>
 #include <nav_msgs/Odometry.h>
 
+/**
+ * @brief Class qrJoy2Twist is used to convert the message received from the joystick
+ *        to Twist message which could be received by qrVelocityParamReceiver.
+ */
 class qrJoy2Twist
 {
 public:
+
+    /**
+     * @brief Constructor of qrJoy2Twist.
+     * @param nh The ros node which this class create from.
+     * @param pathToNode The path where the node is running.
+     */
     qrJoy2Twist(ros::NodeHandle &nh, std::string pathToNode);
+
+    /**
+     * @brief Default destructor of qrJoy2Twist.
+     */
     ~qrJoy2Twist();
+
+    /**
+     * @brief The callback function of the subscriber.
+     * @param joyMsg The joy message received from the joystick.
+     */
     void JoyCmdCallback(const sensor_msgs::Joy::ConstPtr &joyMsg);
+
 private:
+
+    /**
+     * @brief The ros node which this class create from.
+     */
     ros::NodeHandle &nh;
+
+    /**
+     * @brief The topic which the converted message to publish to.
+     */
     std::string cmdVelTopic = "/velocity_param";
+
+    /**
+     * @brief The topic which the joystick message to subscribe.
+     */
     std::string joyCmdTopic = "/joy";
+
+    /**
+     * @brief The joystick message subscriber.
+     */
     ros::Subscriber joySubscriber;
+
+    /**
+     * @brief The Twist message publisher.
+     */
     ros::Publisher twistPublisher;
+
+    /**
+     * @brief The Twist message.
+     */
     geometry_msgs::Twist msg;
+
+    /**
+     * @brief The max velocity in X direction.
+     */
     double joyCmdVelXMax;
+
+    /**
+     * @brief The max velocity in Y direction.
+     */
     double joyCmdVelYMax;
+
+    /**
+     * @brief The max velocity in Z direction.
+     */
     double joyCmdVelZMax;
+
+    /**
+     * @brief The max velocity in roll.
+     */
     double joyCmdVelRollMax;
+
+    /**
+     * @brief The max velocity in pitch.
+     */
     double joyCmdVelPitchMax;
+
+    /**
+     * @brief The max velocity in yaw.
+     */
     double joyCmdVelYawMax;
 };
 

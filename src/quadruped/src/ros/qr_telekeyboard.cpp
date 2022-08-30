@@ -29,7 +29,6 @@ qrTeleKeyboard::qrTeleKeyboard(ros::NodeHandle &nhIn):nh(nhIn)
 
 }
 
-// For non-blocking keyboard inputs
 int qrTeleKeyboard::getch(void)
 {
   int ch;
@@ -58,14 +57,11 @@ int qrTeleKeyboard::getch(void)
   return ch;
 }
 
-void qrTeleKeyboard::main()
+void qrTeleKeyboard::run()
 {
-    // ros::init(argc, argv, "teleop_keyboard");
-    // ros::NodeHandle nh;
-    // ros::Publisher pub = nh.advertise<sensor_msgs::Joy>("joy", 1);
     ros::Publisher pub = nh.advertise<geometry_msgs::Twist>(cmdTopic, 1);
-    // sensor_msgs::Joy joyMsg;
     geometry_msgs::Twist twMsg;
+
     // initialize speed.
     twMsg.linear.x = 0;
     twMsg.linear.y = 0;
@@ -99,12 +95,6 @@ void qrTeleKeyboard::main()
     while(true){
         key = getch();
 
-        // for(int i = 0; i < 4; ++i){
-        //     moveCmd[i] = 0;
-        // }
-        // for(int i = 0; i < 3; ++i){
-        //     rotationCmd[i] = 0;
-        // }
         if(moveBindings.count(key) == 1){
             for(int i = 0; i < 3; ++i){
                 moveCmd[i] = l_alpha * moveBindings[key][i] + (1 - l_alpha) * moveCmd[i];
@@ -123,22 +113,11 @@ void qrTeleKeyboard::main()
                 rotationCmd[i] = 0;
             }
         }
+        // receive CTRL + v
         if(key == '\x03'){
             std::cout << "Break from keyboard." << std::endl;
             break;
         }
-        // for(auto &a : joyMsg.axes){
-        //     a = 0;
-        // }
-        // joyMsg.axes[5] = moveCmd[0];
-        // joyMsg.axes[2] = moveCmd[1];
-        // joyMsg.axes[1] = moveCmd[2];
-        // joyMsg.axes[0] = moveCmd[3];
-        // joyMsg.axes[6] = rotationCmd[0];
-        // joyMsg.axes[7] = rotationCmd[1];
-        // for(auto &b : joyMsg.buttons){
-        //     b = 0;
-        // }
         twMsg.linear.x = moveCmd[0];
         twMsg.linear.y = moveCmd[1];
         twMsg.linear.z = moveCmd[2];
@@ -147,7 +126,6 @@ void qrTeleKeyboard::main()
         twMsg.angular.z = rotationCmd[2];
         std::cout << moveCmd[0] << " " << moveCmd[1] << " " << moveCmd[2] << " " << rotationCmd[0] << " " << rotationCmd[1] << " " << rotationCmd[2] << " " << std::endl;
 
-        // pub.publish(joyMsg);
         pub.publish(twMsg);
         ros::spinOnce();
     }

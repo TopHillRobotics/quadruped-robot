@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     Action::StandUp(quadruped, 3.f, 5.f, 0.001);
 
     // Create the locomotion controller.
-    qrLocomotionController *locomotionController = setUpController(quadruped, pathToNode, robotName);
+    qrLocomotionController *locomotionController = setUpController(quadruped, pathToNode);
     locomotionController->Reset();
 
     // Initialize the desired speed of the robot.
