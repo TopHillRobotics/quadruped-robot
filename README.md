@@ -1,1 +1,1 @@
-# quadruped-robot
+# Please see in src/quadruped/README.md

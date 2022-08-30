@@ -1,66 +1,44 @@
-
 ## Step 1: install the third party dependencies:
-* Eigen3
+
 * yaml-cpp
+* eigen3
 * lcm
-* Quadprogpp
+* glm
 
 ```
-apt install libyaml-cpp-dev
-apt install libeigen3-dev
-cd ${ROBOTS}/src/ascend-quadruped-cpp/third_party/lcm-1.4.0
-mkdir build && cd build
-cmake ..
+sudo apt install libyaml-cpp-dev
+sudo apt install libeigen3-dev
+sudo apt install liblcm-dev
+sudo apt install libglm-dev
 ```
 
-## Step2: edit compile option.
-open the `CMakeLists.txt` file in `ascend-quadruped-cpp` folder, check the compile options matches the hardware and applications. In particular,  when compiling unitree_legged_skd, the binary `.so` file should be `*amd64.so` in ./lib/ subdirectory, according to current X86/AMD64 platform.
+## Step 2: compile the exectuable locomotion controller or other ros packages
 
-
-## Step 3: compile the exectuable locomotion controller or other ros packages
 ```
-cd ${ROBOTS}/src/ascend-quadruped-cpp/
-mkdir build && cd build
-cmake ..
-```
-or in ROS env,
-```
-cd ${ROBOTS_DIR}
+cd ${WorkSpace}
 catkin_make
 ```
-Currently, the locomotion controller support Velocity Mode and Position Mode, as you can browse through `src/ascend-quadruped-cpp/config` directory to select corresponding configuration.
 
+Currently, the locomotion controller support Velocity Mode and Position Mode, as you can browse through `src/demo/${robot}` directory to select corresponding demo.
 
-## Step 4: run the controller
-You need not to login into subdirectories to launch exec file, instead input the commands
+## Step 3: run the controller
+
+Please always run `devel/setup.bash` before running these demo.
+
+You need to start the gazebo simulation environment to load the robot model first.
+
 ```
 roslaunch unitree_gazebo normal.launch
 ```
-to launch gazebo simulation env,
-the in another new terminal, launch the controller node,
+
+Then in another new terminal, launch the controller node. This is the simplest demo which makes the quadruped robot stand up only.
+
 ```
-rosrun ascend_quadruped_cpp a1_sim
+rosrun a1sim stand_up
 ```
-Remember always run 
-```
-source ./devel/setup.bash
-```
-before launch local ROS nodes.
 
+## Step 4 (Option): Advances
 
-## Step 5 (Option): Advances
-* Visualization
-  
-    `xpp` is a ROS package for legged roobt visualization, that wraping Rviz internally.
-    We adopt it for unitree A1 robot. 
-    To start it, run following command in terminal:
-    ```
-    roslaunch xpp_example a1_bag.launch
-    ```
-* Realsense Camera
-  
-  In `normal.launch` file, you can determines wheather to use camera or not, by setting `use_camera` param true or false.
+We also provided many different demoes which are combined with different gait and different locomotion. For example, you could run trot in velocity locomotion demo with `rosrun a1sim trot_velocity_motion`. What's more you can run `rosrun a1sim trot_velocity_motion_with_keyboard` to control the robot via keyboard.
 
-
-
-If you have any problems about this repository, pls report them to Yijie Zhu(z00592961).
+And also you can read the code of  `main.cpp` and the files in `config` to learn how to combine the locomotion and gait to realize different demo.
