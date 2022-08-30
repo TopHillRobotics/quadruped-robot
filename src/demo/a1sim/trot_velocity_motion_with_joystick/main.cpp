@@ -20,12 +20,15 @@ int main(int argc, char **argv)
 
     std::string robotName = "a1_sim";
 
+    std::cout << "Joy start receving..." << std::endl;
+    qrJoy2Twist * msgConvert = new qrJoy2Twist(nh, pathToNode);
+
     // Reset robot model and gazebo controller.
     ResetRobotBySystem(nh);
     ros::AsyncSpinner spinner(1); // one threads
     spinner.start();
 
-    // Create command receiver to update velocity if changed.
+    // Create command receiver to update velocity from joystick.
     qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
     std::cout << "---------Ros Module Init finished---------" << std::endl;
 
@@ -40,7 +43,6 @@ int main(int argc, char **argv)
     // Create the locomotion controller.
     qrLocomotionController *locomotionController = setUpController(quadruped, pathToNode, robotName);
     locomotionController->Reset();
-    
     // Initialize the desired speed of the robot.
     float desiredTwistingSpeed = 0.;
     Eigen::Matrix<float, 3, 1> desiredSpeed = {0.0, 0.0, 0.0};
