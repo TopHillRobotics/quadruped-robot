@@ -22,11 +22,15 @@ include_directories(
 )
 
 add_executable(trot_velocity_motion trot_velocity_motion/main.cpp)
+add_executable(trot_velocity_motion_with_joystick trot_velocity_motion_with_joystick/main.cpp)
+add_executable(trot_velocity_motion_with_keyboard trot_velocity_motion_with_keyboard/main.cpp)
 add_executable(trot_position_motion trot_position_motion/main.cpp)
 add_executable(external_force_motion external_force_motion/main.cpp)
 add_executable(stand_up stand_up/main.cpp)
 
 target_link_libraries(trot_velocity_motion ${catkin_LIBRARIES})
+target_link_libraries(trot_velocity_motion_with_joystick ${catkin_LIBRARIES})
+target_link_libraries(trot_velocity_motion_with_keyboard ${catkin_LIBRARIES})
 target_link_libraries(trot_position_motion ${catkin_LIBRARIES})
 target_link_libraries(external_force_motion ${catkin_LIBRARIES})
 target_link_libraries(stand_up ${catkin_LIBRARIES})

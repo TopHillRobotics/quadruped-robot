@@ -23,7 +23,7 @@ int main(int argc, char **argv)
     // Start keyboard receiving thread.
     qrTeleKeyboard keyboard(nh);
     std::cout << "---------Keyboard start receving---------" << std::endl;
-    thread keyboardTh(&qrTeleKeyboard::main, keyboard);
+    thread keyboardTh(&qrTeleKeyboard::run, keyboard);
     keyboardTh.detach();
 
     // Reset robot model and gazebo controller.
