@@ -72,7 +72,7 @@ private:
     /**
      * @brief The topic which the converted message to publish to.
      */
-    std::string cmdTopic = "/velocity_param";
+    std::string cmdTopic = "/velocityParam";
 
     /**
      * @brief The ros node which this class create from.

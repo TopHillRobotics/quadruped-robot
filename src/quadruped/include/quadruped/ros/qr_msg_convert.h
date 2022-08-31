@@ -74,7 +74,7 @@ private:
     /**
      * @brief The topic which the converted message to publish to.
      */
-    std::string cmdVelTopic = "/velocity_param";
+    std::string cmdVelTopic = "/velocityParam";
 
     /**
      * @brief The topic which the joystick message to subscribe.

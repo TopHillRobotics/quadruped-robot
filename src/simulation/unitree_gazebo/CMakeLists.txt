@@ -1,5 +1,7 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 2.8.3)
 project(unitree_gazebo)
+
+set (CMAKE_AUTOMOC ON)
 
 find_package(catkin REQUIRED COMPONENTS
     controller_manager
@@ -24,6 +26,9 @@ catkin_package(
 )
 
 include_directories(
+    # include
+    SYSTEM
+    ${Qt5Core_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIR}
     ${catkin_INCLUDE_DIRS}
     ${GAZEBO_INCLUDE_DIRS}
@@ -34,15 +39,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
 
 
-add_library(unitreeFootContactPlugin SHARED plugin/foot_contact_plugin.cc)
-target_link_libraries(unitreeFootContactPlugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} )
-
-add_library(unitreeDrawForcePlugin SHARED plugin/draw_force_plugin.cc)
-target_link_libraries(unitreeDrawForcePlugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
-
-add_library(drawLinesPlugin SHARED plugin/draw_lines_plugin.cc)
-target_link_libraries(drawLinesPlugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
-
 add_library(GaitParameterGuiPlugin SHARED plugin/gait_parameter_gui_plugin.cc)
 target_link_libraries(GaitParameterGuiPlugin 
 ${catkin_LIBRARIES} 
@@ -50,4 +46,9 @@ ${GAZEBO_LIBRARIES}
 ${Qt5Core_LIBRARIES}
 ${Qt5Widgets_LIBRARIES}) 
 
+add_library(unitreeFootContactPlugin SHARED plugin/foot_contact_plugin.cc)
+target_link_libraries(unitreeFootContactPlugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
+add_library(unitreeDrawForcePlugin SHARED plugin/draw_force_plugin.cc)
+target_link_libraries(unitreeDrawForcePlugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 

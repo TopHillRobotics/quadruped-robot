@@ -104,7 +104,7 @@ class qrGaitParamReceiver {
 
         ros::NodeHandle &nh;
         ros::Subscriber gaitParamSub;
-        std::string gaitParamTopic = "/gait_param";
+        std::string gaitParamTopic = "/gaitParam";
 
     private:
         /**
