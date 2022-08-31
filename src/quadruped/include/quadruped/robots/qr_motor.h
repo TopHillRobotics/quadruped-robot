@@ -30,42 +30,38 @@
 #include <Eigen/Dense>
 
 /**
- * @brief send motor commond to uitree_sdk
- * @param p double, position, joint angle
- * @param Kp double, position factor
- * @param d double, joint velocity
- * @param Kd double, velocity factor
- * @param tua double, torque
+ * @brief structure for motor command
  */
 struct qrMotorCommand {
-
-    friend std::ostream &operator<<(std::ostream &os, qrMotorCommand &data);
 
     /**
      * @brief joint angle (unit: radian)
      */
-    double p;
+    float p;
 
     /**
      * @brief position stiffness (unit: N.m/rad )
      */
-    double Kp;
+    float Kp;
 
     /**
      * @brief joint velocity ( unit: radian/second)
      */
-    double d;
+    float d;
 
     /**
      * @brief velocity stiffness (unit: N.m/(rad/s) )
      */
-    double Kd;
+    float Kd;
 
     /**
      * @brief torque (unit: N.m)
      */
-    double tua;
+    float tua;
 
+    /**
+     * @brief default constructor
+     */
     qrMotorCommand(){}
 
     /**
@@ -76,7 +72,7 @@ struct qrMotorCommand {
      * @param KdIn: velocity stiffness input
      * @param tuaIn:torque input
      */
-    qrMotorCommand(double pIn, double KpIn, double dIn, double KdIn, double tuaIn);
+    qrMotorCommand(float pIn, float KpIn, float dIn, float KdIn, float tuaIn);
 
     /**
      * @brief constructor of qrMotorCommand

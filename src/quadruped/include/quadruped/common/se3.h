@@ -33,7 +33,7 @@
 #include <type_traits>
 
 #include "common/qr_algebra.h"
-#include "common/qr_cppTypes.h"
+#include "common/qr_eigen_types.h"
 
 static constexpr double quaternionDerviativeStabilization = 0.1;
 namespace math {

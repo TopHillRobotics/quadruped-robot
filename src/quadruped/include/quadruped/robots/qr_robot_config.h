@@ -29,10 +29,13 @@
 #include <unordered_map>
 #include <yaml-cpp/yaml.h>
 #include <Eigen/Dense>
-#include "common/qr_cppTypes.h"
+#include "common/qr_eigen_types.h"
 #include "common/se3.h"
 #include "types.h"
 
+/**
+ * @brief The qrRobotConfig class stores the configuration of specific robot
+ */
 class qrRobotConfig
 {
 public:
@@ -76,6 +79,9 @@ public:
      */
     float bodyMass;
 
+    /**
+     * @brief the inertia of body
+     */
     Eigen::Matrix<float, 3, 3> bodyInertia = Eigen::Matrix<float, 3, 3>::Zero();
 
     /**
@@ -88,6 +94,9 @@ public:
      */
     float hipLength, upperLegLength, lowerLegLength;
 
+    /**
+     * @brief CoM offset
+     */
     Eigen::Matrix<float, 3, 1> comOffset;
 
     /**

@@ -34,7 +34,7 @@
 #include <geometry_msgs/Pose.h>
 
 #include "robots/qr_timer.h"
-#include "common/qr_cppTypes.h"
+#include "common/qr_eigen_types.h"
 #include "robots/qr_robot.h"
 #include "robots/qr_motor.h"
 #include "planner/qr_gait_generator.h"

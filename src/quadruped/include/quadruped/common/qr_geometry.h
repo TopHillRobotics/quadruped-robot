@@ -29,7 +29,7 @@
 #include <iostream>
 #include <type_traits>
 #include "common/qr_algebra.h"
-#include "common/qr_cppTypes.h"
+#include "common/qr_eigen_types.h"
 #include "common/se3.h"
 
 namespace math {

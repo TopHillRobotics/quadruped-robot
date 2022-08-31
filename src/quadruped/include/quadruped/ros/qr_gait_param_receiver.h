@@ -31,7 +31,7 @@
 #include <Eigen/Dense>
 #include <ros/ros.h>
 #include <unitree_legged_msgs/GaitParameter.h>
-#include "common/qr_cppTypes.h"
+#include "common/qr_eigen_types.h"
 /**
  * @brief  A qrGaitParamReceiver object receives the gait parameters from ROS topic when a gait updates.
  */

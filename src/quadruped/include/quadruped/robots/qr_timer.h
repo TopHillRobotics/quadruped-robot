@@ -26,30 +26,52 @@
 #define QR_TIMER_H
 #include <time.h>
 
+/**
+ * @brief The Timer class counts the time when robots started
+ */
 class Timer {
 public:
-    Timer()
-    {
+    /**
+     * @brief constructor of Timer
+     */
+    Timer(){
         start = clock();
         startTime = (double)start;
     }
 
-    inline double GetTimeSinceReset()
-    {
+    /**
+     * @brief get time since robot reset
+     * @return time since reset
+     */
+    inline double GetTimeSinceReset(){
         finish = clock();
         double timeSinceReset = (double)(finish - startTime) / CLOCKS_PER_SEC; // second(s)
         return timeSinceReset;
     }
 
-    inline void ResetStartTime()
-    {
+    /**
+     * @brief set current time as start time
+     */
+    inline void ResetStartTime(){
         start = clock();
         startTime = (double)start;
     }
 
 private:
+
+    /**
+     * @brief start time
+     */
     clock_t start;
+
+    /**
+     * @brief finish time
+     */
     clock_t finish;
+
+    /**
+     * @brief start time
+     */
     double startTime;
 };
 

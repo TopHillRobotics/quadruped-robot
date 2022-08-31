@@ -25,4 +25,10 @@
 #include "robots/qr_robot.h"
 qrRobot::qrRobot(std::string path):config(new qrRobotConfig(path)),state(qrRobotState(config))
 {
+
+}
+
+qrRobot::~qrRobot()
+{
+  delete config;
 }

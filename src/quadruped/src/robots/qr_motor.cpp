@@ -24,7 +24,7 @@
 
 #include "robots/qr_motor.h"
 
-qrMotorCommand::qrMotorCommand(double pIn, double KpIn, double dIn, double KdIn, double tuaIn)
+qrMotorCommand::qrMotorCommand(float pIn, float KpIn, float dIn, float KdIn, float tuaIn)
     : p(pIn), Kp(KpIn), d(dIn), Kd(KdIn), tua(tuaIn)
 {}
 
@@ -42,11 +42,4 @@ Eigen::Matrix<float, 5, 1> qrMotorCommand::convertToVector() const
     Eigen::Matrix<float, 5, 1> HybridMotorCommandVector;
     HybridMotorCommandVector << p, Kp, d, Kd, tua;
     return HybridMotorCommandVector;
-}
-
-std::ostream &operator<<(std::ostream &os, qrMotorCommand &data)
-{
-    os << data.p << " " << data.Kp << " " << data.d << " " << data.Kd <<
-        " " << data.tua;
-    return os;
 }

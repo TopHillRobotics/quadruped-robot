@@ -53,7 +53,7 @@ public:
      */
     qrRobot(std::string path);
 
-    virtual ~qrRobot() = default;
+    virtual ~qrRobot();
 
     /**
      * @brief update observation in each loop.
@@ -65,31 +65,28 @@ public:
      * @param motorCommands: matrix of commands to execute
      * @param motorControlMode: control mode
      */
-    virtual void ApplyAction(const Eigen::MatrixXf &motorCommands, MotorMode motorControlMode) = 0;
+    virtual void ApplyAction(const Eigen::MatrixXf &motorCommands, MotorMode motorControlMode) {};
 
     /**
      * @brief set and execute commands
      * @param motorCommands: vector of commands to execute
      * @param motorControlMode: control mode
      */
-    virtual void ApplyAction(const std::vector<qrMotorCommand> &motorCommands, MotorMode motorControlMode)
-    {};
+    virtual void ApplyAction(const std::vector<qrMotorCommand> &motorCommands, MotorMode motorControlMode){};
 
     /**
      * @brief observe and apply action
      * @param action: commands to execute
      * @param motorControlMode: control mode
      */
-    virtual void Step(const Eigen::MatrixXf &action, MotorMode motorControlMode) = 0;
+    virtual void Step(const Eigen::MatrixXf &action, MotorMode motorControlMode) {};
 
     /**
      * @brief observe and apply action
      * @param motorCommands: commands to execute
      * @param motorControlMode: control mode
      */
-    virtual void Step(const std::vector<qrMotorCommand> &motorCommands,
-                        MotorMode motorControlMode)
-    {};
+    virtual void Step(const std::vector<qrMotorCommand> &motorCommands, MotorMode motorControlMode) {};
 
     /**
      * @brief get current 12 motor angles
@@ -200,28 +197,56 @@ public:
      */
     std::map<std::string, int> controlParams;
 
+    /**
+     * @brief timer that store time since robot starts
+     */
     Timer timer;
 
+    /**
+     * @brief control frequence of the robot
+     */
     float timeStep;
 
+    /**
+     * @brief stores last time that resets robot
+     */
     float lastResetTime = GetTimeSinceReset();
 
-    bool initComplete = false;
-
+    /**
+     * @brief store the configuration of the robot
+     */
     qrRobotConfig *config;
 
+    /**
+     * @brief real robot state used for compution time for each loop
+     */
     LowState lowstate;
 
-    qrRobotState  state;
+    /**
+     * @brief restore the state of the robot
+     */
+    qrRobotState state;
 
+    /**
+     * @brief whether the robot has stopped
+     */
     bool stop = false;
 
-    float heightInControlFrame = 0.27f;// ???
-    //Note:
+    /**
+     * @brief default height in control frame
+     */
+    float heightInControlFrame = 0.27f;
+
+    /**
+     * @brief default base frame position in gazebo
+     */
     Eigen::Matrix<float, 3, 1> gazeboBasePosition = {0.f, 0.f, A1_BODY_HIGHT}; //robot base position in world frame
+
+    /**
+     * @brief default base frame orientation in gazebo
+     */
     Eigen::Matrix<float, 4, 1> gazeboBaseOrientation = {1.f,0.f,0.f,0.f}; //robot base orientation in world frame
     
-
     // std::unordered_map<int, std::string> modeMap = {{0, "velocity"}, {1, "position"}, {2, "walk"}};
 };
 

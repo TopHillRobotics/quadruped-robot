@@ -43,8 +43,7 @@ qrRobotA1Sim::qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath):
     Eigen::Matrix<float, 3, 1> defaultSitDownAngle(sitDownAbAngle, sitDownHipAngle, sitDownKneeAngle);
     sitDownMotorAngles << defaultSitDownAngle, defaultSitDownAngle, defaultSitDownAngle, defaultSitDownAngle;
 
-    // controlParams["mode"] = qrRobotConfig["controller_params"]["mode"].as<int>(); //types.h: enum
-
+    // set up ros subscribers and publishers of joint angles, IMU and force feed back
     imuSub = nh.subscribe("/trunk_imu", 1, &qrRobotA1Sim::ImuCallback, this);
     jointStateSub[0] = nh.subscribe("a1_gazebo/FR_hip_controller/state", 1, &qrRobotA1Sim::FRhipCallback, this);
     jointStateSub[1] = nh.subscribe("a1_gazebo/FR_thigh_controller/state", 1, &qrRobotA1Sim::FRthighCallback, this);
@@ -81,13 +80,13 @@ qrRobotA1Sim::qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath):
     timeStep = 0.001;
     this->ResetTimer();
     lastResetTime = GetTimeSinceReset();
-    initComplete = true;
 
     std::cout << "-------qrRobotA1Sim init Complete-------" << std::endl;
 }
 
 void qrRobotA1Sim::ImuCallback(const sensor_msgs::Imu &msg)
 {
+    // set quaternion information
     state.imu.quaternion[0] = msg.orientation.w;
     state.imu.quaternion[1] = msg.orientation.x;
     state.imu.quaternion[2] = msg.orientation.y;
@@ -99,14 +98,17 @@ void qrRobotA1Sim::ImuCallback(const sensor_msgs::Imu &msg)
                                                 state.imu.quaternion[3]};
     Eigen::Matrix<float, 3, 1> rpy = math::quatToRPY(quaternion);
 
+    // set roll pitch yaw information
     state.imu.rpy[0] = rpy[0];
     state.imu.rpy[1] = rpy[1];
     state.imu.rpy[2] = rpy[2];
 
+    // set angular acceleration
     state.imu.gyroscope[0] = msg.angular_velocity.x;
     state.imu.gyroscope[1] = msg.angular_velocity.y;
     state.imu.gyroscope[2] = msg.angular_velocity.z;
 
+    // set linear acceleration
     state.imu.accelerometer[0] = msg.linear_acceleration.x;
     state.imu.accelerometer[1] = msg.linear_acceleration.y;
     state.imu.accelerometer[2] = msg.linear_acceleration.z;
@@ -229,7 +231,7 @@ void qrRobotA1Sim::ApplyAction(const Eigen::MatrixXf &motorCommands,
 {
     // std::cout << "apply:\n" << motorCommands << std::endl;
     std::array<float, 60> motorCommandsArray = {0};
-    if (motorControlMode == POSITION_MODE) {
+    if (motorControlMode == POSITION_MODE) {// in position mode, motor needs q, kp. kd
         Eigen::Matrix<float, 1, 12> motorCommandsShaped = motorCommands.transpose();
         for (int motorId = 0; motorId < qrRobotConfig::numMotors; motorId++) {
             motorCommandsArray[motorId * 5] = motorCommandsShaped[motorId];
@@ -238,7 +240,7 @@ void qrRobotA1Sim::ApplyAction(const Eigen::MatrixXf &motorCommands,
             motorCommandsArray[motorId * 5 + 3] = config->motorKds[motorId];
             motorCommandsArray[motorId * 5 + 4] = 0;
         }
-    } else if (motorControlMode == TORQUE_MODE) {
+    } else if (motorControlMode == TORQUE_MODE) {// in torque mode, motor needs joint torque
         Eigen::Matrix<float, 1, 12> motorCommandsShaped = motorCommands.transpose();
         for (int motorId = 0; motorId < qrRobotConfig::numMotors; motorId++) {
             motorCommandsArray[motorId * 5] = 0;
@@ -247,16 +249,14 @@ void qrRobotA1Sim::ApplyAction(const Eigen::MatrixXf &motorCommands,
             motorCommandsArray[motorId * 5 + 3] = 0;
             motorCommandsArray[motorId * 5 + 4] = motorCommandsShaped[motorId];
         }
-    } else if (motorControlMode == HYBRID_MODE) {
+    } else if (motorControlMode == HYBRID_MODE) {// in hybrid mode, motor needs q, dq, kp, kd and torque
         Eigen::Matrix<float, 5, 12> motorCommandsShaped = motorCommands;
         for (int motorId = 0; motorId < qrRobotConfig::numMotors; motorId++) {
             motorCommandsArray[motorId * 5] = motorCommandsShaped(POSITION, motorId);
             motorCommandsArray[motorId * 5 + 1] = motorCommandsShaped(KP, motorId);
-            motorCommandsArray[motorId * 5 + 2] =
-                motorCommandsShaped(VELOCITY, motorId);
+            motorCommandsArray[motorId * 5 + 2] = motorCommandsShaped(VELOCITY, motorId);
             motorCommandsArray[motorId * 5 + 3] = motorCommandsShaped(KD, motorId);
-            motorCommandsArray[motorId * 5 + 4] =
-                motorCommandsShaped(TORQUE, motorId);
+            motorCommandsArray[motorId * 5 + 4] = motorCommandsShaped(TORQUE, motorId);
         }
     } 
 

@@ -82,8 +82,7 @@ void qrRobotConfig::LoadComOffset(YAML::Node &node)
 
 void qrRobotConfig::LoadHipOffset(YAML::Node &node)
 {
-    std::vector<std::vector<float >> hipOffsetList =
-        node["robot_params"]["hip_offset"].as<std::vector<std::vector<float>>>();
+    std::vector<std::vector<float >> hipOffsetList = node["robot_params"]["hip_offset"].as<std::vector<std::vector<float>>>();
     Eigen::Matrix<float, 3, 1> hipOffsetFR = Eigen::MatrixXf::Map(&hipOffsetList[0][0], 3, 1) + comOffset;
     Eigen::Matrix<float, 3, 1> hipOffsetFL = Eigen::MatrixXf::Map(&hipOffsetList[1][0], 3, 1) + comOffset;
     Eigen::Matrix<float, 3, 1> hipOffsetRL = Eigen::MatrixXf::Map(&hipOffsetList[2][0], 3, 1) + comOffset;
@@ -93,8 +92,7 @@ void qrRobotConfig::LoadHipOffset(YAML::Node &node)
 
 void qrRobotConfig::LoadHipPosition(YAML::Node &node)
 {
-    std::vector<std::vector<float>> defaultHipPositionList =
-        node["robot_params"]["default_hip_positions"].as<std::vector<std::vector<float>>>();
+    std::vector<std::vector<float>> defaultHipPositionList = node["robot_params"]["default_hip_positions"].as<std::vector<std::vector<float>>>();
     Eigen::Matrix<float, 3, 1> defaultHipPositionFR = Eigen::MatrixXf::Map(&defaultHipPositionList[0][0], 3, 1);
     Eigen::Matrix<float, 3, 1> defaultHipPositionFL = Eigen::MatrixXf::Map(&defaultHipPositionList[1][0], 3, 1);
     Eigen::Matrix<float, 3, 1> defaultHipPositionRL = Eigen::MatrixXf::Map(&defaultHipPositionList[2][0], 3, 1);

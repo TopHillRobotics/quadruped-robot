@@ -41,7 +41,7 @@ qrRobotState::qrRobotState(qrRobotConfig*& config):config(config)
 void qrRobotState::Update()
 {
     if(firstObservation){
-        yawOffset = imu.rpy[2]; // todo
+        yawOffset = imu.rpy[2]; // when firstly Updating, record current yaw offset
         firstObservation = false;
     }
     baseRollPitchYaw << imu.rpy[0], imu.rpy[1], CalibrateYaw();

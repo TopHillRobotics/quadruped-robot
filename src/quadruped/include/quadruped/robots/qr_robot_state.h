@@ -29,6 +29,9 @@
 #include "common/se3.h"
 #include "qr_robot_config.h"
 
+/**
+ * @brief The qrIMU struct stores the information of IMU
+ */
 struct qrIMU{
     /**
      * @brief quaternion of the IMU ( w,x,y,z )
@@ -51,6 +54,9 @@ struct qrIMU{
     std::array<float, 3> rpy;
 };
 
+/**
+ * @brief The qrMotorState struct stores the information of current state of motors
+ */
 struct qrMotorState
 {
     /**
@@ -68,13 +74,20 @@ struct qrMotorState
      */
     float tauEst;
 
-    void operator=(const qrMotorState &state){
+    /**
+     * @brief override of operator =
+     * @param state: state to set equal to
+     */
+    void operator=(const qrMotorState &state) {
         this->q = state.q;
         this->dq = state.dq;
         this->tauEst = state.tauEst;
     }
 };
 
+/**
+ * @brief The qrRobotState class stores the current status of the robot
+ */
 class qrRobotState{
 public:
     /**
