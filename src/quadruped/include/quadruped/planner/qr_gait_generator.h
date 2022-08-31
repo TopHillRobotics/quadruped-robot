@@ -80,10 +80,20 @@ public:
     */
     virtual void Update(float currentTime);
 
+    /**
+    * @brief Use gait type to create gait.
+    * @param gaitType
+    */
     virtual void CreateGait(std::string gaitType);
 
+    /**
+    * @brief change gait
+    */
     virtual void ModifyGait();
 
+    /** 
+     * @brief qrRobot object.
+     */
     qrRobot *robot;
 
     /**
@@ -179,8 +189,16 @@ public:
     */
     float contactDetectionPhaseThreshold;
 
+    /**
+    * @brief current gait type
+    *
+    */
     std::string curGaitType;
 
+    /**
+    * @brief next gait type
+    *
+    */
     std::string nextGaitType;
 };
 

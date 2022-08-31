@@ -168,6 +168,7 @@ void qrStanceLegController::PositionLocomotionProcess(Eigen::Matrix<float, 3, 1>
     desiredComAngularVelocity = {0.f, 0.f, 0.f};
 }
 
+// See the MIT paper for details:https://ieeexplore.ieee.org/document/8593885
 std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLegController::GetAction()
 {
     Eigen::Matrix<float, 3, 1> robotComPosition;
@@ -240,7 +241,6 @@ std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLe
     desiredDq << desiredComVelocity, desiredComAngularVelocity;
     Vec6<float> ddq = desiredDq - robotDq;
 
-    //
     desiredDdq = KP.cwiseProduct(dq) + KD.cwiseProduct(ddq);
     desiredDdq = desiredDdq.cwiseMin(maxDdq).cwiseMax(minDdq);
 

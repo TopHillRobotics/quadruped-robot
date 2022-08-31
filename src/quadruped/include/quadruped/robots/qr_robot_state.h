@@ -26,7 +26,7 @@
 #define QR_ROBOT_STATE_H
 
 #include <Eigen/Dense>
-#include "common/se3.h"
+#include "common/qr_se3.h"
 #include "qr_robot_config.h"
 
 /**

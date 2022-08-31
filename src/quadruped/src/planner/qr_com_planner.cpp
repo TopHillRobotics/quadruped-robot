@@ -51,6 +51,7 @@ void qrComPlanner ::Reset(float current_time)
     comPosInWorldFrame << basePosition[0], basePosition[1], 0.f;
 }
 
+// See the MIT paper for details:https://ieeexplore.ieee.org/document/8593885
 Eigen::Matrix<float, 3, 1> qrComPlanner ::Update(float current_time)
 {
 
@@ -98,7 +99,6 @@ Eigen::Matrix<float, 3, 1> qrComPlanner ::Update(float current_time)
     }
 
     comPosInBaseFrame = supportPolygonVertices.rowwise().mean(); // shape = (3,1)
-    // std::cout << "comPosInBaseFrame:" <<comPosInBaseFrame<<std::endl;
 
     return comPosInBaseFrame;
 }

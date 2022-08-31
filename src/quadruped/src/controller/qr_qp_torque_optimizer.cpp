@@ -123,13 +123,6 @@ std::tuple<Eigen::Matrix<float, 12, 12>, Eigen::Matrix<float, 12, 1>> ComputeObj
 Eigen::Matrix<float,12,12> ComputeWeightMatrix(qrRobot *robot, const Eigen::Matrix<bool, 4, 1>& contacts)
 {
     Eigen::Matrix<float,12,12> W = 1e-4 * Eigen::Matrix<float,12,12>::Identity(); // 1e-4
-    // regularize the joint torque
-    // for(int i=0; i<4; ++i) {
-    //     if(contacts[i]) {
-    //         auto Jv = robot->state.ComputeJacobian(i);
-    //         W.block<3,3>(3*i,3*i) = Jv * W.block<3,3>(3*i,3*i) * Jv.transpose();
-    //     }
-    // }
     return W;
 }
 

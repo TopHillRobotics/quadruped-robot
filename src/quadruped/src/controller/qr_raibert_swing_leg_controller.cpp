@@ -143,6 +143,11 @@ void qrSwingLegController::Update(float currentTime)
     
 }
 
+// Controls the swing leg position using Raibert's formula.
+// For details, please refer to chapter 2 in "Legged robbots that balance" byMarc Raibert. 
+// The key idea is to stablize the swing foot's location based onthe CoM moving speed.
+// see the following paper for details:https://ieeexplore.ieee.org/document/8593885
+
 void qrSwingLegController::VelocityLocomotionProcess(const Eigen::Matrix<float, 3, 3> &dR, 
                                                     Matrix<float, 3, 1> &footPositionInBaseFrame, 
                                                     int legId)

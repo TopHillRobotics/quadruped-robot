@@ -28,7 +28,6 @@
 
 qrFootStepper ::qrFootStepper (qrTerrain& terrain, float defaultFootholdOffset, std::string level)
 {
-    // terrainType
     switch (terrain.terrainType)
     {
         case TerrainType::PLUM_PILES: {
@@ -40,12 +39,12 @@ qrFootStepper ::qrFootStepper (qrTerrain& terrain, float defaultFootholdOffset, 
             stairUp.height = 0.1;
             stairUp.width = 0.2;
             stairUp.length = 1.0;
-            stairUp.k = 3; // 
+            stairUp.k = 3;
             stairUp.startPoint << 1.0f, 0.f,0.f;
             stairDown.height = 0.1;
             stairDown.width = 0.2;
             stairDown.length = 1.0;
-            stairDown.k = 3; // 
+            stairDown.k = 3; 
             stairDown.startPoint << 2.4f,0.f,0.2f;
         } break;
     default:
@@ -83,10 +82,6 @@ qrFootStepper ::qrFootStepper (qrTerrain& terrain, float defaultFootholdOffset, 
 double  qrFootStepper ::CheckSolution(Eigen::Matrix<float, 1, 4> currentFootholdsX, double front, double back, qrGap frontGap, qrGap backGap) {
     for (int i = 1; i < 5; ++i) {
         if (i <= 2) {
-            // cout << defaultFootholdDelta<< endl;
-            // cout << frontGap.distance << endl;
-            // cout << frontGap.width << endl;
-            // cout << currentFootholdsX[i - 1] << endl;
             CI[0][i] = front;
             b[i] = -CI[0][i] * (defaultFootholdDelta - (frontGap.distance + frontGap.width / 2.0 * CI[0][i])
                                 + currentFootholdsX[i - 1]);
@@ -110,19 +105,15 @@ double  qrFootStepper ::CheckSolution(Eigen::Matrix<float, 1, 4> currentFoothold
     // whether satisfy: Ax + b >= 0
     for (int i = 0; i < CI.ncols(); i++) {
         if ((int)(deltaX * CI[0][i] * 10000) < (int)(b[i]*10000)) {
-            // std::cout << std::setprecision(10) << CI[0][i] << " " << b[i] << " " <<  deltaX * CI[0][i]  << std::endl;
-            // std::cout << "x[0] is: " << deltaX << ", index: " << i << " not satisfied the equation" << std::endl;
             return MAXIMUM_STEP;
         }
     }
-    // std::cout << deltaX <<  " is OK" << std::endl;
     return deltaX;
 }
 
 
 int qrFootStepper ::StepGenerator(Eigen::Matrix<float, 1, 4>& currentFootholdsX, Eigen::Matrix<float, 1, 4>& desiredFootholdsOffset) {
     Eigen::Matrix<float, 1, 4> defaultNextFootholdsX = currentFootholdsX.array() + defaultFootholdDelta;
-    // std::cout << "defaultNextFootholdsX = " << defaultNextFootholdsX << std::endl;
     desiredFootholdsOffset << defaultFootholdDelta, defaultFootholdDelta, defaultFootholdDelta, defaultFootholdDelta;
     
     for (int gapIndex = 0; gapIndex < gaps.size(); gapIndex++){
@@ -162,12 +153,9 @@ int qrFootStepper ::StepGenerator(Eigen::Matrix<float, 1, 4>& currentFootholdsX,
                     if (gaitFlag) {
                         return -2;
                     }
-                    // std::cout << "=====================" << "plan failed" << "======================" << std::endl;
-                    // std::cout << gap.distance << std::endl;
                     gaitFlag = true;
                     return -1;
                 }                                      
-                // std::cout << "desiredFootholdsOffset = \n" << desiredFootholdsOffset << std::endl;
                 return 0;
             }
         }
@@ -194,7 +182,6 @@ std::tuple<Eigen::Matrix<float,3,4>, Eigen::Matrix<float,3,4>> qrFootStepper ::G
 {   
     std::cout << "currentFootholds" << currentFootholds << std::endl;
     Eigen::Matrix<float, 3, 4> nextFootholds = currentFootholds;
-    // nextFootholds.row(1) << -0.145f, 0.145f, -0.145f, 0.145f;
     Eigen::Matrix<float, 3, 1> constOffset = {0.1f, 0.f, 0.f};
     dZ << 0.f, 0.f, 0.f, 0.f; 
     
@@ -262,8 +249,7 @@ std::tuple<Eigen::Matrix<float,3,4>, Eigen::Matrix<float,3,4>> qrFootStepper ::G
             nextFootholds.col(legId) = nextFootPos;
         }
         
-    } else { // down
-        // todo
+    } else {
         for (int legId=0; legId< NumLeg; ++legId) {
             fourFootOnWhichStairK[legId] = 0; // ground is 3=k
         }
@@ -324,8 +310,8 @@ std::tuple<Eigen::Matrix<float,3,4>, Eigen::Matrix<float,3,4>> qrFootStepper ::G
                 
             }
             nextFootholds.col(legId) = nextFootPos;
-        } // end for
-    } // end if
+        }
+    }
     
     nextFootholdsOffset.row(2) = dZ;
     return {nextFootholds, nextFootholdsOffset};
@@ -366,12 +352,6 @@ Eigen::Matrix<float, 3, 4> qrFootStepper ::GetOptimalFootholdsOffset(Eigen::Matr
         }
 
         generatorFlag = true;
-        // std::cout << "************************************************" << std::endl;
-        // while(!steps.empty()) {
-        //     std::cout << steps.front() << std::endl;
-        //     steps.pop();
-        // }
-        // std::cout << "************************************************" << std::endl;  
     }
 
     if (!steps.empty()) {

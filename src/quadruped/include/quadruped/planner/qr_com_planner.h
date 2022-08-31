@@ -70,8 +70,19 @@ class qrComPlanner  {
                                                                 std::map<std::string, int>{{"cw", 1}, {"ccw", 2}}
     };
 
+    /** 
+     * @brief qrRobot object.
+     */
     qrRobot *robot;
+
+    /** 
+     * @brief qrGaitGenerator object.
+     */
     qrGaitGenerator *gaitGenerator;
+
+    /** 
+     * @brief qrRobotEstimator object.
+     */
     qrRobotEstimator *robotEstimator;
 
     /**
@@ -142,4 +153,4 @@ class qrComPlanner  {
 
 };
 
-#endif //ASCEND_QUADRUPED_CPP_INCLUDE_PLANNER_COM_ADJUSTER_H_
+#endif //QR_COM_PLANNER_H

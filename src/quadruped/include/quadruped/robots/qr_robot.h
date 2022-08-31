@@ -36,7 +36,7 @@
 #include "types.h"
 #include "robots/qr_timer.h"
 #include "robots/qr_motor.h"
-#include "common/se3.h"
+#include "common/qr_se3.h"
 #include "qr_robot_config.h"
 #include "qr_robot_state.h"
 

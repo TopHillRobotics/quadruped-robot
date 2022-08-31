@@ -30,7 +30,7 @@
 #include <type_traits>
 #include "common/qr_algebra.h"
 #include "common/qr_eigen_types.h"
-#include "common/se3.h"
+#include "common/qr_se3.h"
 
 namespace math {
 

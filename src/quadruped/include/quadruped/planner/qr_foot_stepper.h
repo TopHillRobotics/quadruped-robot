@@ -38,8 +38,7 @@
 #include "common/qr_se3.h"
 #include "state_estimator/qr_ground_estimator.h"
 
-    
-// todo :different terrains may apply to different qrFootStepper , using factory method.
+
 class qrFootStepper  {
 public:
     qrFootStepper (qrTerrain& terrain, float defaultFootholdOffset, std::string level);
@@ -51,7 +50,7 @@ public:
         return {defaultFootholdDelta, 0.f, 0.f};
     }
 
-        /**
+    /**
      * @brief Find a optimal foot placement for swing legs, usually larger then zero.
      * @param Matrix<float, 3, 4> feet positions in world frame when all stance at ground.
      * @note Assuming that foot offset L = L0 + x, gap width is W,

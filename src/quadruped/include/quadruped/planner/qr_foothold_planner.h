@@ -34,21 +34,27 @@
  */
 class qrFootholdPlanner {
 public:
-
+    /** 
+     * @brief Constructor of qrFootholdPlanner.
+     * @param robotIn The robot object pointer.
+     * @param groundEstimator The ground estimator
+     */
     qrFootholdPlanner(qrRobot *robotIn, qrGroundSurfaceEstimator *groundEsitmatorIn);
 
+    /**
+     * @brief Deconstruct a qrFootholdPlanner object.
+     */
     ~qrFootholdPlanner() = default;
 
+    /** 
+     * @brief Reset the foothold planner
+     */
     void Reset();
 
-    void Update()
-    {}
     /**
     * @brief only be called at the moment right before lift up legs.
     */
     void UpdateOnce(Eigen::Matrix<float, 3, 4> currentFootholds, std::vector<int> legIds={});
-
-    bool Loadterrain( std::string& configPathIn);
 
     /**
      * @brief compute desired foot-end position in walk mode
@@ -105,9 +111,19 @@ public:
     }
 
 public:
-
+    /** 
+     * @brief qrRobot object.
+     */
     qrRobot *robot;
+
+    /** 
+     * @brief qrGroundSurfaceEstimator object.
+     */
     qrGroundSurfaceEstimator *groundEsitmator;
+
+    /** 
+     * @brief qrFootStepper object.
+     */
     qrFootStepper *footstepper;
 
     /**
@@ -155,4 +171,4 @@ public:
     Eigen::Matrix<float, 3, 4> desiredFootholds;
 };
 
-#endif //ASCEND_QUADRUPED_CPP_INCLUDE_PLANNER_Foothold_PLANNER_H_
+#endif //QR_FOOTHOLD_PLANNER_H_

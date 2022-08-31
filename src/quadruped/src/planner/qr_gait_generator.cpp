@@ -67,7 +67,6 @@ qrGaitGenerator::qrGaitGenerator(qrRobot *robot, string configFilePath)
     string gait = config["gait_params"]["gait"].as<string>();
     cout << "qrGaitGenerator Set gait: " << gait << endl;
     this->CreateGait(gait);
-    // std::cout << "initialLegState" << initialLegState <<std::endl;
     Reset(0);
 }
 void qrGaitGenerator::CreateGait(string gaitType) {
@@ -145,7 +144,6 @@ void qrGaitGenerator::Update(float currentTime)
         fullCyclePeriod = stanceDuration[legId] / dutyFactor[legId];
         augmentedTime = initialLegPhase[legId] * fullCyclePeriod + currentTime;
         phaseInFullCycle = fmod(augmentedTime, fullCyclePeriod) / fullCyclePeriod;
-        // std::cout << "phaseInFullCycle = " <<phaseInFullCycle <<std::endl;
         
         ratio = initStateRadioInCycle[legId];
         if (phaseInFullCycle < ratio) {
@@ -156,7 +154,6 @@ void qrGaitGenerator::Update(float currentTime)
             desiredLegState[legId] = nextLegState[legId];
             normalizedPhase(legId) = (phaseInFullCycle - ratio) / (1 - ratio);
         }
-        // printf("leg %d normalizedPhase = %f\n", legId, normalizedPhase(legId));
         
         legState[legId] = desiredLegState[legId];
 
@@ -170,6 +167,4 @@ void qrGaitGenerator::Update(float currentTime)
             legState[legId] = LegState::LOSE_CONTACT;
         }
     }
-    // std::cout << "desiredLegState " << desiredLegState.transpose() << std::endl;
-    // std::cout << "legState " << legState.transpose() << std::endl;
 }
