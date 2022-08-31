@@ -10,7 +10,7 @@
 #ifndef ASCEND_QUADRUPED_CPP_GROUND_ESTIMATOR_H
 #define ASCEND_QUADRUPED_CPP_GROUND_ESTIMATOR_H
 
-#include "common/se3.h"
+#include "common/qr_se3.h"
 #include "robots/qr_robot.h"
 
 

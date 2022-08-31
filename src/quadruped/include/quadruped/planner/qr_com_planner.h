@@ -35,7 +35,7 @@
 #include "robots/qr_robot.h"
 #include "state_estimator/qr_robot_estimator.h"
 #include "planner/qr_gait_generator.h"
-#include "common/se3.h"
+#include "common/qr_se3.h"
 
 class qrComPlanner  {
     public:

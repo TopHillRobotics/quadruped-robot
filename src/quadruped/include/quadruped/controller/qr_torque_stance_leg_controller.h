@@ -25,7 +25,7 @@
 #ifndef QR_STANCE_LEG_CONTROLLER_H
 #define QR_STANCE_LEG_CONTROLLER_H
 
-#include "common/se3.h"
+#include "common/qr_se3.h"
 #include "robots/qr_robot.h"
 #include "planner/qr_gait_generator.h"
 #include "state_estimator/qr_robot_estimator.h"

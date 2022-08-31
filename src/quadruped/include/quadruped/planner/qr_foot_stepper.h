@@ -35,7 +35,7 @@
 #include "quadprogpp/QuadProg++.hh"
 #include "quadprogpp/Array.hh"
 #include "robots/qr_robot.h"
-#include "common/se3.h"
+#include "common/qr_se3.h"
 #include "state_estimator/qr_ground_estimator.h"
 
     
