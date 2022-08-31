@@ -11,7 +11,7 @@ using namespace std;
 int main(int argc, char **argv)
 {
 
-    ros::init(argc, argv, "trot_velocity_motion");
+    ros::init(argc, argv, "demo_trot_keyboard");
     ros::NodeHandle nh;
 
     // Get package path.
@@ -60,6 +60,10 @@ int main(int argc, char **argv)
     std::cout << "----------------Main Loop Starting------------------" << std::endl;
 
     // Start the control loop until the time arrive at MAX_TIME_SECONDS.
+    std::cout << "You can use 'w' 'a' 's' 'd' 'r' 'f' to control the robot's position,\n" << 
+                "and use 'i' 'k' 'j' 'l' 'u' 'o' to control the robot's orientation,\n" <<
+                "input CTRL + c to exit keyboard control,\n" << 
+                "other key to set all velocity to 0." << std::endl;
     while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS) {
         startTimeWall = quadruped->GetTimeSinceReset();
 

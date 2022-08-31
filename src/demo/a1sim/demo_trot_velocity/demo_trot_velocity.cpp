@@ -11,7 +11,7 @@ using namespace std;
 int main(int argc, char **argv)
 {
 
-    ros::init(argc, argv, "trot_velocity_motion");
+    ros::init(argc, argv, "demo_trot_velocity");
     ros::NodeHandle nh;
 
     // Get package path.
@@ -27,9 +27,6 @@ int main(int argc, char **argv)
 
     // Create command receiver to update velocity if changed.
     qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
-    
-    // Create a service client to receive the link state from gazebo.
-    ros::ServiceClient baseStateClient = nh.serviceClient<gazebo_msgs::GetLinkState>("/gazebo/get_link_state");
     std::cout << "---------Ros Module Init finished---------" << std::endl;
 
     // Create the robot.
@@ -43,14 +40,14 @@ int main(int argc, char **argv)
     // Create the locomotion controller.
     qrLocomotionController *locomotionController = setUpController(quadruped, pathToNode);
     locomotionController->Reset();
-
+    
     // Initialize the desired speed of the robot.
     float desiredTwistingSpeed = 0.;
     Eigen::Matrix<float, 3, 1> desiredSpeed = {0.0, 0.0, 0.0};
     updateControllerParams(locomotionController, desiredSpeed, desiredTwistingSpeed);
 
     std::cout << "---------Locomotion Module Init Finished---------" << std::endl;
-    
+
     float startTime = quadruped->GetTimeSinceReset();
     float currentTime = startTime;
     float startTimeWall = startTime;
@@ -64,20 +61,16 @@ int main(int argc, char **argv)
         // Update the desired speed if they were changed.
         desiredSpeed = cmdVelReceiver->GetLinearVelocity();
         desiredTwistingSpeed = cmdVelReceiver->GetAngularVelocity();
-         
         updateControllerParams(locomotionController,
                                 desiredSpeed,
                                 desiredTwistingSpeed);
-
-        // Get the COM of the robot which was computed from the link state received from the gazebo.
-        locomotionController->GetComPositionInWorldFrame(baseStateClient);
 
         // Update the locomotion controller include many estimators' update. 
         locomotionController->Update();
 
         // And compute to get the motor command accord the update.
         auto [hybridAction, qpSol] = locomotionController->GetAction();
-        
+
         // Execute the motor command accord different control mode(e.g. torque,position,hybrid).
         quadruped->Step(qrMotorCommand::convertToMatix(hybridAction), HYBRID_MODE);
 

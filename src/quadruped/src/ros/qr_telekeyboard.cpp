@@ -99,12 +99,10 @@ void qrTeleKeyboard::run()
             for(int i = 0; i < 3; ++i){
                 moveCmd[i] = l_alpha * moveBindings[key][i] + (1 - l_alpha) * moveCmd[i];
             }
-            std::cout << "receive key: " << key << " ";
         } else if(rotationBindings.count(key) == 1){
             for(int i = 0; i < 3; ++i){
                 rotationCmd[i] = r_alpha * rotationBindings[key][i] + (1 - r_alpha) * rotationCmd[i];
             }
-            std::cout << "receive key: " << key << " ";
         } else {
             for(int i = 0; i < 4; ++i){
                 moveCmd[i] = 0;
@@ -124,7 +122,6 @@ void qrTeleKeyboard::run()
         twMsg.angular.x = rotationCmd[0];
         twMsg.angular.y = rotationCmd[1];
         twMsg.angular.z = rotationCmd[2];
-        std::cout << moveCmd[0] << " " << moveCmd[1] << " " << moveCmd[2] << " " << rotationCmd[0] << " " << rotationCmd[1] << " " << rotationCmd[2] << " " << std::endl;
 
         pub.publish(twMsg);
         ros::spinOnce();

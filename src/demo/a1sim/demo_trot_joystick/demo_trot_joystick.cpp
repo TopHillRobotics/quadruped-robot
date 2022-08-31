@@ -11,7 +11,7 @@ using namespace std;
 int main(int argc, char **argv)
 {
 
-    ros::init(argc, argv, "trot_velocity_motion");
+    ros::init(argc, argv, "demo_trot_joystick");
     ros::NodeHandle nh;
 
     // Get package path.

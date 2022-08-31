@@ -12,6 +12,11 @@ sudo apt install liblcm-dev
 sudo apt install libglm-dev
 ```
 
+And you need to install ros environment. Please go to www.wiki.ros.org for the ros installation information.
+
+Other dependencies please see in `simulation/README.md`.
+
+
 ## Step 2: compile the exectuable locomotion controller or other ros packages
 
 ```
@@ -34,11 +39,11 @@ roslaunch unitree_gazebo normal.launch
 Then in another new terminal, launch the controller node. This is the simplest demo which makes the quadruped robot stand up only.
 
 ```
-rosrun a1sim stand_up
+rosrun a1sim demo_helloworld
 ```
 
 ## Step 4 (Option): Advances
 
-We also provided many different demoes which are combined with different gait and different locomotion. For example, you could run trot in velocity locomotion demo with `rosrun a1sim trot_velocity_motion`. What's more you can run `rosrun a1sim trot_velocity_motion_with_keyboard` to control the robot via keyboard.
+We also provided many different demoes which are combined with different gait and different locomotion. For example, you could run trot in velocity locomotion demo with `rosrun a1sim demo_trot_velocity`. What's more you can run `rosrun a1sim demo_trot_keyboard` to control the robot via keyboard. By the way, the joystick only support ps4 controller so far.
 
-And also you can read the code of  `main.cpp` and the files in `config` to learn how to combine the locomotion and gait to realize different demo.
+And also you can read the cpp code of  each demo and the files in `config` to learn how to combine the locomotion and gait to realize different demo.
