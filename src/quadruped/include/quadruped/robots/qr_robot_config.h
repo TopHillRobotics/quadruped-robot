@@ -30,7 +30,7 @@
 #include <yaml-cpp/yaml.h>
 #include <Eigen/Dense>
 #include "common/qr_eigen_types.h"
-#include "common/se3.h"
+#include "common/qr_se3.h"
 #include "types.h"
 
 /**

@@ -31,24 +31,16 @@ qrGroundSurfaceEstimator::qrGroundSurfaceEstimator(qrRobot *robotIn, std::string
     Reset(0.f);
 }
 
+
+
 void qrGroundSurfaceEstimator::Update(float currentTime)
 {   
     Eigen::Matrix<bool, 4, 1> contactState = robot->GetFootContacts();
-    bool shouldUpdate = false;
-    int N=0;
-    int i=0;
-    for(i=0; i < 4; ++i) {
-        if (contactState[i]) {
-            if ((!lastContactState[i])) {
-                shouldUpdate = true;
-            }
-            ++N;
-        }
+
+    if(!ShouldUpdate(contactState)){
+      return;
     }
-    lastContactState = contactState;
-    if (N <= 3 || !shouldUpdate) {
-        return ;
-    }
+
     Eigen::Matrix<double, 3, 4> footPositionsInBaseFrame = robot->state.GetFootPositionsInBaseFrame().cast<double>();
     pZ = footPositionsInBaseFrame.row(2);
     W.col(1) = footPositionsInBaseFrame.row(0);
@@ -57,6 +49,7 @@ void qrGroundSurfaceEstimator::Update(float currentTime)
     Mat3<double> ww = W.transpose()* W;
     a = ww.inverse()* W.transpose()*pZ;
     GetNormalVector(true);
+    // TODO: check this
     ComputeControlFrame();
 }
 
@@ -84,7 +77,7 @@ void qrGroundSurfaceEstimator::Reset(float currentTime) {
     }
 
     a = Eigen::Matrix<double, 3, 1>::Zero();
-    W = Eigen::Matrix<double,4,3>::Ones();
+    W = Eigen::Matrix<double, 4, 3>::Ones();
     pZ = Vec4<double>::Zero();
     n << 0.f, 0.f, 1.f;
     controlFrameRPY << 0., 0., 0.;
@@ -139,4 +132,25 @@ Eigen::Matrix<float, 3, 3> qrGroundSurfaceEstimator::GetAlignedDirections()
 {
     Mat3<float> R = controlFrame.block<3,3>(0,0).cast<float>();   
     return R;
+}
+
+bool qrGroundSurfaceEstimator::ShouldUpdate(const Eigen::Matrix<bool, 4, 1>& contactState)
+{
+    bool shouldUpdate = false;
+    int N=0;
+    int i=0;
+    for(i=0; i < 4; ++i) {
+        if (contactState[i]) {
+            if ((!lastContactState[i])) {
+                shouldUpdate = true;
+            }
+            ++N;
+        }
+    }
+
+    lastContactState = contactState;
+    if (N <= 3 || !shouldUpdate) {
+        return false;
+    }
+    return true;
 }

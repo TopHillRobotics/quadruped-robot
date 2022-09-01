@@ -70,7 +70,8 @@ qrGaitGenerator::qrGaitGenerator(qrRobot *robot, string configFilePath)
     // std::cout << "initialLegState" << initialLegState <<std::endl;
     Reset(0);
 }
-void qrGaitGenerator::CreateGait(string gaitType) {
+void qrGaitGenerator::CreateGait(string gaitType)
+{
 
     this->curGaitType = gaitType;
     vector<float> stanceDurationList = config["gait_params"][gaitType]["stance_duration"].as<vector<float >>();
@@ -105,7 +106,6 @@ void qrGaitGenerator::CreateGait(string gaitType) {
         }
     }
     this->nextGaitType = this->curGaitType;
-
 }
 
 void qrGaitGenerator::ModifyGait() {
@@ -114,6 +114,7 @@ void qrGaitGenerator::ModifyGait() {
         this->CreateGait(this->curGaitType);
     }
 }
+
 void qrGaitGenerator::Reset(float currentTime)
 {
     normalizedPhase = Eigen::Matrix<float, 4, 1>::Zero();
@@ -136,12 +137,13 @@ void qrGaitGenerator::Update(float currentTime)
             continue;
         }
         
-        
+        // if robot stopped but some legs still swings, it should continue to stance
         if (!robot->stop || (robot->stop && lastLegState[legId]==LegState::SWING)) {
             lastLegState[legId] = desiredLegState[legId];
             curLegState[legId] = desiredLegState[legId];
         }
         
+        // calculate current phase
         fullCyclePeriod = stanceDuration[legId] / dutyFactor[legId];
         augmentedTime = initialLegPhase[legId] * fullCyclePeriod + currentTime;
         phaseInFullCycle = fmod(augmentedTime, fullCyclePeriod) / fullCyclePeriod;
