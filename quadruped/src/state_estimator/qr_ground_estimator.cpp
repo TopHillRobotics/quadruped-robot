@@ -34,26 +34,19 @@ qrGroundSurfaceEstimator::qrGroundSurfaceEstimator(qrRobot *robotIn, std::string
 void qrGroundSurfaceEstimator::Update(float currentTime)
 {   
     Eigen::Matrix<bool, 4, 1> contactState = robot->GetFootContacts();
-    bool shouldUpdate = false;
-    int N=0;
-    int i=0;
-    for(i=0; i < 4; ++i) {
-        if (contactState[i]) {
-            if ((!lastContactState[i])) {
-                shouldUpdate = true;
-            }
-            ++N;
-        }
-    }
-    lastContactState = contactState;
-    if (N <= 3 || !shouldUpdate) {
+
+    if(!ShouldUpdate(contactState)){
         return ;
     }
+
+    // equation of the plane is pZ(x,y) = a_0 + a_1 * x + a_2 * y
+    // then the least square problem is min||Wa - pZ||_2
     Eigen::Matrix<double, 3, 4> footPositionsInBaseFrame = robot->state.GetFootPositionsInBaseFrame().cast<double>();
     pZ = footPositionsInBaseFrame.row(2);
     W.col(1) = footPositionsInBaseFrame.row(0);
     W.col(2) = footPositionsInBaseFrame.row(1);
     
+    // the analytic solution is (W^T * W)^(-1) * W^T * pZ
     Mat3<double> ww = W.transpose()* W;
     a = ww.inverse()* W.transpose()*pZ;
     GetNormalVector(true);
@@ -104,6 +97,7 @@ float qrGroundSurfaceEstimator::GetZ(float x, float y)
 
 Eigen::Matrix<double, 3, 1> qrGroundSurfaceEstimator::GetNormalVector(bool update)
 {
+    // z axis of normal vector should be positive.It will be easy to calculate the control frame
     if (update){
         double factor = std::sqrt(a[1]*a[1] + a[2]*a[2] + 1);
         n << -a[1], -a[2], 1.0;
@@ -115,6 +109,9 @@ Eigen::Matrix<double, 3, 1> qrGroundSurfaceEstimator::GetNormalVector(bool updat
 
 Eigen::Matrix<double, 4, 4> qrGroundSurfaceEstimator::ComputeControlFrame()
 {
+    // x axis of the control frame is the orientation of robot base axis projected on the plane
+    // z axis is the norm vector of the plane
+    // y axis is the cross of x axis and z axis
     Quat<double> quat = robot->GetBaseOrientation().cast<double>();
     Vec3<double> nInWorldFrame = math::invertRigidTransform<double>({0,0,0},quat, n);
     Vec3<double> xAxis = math::quaternionToRotationMatrix(quat).transpose().col(0);
@@ -127,7 +124,7 @@ Eigen::Matrix<double, 4, 4> qrGroundSurfaceEstimator::ComputeControlFrame()
     R.col(0) = xAxis;
     R.col(1) = yAxis;
     R.col(2) = nInWorldFrame;
-    double ratio = 0.7; // todo, 0.7 for walk mode
+    double ratio = 0.7; // TODO: 0.7 for walk mode
     controlFrameRPY = (1-ratio) * controlFrameRPY + ratio * math::rotationMatrixToRPY(R.transpose());
     controlFrameOrientation = math::rpyToQuat(controlFrameRPY);
     controlFrame.block<3,3>(0,0) = R;
@@ -139,4 +136,25 @@ Eigen::Matrix<float, 3, 3> qrGroundSurfaceEstimator::GetAlignedDirections()
 {
     Mat3<float> R = controlFrame.block<3,3>(0,0).cast<float>();   
     return R;
+}
+
+bool qrGroundSurfaceEstimator::ShouldUpdate(const Eigen::Matrix<bool, 4, 1> &contactState)
+{
+    bool shouldUpdate = false;
+    int N=0;
+    int i=0;
+    for(i=0; i < 4; ++i) {
+        if (contactState[i]) {
+            if ((!lastContactState[i])) {
+                shouldUpdate = true;
+            }
+            ++N;
+        }
+    }
+    lastContactState = contactState;
+    // when all foot on the ground and contact state changed will the plane update
+    if (N <= 3 || !shouldUpdate) {
+        return false;
+    }
+    return true;
 }

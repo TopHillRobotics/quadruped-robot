@@ -244,6 +244,15 @@ public:
      * @brief The configuration in terrain yaml file.
      */
     YAML::Node footStepperConfig;
+
+private:
+
+    /**
+     * @brief whether the plane should update
+     * @param contactState: contact state of foot
+     * @return whether to update
+     */
+    bool ShouldUpdate(const Eigen::Matrix<bool, 4, 1>& contactState);
 };
 
 #endif // ASCEND_QUADRUPED_CPP_GROUND_ESTIMATOR_H
