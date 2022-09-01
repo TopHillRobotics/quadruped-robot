@@ -17,7 +17,7 @@ The project now supports Unitree A1 robot and DeepRobotics Lite2A robot. This pr
 
 - ** [Anybotics](https://www.anybotics.com/anymal-autonomous-legged-robot/)
 
-Here some snapshots of our projects.
+Here some snapshots in simulation.
 
 <p align="center">
   <img src="media/trot-mpc.gif" width="600" />
@@ -27,7 +27,7 @@ Here some snapshots of our projects.
   <img src="media/walk-locomotion.gif" width="600" />
 </p>
 
-The project also supports real robots. Currently we test the system on Unitree A1.
+Here is a demo for a real quadruped robot (Unitree A1).
 
 <p align="center">
   <img src="media/real.gif" width="600" />
