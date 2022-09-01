@@ -33,6 +33,7 @@ Here is a demo for a real quadruped robot (Unitree A1).
   <img src="media/real.gif" width="600" />
 </p>
 
+---
 
 # 2. Source Code Structure
 
@@ -84,6 +85,7 @@ sudo apt install libglm-dev
 cd ${your_workspace}
 catkin_make
 ```
+---
 
 # 4. Run Demos
 
@@ -112,3 +114,4 @@ Third, in a new terminal, launch a demo and run the quadruped controller node. H
 ```
 rosrun a1sim demo_helloworld
 ```
+---
