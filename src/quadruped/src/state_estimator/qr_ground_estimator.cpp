@@ -31,32 +31,28 @@ qrGroundSurfaceEstimator::qrGroundSurfaceEstimator(qrRobot *robotIn, std::string
     Reset(0.f);
 }
 
+
+
 void qrGroundSurfaceEstimator::Update(float currentTime)
 {   
     Eigen::Matrix<bool, 4, 1> contactState = robot->GetFootContacts();
-    bool shouldUpdate = false;
-    int N=0;
-    int i=0;
-    for(i=0; i < 4; ++i) {
-        if (contactState[i]) {
-            if ((!lastContactState[i])) {
-                shouldUpdate = true;
-            }
-            ++N;
-        }
+
+    if(!ShouldUpdate(contactState)){
+      return;
     }
-    lastContactState = contactState;
-    if (N <= 3 || !shouldUpdate) {
-        return ;
-    }
+
+    // assume that the plane is Z(x, y) = a_0 + a_1 * x + a_2 * y
+    // then the least square problem is formed as min|| Wa - pZ ||_2
     Eigen::Matrix<double, 3, 4> footPositionsInBaseFrame = robot->state.GetFootPositionsInBaseFrame().cast<double>();
     pZ = footPositionsInBaseFrame.row(2);
     W.col(1) = footPositionsInBaseFrame.row(0);
     W.col(2) = footPositionsInBaseFrame.row(1);
     
+    // the analytical solution of a is (W^T * W)^(-1) W^T * pZ
     Mat3<double> ww = W.transpose()* W;
     a = ww.inverse()* W.transpose()*pZ;
     GetNormalVector(true);
+    // TODO: check this
     ComputeControlFrame();
 }
 
@@ -84,7 +80,7 @@ void qrGroundSurfaceEstimator::Reset(float currentTime) {
     }
 
     a = Eigen::Matrix<double, 3, 1>::Zero();
-    W = Eigen::Matrix<double,4,3>::Ones();
+    W = Eigen::Matrix<double, 4, 3>::Ones();
     pZ = Vec4<double>::Zero();
     n << 0.f, 0.f, 1.f;
     controlFrameRPY << 0., 0., 0.;
@@ -104,13 +100,14 @@ float qrGroundSurfaceEstimator::GetZ(float x, float y)
 
 Eigen::Matrix<double, 3, 1> qrGroundSurfaceEstimator::GetNormalVector(bool update)
 {
+    // the normal vector of the plane is relative to base frame
+    // the axis Z should be positive
     if (update){
         double factor = std::sqrt(a[1]*a[1] + a[2]*a[2] + 1);
         n << -a[1], -a[2], 1.0;
         n /= factor;
     }
-
-    return n; // in base frame
+    return n;
 }
 
 Eigen::Matrix<double, 4, 4> qrGroundSurfaceEstimator::ComputeControlFrame()
@@ -139,4 +136,25 @@ Eigen::Matrix<float, 3, 3> qrGroundSurfaceEstimator::GetAlignedDirections()
 {
     Mat3<float> R = controlFrame.block<3,3>(0,0).cast<float>();   
     return R;
+}
+
+bool qrGroundSurfaceEstimator::ShouldUpdate(const Eigen::Matrix<bool, 4, 1>& contactState)
+{
+    bool shouldUpdate = false;
+    int N=0;
+    int i=0;
+    for(i=0; i < 4; ++i) {
+        if (contactState[i]) {
+            if ((!lastContactState[i])) {
+                shouldUpdate = true;
+            }
+            ++N;
+        }
+    }
+
+    lastContactState = contactState;
+    if (N <= 3 || !shouldUpdate) {
+        return false;
+    }
+    return true;
 }
