@@ -43,7 +43,9 @@ int main(int argc, char **argv)
 
     // Keep program running to maintain the robot stand.
     while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS) {
-        
+        /*
+          Put control logic here.
+        */
     }
     
     ROS_INFO("Time is up, end now.");

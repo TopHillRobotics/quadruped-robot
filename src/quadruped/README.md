@@ -14,8 +14,7 @@ sudo apt install libglm-dev
 
 And you need to install ros environment. Please go to www.wiki.ros.org for the ros installation information.
 
-Other dependencies please see in `simulation/README.md`.
-
+Other dependencies please see in `src/simulation/README.md`.
 
 ## Step 2: compile the exectuable locomotion controller or other ros packages
 
