@@ -1,13 +1,60 @@
 # 1. Overview
-Here goes overview
 
-# 2. Installation
+This project provides an architecture and some key algorithms to control quadruped robots, including state estimator, gait generator, stance and swing leg controllers.  
+This project supports three control modes
 
-## 2.1 Install ROS
+- **velocity mode** allows a user to control the robot's linear and angular velocity.
+
+- **position mode** generates user-defined gaits using gait configurations.
+
+- **hybrid mode** uses position and torque to implement flexible locomotion.
+
+The project now supports Unitree A1 robot and DeepRobotics Lite2A robot. This project can be extended to support other quadruped robots such as Unitree AlienGO/GO1, DeepRobotics Jueying/X20 and Anymal. For more information about quadruped robots, check out the following websites
+
+- ** [Unitree](https://github.com/unitreerobotics) 
+
+- ** [DEEPRobotics](https://www.deeprobotics.cn/)
+
+- ** [Anybotics](https://www.anybotics.com/anymal-autonomous-legged-robot/)
+
+Here some snapshots of our projects.
+
+<p align="center">
+  <img src="media/trot-mpc.gif" width="600" />
+</p>
+
+<p align="center">
+  <img src="media/walk-locomotion.gif" width="600" />
+</p>
+
+The project also supports real robots. Currently we test the system on Unitree A1.
+
+<p align="center">
+  <img src="media/real.gif" width="600" />
+</p>
+
+
+# 2. Source Code Structure
+
+This source code include four directories
+
+- **demo** contains various demos to understand the software architecture and algorithms.
+
+- **extern** contains the third-party dependencies to successfully run our code.
+
+- **quadruped** contains the core algorithms of our project.
+
+- **simulation** contains the configuration to run the simulation.
+
+---
+
+# 3. Installation
+
+## 3.1 Install ROS
 
 You need install ROS (Robot Operating System) first. We tested the codes under Ubuntu Linux and ROS 1 Melodic Morenia distribution. Other newer ROS distributions are supposed to be supported. Please visit http://www.wiki.ros.org for ROS installation.
 
-## 2.2 Clone the source code
+## 3.2 Clone the source code
 
 ```
 cd ${your_workspace}
@@ -17,7 +64,7 @@ catkin_init_workspace
 git clone https://github.com/TopHillRobotics/quadruped-robot/
 ```
 
-## 2.3 Install the following third party dependencies
+## 3.3 Install the following third party dependencies
 
 * yaml-cpp
 * eigen3
@@ -31,22 +78,22 @@ sudo apt install liblcm-dev
 sudo apt install libglm-dev
 ```
 
-## 2.4 Compile the codes
+## 3.4 Compile the codes
 
 ```
 cd ${your_workspace}
 catkin_make
 ```
 
-# 3. Run Demos
+# 4. Run Demos
 
-## 3.1 Browse the demos
+## 4.1 Browse the demos
 
 Browse the directories `src/demo/${robot}` to find the corresponding demo. We support the robots provided by two companies: unitree and deeprobotics. 
 
 Our locomotion controllers support two modes:  velocity control and position control. Please check out the corresponding demos.
 
-## 3.2 Run a demo
+## 4.2 Run a demo
 
 First, run
 
