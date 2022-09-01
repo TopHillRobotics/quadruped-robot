@@ -51,8 +51,8 @@
     </plugin>
   </gazebo>
   <!-- Show the trajectory of trunk center. -->
-  <!-- <gazebo>
-    <plugin filename="libnewLinkPlot3DPlugin.so" name="3dplotTrunk">
+  <gazebo>
+    <plugin filename="libLinkPlot3DPlugin.so" name="3dplotTrunk">
       <frequency>10</frequency>
       <plot>
         <link>base</link>
@@ -60,10 +60,10 @@
         <material>Gazebo/Yellow</material>
       </plot>
     </plugin>
-  </gazebo> -->
+  </gazebo>
   <!-- Show the trajectory of foot. You can add another trajectory about another foot. -->
-  <!-- <gazebo>
-    <plugin filename="libnewLinkPlot3DPlugin.so" name="3dplot">
+  <gazebo>
+    <plugin filename="libLinkPlot3DPlugin.so" name="3dplot">
       <frequency>1000</frequency>
       <plot>
         <link>FR_calf</link>
@@ -72,36 +72,6 @@
       </plot>
     </plugin>
   </gazebo>
-  <gazebo>
-    <plugin filename="libnewLinkPlot3DPlugin.so" name="3dplot">
-      <frequency>1000</frequency>
-      <plot>
-        <link>FL_calf</link>
-        <pose>0 0 -0.2 0 0 0</pose>
-        <material>Gazebo/Red</material>
-      </plot>
-    </plugin>
-  </gazebo>
-  <gazebo>
-    <plugin filename="libnewLinkPlot3DPlugin.so" name="3dplot">
-      <frequency>1000</frequency>
-      <plot>
-        <link>RR_calf</link>
-        <pose>0 0 -0.2 0 0 0</pose>
-        <material>Gazebo/Blue</material>
-      </plot>
-    </plugin>
-  </gazebo>
-  <gazebo>
-    <plugin filename="libnewLinkPlot3DPlugin.so" name="3dplot">
-      <frequency>1000</frequency>
-      <plot>
-        <link>RL_calf</link>
-        <pose>0 0 -0.2 0 0 0</pose>
-        <material>Gazebo/Black</material>
-      </plot>
-    </plugin>
-  </gazebo> -->
   <gazebo>
     <plugin filename="libgazebo_ros_force.so" name="gazebo_ros_force">
       <bodyName>trunk</bodyName>
@@ -165,7 +135,7 @@
     </sensor>
   </gazebo>
   <!-- Visualization of Foot contacts. -->
-  <!-- <gazebo reference="FR_foot">
+  <gazebo reference="FR_foot">
     <visual>
       <plugin filename="libunitreeDrawForcePlugin.so" name="drawForcePlugin">
         <topicName>FR_foot_contact</topicName>
@@ -192,8 +162,7 @@
         <topicName>RL_foot_contact</topicName>
       </plugin>
     </visual>
-  </gazebo> -->
-  
+  </gazebo>
   <gazebo reference="base">
     <material>Gazebo/Green</material>
     <turnGravityOff>false</turnGravityOff>

@@ -100,7 +100,7 @@
 
     <!-- foot -->
     <xacro:property name="foot_mass" value="0.06"/>
-    <xacro:property name="foot_mu" value="0.8"/>
+    <xacro:property name="foot_mu" value="0.6"/>
 
     <xacro:property name="kp" value="100"/>
     <xacro:property name="kd" value="1"/>

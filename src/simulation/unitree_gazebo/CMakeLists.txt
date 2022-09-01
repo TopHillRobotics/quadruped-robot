@@ -37,16 +37,7 @@ include_directories(
 link_directories(${GAZEBO_LIBRARY_DIRS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
-# # Declare a C++ library
-# add_library(${PROJECT_NAME}
-#     src/body.cpp 
-# )
 
-# add_dependencies(${PROJECT_NAME} unitree_legged_msgs_gencpp)
-
-# target_link_libraries(${PROJECT_NAME}
-#   ${catkin_LIBRARIES} ${EXTRA_LIBS}
-# )
 
 add_library(GaitParameterGuiPlugin SHARED plugin/gait_parameter_gui_plugin.cc)
 target_link_libraries(GaitParameterGuiPlugin 
@@ -60,14 +51,4 @@ target_link_libraries(unitreeFootContactPlugin ${catkin_LIBRARIES} ${GAZEBO_LIBR
 
 add_library(unitreeDrawForcePlugin SHARED plugin/draw_force_plugin.cc)
 target_link_libraries(unitreeDrawForcePlugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
-
-add_library(drawLinesPlugin SHARED plugin/draw_lines_plugin.cc)
-target_link_libraries(drawLinesPlugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
-
-# add_executable(unitree_external_force src/exe/external_force.cpp)
-# target_link_libraries(unitree_external_force ${catkin_LIBRARIES})
-
-# add_executable(unitree_servo src/exe/servo.cpp)
-# target_link_libraries(unitree_servo ${PROJECT_NAME} ${catkin_LIBRARIES})
-
 

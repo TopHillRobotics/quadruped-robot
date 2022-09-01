@@ -1,8 +1,8 @@
 // The MIT License
 
 // Copyright (c) 2022
-// Robot Motion and Vision Laboratory at East China Normal University
-// Contact: Xinyu Zhang   email: tophill.robotics@gmail.com
+// qrRobot Motion and Vision Laboratory at East China Normal University
+// Contact:tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,70 +24,71 @@
 
 #include "ros/qr_gait_param_receiver.h"
 
-QrGaitParamReceiver::QrGaitParamReceiver(ros::NodeHandle &nhIn)
+qrGaitParamReceiver::qrGaitParamReceiver(ros::NodeHandle &nhIn)
     : nh(nhIn)
 {
     ROS_INFO("gait param topic: %s", gaitParamTopic.c_str());
-    gaitParamSub = nh.subscribe(gaitParamTopic, 10, &QrGaitParamReceiver::GaitParamCallback, this);
+    gaitParamSub = nh.subscribe(gaitParamTopic, 10, &qrGaitParamReceiver::GaitParamCallback, this);
 }
 
-Eigen::Matrix<float, 4, 1> QrGaitParamReceiver::GetStanceDuration() {
+Vec4<float> qrGaitParamReceiver::GetStanceDuration() {
     return stanceDuration;
 }
 
-Eigen::Matrix<float, 4, 1> QrGaitParamReceiver::GetDutyFactor() {
+Vec4<float> qrGaitParamReceiver::GetDutyFactor() {
     return dutyFactor;
 }
 
-Eigen::Matrix<int, 4, 1> QrGaitParamReceiver::GetInitialLegState() {
+Vec4<int> qrGaitParamReceiver::GetInitialLegState() {
     return initialLegState;
 }
 
-Eigen::Matrix<float, 4, 1> QrGaitParamReceiver::GetInitialLegPhase() {
+Vec4<float> qrGaitParamReceiver::GetInitialLegPhase() {
     return initialLegPhase;
 }
 
-float QrGaitParamReceiver::GetContactDetectionPhaseThreshold() {
+float qrGaitParamReceiver::GetContactDetectionPhaseThreshold() {
     return contactDetectionPhaseThreshold;
 }
 
-bool QrGaitParamReceiver::GetFlag() {
+bool qrGaitParamReceiver::GetFlag() {
     return flag;
 }
 
-std::string QrGaitParamReceiver::GetGaitName() {
+std::string qrGaitParamReceiver::GetGaitName() {
     return gaitName;
 }
 
-void QrGaitParamReceiver::SetFlag() {
+void qrGaitParamReceiver::SetFlag() {
     flag = false;
 }
 
-void QrGaitParamReceiver::GaitParamCallback(const unitree_legged_msgs::GaitParameter::ConstPtr &input)
+void qrGaitParamReceiver::GaitParamCallback(const unitree_legged_msgs::GaitParameter::ConstPtr &msg)
 {
-    this->gaitName = input->gaitName;
-    this->stanceDuration << input->stanceDuration[0],
-                            input->stanceDuration[1],
-                            input->stanceDuration[2],
-                            input->stanceDuration[3];
+    this->gaitName = msg->gaitName;
+
+    this->stanceDuration << msg->stanceDuration[0],
+                            msg->stanceDuration[1],
+                            msg->stanceDuration[2],
+                            msg->stanceDuration[3];
                             
-    this->dutyFactor << input->dutyFactor[0],
-                        input->dutyFactor[1],
-                        input->dutyFactor[2],
-                        input->dutyFactor[3];
+    this->dutyFactor << msg->dutyFactor[0],
+                        msg->dutyFactor[1],
+                        msg->dutyFactor[2],
+                        msg->dutyFactor[3];
 
-    this->initialLegState << input->initLegState[0],
-                            input->initLegState[1],
-                            input->initLegState[2],
-                            input->initLegState[3];
+    this->initialLegState << msg->initLegState[0],
+                            msg->initLegState[1],
+                            msg->initLegState[2],
+                            msg->initLegState[3];
 
-    this->initialLegPhase << input->initFullCycle[0],
-                            input->initFullCycle[1],
-                            input->initFullCycle[2],
-                            input->initFullCycle[3];
+    this->initialLegPhase << msg->initFullCycle[0],
+                            msg->initFullCycle[1],
+                            msg->initFullCycle[2],
+                            msg->initFullCycle[3];
 
-    this->contactDetectionPhaseThreshold = input->contactDetectionPhaseThreshold;
+    this->contactDetectionPhaseThreshold = msg->contactDetectionPhaseThreshold;
+    
     this->flag = true;
 }
-
 

@@ -1,0 +1,13 @@
+# Logitech F710
+axis_linear:
+  x: 1
+  y: 0
+scale_linear:
+  x: 0.7
+  y: 0.7
+axis_angular:
+  yaw: 2
+scale_angular:
+  yaw: 0.5
+enable_button: 6
+enable_turbo_button: 7
