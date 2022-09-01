@@ -1,4 +1,4 @@
-# Quadruped Overview
+# 1. Quadruped Overview
 
 This repository provides an architecture to control quadruped robots. It provides state estimator, geit generator, stance and swing leg controllers.  
 
