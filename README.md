@@ -27,8 +27,24 @@ https://user-images.githubusercontent.com/56444225/187832912-4fb6e0d9-cb24-4cce-
 
 ---
 
-# Install guide
-## Step 1: install the third party dependencies:s
+# 2. Installation
+
+## 2.1 Install ROS
+
+You need install ROS (Robot Operating System) first. We tested the codes under Ubuntu Linux and ROS 1 Melodic Morenia distribution. Other newer ROS distributions are supposed to be supported. Please visit http://www.wiki.ros.org for ROS installation.
+
+## 2.2 Clone the source code
+
+```
+cd ${your_workspace}
+mkdir src
+cd ${your_workspace}/src
+catkin_init_workspace
+git clone https://github.com/TopHillRobotics/quadruped-robot/
+```
+
+## 2.3 Install the following third party dependencies
+
 * yaml-cpp
 * eigen3
 * lcm
@@ -41,37 +57,38 @@ sudo apt install liblcm-dev
 sudo apt install libglm-dev
 ```
 
-And you need to install ros environment. Please go to www.wiki.ros.org for the ros installation information.
-
-Other dependencies please see in `src/simulation/README.md`.
-
-## Step 2: compile the exectuable locomotion controller or other ros packages
+## 2.4 Compile the codes
 
 ```
-cd ${WorkSpace}
+cd ${your_workspace}
 catkin_make
 ```
 
-Currently, the locomotion controller support Velocity Mode and Position Mode, as you can browse through `src/demo/${robot}` directory to select corresponding demo.
+# 3. Run Demos
 
-## Step 3: run the controller
+## 3.1 Browse the demos
 
-Please always run `devel/setup.bash` before running these demo.
+Browse the directories `src/demo/${robot}` to find the corresponding demo. We support the robots provided by two companies: unitree and deeprobotics. 
 
-You need to start the gazebo simulation environment to load the robot model first.
+Our locomotion controllers support two modes:  velocity control and position control. Please check out the corresponding demos.
+
+## 3.2 Run a demo
+
+First, run
+
+```
+`${your_workspace}/devel/setup.bash` 
+```
+
+Second, run the Gazebo simulator to load a robot.
 
 ```
 roslaunch unitree_gazebo normal.launch
 ```
 
-Then in another new terminal, launch the controller node. This is the simplest demo which makes the quadruped robot stand up only.
+Third, in a new terminal, launch a demo and run the quadruped controller node. Here, a demo helloworld lets the quadruped robot stand up.
 
 ```
 rosrun a1sim demo_helloworld
 ```
 
-## Step 4 (Option): Advances
-
-We also provided many different demoes which are combined with different gait and different locomotion. For example, you could run trot in velocity locomotion demo with `rosrun a1sim demo_trot_velocity`. What's more you can run `rosrun a1sim demo_trot_keyboard` to control the robot via keyboard. By the way, the joystick only support ps4 controller so far.
-
-And also you can read the cpp code of  each demo and the files in `config` to learn how to combine the locomotion and gait to realize different demo
