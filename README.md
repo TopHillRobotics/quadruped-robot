@@ -1,5 +1,31 @@
-## Step 1: install the third party dependencies:
+# Quadruped Overview
 
+This repository provides an architecture to control quadruped robots. It provides state estimator, geit generator, stance and swing leg controllers.  
+
+The project includes demo, extern quadruped and simulation, totally four ROS packages. The **demo** package provides some simple examples of the control flow and examples that uses different control modes. The **extern** packages consists of third party libraries. The **quadruped** is the main package that provides the control architecture. The **simulation** package is used for launching simulation environment in gazebo. Currently it uses code and structure provided by unitree. More details about simulation is at [this link](https://github.com/unitreerobotics/unitree_ros).
+
+The control architecture now supports:
+
+- **velocity mode** allow user controlling the speed and rotation of the robot.
+
+- **position mode** will generate gaits from specific gait configuration.
+
+- **hybrid mode** uses position and torque information. It allows more complicated control methods
+
+
+The project now supports Unitree robots, such as A1, AlienGO and GO1. In near future, the project will support robots from DEEPRobotics. For more information, please check websites of [Unitree](https://github.com/unitreerobotics) and [DEEPRobotics](https://www.deeprobotics.cn/).
+
+
+
+
+
+
+
+
+---
+
+# Install guide
+## Step 1: install the third party dependencies:s
 * yaml-cpp
 * eigen3
 * lcm
