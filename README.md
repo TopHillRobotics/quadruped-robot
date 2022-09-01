@@ -23,10 +23,7 @@ The **main** branch will support Model-predictive control and Walk Locomotion in
 
 The project also supports real robots. Currently we test the system on Unitree A1.
 
-<video src="media/real.mp4"></video>
-
-
-
+https://user-images.githubusercontent.com/56444225/187832912-4fb6e0d9-cb24-4cce-87aa-52b7457a5b4b.mp4
 
 ---
 
