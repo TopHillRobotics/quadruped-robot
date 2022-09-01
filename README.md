@@ -11,11 +11,11 @@ This project supports three control modes
 
 The project now supports Unitree A1 robot and DeepRobotics Lite2A robot. This project can be extended to support other quadruped robots such as Unitree AlienGO/GO1, DeepRobotics Jueying/X20 and Anymal. For more information about quadruped robots, check out the following websites
 
-- ** [Unitree](https://github.com/unitreerobotics) 
+- ** [Unitree](https://github.com/unitreerobotics)**
 
-- ** [DEEPRobotics](https://www.deeprobotics.cn/)
+- ** [DEEPRobotics](https://www.deeprobotics.cn/)**
 
-- ** [Anybotics](https://www.anybotics.com/anymal-autonomous-legged-robot/)
+- ** [Anybotics](https://www.anybotics.com/anymal-autonomous-legged-robot/)**
 
 Here some snapshots in simulation.
 
