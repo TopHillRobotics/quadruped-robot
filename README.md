@@ -18,8 +18,8 @@ The project now supports Unitree robots, such as A1, AlienGO and GO1. In near fu
 The **main** branch will support Model-predictive control and Walk Locomotion in near future, which still need some adjustment. We will also provide whole body control.
 
 <center clas="half">
-	<img src="media/trot-mpc.gif" width="400" />
-	<img src="media/walk-locomotion.gif" width="400" />
+	<img src="media/trot-mpc.gif" width="300" />
+	<img src="media/walk-locomotion.gif" width="300" />
 </center>
 The project also supports real robots. Currently we test the system on Unitree A1.
 
