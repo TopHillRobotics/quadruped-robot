@@ -15,9 +15,15 @@ The control architecture now supports:
 
 The project now supports Unitree robots, such as A1, AlienGO and GO1. In near future, the project will support robots from DEEPRobotics. For more information, please check websites of [Unitree](https://github.com/unitreerobotics) and [DEEPRobotics](https://www.deeprobotics.cn/).
 
+The **main** branch will support Model-predictive control and Walk Locomotion in near future, which still need some adjustment. We will also provide whole body control.
 
+<center clas="half">
+	<img src="media/trot-mpc.gif" width="400" />
+	<img src="media/walk-locomotion.gif" width="400" />
+</center>
+The project also supports real robots. Currently we test the system on Unitree A1.
 
-
+<video src="media/real.mp4"></video>
 
 
 
