@@ -1,6 +1,6 @@
-# 1. Quadruped Overview
+# 1. Overview
 
-This repository provides an architecture to control quadruped robots. It provides state estimator, geit generator, stance and swing leg controllers.  
+This repository provides an architecture to control quadruped robots. It provides state estimator, gait generator, stance and swing leg controllers.  
 
 The project includes demo, extern quadruped and simulation, totally four ROS packages. The **demo** package provides some simple examples of the control flow and examples that uses different control modes. The **extern** packages consists of third party libraries. The **quadruped** is the main package that provides the control architecture. The **simulation** package is used for launching simulation environment in gazebo. Currently it uses code and structure provided by unitree. More details about simulation is at [this link](https://github.com/unitreerobotics/unitree_ros).
 
