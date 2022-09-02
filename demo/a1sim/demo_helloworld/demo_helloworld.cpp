@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include <typeinfo>
 
 #include "quadruped/exec/runtime.h"
