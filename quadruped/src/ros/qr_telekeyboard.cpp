@@ -26,7 +26,7 @@
 
 qrTeleKeyboard::qrTeleKeyboard(ros::NodeHandle &nhIn):nh(nhIn)
 {
-
+    finish = false;
 }
 
 int qrTeleKeyboard::getch(void)
@@ -74,8 +74,8 @@ void qrTeleKeyboard::run()
     std::map<char, std::vector<double>> moveBindings;
     moveBindings['w'] = std::vector<double>{1, 0, 0};
     moveBindings['s'] = std::vector<double>{-1, 0, 0};
-    moveBindings['a'] = std::vector<double>{0, -1, 0};
-    moveBindings['d'] = std::vector<double>{0, 1, 0};
+    moveBindings['a'] = std::vector<double>{0, 1, 0};
+    moveBindings['d'] = std::vector<double>{0, -1, 0};
     moveBindings['r'] = std::vector<double>{0, 0, 1};
     moveBindings['f'] = std::vector<double>{0, 0, -1};
 
@@ -112,7 +112,7 @@ void qrTeleKeyboard::run()
             }
         }
         // receive CTRL + v
-        if(key == '\x03'){
+        if(key == '\x03' || finish){
             std::cout << "Break from keyboard." << std::endl;
             break;
         }

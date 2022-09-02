@@ -67,6 +67,11 @@ public:
      */
     void run();
 
+    /**
+     * @brief If the keyboard stop receiving event.
+     */
+    bool finish;
+    
 private:
 
     /**

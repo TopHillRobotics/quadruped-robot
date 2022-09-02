@@ -1,21 +1,23 @@
 # 1. Overview
 
-This repository provides an architecture to control quadruped robots. It provides state estimator, gait generator, stance and swing leg controllers.  
+This project provides an architecture and some key algorithms to control quadruped robots, including state estimator, gait generator, stance and swing leg controllers. 
+This project supports three control modes
 
-The project includes demo, extern quadruped and simulation, totally four ROS packages. The **demo** package provides some simple examples of the control flow and examples that uses different control modes. The **extern** packages consists of third party libraries. The **quadruped** is the main package that provides the control architecture. The **simulation** package is used for launching simulation environment in gazebo. Currently it uses code and structure provided by unitree. More details about simulation is at [this link](https://github.com/unitreerobotics/unitree_ros).
+- **velocity mode** allows a user to control the robot's linear and angular velocity.
 
-The control architecture now supports:
+- **position mode** generates user-defined gaits using gait configurations.
 
-- **velocity mode** allow user controlling the speed and rotation of the robot.
+- **hybrid mode** uses position and torque to implement flexible locomotion.
 
-- **position mode** will generate gaits from specific gait configuration.
+The project now supports Unitree A1 robot and DeepRobotics Lite2A robot, and can be extended to support other quadruped robots such as Unitree AlienGO/GO1, DeepRobotics Jueying/X20 and Anymal. For more information about quadruped robots, check out the following websites
 
-- **hybrid mode** uses position and torque information. It allows more complicated control methods
+-  [Unitree](https://github.com/unitreerobotics)
 
+-  [DEEPRobotics](https://www.deeprobotics.cn/)
 
-The project now supports Unitree robots, such as A1, AlienGO and GO1. In near future, the project will support robots from DEEPRobotics. For more information, please check websites of [Unitree](https://github.com/unitreerobotics) and [DEEPRobotics](https://www.deeprobotics.cn/).
+-  [Anybotics](https://www.anybotics.com/anymal-autonomous-legged-robot/)
 
-The **main** branch will support Model-predictive control and Walk Locomotion in near future, which still need some adjustment. We will also provide whole body control.
+Here some snapshots in simulation.
 
 <p align="center">
   <img src="media/trot-mpc.gif" width="600" />
@@ -25,7 +27,7 @@ The **main** branch will support Model-predictive control and Walk Locomotion in
   <img src="media/walk-locomotion.gif" width="600" />
 </p>
 
-The project also supports real robots. Currently we test the system on Unitree A1.
+Here is a demo for a real quadruped robot (Unitree A1).
 
 <p align="center">
   <img src="media/real.gif" width="600" />
@@ -33,13 +35,27 @@ The project also supports real robots. Currently we test the system on Unitree A
 
 ---
 
-# 2. Installation
+# 2. Source Code Structure
 
-## 2.1 Install ROS
+This source code include four directories
+
+- **demo** contains various demos to understand the software architecture and algorithms.
+
+- **extern** contains the third-party dependencies to successfully run our code.
+
+- **quadruped** contains the core algorithms of our project.
+
+- **simulation** contains the configuration to run the simulation.
+
+---
+
+# 3. Installation
+
+## 3.1 Install ROS
 
 You need install ROS (Robot Operating System) first. We tested the codes under Ubuntu Linux and ROS 1 Melodic Morenia distribution. Other newer ROS distributions are supposed to be supported. Please visit http://www.wiki.ros.org for ROS installation.
 
-## 2.2 Clone the source code
+## 3.2 Clone the source code
 
 ```
 cd ${your_workspace}
@@ -49,7 +65,7 @@ catkin_init_workspace
 git clone https://github.com/TopHillRobotics/quadruped-robot/
 ```
 
-## 2.3 Install the following third party dependencies
+## 3.3 Install the following third party dependencies
 
 * yaml-cpp
 * eigen3
@@ -63,27 +79,28 @@ sudo apt install liblcm-dev
 sudo apt install libglm-dev
 ```
 
-## 2.4 Compile the codes
+## 3.4 Compile the codes
 
 ```
 cd ${your_workspace}
 catkin_make
 ```
+---
 
-# 3. Run Demos
+# 4. Run Demos
 
-## 3.1 Browse the demos
+## 4.1 Browse the demos
 
 Browse the directories `src/demo/${robot}` to find the corresponding demo. We support the robots provided by two companies: unitree and deeprobotics. 
 
 Our locomotion controllers support two modes:  velocity control and position control. Please check out the corresponding demos.
 
-## 3.2 Run a demo
+## 4.2 Run a demo
 
 First, run
 
 ```
-`${your_workspace}/devel/setup.bash` 
+source ${your_workspace}/devel/setup.bash
 ```
 
 Second, run the Gazebo simulator to load a robot.
@@ -97,4 +114,4 @@ Third, in a new terminal, launch a demo and run the quadruped controller node. H
 ```
 rosrun a1sim demo_helloworld
 ```
-
+---

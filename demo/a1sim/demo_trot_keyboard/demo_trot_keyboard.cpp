@@ -21,7 +21,7 @@ int main(int argc, char **argv)
     std::string robotName = "a1_sim";
 
     // Start keyboard receiving thread.
-    qrTeleKeyboard keyboard(nh);
+    qrTeleKeyboard *keyboard = new qrTeleKeyboard(nh);
     std::cout << "---------Keyboard start receving---------" << std::endl;
     thread keyboardTh(&qrTeleKeyboard::run, keyboard);
     keyboardTh.detach();
@@ -92,6 +92,8 @@ int main(int argc, char **argv)
         }
         while (quadruped->GetTimeSinceReset() - startTimeWall < quadruped->timeStep) {}
     }
+    
+    keyboard->finish = true;
     
     ROS_INFO("Time is up, end now.");
     ros::shutdown();
