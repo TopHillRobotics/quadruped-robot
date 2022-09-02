@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>quadruped</name>
+    <version>1.11.0</version>
+    <description>The quadruped package</description>
+    <maintainer email="51215902047@stu.ecnu.edu.cn">ZhenyuXu</maintainer>
+    <license>MIT</license>
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <build_depend>tinyekf</build_depend>
+    <build_depend>quadprogpp</build_depend>
+    <build_depend>tinynurbs</build_depend>
+    <build_depend>unitree_legged_sdk</build_depend>
+    <build_depend>roscpp</build_depend>
+    <build_depend>unitree_legged_msgs</build_depend>
+
+    <exec_depend>tinyekf</exec_depend>
+    <exec_depend>quadprogpp</exec_depend>
+    <exec_depend>tinynurbs</exec_depend>
+    <exec_depend>unitree_legged_sdk</exec_depend>
+    <exec_depend>roscpp</exec_depend>
+    <exec_depend>unitree_legged_msgs</exec_depend>
+
+    <export>
+    </export>
+</package>

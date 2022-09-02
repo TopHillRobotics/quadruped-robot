@@ -11,11 +11,11 @@ This project supports three control modes
 
 The project now supports Unitree A1 robot and DeepRobotics Lite2A robot, and can be extended to support other quadruped robots such as Unitree AlienGO/GO1, DeepRobotics Jueying/X20 and Anymal. For more information about quadruped robots, check out the following websites
 
-- ** [Unitree](https://github.com/unitreerobotics)**
+-  [Unitree](https://github.com/unitreerobotics)
 
-- ** [DEEPRobotics](https://www.deeprobotics.cn/)**
+-  [DEEPRobotics](https://www.deeprobotics.cn/)
 
-- ** [Anybotics](https://www.anybotics.com/anymal-autonomous-legged-robot/)**
+-  [AnyRobotics](https://www.anybotics.com/anymal-autonomous-legged-robot/)
 
 Here some snapshots in simulation.
 
@@ -32,6 +32,9 @@ Here is a demo for a real quadruped robot (Unitree A1).
 <p align="center">
   <img src="media/real.gif" width="600" />
 </p>
+
+
+---
 
 
 # 2. Source Code Structure
@@ -84,6 +87,7 @@ sudo apt install libglm-dev
 cd ${your_workspace}
 catkin_make
 ```
+---
 
 # 4. Run Demos
 
@@ -112,4 +116,5 @@ Third, in a new terminal, launch a demo and run the quadruped controller node. H
 ```
 rosrun a1sim demo_helloworld
 ```
+
 
