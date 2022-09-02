@@ -100,7 +100,7 @@ Our locomotion controllers support two modes:  velocity control and position con
 First, run
 
 ```
-${your_workspace}/devel/setup.bash
+source ${your_workspace}/devel/setup.bash
 ```
 
 Second, run the Gazebo simulator to load a robot.
