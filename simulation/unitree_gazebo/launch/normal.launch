@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <launch>
     <arg name="wname" default="earth"/>
     <arg name="rname" default="lite2"/>
@@ -59,4 +58,3 @@
     <!-- <node pkg="unitree_gazebo" type="servo" name="servo" required="true" output="screen"/> -->
 
 </launch>
->>>>>>> b49baceed64889b41e2334c0de777ba840b008ef
