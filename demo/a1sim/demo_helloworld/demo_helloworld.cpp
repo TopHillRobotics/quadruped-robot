@@ -1,5 +1,3 @@
-#include <typeinfo>
-
 #include "quadruped/exec/runtime.h"
 #include "quadruped/robots/qr_robot_a1_sim.h"
 #include "quadruped/ros/qr_gazebo_controller_manager.h"
@@ -38,10 +36,12 @@ int main(int argc, char **argv)
     float startTimeWall = startTime;
 
     // keep ROS running to let the robot stand.
-    // 20.f means that the robot keep stands for 20.0 seconds and 0.001 is the time step.
     std::cout << "---------keep quadruped robot standing for 20.0 seconds---------" << std::endl;
+    // 20.f means that the robot keep stands for 20.0 seconds and 0.001 is the time step.
     Action::KeepStand(quadruped, 20.f, 0.001f);
+    
     std::cout << "---------quadruped robot sitting down---------" << std::endl;
+    // 3.f means that the robot needs 20.0 seconds to sit down and 0.001 is the time step.
     Action::SitDown(quadruped, 3.f, 0.001f);
     ROS_INFO("Time is up, end now.");
     ros::shutdown();

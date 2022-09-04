@@ -1,49 +1,48 @@
-#include <thread>
-#include <typeinfo>
-
 #include "quadruped/exec/runtime.h"
-#include "ros/qr_msg_convert.h"
-#include "quadruped/ros/qr_telekeyboard.h"
+#include "quadruped/ros/qr_msg_convert.h"
 #include "quadruped/robots/qr_robot_a1_sim.h"
 #include "quadruped/ros/qr_gazebo_controller_manager.h"
 using namespace std;
 
 int main(int argc, char **argv)
 {
-
+    // initialize ROS nodes
     ros::init(argc, argv, "demo_trot_joystick");
     ros::NodeHandle nh;
 
-    // Get package path.
+    // get the node package path
     std::string pathToPackage = ros::package::getPath("a1sim");
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
 
     std::string robotName = "a1_sim";
 
+    // create a convertor for joymsgs.
     std::cout << "Joy start receving..." << std::endl;
     qrJoy2Twist * msgConvert = new qrJoy2Twist(nh, pathToNode);
 
-    // Reset robot model and gazebo controller.
+    // reset the gazebo controller and robot
     ResetRobotBySystem(nh);
     ros::AsyncSpinner spinner(1); // one threads
     spinner.start();
 
-    // Create command receiver to update velocity from joystick.
+    // create command receiver to update velocity from joystick.
     qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
     std::cout << "---------Ros Module Init finished---------" << std::endl;
 
-    // Create the robot.
+    // create the quadruped robot.
     qrRobot *quadruped = new qrRobotA1Sim(nh, pathToNode + "/config/a1_sim.yaml");
     quadruped->ReceiveObservation();
-    std::cout << "BaseOrientation:\n" << quadruped->GetBaseOrientation().transpose() << std::endl;
 
-    // Execute the stand up action which is and automic aciton.
+    /* the quadruped robot stands up.
+    (the parameters are robot, the time that stand up need, the total time before excuting other action and time step)
+    */
     Action::StandUp(quadruped, 3.f, 5.f, 0.001);
 
-    // Create the locomotion controller.
+    // create the locomotion controller.
     qrLocomotionController *locomotionController = setUpController(quadruped, pathToNode);
     locomotionController->Reset();
-    // Initialize the desired speed of the robot.
+    
+    // initialize the desired speed of the robot.
     float desiredTwistingSpeed = 0.;
     Eigen::Matrix<float, 3, 1> desiredSpeed = {0.0, 0.0, 0.0};
     updateControllerParams(locomotionController, desiredSpeed, desiredTwistingSpeed);
@@ -56,7 +55,7 @@ int main(int argc, char **argv)
 
     std::cout << "----------------Main Loop Starting------------------" << std::endl;
 
-    // Start the control loop until the time arrive at MAX_TIME_SECONDS.
+    // start the control loop until the time arrive at MAX_TIME_SECONDS.
     while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS) {
         startTimeWall = quadruped->GetTimeSinceReset();
 
@@ -83,6 +82,8 @@ int main(int argc, char **argv)
             ROS_ERROR("The dog is going down, main function exit.");
             break;
         }
+        
+        // wait until this step has cost the timestep to synchronizing frequency.
         while (quadruped->GetTimeSinceReset() - startTimeWall < quadruped->timeStep) {}
     }
     
