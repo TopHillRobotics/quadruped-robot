@@ -124,17 +124,17 @@ void qrStanceLegController::VelocityLocomotionProcess(Quat<float> &robotComOrien
     Vec3<float> groundRPY = groundEstimator->GetControlFrameRPY();
     Mat3<float> Rcb = Rc.transpose() * Rb;
 
-    // Velocity mode in base frame, height is in world frame.
+    // velocity mode in base frame, height is in world frame.
     robotComPosition = {0., 0., robot->state.basePosition[2]}; 
     robotComRpy[2] = 0.f;
-    // Not horizontal plane
+    // if not horizontal plane then adjust the orientation.
     if (groundEstimator->terrain.terrainType>=2) { 
         robotComPosition = math::TransformVecByQuat(math::quatInverse(controlFrameOrientation), robotComPosition);      
         robotComPosition[0] = 0.f;
         robotComPosition[1] = 0.f;
-        // In world frame
+        // COM velocity in world frame
         robotComVelocity = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComVelocity); 
-        // In control frame
+        // COM velocity in control frame
         robotComVelocity = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComVelocity); 
         // Body orientation in control frame.
         robotComRpy = math::rotationMatrixToRPY(Rcb.transpose());
@@ -144,9 +144,9 @@ void qrStanceLegController::VelocityLocomotionProcess(Quat<float> &robotComOrien
         robotComRpyRate = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComRpyRate); 
     }
     desiredComPosition << 0.f, 0.f, desiredBodyHeight;
-    // Not control roll/yaw
+    // do not control roll/yaw
     desiredComRpy << -groundRPY[0], 0, -groundRPY[2]; 
-    // In base/control frame
+    // desired COM velocity in base/control frame
     desiredComVelocity = {desiredSpeed[0], desiredSpeed[1], 0.f}; 
     desiredComAngularVelocity = {0.f, 0.f, desiredTwistingSpeed};
 }
@@ -160,10 +160,10 @@ void qrStanceLegController::PositionLocomotionProcess(Eigen::Matrix<float, 3, 1>
     robotComPosition = {0., 0., robot->state.basePosition[2]};
 
     auto &comAdjPosInBaseFrame = comPlanner->GetComPosInBaseFrame();
-    // Get goal com position from comAdjuster, base frame
+    // get goal com position from comPlanner in base frame
     desiredComPosition = {comAdjPosInBaseFrame[0], comAdjPosInBaseFrame[1], desiredBodyHeight}; 
     desiredComVelocity = {desiredSpeed[0], desiredSpeed[1], 0.f};
-    // Get goal rpy from footholdPlanner, in world frame
+    // get goal rpy from footholdPlanner in world frame
     desiredComRpy = footholdPlanner->GetDesiredComPose().tail(3);
     desiredComAngularVelocity = {0.f, 0.f, 0.f};
 }
@@ -205,11 +205,11 @@ std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLe
     Quat<float> robotComOrientation = robot->GetBaseOrientation();
     
     /// current robot status  ///
-    // base frame
+    // robot COM velocity in base frame
     robotComVelocity = robotEstimator->GetEstimatedVelocity();
-    // world frame
+    // robot COM rpy in world frame
     robotComRpy = robot->GetBaseRollPitchYaw(); 
-    // base frame
+    // robot COM rpy rate in base frame
     robotComRpyRate = robot->GetBaseRollPitchYawRate();  
     switch(robot->config->controlParams["mode"]){
         case LocomotionMode::VELOCITY_LOCOMOTION: {

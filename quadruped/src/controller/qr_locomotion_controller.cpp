@@ -74,7 +74,8 @@ void qrLocomotionController::GetComPositionInWorldFrame(ros::ServiceClient& base
 
 void qrLocomotionController::Update()
 {
-    if (!robot->stop) { // not stop = (swingSemaphore > 0) or  (swingSemaphore=0 but not switchToSwing)
+    // robot is running means swingSemaphore not 0 or swingSemaphore is 0 but not robot are not switching to swing. 
+    if (!robot->stop) { 
         timeSinceReset = robot->GetTimeSinceReset() - resetTime;
     }
     
@@ -89,9 +90,9 @@ void qrLocomotionController::Update()
 std::tuple<std::vector<qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrLocomotionController::GetAction()
 {
     action.clear();
-    // Returns the control ouputs (e.g. positions/torques) for all motors. type: map
+    // get the control ouputs (e.g. positions/torques) for all motors.
     auto swingAction = swingLegController->GetAction();
-    auto [stanceAction, qpSol] = stanceLegController->GetAction(); // map<int, qrMotorCommand>
+    auto [stanceAction, qpSol] = stanceLegController->GetAction();
     std::vector<qrMotorCommand> action;
     // copy motors' actions from subcontrollers to output variable.         
     for (int joint_id = 0; joint_id < qrRobotConfig::numMotors; ++joint_id) {
