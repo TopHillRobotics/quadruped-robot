@@ -1,3 +1,27 @@
+// The MIT License
+
+// Copyright (c) 2022
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact: tophill.robotics@gmail.com
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 #include "quadruped/exec/runtime.h"
 #include "quadruped/robots/qr_robot_a1_sim.h"
 #include "quadruped/ros/qr_gazebo_controller_manager.h"
@@ -20,30 +44,30 @@ int main(int argc, char **argv)
     ResetRobotBySystem(nh);
     ros::AsyncSpinner spinner(1); // one threads
     spinner.start();
-    std::cout << "---------finished: ROS, Gazebo controller and loading robot model---------" << std::endl;
+    ROS_INF("---------finished: ROS, Gazebo controller and loading robot model---------");
 
-    // create the quadruped robot.
+    // create a quadruped robot.
     qrRobot *quadruped = new qrRobotA1Sim(nh, pathToNode + "/config/a1_sim.yaml");
     quadruped->ReceiveObservation();
 
-    /* the quadruped robot stands up.
-    (the parameters are robot, the time that stand up need, the total time before excuting other action and time step)
-    */
+    // perform the first action: standing up
+    // It takes 3 seconds to stand up and keep 5 seconds before any other action
+    // 0.0001 is the specified time step.
     Action::StandUp(quadruped, 3.f, 5.f, 0.001f);
 
     float startTime = quadruped->GetTimeSinceReset();
     float currentTime = startTime;
     float startTimeWall = startTime;
 
-    // keep ROS running to let the robot stand.
-    std::cout << "---------keep quadruped robot standing for 20.0 seconds---------" << std::endl;
-    // 20.f means that the robot keep stands for 20.0 seconds and 0.001 is the time step.
+    // keep the quadruped robot standing for 20.0 seconds and 0.001 is the time step
     Action::KeepStand(quadruped, 20.f, 0.001f);
     
-    std::cout << "---------quadruped robot sitting down---------" << std::endl;
-    // 3.f means that the robot needs 20.0 seconds to sit down and 0.001 is the time step.
+    // let the quadruped robot sit down. It takes 3 seconds to finish the action.
     Action::SitDown(quadruped, 3.f, 0.001f);
-    ROS_INFO("Time is up, end now.");
+
+    // shutdown all the ROS nodes
+    ROS_INFO("The demo is closed!");
     ros::shutdown();
+
     return 0;
 }
