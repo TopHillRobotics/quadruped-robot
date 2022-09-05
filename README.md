@@ -115,3 +115,11 @@ Third, in a new terminal, launch a demo and run the quadruped controller node. H
 rosrun a1sim demo_helloworld
 ```
 ---
+
+# 5. Feedback and Bugs
+
+Please file bugs and feature requests here: [https://github.com/TopHillRobotics/quadruped-robot/issues](https://github.com/TopHillRobotics/quadruped-robot/issues)
+
+You can help to ensure your issue gets fixed if you provide sufficient detail. 
+
+---
