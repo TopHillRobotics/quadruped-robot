@@ -38,29 +38,18 @@ void qrGroundSurfaceEstimator::Update(float currentTime)
     Eigen::Matrix<bool, 4, 1> contactState = robot->GetFootContacts();
 
     if(!ShouldUpdate(contactState)){
-<<<<<<< HEAD:src/quadruped/src/state_estimator/qr_ground_estimator.cpp
-      return;
-    }
 
-    // assume that the plane is Z(x, y) = a_0 + a_1 * x + a_2 * y
-    // then the least square problem is formed as min|| Wa - pZ ||_2
-=======
         return ;
     }
 
     // equation of the plane is pZ(x,y) = a_0 + a_1 * x + a_2 * y
     // then the least square problem is min||Wa - pZ||_2
->>>>>>> develop:quadruped/src/state_estimator/qr_ground_estimator.cpp
     Eigen::Matrix<double, 3, 4> footPositionsInBaseFrame = robot->state.GetFootPositionsInBaseFrame().cast<double>();
     pZ = footPositionsInBaseFrame.row(2);
     W.col(1) = footPositionsInBaseFrame.row(0);
     W.col(2) = footPositionsInBaseFrame.row(1);
     
-<<<<<<< HEAD:src/quadruped/src/state_estimator/qr_ground_estimator.cpp
-    // the analytical solution of a is (W^T * W)^(-1) W^T * pZ
-=======
     // the analytic solution is (W^T * W)^(-1) * W^T * pZ
->>>>>>> develop:quadruped/src/state_estimator/qr_ground_estimator.cpp
     Mat3<double> ww = W.transpose()* W;
     a = ww.inverse()* W.transpose()*pZ;
     GetNormalVector(true);
@@ -112,12 +101,7 @@ float qrGroundSurfaceEstimator::GetZ(float x, float y)
 
 Eigen::Matrix<double, 3, 1> qrGroundSurfaceEstimator::GetNormalVector(bool update)
 {
-<<<<<<< HEAD:src/quadruped/src/state_estimator/qr_ground_estimator.cpp
-    // the normal vector of the plane is relative to base frame
-    // the axis Z should be positive
-=======
     // z axis of normal vector should be positive.It will be easy to calculate the control frame
->>>>>>> develop:quadruped/src/state_estimator/qr_ground_estimator.cpp
     if (update){
         double factor = std::sqrt(a[1]*a[1] + a[2]*a[2] + 1);
         n << -a[1], -a[2], 1.0;
@@ -157,11 +141,7 @@ Eigen::Matrix<float, 3, 3> qrGroundSurfaceEstimator::GetAlignedDirections()
     return R;
 }
 
-<<<<<<< HEAD:src/quadruped/src/state_estimator/qr_ground_estimator.cpp
-bool qrGroundSurfaceEstimator::ShouldUpdate(const Eigen::Matrix<bool, 4, 1>& contactState)
-=======
 bool qrGroundSurfaceEstimator::ShouldUpdate(const Eigen::Matrix<bool, 4, 1> &contactState)
->>>>>>> develop:quadruped/src/state_estimator/qr_ground_estimator.cpp
 {
     bool shouldUpdate = false;
     int N=0;
@@ -174,13 +154,8 @@ bool qrGroundSurfaceEstimator::ShouldUpdate(const Eigen::Matrix<bool, 4, 1> &con
             ++N;
         }
     }
-<<<<<<< HEAD:src/quadruped/src/state_estimator/qr_ground_estimator.cpp
-
-    lastContactState = contactState;
-=======
     lastContactState = contactState;
     // when all foot on the ground and contact state changed will the plane update
->>>>>>> develop:quadruped/src/state_estimator/qr_ground_estimator.cpp
     if (N <= 3 || !shouldUpdate) {
         return false;
     }
