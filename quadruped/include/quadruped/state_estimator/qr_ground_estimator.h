@@ -248,18 +248,10 @@ private:
 
     /**
      * @brief whether the plane should update
-<<<<<<< HEAD:src/quadruped/include/quadruped/state_estimator/qr_ground_estimator.h
-     * @param contactState: current contact state
-     * @return whether needs update
-     */
-    bool ShouldUpdate(const Eigen::Matrix<bool, 4, 1>& contactState);
-
-=======
      * @param contactState: contact state of foot
      * @return whether to update
      */
     bool ShouldUpdate(const Eigen::Matrix<bool, 4, 1>& contactState);
->>>>>>> develop:quadruped/include/quadruped/state_estimator/qr_ground_estimator.h
 };
 
 #endif // ASCEND_QUADRUPED_CPP_GROUND_ESTIMATOR_H
