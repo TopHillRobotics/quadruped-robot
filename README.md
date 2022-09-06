@@ -85,6 +85,8 @@ sudo apt install libglm-dev
 cd ${your_workspace}
 catkin_make
 ```
+Make sure that your cmake version should at least 3.15.x, or compilation will fail.
+
 ---
 
 # 4. Run Demos
