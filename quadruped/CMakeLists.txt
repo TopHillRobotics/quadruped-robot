@@ -8,6 +8,7 @@ ADD_COMPILE_OPTIONS(-D_cplusplus)
 
 find_package(catkin REQUIRED COMPONENTS
         roscpp
+        roslib
         unitree_legged_msgs
         unitree_legged_sdk
         tinyekf
@@ -21,7 +22,7 @@ find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 catkin_package(
     INCLUDE_DIRS include
     LIBRARIES ${PROJECT_NAME}
-    CATKIN_DEPENDS roscpp unitree_legged_msgs tinyekf quadprogpp tinynurbs unitree_legged_sdk
+    CATKIN_DEPENDS roscpp roslib unitree_legged_msgs tinyekf quadprogpp tinynurbs unitree_legged_sdk
 )
 
 file(GLOB_RECURSE sources "src/*.cpp")

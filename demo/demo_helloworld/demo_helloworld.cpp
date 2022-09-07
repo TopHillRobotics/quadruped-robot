@@ -26,8 +26,6 @@
 #include "quadruped/robots/qr_robot_a1_sim.h"
 #include "quadruped/ros/qr_gazebo_controller_manager.h"
 
-using namespace std;
-
 int main(int argc, char **argv)
 {
     // initialize ROS nodes
