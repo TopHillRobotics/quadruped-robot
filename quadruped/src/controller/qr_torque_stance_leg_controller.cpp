@@ -62,7 +62,8 @@ void qrStanceLegController::Reset(float currentTime_)
     string controlModeStr;
     if (modeMap.count(robot->controlParams["mode"]) > 0) {
         controlModeStr = modeMap[robot->controlParams["mode"]];
-    }     
+    }
+    std::cout << "locomotion mode: " + controlModeStr << std::endl;
     YAML::Node param = YAML::LoadFile(configFilepath);
     this->force_dim = param["stance_leg_params"]["force_dim"].as<int>();        
     vector<float> v = param["stance_leg_params"][controlModeStr]["KD"].as<vector<float>>();

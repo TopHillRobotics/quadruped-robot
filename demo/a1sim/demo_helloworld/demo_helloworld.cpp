@@ -44,7 +44,7 @@ int main(int argc, char **argv)
     ResetRobotBySystem(nh);
     ros::AsyncSpinner spinner(1); // one threads
     spinner.start();
-    ROS_INF("---------finished: ROS, Gazebo controller and loading robot model---------");
+    ROS_INFO("---------finished: ROS, Gazebo controller and loading robot model---------");
 
     // create a quadruped robot.
     qrRobot *quadruped = new qrRobotA1Sim(nh, pathToNode + "/config/a1_sim.yaml");
