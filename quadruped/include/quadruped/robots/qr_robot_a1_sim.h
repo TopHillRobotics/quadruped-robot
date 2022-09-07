@@ -27,9 +27,9 @@ public:
     /**
      * @brief constructor for Unitree A1 robot
      * @param nhIn: ros node
-     * @param configFilePath: file path of the robot
+     * @param robotName: name of robot to create
      */
-    qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath);
+    qrRobotA1Sim(ros::NodeHandle &nhIn, std::string robotName, LocomotionMode mode = LocomotionMode::VELOCITY_LOCOMOTION);
 
     /**
      * @brief send command to gazebo controller

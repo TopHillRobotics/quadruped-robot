@@ -1,8 +1,8 @@
 // The MIT License
 
 // Copyright (c) 2022
-// qrRobot Motion and Vision Laboratory at East China Normal University
-// Contact:tophill.robotics@gmail.com
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -136,13 +136,12 @@ void qrGaitGenerator::Update(float currentTime)
             continue;
         }
         
-        // if robot stopped but some legs still swings, it should continue to stance
+        
         if (!robot->stop || (robot->stop && lastLegState[legId]==LegState::SWING)) {
             lastLegState[legId] = desiredLegState[legId];
             curLegState[legId] = desiredLegState[legId];
         }
         
-        // calculate current phase
         fullCyclePeriod = stanceDuration[legId] / dutyFactor[legId];
         augmentedTime = initialLegPhase[legId] * fullCyclePeriod + currentTime;
         phaseInFullCycle = fmod(augmentedTime, fullCyclePeriod) / fullCyclePeriod;

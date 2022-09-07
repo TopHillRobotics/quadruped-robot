@@ -87,6 +87,8 @@ sudo apt install libglm-dev
 cd ${your_workspace}
 catkin_make
 ```
+For a smooth compilation, we suggest using CMake version 3.15 or greater.
+
 ---
 
 # 4. Run Demos
@@ -99,13 +101,13 @@ Our locomotion controllers support two modes:  velocity control and position con
 
 ## 4.2 Run a demo
 
-First, run
+First, in one terminal, source the `setup.bash` to set up the environment
 
 ```
-${your_workspace}/devel/setup.bash
+source ${your_workspace}/devel/setup.bash
 ```
 
-Second, run the Gazebo simulator to load a robot.
+Second, run the Gazebo simulator and load a robot.
 
 ```
 roslaunch unitree_gazebo normal.launch
@@ -114,7 +116,23 @@ roslaunch unitree_gazebo normal.launch
 Third, in a new terminal, launch a demo and run the quadruped controller node. Here, a demo helloworld lets the quadruped robot stand up.
 
 ```
-rosrun a1sim demo_helloworld
+rosrun demo demo_helloworld
 ```
 
+For more demos, please check out the directory /demos. If you have a robot **YAML** configuration file as long as  **xacro** or **URDF**, you can specify the file location when instantiate the **qrRobotA1Sim** class, or write your own subclass to run your robot and then configure  your xacro and URDF files in **simulation** package, you can try your own robot.
 
+---
+
+# 5. Feedback and Bugs
+
+Please file bugs and feature requests here: [https://github.com/TopHillRobotics/quadruped-robot/issues](https://github.com/TopHillRobotics/quadruped-robot/issues)
+
+You can help to ensure your issue gets fixed if you provide sufficient detail. 
+
+---
+
+# 6. Documentation
+
+There is also a [readthedocs](https://quadruped-robot-docs.readthedocs.io/en/main/index.html)  for the helps, tutorials, demo explanation. 
+
+---

@@ -1,8 +1,8 @@
 // The MIT License
 
 // Copyright (c) 2022
-// qrRobot Motion and Vision Laboratory at East China Normal University
-// Contact:tophill.robotics@gmail.com
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@
 // SOFTWARE.
 
 #include "ros/qr_vel_param_receiver.h"
-qrVelocityParamReceiver::qrVelocityParamReceiver (ros::NodeHandle &nhIn,std::string pathToNode)
+qrVelocityParamReceiver::qrVelocityParamReceiver (ros::NodeHandle &nhIn, std::string pathToNode)
     : nh(nhIn)
 {
     ROS_INFO("command velocity topic: %s", cmdVelTopic.c_str());

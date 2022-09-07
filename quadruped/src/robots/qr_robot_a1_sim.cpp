@@ -1,8 +1,8 @@
 // The MIT License
 
 // Copyright (c) 2022
-// qrRobot Motion and Vision Laboratory at East China Normal University
-// Contact:tophill.robotics@gmail.com
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,8 @@
 
 #include "robots/qr_robot_a1_sim.h"
 
-static bool firstObservation = true;
-
-qrRobotA1Sim::qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath):
-    qrRobot(configFilePath), nh(nhIn)
+qrRobotA1Sim::qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath, LocomotionMode mode):
+    qrRobot(configFilePath, mode), nh(nhIn)
 {
     float standUpAbAngle, standUpHipAngle, standUpKneeAngle;
     standUpAbAngle = 0.f;
@@ -93,9 +91,9 @@ void qrRobotA1Sim::ImuCallback(const sensor_msgs::Imu &msg)
     state.imu.quaternion[3] = msg.orientation.z;
 
     Eigen::Matrix<float, 4, 1> quaternion = {state.imu.quaternion[0],
-                                                state.imu.quaternion[1],
-                                                state.imu.quaternion[2],
-                                                state.imu.quaternion[3]};
+                                             state.imu.quaternion[1],
+                                             state.imu.quaternion[2],
+                                             state.imu.quaternion[3]};
     Eigen::Matrix<float, 3, 1> rpy = math::quatToRPY(quaternion);
 
     // set roll pitch yaw information

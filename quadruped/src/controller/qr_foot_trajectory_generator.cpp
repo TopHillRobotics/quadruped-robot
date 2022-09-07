@@ -2,7 +2,7 @@
 
 // Copyright (c) 2022 
 // Robot Motion and Vision Laboratory at East China Normal University
-// Contact: tophill.robotics@gmail.com
+// Contact:  tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -50,11 +50,11 @@ void qrFootBSplinePatternGenerator::SetParameters(const float initial_time,
                                                 const Eigen::Vector3f &target_pos,
                                                 const qrStepParameters &params)
 {
-    // Setting the initial time and duration of the swing movements
+    // setting the initial time and duration of the swing movements
     initial_time_ = initial_time;
     duration_ = params.duration;
 
-    // Computing the appex of the swing movement
+    // computing the appex of the swing movement
     Eigen::Vector3f step_delta = target_pos - initial_pos;
     float height_dist = fabs((float)step_delta(2));
     float step2d_dist = fabs(step_delta.head<2>().norm());
@@ -67,7 +67,7 @@ void qrFootBSplinePatternGenerator::SetParameters(const float initial_time,
     }
     float target_appex = params.height;
 
-    // Setting the spline boundaries
+    // setting the spline boundaries
     UpdateSpline(initial_time, params.duration, initial_pos, target_appex, target_pos);
 }
 
@@ -79,7 +79,7 @@ void qrFootBSplinePatternGenerator::UpdateSpline(float initial_time, float durat
     startPos = initial_pos * 100.f;
     endPos = target_pos * 100.f;
     float xRatio = abs(endPos[0] - startPos[0]) /20.f;
-    // walk up
+    // robot lifts the leg in walk gait.
     if (endPos[2] >= startPos[2]) { 
         float z_length_left = target_appex;
         float z_length_right = target_appex - (endPos[2] - startPos[2]);
@@ -97,7 +97,7 @@ void qrFootBSplinePatternGenerator::UpdateSpline(float initial_time, float durat
         controlPoints[6].z = controlPoints[8].z + 2.0/8 *z_length_right;
         controlPoints[5].z = controlPoints[8].z + 7.0/8 *z_length_right;
     
-    } else { // walk down
+    } else { // robot puts down the leg in walk gait.
         float z_length_left = target_appex - (startPos[2] - endPos[2]);
         float z_length_right = target_appex ;
         float zRatio = abs(z_length_right) / 8.f;
@@ -122,12 +122,12 @@ bool qrFootBSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
 { 
     float dt = time - initial_time_;
 
-    // The float number is not exactly representation, so add 1e-3.
+    // the float number is not exactly representation, so add 1e-3.
     if (dt < - 1e-3 || dt >= duration_ + 1e-3)  
-        // Duration it's always positive, and makes sense when
+        // duration is always positive, and makes sense when is bigger than the sample time
         return false; 
     
-    // Setting the foot state
+    // setting the foot state
     glm::vec3 pt1 = tinynurbs::curvePoint(crv, dt);
     foot_pos[0] = pt1.x / 100;
     foot_pos[1] = pt1.y / 100;
@@ -150,11 +150,11 @@ void qrFootSplinePatternGenerator::SetParameters(const float initial_time,
                                                 const Eigen::Vector3f &target_pos,
                                                 const qrStepParameters &params)
 {
-    // Setting the initial time and duration of the swing movements
+    // setting the initial time and duration of the swing movements
     initial_time_ = initial_time;
     duration_ = params.duration;
 
-    // Computing the appex of the swing movement
+    // computing the appex of the swing movement
     Eigen::Vector3f step_delta = target_pos - initial_pos;
     float height_dist = fabs((float)step_delta(2));
     float step2d_dist = fabs(step_delta.head<2>().norm());
@@ -171,7 +171,7 @@ void qrFootSplinePatternGenerator::SetParameters(const float initial_time,
     } else {
         target_appex = initial_pos(2) + params.height * cos(step_theta);
     }
-    // Setting the spline boundaries
+    // setting the spline boundaries
     foot_spliner_x_.setBoundary(initial_time,
                                 params.duration,
                                 initial_pos(0),
@@ -197,10 +197,10 @@ bool qrFootSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
 {
     // the float number is not exactly representation, so add 1e-3.
     if (time < initial_time_ - 1e-3) {
-        // duration it's always positive, and makes sense when is bigger than the sample time
+        // duration is always positive, and makes sense when is bigger than the sample time
         return false;
     }
-    // Computing the time that allows us to discriminate the swing-up or swing-down phase
+    // computing the time that allows us to discriminate the swing-up or swing-down phase
     math::Spline::Point swing_traj_x, swing_traj_y, swing_traj_z;
     float dt = time - initial_time_;
     foot_spliner_x_.getPoint(time, swing_traj_x);
@@ -211,7 +211,7 @@ bool qrFootSplinePatternGenerator::GenerateTrajectory(Vec3<float> &foot_pos,
     else
         foot_spliner_down_z_.getPoint(time, swing_traj_z);
 
-    // Setting the foot state
+    // setting the foot state
     foot_pos << swing_traj_x.x, swing_traj_y.x, swing_traj_z.x;
     foot_vel << swing_traj_x.xd, swing_traj_y.xd, swing_traj_z.xd;
     foot_acc << swing_traj_x.xdd, swing_traj_y.xdd, swing_traj_z.xdd;

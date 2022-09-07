@@ -2,7 +2,7 @@
 
 // Copyright (c) 2022 
 // Robot Motion and Vision Laboratory at East China Normal University
-// Contact: tophill.robotics@gmail.com
+// Contact:  tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -55,17 +55,17 @@ public:
      * @param frictionCoeffs The coefficients of friction.
      */
     qrStanceLegController(qrRobot *robot,
-                            qrGaitGenerator *gaitGenerator,
-                            qrRobotEstimator *robotVelocityEstimator,
-                            qrGroundSurfaceEstimator *groundEstimatorIn,
-                            qrComPlanner *comPlanner,
-                            qrFootholdPlanner *footholdPlanner,
-                            Eigen::Matrix<float, 3, 1> desired_speed,
-                            float desiredTwistingSpeed,
-                            float desiredBodyHeight,
-                            int numLegs,
-                            std::string configFilepath,
-                            std::vector<float> frictionCoeffs = {0.45, 0.45, 0.45, 0.45});
+                          qrGaitGenerator *gaitGenerator,
+                          qrRobotEstimator *robotVelocityEstimator,
+                          qrGroundSurfaceEstimator *groundEstimatorIn,
+                          qrComPlanner *comPlanner,
+                          qrFootholdPlanner *footholdPlanner,
+                          Eigen::Matrix<float, 3, 1> desired_speed,
+                          float desiredTwistingSpeed,
+                          float desiredBodyHeight,
+                          int numLegs,
+                          std::string configFilepath,
+                          std::vector<float> frictionCoeffs = {0.45, 0.45, 0.45, 0.45});
 
     /**
      * @brief Default desconstructor of qrStanceLegController

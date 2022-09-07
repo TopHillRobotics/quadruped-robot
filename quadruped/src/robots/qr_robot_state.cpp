@@ -1,8 +1,8 @@
 // The MIT License
 
 // Copyright (c) 2022
-// qrRobot Motion and Vision Laboratory at East China Normal University
-// Contact:tophill.robotics@gmail.com
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,16 +26,20 @@
 
 static bool firstObservation = true;
 
-qrRobotState::qrRobotState(qrRobotConfig*& config):config(config)
+qrRobotState::qrRobotState()
 {
-    Eigen::Matrix<float, 3, 1> basePosition = {0.f, 0.f, config->bodyHeight};
+
     baseOrientation << 1.f, 0.f, 0.f, 0.f;
     baseRollPitchYaw << 0.f, 0.f, 0.f;
     baseRollPitchYawRate << 0.f, 0.f, 0.f;
     motorVelocities = Eigen::Matrix<float, 12, 1>::Zero();
     footForce << 0.f, 0.f, 0.f, 0.f;
     footContact << 1, 1, 1, 1;
-    std::cout <<" robot state initialized" << std::endl;
+}
+
+qrRobotState::qrRobotState(qrRobotConfig* config): qrRobotState()
+{
+    SetRobotConfig(config);
 }
 
 void qrRobotState::Update()
@@ -54,6 +58,11 @@ void qrRobotState::Update()
     for (int footId = 0; footId < qrRobotConfig::numLegs; footId++) {
         footContact[footId] = footForce[footId] > 5 ? true : false;
     }
+}
+
+void qrRobotState::SetRobotConfig(qrRobotConfig *config)
+{
+    this->config = config;
 }
 
 

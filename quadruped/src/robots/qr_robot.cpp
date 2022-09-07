@@ -1,8 +1,8 @@
-// The MIT License
+﻿// The MIT License
 
 // Copyright (c) 2022
-// qrRobot Motion and Vision Laboratory at East China Normal University
-// Contact:tophill.robotics@gmail.com
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include <ros/package.h>
 #include "robots/qr_robot.h"
-qrRobot::qrRobot(std::string path):config(new qrRobotConfig(path)),state(qrRobotState(config))
-{
 
+qrRobot::qrRobot(std::string robotName, LocomotionMode mode): locomotionMode(mode)
+{
+    std::string pathToPackage = ros::package::getPath("quadruped");
+    std::string pathToConfig =  pathToPackage + "/config/robots/" + robotName + ".yaml";
+    config = new qrRobotConfig(pathToConfig, mode);
+    state.SetRobotConfig(config);
 }
 
 qrRobot::~qrRobot()
 {
-  delete config;
 }

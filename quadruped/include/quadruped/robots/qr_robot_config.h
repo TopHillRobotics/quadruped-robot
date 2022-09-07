@@ -1,8 +1,8 @@
 // The MIT License
 
 // Copyright (c) 2022
-// qrRobot Motion and Vision Laboratory at East China Normal University
-// Contact:tophill.robotics@gmail.com
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@
 #include <Eigen/Dense>
 #include "common/qr_eigen_types.h"
 #include "common/qr_se3.h"
-#include "types.h"
+#include "common/qr_enums.h"
 
 /**
  * @brief The qrRobotConfig class stores the configuration of specific robot
@@ -43,14 +43,16 @@ public:
     /**
      * @brief Construction of qrRobotConfig
      * @param path: the path to the YAML config file
+     * @param mode: locomotion mode of robot
      */
-    qrRobotConfig(std::string path);
+    qrRobotConfig(std::string path, LocomotionMode mode);
 
     /**
      * @brief load parameter of the robot
      * @param path: the path to the YAML config file
+     * @param mode: locomotion mode of robot
      */
-    void Load(std::string path);
+    void Load(std::string path, LocomotionMode mode);
 
     /**
      * @brief motor numbers of the robot
@@ -69,10 +71,10 @@ public:
 
     float footHoldOffset = 0.1f;
 
-    /**
-     * @brief control parameters of the robot
-     */
-    std::map<std::string, int> controlParams;
+//    /**
+//     * @brief control parameters of the robot
+//     */
+//    std::map<std::string, int> controlParams;
 
     /**
      * @brief the weight of the main body
@@ -185,33 +187,39 @@ public:
 private:
 
     /**
+     * @brief YAML node of the config file
+     */
+    YAML::Node node;
+
+    /**
      * @brief auxiliary function for loading Kp
      * @param node: YAML node
      */
-    void LoadKps(YAML::Node &node);
+    void LoadKps();
 
     /**
      * @brief auxiliary function for loading Kd
      * @param node: YAML node
      */
-    void LoadKds(YAML::Node &node);
+    void LoadKds();
 
     /**
      * @brief auxiliary function for loading CoM offset
      * @param node: YAML node
      */
-    void LoadComOffset(YAML::Node &node);
+    void LoadComOffset(LocomotionMode mode);
 
     /**
      * @brief auxiliary function for loading hip offset
      * @param node: YAML node
      */
-    void LoadHipOffset(YAML::Node &node);
+    void LoadHipOffset();
 
     /**
      * @brief auxiliary function for loading hip position
      * @param node: YAML node
      */
-    void LoadHipPosition(YAML::Node &node);
+    void LoadHipPosition();
+
 };
 #endif // QR_ROBOT_CONFIG_H

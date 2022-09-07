@@ -1,8 +1,8 @@
 // The MIT License
 
 // Copyright (c) 2022
-// qrRobot Motion and Vision Laboratory at East China Normal University
-// Contact:tophill.robotics@gmail.com
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,14 +31,11 @@ qrGroundSurfaceEstimator::qrGroundSurfaceEstimator(qrRobot *robotIn, std::string
     Reset(0.f);
 }
 
-
-
 void qrGroundSurfaceEstimator::Update(float currentTime)
 {   
     Eigen::Matrix<bool, 4, 1> contactState = robot->GetFootContacts();
 
     if(!ShouldUpdate(contactState)){
-
         return ;
     }
 
@@ -53,7 +50,6 @@ void qrGroundSurfaceEstimator::Update(float currentTime)
     Mat3<double> ww = W.transpose()* W;
     a = ww.inverse()* W.transpose()*pZ;
     GetNormalVector(true);
-    // TODO: check this
     ComputeControlFrame();
 }
 
@@ -107,7 +103,8 @@ Eigen::Matrix<double, 3, 1> qrGroundSurfaceEstimator::GetNormalVector(bool updat
         n << -a[1], -a[2], 1.0;
         n /= factor;
     }
-    return n;
+
+    return n; // in base frame
 }
 
 Eigen::Matrix<double, 4, 4> qrGroundSurfaceEstimator::ComputeControlFrame()

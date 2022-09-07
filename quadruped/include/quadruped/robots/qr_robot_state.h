@@ -1,8 +1,8 @@
-﻿// The MIT License
+// The MIT License
 
 // Copyright (c) 2022
-// qrRobot Motion and Vision Laboratory at East China Normal University
-// Contact:tophill.robotics@gmail.com
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -90,11 +90,17 @@ struct qrMotorState
  */
 class qrRobotState{
 public:
+
+    /**
+     * @brief qrRobotState
+     */
+    qrRobotState();
+
     /**
      * @brief qrRobotState
      * @param config
      */
-    qrRobotState(qrRobotConfig*& config);
+    qrRobotState(qrRobotConfig* config);
 
     /**
      * @brief robot base position in world frame
@@ -144,7 +150,7 @@ public:
     /**
      * @brief robot config for calculation of some states
      */
-    qrRobotConfig* &config;
+    qrRobotConfig* config;
 
     /**
      * @brief imu information
@@ -160,6 +166,12 @@ public:
      * @brief update current robot states
      */
     void Update();
+
+    /**
+     * @brief set robot config for calculating some of the states
+     * @param config: current config
+     */
+    void SetRobotConfig(qrRobotConfig* config);
 
     /**
      * @brief get foot positions in base frame
