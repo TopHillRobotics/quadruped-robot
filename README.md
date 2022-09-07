@@ -128,3 +128,9 @@ Please file bugs and feature requests here: [https://github.com/TopHillRobotics/
 You can help to ensure your issue gets fixed if you provide sufficient detail. 
 
 ---
+
+# 6. Documentation
+
+There is also a [readthedocs](https://quadruped-robot-docs.readthedocs.io/en/main/index.html)  for the helps, tutorials, demo explanation. 
+
+---
