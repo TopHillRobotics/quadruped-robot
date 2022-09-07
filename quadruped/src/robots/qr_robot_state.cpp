@@ -28,7 +28,7 @@ static bool firstObservation = true;
 
 qrRobotState::qrRobotState()
 {
-    Eigen::Matrix<float, 3, 1> basePosition = {0.f, 0.f, config->bodyHeight};
+
     baseOrientation << 1.f, 0.f, 0.f, 0.f;
     baseRollPitchYaw << 0.f, 0.f, 0.f;
     baseRollPitchYawRate << 0.f, 0.f, 0.f;
@@ -39,7 +39,7 @@ qrRobotState::qrRobotState()
 
 qrRobotState::qrRobotState(qrRobotConfig* config): qrRobotState()
 {
-    this->config = config;
+    SetRobotConfig(config);
 }
 
 void qrRobotState::Update()

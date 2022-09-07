@@ -24,8 +24,6 @@
 
 #include "robots/qr_robot_a1_sim.h"
 
-static bool firstObservation = true;
-
 qrRobotA1Sim::qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath, LocomotionMode mode):
     qrRobot(configFilePath, mode), nh(nhIn)
 {
@@ -93,9 +91,9 @@ void qrRobotA1Sim::ImuCallback(const sensor_msgs::Imu &msg)
     state.imu.quaternion[3] = msg.orientation.z;
 
     Eigen::Matrix<float, 4, 1> quaternion = {state.imu.quaternion[0],
-                                                state.imu.quaternion[1],
-                                                state.imu.quaternion[2],
-                                                state.imu.quaternion[3]};
+                                             state.imu.quaternion[1],
+                                             state.imu.quaternion[2],
+                                             state.imu.quaternion[3]};
     Eigen::Matrix<float, 3, 1> rpy = math::quatToRPY(quaternion);
 
     // set roll pitch yaw information
