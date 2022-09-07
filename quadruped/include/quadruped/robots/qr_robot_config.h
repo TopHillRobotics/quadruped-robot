@@ -43,14 +43,16 @@ public:
     /**
      * @brief Construction of qrRobotConfig
      * @param path: the path to the YAML config file
+     * @param mode: locomotion mode of robot
      */
-    qrRobotConfig(std::string path);
+    qrRobotConfig(std::string path, LocomotionMode mode);
 
     /**
      * @brief load parameter of the robot
      * @param path: the path to the YAML config file
+     * @param mode: locomotion mode of robot
      */
-    void Load(std::string path);
+    void Load(std::string path, LocomotionMode mode);
 
     /**
      * @brief motor numbers of the robot
@@ -69,10 +71,10 @@ public:
 
     float footHoldOffset = 0.1f;
 
-    /**
-     * @brief control parameters of the robot
-     */
-    std::map<std::string, int> controlParams;
+//    /**
+//     * @brief control parameters of the robot
+//     */
+//    std::map<std::string, int> controlParams;
 
     /**
      * @brief the weight of the main body
@@ -200,7 +202,7 @@ private:
      * @brief auxiliary function for loading CoM offset
      * @param node: YAML node
      */
-    void LoadComOffset(YAML::Node &node);
+    void LoadComOffset(YAML::Node &node, LocomotionMode mode);
 
     /**
      * @brief auxiliary function for loading hip offset

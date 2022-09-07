@@ -26,12 +26,12 @@
 
 std::unordered_map<int, std::string> modeMap = {{0, "velocity"}, {1, "position"}, {2, "walk"}};
 
-qrRobotConfig::qrRobotConfig(std::string path)
+qrRobotConfig::qrRobotConfig(std::string path, LocomotionMode mode)
 {
-    Load(path);
+    Load(path, mode);
 }
 
-void qrRobotConfig::Load(std::string path)
+void qrRobotConfig::Load(std::string path, LocomotionMode mode)
 {
     YAML::Node qrRobotConfig = YAML::LoadFile(path);
 
@@ -43,9 +43,9 @@ void qrRobotConfig::Load(std::string path)
     hipLength = qrRobotConfig["robot_params"]["hip_l"].as<float>();
     upperLegLength = qrRobotConfig["robot_params"]["upper_l"].as<float>();
     lowerLegLength = qrRobotConfig["robot_params"]["lower_l"].as<float>();
-    controlParams["mode"] = qrRobotConfig["controller_params"]["mode"].as<int>(); // types.h: enum
+    //controlParams["mode"] = qrRobotConfig["controller_params"]["mode"].as<int>(); // types.h: enum
 
-    LoadComOffset(qrRobotConfig);
+    LoadComOffset(qrRobotConfig, mode);
     LoadHipOffset(qrRobotConfig);
     LoadHipPosition(qrRobotConfig);
     LoadKps(qrRobotConfig);
@@ -74,9 +74,9 @@ void qrRobotConfig::LoadKds(YAML::Node &node)
     motorKds << kds, kds, kds, kds;
 }
 
-void qrRobotConfig::LoadComOffset(YAML::Node &node)
+void qrRobotConfig::LoadComOffset(YAML::Node &node, LocomotionMode mode)
 {
-    std::vector<float> comOffsetList = node["robot_params"][modeMap[controlParams["mode"]]]["com_offset"].as<std::vector<float >>();
+    std::vector<float> comOffsetList = node["robot_params"][modeMap[mode]]["com_offset"].as<std::vector<float >>();
     comOffset = -Eigen::MatrixXf::Map(&comOffsetList[0], 3, 1);
 }
 

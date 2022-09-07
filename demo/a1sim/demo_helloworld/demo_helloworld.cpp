@@ -47,7 +47,7 @@ int main(int argc, char **argv)
     ROS_INFO("---------finished: ROS, Gazebo controller and loading robot model---------");
 
     // create a quadruped robot.
-    qrRobot *quadruped = new qrRobotA1Sim(nh, pathToNode + "/config/a1_sim.yaml");
+    qrRobot *quadruped = new qrRobotA1Sim(nh, pathToNode + "/config/a1_sim.yaml", LocomotionMode::VELOCITY_LOCOMOTION);
     quadruped->ReceiveObservation();
 
     // perform the first action: standing up

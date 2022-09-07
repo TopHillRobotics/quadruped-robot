@@ -25,7 +25,7 @@ int main(int argc, char **argv)
     std::cout << "---------Ros Module Init finished---------" << std::endl;
 
     // create the quadruped robot.
-    qrRobot *quadruped = new qrRobotA1Sim(nh, pathToNode + "/config/a1_sim.yaml");
+    qrRobot *quadruped = new qrRobotA1Sim(nh, pathToNode + "/config/a1_sim.yaml", LocomotionMode::VELOCITY_LOCOMOTION);
     quadruped->ReceiveObservation();
     std::cout << "BaseOrientation:\n" << quadruped->GetBaseOrientation().transpose() << std::endl;
 

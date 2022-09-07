@@ -26,8 +26,8 @@
 
 static bool firstObservation = true;
 
-qrRobotA1Sim::qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath):
-    qrRobot(configFilePath), nh(nhIn)
+qrRobotA1Sim::qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath, LocomotionMode mode):
+    qrRobot(configFilePath, mode), nh(nhIn)
 {
     float standUpAbAngle, standUpHipAngle, standUpKneeAngle;
     standUpAbAngle = 0.f;

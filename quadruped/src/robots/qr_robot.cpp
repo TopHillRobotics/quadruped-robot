@@ -23,7 +23,8 @@
 // SOFTWARE.
 
 #include "robots/qr_robot.h"
-qrRobot::qrRobot(std::string path):config(new qrRobotConfig(path)),state(qrRobotState(config))
+qrRobot::qrRobot(std::string path, LocomotionMode mode):
+    locomotionMode(mode), config(new qrRobotConfig(path, mode)),state(qrRobotState(config))
 {
 
 }

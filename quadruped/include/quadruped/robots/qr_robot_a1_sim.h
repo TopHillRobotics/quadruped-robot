@@ -29,7 +29,7 @@ public:
      * @param nhIn: ros node
      * @param configFilePath: file path of the robot
      */
-    qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath);
+    qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath, LocomotionMode mode = LocomotionMode::VELOCITY_LOCOMOTION);
 
     /**
      * @brief send command to gazebo controller

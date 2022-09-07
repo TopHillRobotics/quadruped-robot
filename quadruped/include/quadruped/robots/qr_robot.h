@@ -50,8 +50,9 @@ public:
     /**
      * @brief constructor of qrRobot
      * @param path: path to config file
+     * @param mode: locomotion mode of robot
      */
-    qrRobot(std::string path);
+    qrRobot(std::string path, LocomotionMode mode);
 
     virtual ~qrRobot();
 
@@ -192,10 +193,11 @@ public:
      */
     Eigen::Matrix<float, 12, 1> sitDownMotorAngles;
 
-    /**
-     * @brief control parameters
-     */
-    std::map<std::string, int> controlParams;
+//    /**
+//     * @brief control parameters
+//     */
+//    std::map<std::string, int> controlParams;
+    LocomotionMode locomotionMode;
 
     /**
      * @brief timer that store time since robot starts

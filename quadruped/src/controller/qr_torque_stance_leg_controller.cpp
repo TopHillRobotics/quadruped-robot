@@ -60,8 +60,8 @@ void qrStanceLegController::Reset(float currentTime_)
                                                     {1, "position"}, 
                                                     {2, "walk"}};
     string controlModeStr;
-    if (modeMap.count(robot->controlParams["mode"]) > 0) {
-        controlModeStr = modeMap[robot->controlParams["mode"]];
+    if (modeMap.count(robot->locomotionMode) > 0) {
+        controlModeStr = modeMap[robot->locomotionMode];
     }
     std::cout << "locomotion mode: " + controlModeStr << std::endl;
     YAML::Node param = YAML::LoadFile(configFilepath);
@@ -212,7 +212,7 @@ std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLe
     robotComRpy = robot->GetBaseRollPitchYaw(); 
     // robot COM rpy rate in base frame
     robotComRpyRate = robot->GetBaseRollPitchYawRate();  
-    switch(robot->config->controlParams["mode"]){
+    switch(robot->locomotionMode){
         case LocomotionMode::VELOCITY_LOCOMOTION: {
             VelocityLocomotionProcess(robotComOrientation,
                                         robotComPosition,
