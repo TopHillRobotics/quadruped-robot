@@ -85,7 +85,7 @@ sudo apt install libglm-dev
 cd ${your_workspace}
 catkin_make
 ```
-Make sure that your cmake version should at least 3.15.x, or compilation will fail.
+For a smooth compilation, we suggest using CMake version 3.15 or greater.
 
 ---
 
@@ -116,6 +116,9 @@ Third, in a new terminal, launch a demo and run the quadruped controller node. H
 ```
 rosrun a1sim demo_helloworld
 ```
+
+For more demos, please check out the directory /demos.
+
 ---
 
 # 5. Feedback and Bugs
