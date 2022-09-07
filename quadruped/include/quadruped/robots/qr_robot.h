@@ -194,10 +194,9 @@ public:
      */
     Eigen::Matrix<float, 12, 1> sitDownMotorAngles;
 
-//    /**
-//     * @brief control parameters
-//     */
-//    std::map<std::string, int> controlParams;
+    /**
+     * @brief locomotion mode of the robot
+     */
     LocomotionMode locomotionMode;
 
     /**
