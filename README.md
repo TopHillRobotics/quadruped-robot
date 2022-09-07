@@ -99,13 +99,13 @@ Our locomotion controllers support two modes:  velocity control and position con
 
 ## 4.2 Run a demo
 
-First, run
+First, in one terminal, source the `setup.bash` to set up the environment
 
 ```
 source ${your_workspace}/devel/setup.bash
 ```
 
-Second, run the Gazebo simulator to load a robot.
+Second, run the Gazebo simulator and load a robot.
 
 ```
 roslaunch unitree_gazebo normal.launch
