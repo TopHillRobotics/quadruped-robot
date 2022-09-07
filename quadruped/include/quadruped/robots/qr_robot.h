@@ -33,7 +33,7 @@
 
 #include "unitree_legged_sdk/unitree_interface.h"
 #include "config.h"
-#include "types.h"
+#include "common/qr_enums.h"
 #include "robots/qr_timer.h"
 #include "robots/qr_motor.h"
 #include "common/qr_se3.h"
