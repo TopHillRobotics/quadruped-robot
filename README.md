@@ -114,10 +114,10 @@ roslaunch unitree_gazebo normal.launch
 Third, in a new terminal, launch a demo and run the quadruped controller node. Here, a demo helloworld lets the quadruped robot stand up.
 
 ```
-rosrun a1sim demo_helloworld
+rosrun demo demo_helloworld
 ```
 
-For more demos, please check out the directory /demos.
+For more demos, please check out the directory /demos. If you have a robot **YAML** configuration file as long as  **xacro** or **URDF**, you can specify the file location when instantiate the **qrRobotA1Sim** class, or write your own subclass to run your robot and then configure  your xacro and URDF files in **simulation** package, you can try your own robot.
 
 ---
 
