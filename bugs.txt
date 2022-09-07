@@ -1,9 +1,0 @@
-1. License 内容
-
-   qrRobot Motion and Vision Laboratory at East China Normal University
-
->> Robot Motion and Vision Laboratory at East China Normal University
-
-2. modify the demo_helloworld
-
-3. 
