@@ -22,14 +22,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include <ros/package.h>
 #include "robots/qr_robot.h"
-qrRobot::qrRobot(std::string path, LocomotionMode mode):
-    locomotionMode(mode), config(new qrRobotConfig(path, mode)),state(qrRobotState(config))
-{
 
+qrRobot::qrRobot(std::string robotName, LocomotionMode mode): locomotionMode(mode)
+{
+    std::string pathToPackage = ros::package::getPath("quadruped");
+    std::string pathToConfig =  pathToPackage + "/config/robots/" + robotName + ".yaml";
+    config = new qrRobotConfig(pathToConfig, mode);
+    state.SetRobotConfig(config);
 }
 
 qrRobot::~qrRobot()
 {
-  delete config;
+    delete config;
 }

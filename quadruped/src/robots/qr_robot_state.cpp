@@ -26,7 +26,7 @@
 
 static bool firstObservation = true;
 
-qrRobotState::qrRobotState(qrRobotConfig*& config):config(config)
+qrRobotState::qrRobotState()
 {
     Eigen::Matrix<float, 3, 1> basePosition = {0.f, 0.f, config->bodyHeight};
     baseOrientation << 1.f, 0.f, 0.f, 0.f;
@@ -35,7 +35,11 @@ qrRobotState::qrRobotState(qrRobotConfig*& config):config(config)
     motorVelocities = Eigen::Matrix<float, 12, 1>::Zero();
     footForce << 0.f, 0.f, 0.f, 0.f;
     footContact << 1, 1, 1, 1;
-    std::cout <<" robot state initialized" << std::endl;
+}
+
+qrRobotState::qrRobotState(qrRobotConfig* config): qrRobotState()
+{
+    this->config = config;
 }
 
 void qrRobotState::Update()
@@ -54,6 +58,11 @@ void qrRobotState::Update()
     for (int footId = 0; footId < qrRobotConfig::numLegs; footId++) {
         footContact[footId] = footForce[footId] > 5 ? true : false;
     }
+}
+
+void qrRobotState::SetRobotConfig(qrRobotConfig *config)
+{
+    this->config = config;
 }
 
 

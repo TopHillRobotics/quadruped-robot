@@ -47,12 +47,13 @@
 class qrRobot {
 
 public:
+
     /**
      * @brief constructor of qrRobot
-     * @param path: path to config file
+     * @param robotName: name of robot to create
      * @param mode: locomotion mode of robot
      */
-    qrRobot(std::string path, LocomotionMode mode);
+    qrRobot(std::string robotName, LocomotionMode mode);
 
     virtual ~qrRobot();
 
