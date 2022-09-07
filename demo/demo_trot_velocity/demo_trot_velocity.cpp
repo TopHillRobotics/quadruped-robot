@@ -10,10 +10,8 @@ int main(int argc, char **argv)
     ros::NodeHandle nh;
 
     // get the node package path
-    std::string pathToPackage = ros::package::getPath("a1sim");
+    std::string pathToPackage = ros::package::getPath("demo");
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
-
-    std::string robotName = "a1_sim";
 
     // reset the gazebo controller and robot
     ResetRobotBySystem(nh);

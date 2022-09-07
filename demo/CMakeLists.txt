@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(a1sim)
+project(demo)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -23,16 +23,16 @@ include_directories(
 
 add_executable(demo_helloworld demo_helloworld/demo_helloworld.cpp)
 add_executable(demo_trot_velocity demo_trot_velocity/demo_trot_velocity.cpp)
+add_executable(demo_trot_keyboard demo_trot_keyboard/demo_trot_keyboard.cpp)
 #add_executable(demo_trot_joystick demo_trot_joystick/demo_trot_joystick.cpp)
-#add_executable(demo_trot_keyboard demo_trot_keyboard/demo_trot_keyboard.cpp)
 #add_executable(demo_trot_position demo_trot_position/demo_trot_position.cpp)
 #add_executable(external_force_motion external_force_motion/external_force_motion.cpp)
 
 
 target_link_libraries(demo_helloworld ${catkin_LIBRARIES})
 target_link_libraries(demo_trot_velocity ${catkin_LIBRARIES})
+target_link_libraries(demo_trot_keyboard ${catkin_LIBRARIES})
 #target_link_libraries(demo_trot_joystick ${catkin_LIBRARIES})
-#target_link_libraries(demo_trot_keyboard ${catkin_LIBRARIES})
 #target_link_libraries(demo_trot_position ${catkin_LIBRARIES})
 #target_link_libraries(external_force_motion ${catkin_LIBRARIES})
 

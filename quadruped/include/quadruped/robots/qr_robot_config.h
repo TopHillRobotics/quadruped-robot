@@ -187,33 +187,39 @@ public:
 private:
 
     /**
+     * @brief YAML node of the config file
+     */
+    YAML::Node node;
+
+    /**
      * @brief auxiliary function for loading Kp
      * @param node: YAML node
      */
-    void LoadKps(YAML::Node &node);
+    void LoadKps();
 
     /**
      * @brief auxiliary function for loading Kd
      * @param node: YAML node
      */
-    void LoadKds(YAML::Node &node);
+    void LoadKds();
 
     /**
      * @brief auxiliary function for loading CoM offset
      * @param node: YAML node
      */
-    void LoadComOffset(YAML::Node &node, LocomotionMode mode);
+    void LoadComOffset(LocomotionMode mode);
 
     /**
      * @brief auxiliary function for loading hip offset
      * @param node: YAML node
      */
-    void LoadHipOffset(YAML::Node &node);
+    void LoadHipOffset();
 
     /**
      * @brief auxiliary function for loading hip position
      * @param node: YAML node
      */
-    void LoadHipPosition(YAML::Node &node);
+    void LoadHipPosition();
+
 };
 #endif // QR_ROBOT_CONFIG_H

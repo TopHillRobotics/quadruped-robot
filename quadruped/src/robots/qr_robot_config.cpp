@@ -33,28 +33,26 @@ qrRobotConfig::qrRobotConfig(std::string path, LocomotionMode mode)
 
 void qrRobotConfig::Load(std::string path, LocomotionMode mode)
 {
-    YAML::Node qrRobotConfig = YAML::LoadFile(path);
+    node = YAML::LoadFile(path);
 
-    bodyMass = qrRobotConfig["robot_params"]["body_mass"].as<float>();
-    std::vector<float> bodyInertiaList = qrRobotConfig["robot_params"]["body_inertia"].as<std::vector<float >>();
+    bodyMass = node["robot_params"]["body_mass"].as<float>();
+    std::vector<float> bodyInertiaList = node["robot_params"]["body_inertia"].as<std::vector<float >>();
     bodyInertia = Eigen::MatrixXf::Map(&bodyInertiaList[0], 3, 3);
-    bodyHeight = qrRobotConfig["robot_params"]["body_height"].as<float>();
+    bodyHeight = node["robot_params"]["body_height"].as<float>();
 
-    hipLength = qrRobotConfig["robot_params"]["hip_l"].as<float>();
-    upperLegLength = qrRobotConfig["robot_params"]["upper_l"].as<float>();
-    lowerLegLength = qrRobotConfig["robot_params"]["lower_l"].as<float>();
-    //controlParams["mode"] = qrRobotConfig["controller_params"]["mode"].as<int>(); // types.h: enum
+    hipLength = node["robot_params"]["hip_l"].as<float>();
+    upperLegLength = node["robot_params"]["upper_l"].as<float>();
+    lowerLegLength = node["robot_params"]["lower_l"].as<float>();
+    isSim = node["is_sim"].as<bool>();
 
-    LoadComOffset(qrRobotConfig, mode);
-    LoadHipOffset(qrRobotConfig);
-    LoadHipPosition(qrRobotConfig);
-    LoadKps(qrRobotConfig);
-    LoadKds(qrRobotConfig);
-
-    isSim = qrRobotConfig["is_sim"].as<bool>();
+    LoadComOffset(mode);
+    LoadHipOffset();
+    LoadHipPosition();
+    LoadKps();
+    LoadKds();
 }
 
-void qrRobotConfig::LoadKps(YAML::Node &node)
+void qrRobotConfig::LoadKps()
 {
     float abadKp, hipKp, kneeKp;
     abadKp = node["motor_params"]["abad_p"].as<float>();
@@ -64,7 +62,7 @@ void qrRobotConfig::LoadKps(YAML::Node &node)
     motorKps << kps, kps, kps, kps;
 }
 
-void qrRobotConfig::LoadKds(YAML::Node &node)
+void qrRobotConfig::LoadKds()
 {
     float abadKd, hipKd, kneeKd;
     abadKd = node["motor_params"]["abad_d"].as<float>();
@@ -74,13 +72,13 @@ void qrRobotConfig::LoadKds(YAML::Node &node)
     motorKds << kds, kds, kds, kds;
 }
 
-void qrRobotConfig::LoadComOffset(YAML::Node &node, LocomotionMode mode)
+void qrRobotConfig::LoadComOffset(LocomotionMode mode)
 {
     std::vector<float> comOffsetList = node["robot_params"][modeMap[mode]]["com_offset"].as<std::vector<float >>();
     comOffset = -Eigen::MatrixXf::Map(&comOffsetList[0], 3, 1);
 }
 
-void qrRobotConfig::LoadHipOffset(YAML::Node &node)
+void qrRobotConfig::LoadHipOffset()
 {
     std::vector<std::vector<float >> hipOffsetList = node["robot_params"]["hip_offset"].as<std::vector<std::vector<float>>>();
     Eigen::Matrix<float, 3, 1> hipOffsetFR = Eigen::MatrixXf::Map(&hipOffsetList[0][0], 3, 1) + comOffset;
@@ -90,7 +88,7 @@ void qrRobotConfig::LoadHipOffset(YAML::Node &node)
     hipOffset << hipOffsetFR, hipOffsetFL, hipOffsetRL, hipOffsetRR;
 }
 
-void qrRobotConfig::LoadHipPosition(YAML::Node &node)
+void qrRobotConfig::LoadHipPosition()
 {
     std::vector<std::vector<float>> defaultHipPositionList = node["robot_params"]["default_hip_positions"].as<std::vector<std::vector<float>>>();
     Eigen::Matrix<float, 3, 1> defaultHipPositionFR = Eigen::MatrixXf::Map(&defaultHipPositionList[0][0], 3, 1);
