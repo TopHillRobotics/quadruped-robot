@@ -1,8 +1,8 @@
 // The MIT License
 
 // Copyright (c) 2022
-// qrRobot Motion and Vision Laboratory at East China Normal University
-// Contact:tophill.robotics@gmail.com
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,59 +22,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef QR_TYPES_H
-#define QR_TYPES_H
-enum MotorMode {
-    POSITION_MODE,
-    TORQUE_MODE,
-    HYBRID_MODE
-};
+#include "quadruped/ros/qr_external_force.h"
+using namespace std;
 
-enum HybridCmd {
-    POSITION,
-    KP,
-    VELOCITY,
-    KD,
-    TORQUE
-};
+int main(int argc, char **argv)
+{
 
-enum LegState {
-    SWING=0,
-    STANCE,
-    EARLY_CONTACT,
-    LOSE_CONTACT,
-    USERDEFINED_SWING,
-};
-enum SubLegState { // for walk
-    LOAD_FORCE=5,
-    UNLOAD_FORCE,
-    FULL_STANCE,
-    TRUE_SWING,
-};
-
-/** @brief high level control mode */
-enum LocomotionMode {
-    VELOCITY_LOCOMOTION,
-    POSITION_LOCOMOTION,
-    WALK_LOCOMOTION
-};
-
-enum TerrainType {
-    PLANE=0,
-    PLUM_PILES,
-    STAIRS
-};
-
-/** @brief main function gets vel commands by which mode */
-enum TwistMode {
-    CONST,
-    ROS,
-};
-
-enum GaitType {
-    STAND,
-    STATIC_WALK,
-    AMBLE,
-    TROT
-};
-#endif //QR_TYPES_H
+    ros::init(argc, argv, "external_force_motion");
+    qrTeleForceCmd remote;
+    signal(SIGINT,quit);
+    remote.keyLoop();
+    return(0);
+}

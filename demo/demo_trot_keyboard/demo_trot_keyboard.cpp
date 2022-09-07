@@ -1,3 +1,27 @@
+// The MIT License
+
+// Copyright (c) 2022
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact: tophill.robotics@gmail.com
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 #include <thread>
 
 #include "quadruped/exec/runtime.h"
@@ -13,10 +37,8 @@ int main(int argc, char **argv)
     ros::NodeHandle nh;
 
     // get the node package path
-    std::string pathToPackage = ros::package::getPath("a1sim");
+    std::string pathToPackage = ros::package::getPath("demo");
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
-
-    std::string robotName = "a1_sim";
 
     // start keyboard receiving thread.
     qrTeleKeyboard *keyboard = new qrTeleKeyboard(nh);
@@ -34,7 +56,7 @@ int main(int argc, char **argv)
     std::cout << "---------Ros Module Init finished---------" << std::endl;
 
     // create the quadruped robot.
-    qrRobot *quadruped = new qrRobotA1Sim(nh, pathToNode + "/config/a1_sim.yaml");
+    qrRobot *quadruped = new qrRobotA1Sim(nh, "a1_sim");
     quadruped->ReceiveObservation();
     std::cout << "BaseOrientation:\n" << quadruped->GetBaseOrientation().transpose() << std::endl;
 

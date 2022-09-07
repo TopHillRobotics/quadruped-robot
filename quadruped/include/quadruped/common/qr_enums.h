@@ -1,4 +1,4 @@
-﻿// The MIT License
+// The MIT License
 
 // Copyright (c) 2022
 // Robot Motion and Vision Laboratory at East China Normal University
@@ -22,17 +22,59 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <ros/package.h>
-#include "robots/qr_robot.h"
+#ifndef QR_TYPES_H
+#define QR_TYPES_H
+enum MotorMode {
+    POSITION_MODE,
+    TORQUE_MODE,
+    HYBRID_MODE
+};
 
-qrRobot::qrRobot(std::string robotName, LocomotionMode mode): locomotionMode(mode)
-{
-    std::string pathToPackage = ros::package::getPath("quadruped");
-    std::string pathToConfig =  pathToPackage + "/config/robots/" + robotName + ".yaml";
-    config = new qrRobotConfig(pathToConfig, mode);
-    state.SetRobotConfig(config);
-}
+enum HybridCmd {
+    POSITION,
+    KP,
+    VELOCITY,
+    KD,
+    TORQUE
+};
 
-qrRobot::~qrRobot()
-{
-}
+enum LegState {
+    SWING=0,
+    STANCE,
+    EARLY_CONTACT,
+    LOSE_CONTACT,
+    USERDEFINED_SWING,
+};
+enum SubLegState { // for walk
+    LOAD_FORCE=5,
+    UNLOAD_FORCE,
+    FULL_STANCE,
+    TRUE_SWING,
+};
+
+/** @brief high level control mode */
+enum LocomotionMode {
+    VELOCITY_LOCOMOTION,
+    POSITION_LOCOMOTION,
+    WALK_LOCOMOTION
+};
+
+enum TerrainType {
+    PLANE=0,
+    PLUM_PILES,
+    STAIRS
+};
+
+/** @brief main function gets vel commands by which mode */
+enum TwistMode {
+    CONST,
+    ROS,
+};
+
+enum GaitType {
+    STAND,
+    STATIC_WALK,
+    AMBLE,
+    TROT
+};
+#endif //QR_TYPES_H

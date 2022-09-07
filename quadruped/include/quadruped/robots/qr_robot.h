@@ -1,8 +1,8 @@
 // The MIT License
 
 // Copyright (c) 2022
-// qrRobot Motion and Vision Laboratory at East China Normal University
-// Contact:tophill.robotics@gmail.com
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@
 
 #include "unitree_legged_sdk/unitree_interface.h"
 #include "config.h"
-#include "types.h"
+#include "common/qr_enums.h"
 #include "robots/qr_timer.h"
 #include "robots/qr_motor.h"
 #include "common/qr_se3.h"
@@ -47,11 +47,13 @@
 class qrRobot {
 
 public:
+
     /**
      * @brief constructor of qrRobot
-     * @param path: path to config file
+     * @param robotName: name of robot to create
+     * @param mode: locomotion mode of robot
      */
-    qrRobot(std::string path);
+    qrRobot(std::string robotName, LocomotionMode mode);
 
     virtual ~qrRobot();
 
@@ -193,9 +195,9 @@ public:
     Eigen::Matrix<float, 12, 1> sitDownMotorAngles;
 
     /**
-     * @brief control parameters
+     * @brief locomotion mode of the robot
      */
-    std::map<std::string, int> controlParams;
+    LocomotionMode locomotionMode;
 
     /**
      * @brief timer that store time since robot starts

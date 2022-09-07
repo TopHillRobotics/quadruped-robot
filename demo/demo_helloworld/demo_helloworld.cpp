@@ -26,8 +26,6 @@
 #include "quadruped/robots/qr_robot_a1_sim.h"
 #include "quadruped/ros/qr_gazebo_controller_manager.h"
 
-using namespace std;
-
 int main(int argc, char **argv)
 {
     // initialize ROS nodes
@@ -35,7 +33,7 @@ int main(int argc, char **argv)
     ros::NodeHandle nh;
 
     // get the node package path
-    std::string pathToPackage = ros::package::getPath("a1sim");
+    std::string pathToPackage = ros::package::getPath("demo");
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
 
     std::string robotName = "a1_sim";
@@ -47,7 +45,7 @@ int main(int argc, char **argv)
     ROS_INFO("---------finished: ROS, Gazebo controller and loading robot model---------");
 
     // create a quadruped robot.
-    qrRobot *quadruped = new qrRobotA1Sim(nh, pathToNode + "/config/a1_sim.yaml");
+    qrRobot *quadruped = new qrRobotA1Sim(nh, "a1_sim", LocomotionMode::VELOCITY_LOCOMOTION);
     quadruped->ReceiveObservation();
 
     // perform the first action: standing up

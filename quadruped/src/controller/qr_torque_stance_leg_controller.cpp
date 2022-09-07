@@ -1,8 +1,8 @@
 // The MIT License
 
 // Copyright (c) 2022
-// qrRobot Motion and Vision Laboratory at East China Normal University
-// Contact:tophill.robotics@gmail.com
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -60,9 +60,10 @@ void qrStanceLegController::Reset(float currentTime_)
                                                     {1, "position"}, 
                                                     {2, "walk"}};
     string controlModeStr;
-    if (modeMap.count(robot->controlParams["mode"]) > 0) {
-        controlModeStr = modeMap[robot->controlParams["mode"]];
-    }     
+    if (modeMap.count(robot->locomotionMode) > 0) {
+        controlModeStr = modeMap[robot->locomotionMode];
+    }
+    std::cout << "locomotion mode: " + controlModeStr << std::endl;
     YAML::Node param = YAML::LoadFile(configFilepath);
     this->force_dim = param["stance_leg_params"]["force_dim"].as<int>();        
     vector<float> v = param["stance_leg_params"][controlModeStr]["KD"].as<vector<float>>();
@@ -211,7 +212,7 @@ std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLe
     robotComRpy = robot->GetBaseRollPitchYaw(); 
     // robot COM rpy rate in base frame
     robotComRpyRate = robot->GetBaseRollPitchYawRate();  
-    switch(robot->config->controlParams["mode"]){
+    switch(robot->locomotionMode){
         case LocomotionMode::VELOCITY_LOCOMOTION: {
             VelocityLocomotionProcess(robotComOrientation,
                                         robotComPosition,

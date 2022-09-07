@@ -1,8 +1,8 @@
 // The MIT License
 
 // Copyright (c) 2022
-// qrRobot Motion and Vision Laboratory at East China Normal University
-// Contact:tophill.robotics@gmail.com
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact: tophill.robotics@gmail.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -113,7 +113,7 @@ void qrSwingLegController::Update(float currentTime)
         detects phase switch for each leg so we can remember the feet position at
         the beginning of the swing phase.
     */
-    switch (robot->config->controlParams["mode"]) {
+    switch (robot->locomotionMode) {
             case LocomotionMode::VELOCITY_LOCOMOTION: {
                 for (int legId = 0; legId < NumLeg; ++legId) {
                     if (newLegState(legId) == LegState::SWING && newLegState(legId) != gaitGenerator->lastLegState(legId)) {
@@ -229,7 +229,7 @@ map<int, Matrix<float, 5, 1>> qrSwingLegController::GetAction()
         } else {
             dR = math::quaternionToRotationMatrix(controlFrameOrientation) * robotBaseR;
         }
-        switch (robot->config->controlParams["mode"]) {
+        switch (robot->locomotionMode) {
             case LocomotionMode::VELOCITY_LOCOMOTION:
                 VelocityLocomotionProcess(dR, footPositionInBaseFrame, legId);
                 break;
