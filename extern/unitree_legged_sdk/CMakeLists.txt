@@ -12,11 +12,11 @@ catkin_package(
 EXECUTE_PROCESS( COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE )
 message( STATUS "Architecture: ${ARCHITECTURE}") # x86_64, amd64, arm64
 if(${ARCHITECTURE} STREQUAL "x86_64") # 64Bit, 32Bit
-    set(UNITREE_SDK_LIB "unitree_legged_sdk_amd64.so")
+    set(UNITREE_SDK_LIB_NAME "unitree_legged_sdk_amd64")
 elseif(${ARCHITECTURE} STREQUAL "amd64") # 64Bit, 32Bit
-    set(UNITREE_SDK_LIB "unitree_legged_sdk_amd64.so")
+    set(UNITREE_SDK_LIB_NAME "unitree_legged_sdk_amd64")
 elseif(${ARCHITECTURE} STREQUAL "arm64")
-    set(UNITREE_SDK_LIB "unitree_legged_sdk_arm64.so")
+    set(UNITREE_SDK_LIB_NAME "unitree_legged_sdk_arm64")
 else()
     message(FATAL_ERROR "unrecongnized arch.")
 endif()
@@ -24,13 +24,15 @@ endif()
 include_directories(include)
 
 #link_directories(lib)
+find_library(UNITREE_SDK_LIB ${UNITREE_SDK_LIB_NAME} HINT ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+
 
 set(EXTRA_LIBS -pthread ${UNITREE_SDK_LIB} lcm)
 
 #add_subdirectory(pybind11)
 #pybind11_add_module(robot_interface python_interface.cpp)
 add_library(${PROJECT_NAME} SHARED unitree_interface.cpp)
-target_link_directories(${PROJECT_NAME} PUBLIC lib)
+#target_link_directories(${PROJECT_NAME} PUBLIC lib)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 #install(TARGETS ${PROJECT_NAME}

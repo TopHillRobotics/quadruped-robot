@@ -21,13 +21,11 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Core REQUIRED)
 
 catkin_package(
-    CATKIN_DEPENDS 
-    unitree_legged_msgs 
+    CATKIN_DEPENDS unitree_legged_msgs
 )
 
 include_directories(
     # include
-    SYSTEM
     ${Qt5Core_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIR}
     ${catkin_INCLUDE_DIRS}
@@ -38,13 +36,12 @@ link_directories(${GAZEBO_LIBRARY_DIRS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
 
-
 add_library(GaitParameterGuiPlugin SHARED plugin/gait_parameter_gui_plugin.cc)
-target_link_libraries(GaitParameterGuiPlugin 
-${catkin_LIBRARIES} 
+target_link_libraries(GaitParameterGuiPlugin
+${catkin_LIBRARIES}
 ${GAZEBO_LIBRARIES}
 ${Qt5Core_LIBRARIES}
-${Qt5Widgets_LIBRARIES}) 
+${Qt5Widgets_LIBRARIES})
 
 add_library(unitreeFootContactPlugin SHARED plugin/foot_contact_plugin.cc)
 target_link_libraries(unitreeFootContactPlugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
