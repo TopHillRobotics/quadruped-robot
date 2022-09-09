@@ -108,8 +108,10 @@ source ${your_workspace}/devel/setup.bash
 Second, run the Gazebo simulator and load a robot.
 
 ```
-roslaunch unitree_gazebo normal.launch
+roslaunch unitree_gazebo normal.launch rname:=a1 use_xacro:=true
 ```
+
+In this command, **rname** specifies the robot you use, **use_xacro** means whether you use URDF or XACRO file.
 
 Third, in a new terminal, launch a demo and run the quadruped controller node. Here, a demo helloworld lets the quadruped robot stand up.
 
