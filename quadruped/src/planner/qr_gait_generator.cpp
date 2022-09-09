@@ -81,9 +81,10 @@ void qrGaitGenerator::CreateGait(string gaitType) {
     vector<float> initialLegPhaseList = config["gait_params"][gaitType]["init_phase_full_cycle"].as<vector<float >>();
     initialLegPhase = Eigen::MatrixXf::Map(&initialLegPhaseList[0], 4, 1);
     contactDetectionPhaseThreshold = config["gait_params"][gaitType]["contact_detection_phase_threshold"].as<float>();
-    
+
     for (int legId = 0; legId < initialLegState.size(); legId++) {
-        // when dutyFactor is about 0, this leg stay in air.
+        // when dutyFactor is about 0, the leg seems like keeping swinging
+        // user can use this to make special swing trajectories
         if (math::almostEqual(dutyFactor[legId],0.f, 0.001f)) {
             swingDuration[legId] = 1e3;
             initialLegState[legId] = LegState::USERDEFINED_SWING;
@@ -92,6 +93,9 @@ void qrGaitGenerator::CreateGait(string gaitType) {
             nextLegState[legId] = LegState::USERDEFINED_SWING;
             printf("Leg [%i] is userdefined leg!\n", legId);
         } else {
+            // assume the block means one period, '\' means stance, '_' means swing,then if duty factor is 0.7:
+            // when the leg starts with stance,its period is |\\\\\\\___|
+            // otherwise, it will look like |___\\\\\\\|
             swingDuration[legId] = stanceDuration[legId]/dutyFactor[legId] - stanceDuration[legId];
             lastLegState = initialLegState;
             if (initialLegState[legId] == LegState::SWING) {
