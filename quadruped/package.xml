@@ -22,7 +22,8 @@
     <exec_depend>roscpp</exec_depend>
     <exec_depend>roslib</exec_depend>
     <exec_depend>unitree_legged_msgs</exec_depend>
-
+    <depend>tf</depend>
+    <depend>nav_msgs</depend>
     <export>
     </export>
 </package>

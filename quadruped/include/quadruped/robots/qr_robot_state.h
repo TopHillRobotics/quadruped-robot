@@ -127,6 +127,8 @@ public:
      */
     Eigen::Matrix<float, 12, 1> motorAngles;
 
+    Eigen::Matrix<float, 3, 1> baseVelocity;
+
     /**
      * @brief current velocity (unit: radian/second)
      */
@@ -141,6 +143,7 @@ public:
      * @brief foot contact state ( true or false)
      */
     Eigen::Matrix<bool, 4, 1> footContact;
+
 
     /**
      * @brief yaw offset
