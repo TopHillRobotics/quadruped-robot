@@ -44,7 +44,6 @@ int main(int argc, char **argv)
     qrTeleKeyboard *keyboard = new qrTeleKeyboard(nh);
     std::cout << "---------Keyboard start receving---------" << std::endl;
     thread keyboardTh(&qrTeleKeyboard::run, keyboard);
-    keyboardTh.detach();
 
     // reset the gazebo controller and robot
     ResetRobotBySystem(nh);
@@ -117,10 +116,13 @@ int main(int argc, char **argv)
         // wait until this step has cost the timestep to synchronizing frequency.
         while (quadruped->GetTimeSinceReset() - startTimeWall < quadruped->timeStep) {}
     }
+    ROS_INFO("Time is up, end now.");
+
     // exit the thread of keyboard receiving.
     keyboard->finish = true;
-    
-    ROS_INFO("Time is up, end now.");
+    std::cout << "Please push any key to exit!" << std::endl;
+    keyboardTh.join();
+
     ros::shutdown();
     return 0;
 }
