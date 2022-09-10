@@ -117,5 +117,6 @@ void qrRobotVelocityEstimator::Update(float currentTime)
     estimatedVelocity << vx, vy, vz; // world frame
     estimatedVelocity = rotMat.transpose() * estimatedVelocity; // base frame
     estimatedAngularVelocity = robot->GetBaseRollPitchYawRate();
+    robot->state.baseVelocity = estimatedVelocity;
 }
 

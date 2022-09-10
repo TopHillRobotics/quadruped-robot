@@ -44,11 +44,11 @@ public:
      * 2) A moving average filter to smooth out velocity readings
      */
     qrRobotVelocityEstimator(qrRobot *robot,
-                            qrGaitGenerator *gaitGeneratorIn,
-                            float accelerometerVarianceIn = 0.1f,
-                            float sensorVarianceIn = 0.1f,
-                            float initialVarianceIn = 0.1f,
-                            int movingWindowFilterSizeIn = 120);
+                             qrGaitGenerator *gaitGeneratorIn,
+                             float accelerometerVarianceIn = 0.1f,
+                             float sensorVarianceIn = 0.1f,
+                             float initialVarianceIn = 0.1f,
+                             int movingWindowFilterSizeIn = 120);
 
     void Reset(float currentTime);
 

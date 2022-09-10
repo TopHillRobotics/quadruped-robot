@@ -7,8 +7,8 @@
 * Modify: init the file. @ Zhu Yijie
 */
 
-#ifndef ASCEND_QUADRUPED_CPP_GROUND_ESTIMATOR_H
-#define ASCEND_QUADRUPED_CPP_GROUND_ESTIMATOR_H
+#ifndef QR_GROUND_ESTIMATOR_H
+#define QR_GROUND_ESTIMATOR_H
 
 #include "common/qr_se3.h"
 #include "robots/qr_robot.h"
@@ -255,4 +255,4 @@ private:
     bool ShouldUpdate(const Eigen::Matrix<bool, 4, 1>& contactState);
 };
 
-#endif // ASCEND_QUADRUPED_CPP_GROUND_ESTIMATOR_H
+#endif // QR_GROUND_ESTIMATOR_H

@@ -153,6 +153,12 @@ public:
         return state.footContact;
     }
 
+
+    inline Eigen::Matrix<float, 3, 1> GetBaseVelocity() const
+    {
+        return state.baseVelocity;
+    }
+
     /**
      * @brief get current time of one step
      * @return time step

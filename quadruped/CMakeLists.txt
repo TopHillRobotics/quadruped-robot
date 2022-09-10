@@ -14,6 +14,8 @@ find_package(catkin REQUIRED COMPONENTS
         tinyekf
         quadprogpp
         tinynurbs
+        nav_msgs
+        tf
 )
 
 find_package(yaml-cpp REQUIRED)
