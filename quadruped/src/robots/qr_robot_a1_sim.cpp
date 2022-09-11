@@ -24,8 +24,8 @@
 
 #include "robots/qr_robot_a1_sim.h"
 
-qrRobotA1Sim::qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath, LocomotionMode mode):
-    qrRobot(configFilePath, mode), nh(nhIn)
+qrRobotA1Sim::qrRobotA1Sim(ros::NodeHandle &nhIn, std::string robotName, LocomotionMode mode):
+    qrRobot(robotName + "_sim", mode), nh(nhIn)
 {
     float standUpAbAngle, standUpHipAngle, standUpKneeAngle;
     standUpAbAngle = 0.f;
@@ -43,35 +43,35 @@ qrRobotA1Sim::qrRobotA1Sim(ros::NodeHandle &nhIn, std::string configFilePath, Lo
 
     // set up ros subscribers and publishers of joint angles, IMU and force feed back
     imuSub = nh.subscribe("/trunk_imu", 1, &qrRobotA1Sim::ImuCallback, this);
-    jointStateSub[0] = nh.subscribe("a1_gazebo/FR_hip_controller/state", 1, &qrRobotA1Sim::FRhipCallback, this);
-    jointStateSub[1] = nh.subscribe("a1_gazebo/FR_thigh_controller/state", 1, &qrRobotA1Sim::FRthighCallback, this);
-    jointStateSub[2] = nh.subscribe("a1_gazebo/FR_calf_controller/state", 1, &qrRobotA1Sim::FRcalfCallback, this);
-    jointStateSub[3] = nh.subscribe("a1_gazebo/FL_hip_controller/state", 1, &qrRobotA1Sim::FLhipCallback, this);
-    jointStateSub[4] = nh.subscribe("a1_gazebo/FL_thigh_controller/state", 1, &qrRobotA1Sim::FLthighCallback, this);
-    jointStateSub[5] = nh.subscribe("a1_gazebo/FL_calf_controller/state", 1, &qrRobotA1Sim::FLcalfCallback, this);
-    jointStateSub[6] = nh.subscribe("a1_gazebo/RR_hip_controller/state", 1, &qrRobotA1Sim::RRhipCallback, this);
-    jointStateSub[7] = nh.subscribe("a1_gazebo/RR_thigh_controller/state", 1, &qrRobotA1Sim::RRthighCallback, this);
-    jointStateSub[8] = nh.subscribe("a1_gazebo/RR_calf_controller/state", 1, &qrRobotA1Sim::RRcalfCallback, this);
-    jointStateSub[9] = nh.subscribe("a1_gazebo/RL_hip_controller/state", 1, &qrRobotA1Sim::RLhipCallback, this);
-    jointStateSub[10] = nh.subscribe("a1_gazebo/RL_thigh_controller/state", 1, &qrRobotA1Sim::RLthighCallback, this);
-    jointStateSub[11] = nh.subscribe("a1_gazebo/RL_calf_controller/state", 1, &qrRobotA1Sim::RLcalfCallback, this);
+    jointStateSub[0] = nh.subscribe(robotName + "_gazebo/FR_hip_controller/state", 1, &qrRobotA1Sim::FRhipCallback, this);
+    jointStateSub[1] = nh.subscribe(robotName + "_gazebo/FR_thigh_controller/state", 1, &qrRobotA1Sim::FRthighCallback, this);
+    jointStateSub[2] = nh.subscribe(robotName + "_gazebo/FR_calf_controller/state", 1, &qrRobotA1Sim::FRcalfCallback, this);
+    jointStateSub[3] = nh.subscribe(robotName + "_gazebo/FL_hip_controller/state", 1, &qrRobotA1Sim::FLhipCallback, this);
+    jointStateSub[4] = nh.subscribe(robotName + "_gazebo/FL_thigh_controller/state", 1, &qrRobotA1Sim::FLthighCallback, this);
+    jointStateSub[5] = nh.subscribe(robotName + "_gazebo/FL_calf_controller/state", 1, &qrRobotA1Sim::FLcalfCallback, this);
+    jointStateSub[6] = nh.subscribe(robotName + "_gazebo/RR_hip_controller/state", 1, &qrRobotA1Sim::RRhipCallback, this);
+    jointStateSub[7] = nh.subscribe(robotName + "_gazebo/RR_thigh_controller/state", 1, &qrRobotA1Sim::RRthighCallback, this);
+    jointStateSub[8] = nh.subscribe(robotName + "_gazebo/RR_calf_controller/state", 1, &qrRobotA1Sim::RRcalfCallback, this);
+    jointStateSub[9] = nh.subscribe(robotName + "_gazebo/RL_hip_controller/state", 1, &qrRobotA1Sim::RLhipCallback, this);
+    jointStateSub[10] = nh.subscribe(robotName + "_gazebo/RL_thigh_controller/state", 1, &qrRobotA1Sim::RLthighCallback, this);
+    jointStateSub[11] = nh.subscribe(robotName + "_gazebo/RL_calf_controller/state", 1, &qrRobotA1Sim::RLcalfCallback, this);
     footForceSub[0] = nh.subscribe("/visual/FR_foot_contact/the_force", 1, &qrRobotA1Sim::FRfootCallback, this);
     footForceSub[1] = nh.subscribe("/visual/FL_foot_contact/the_force", 1, &qrRobotA1Sim::FLfootCallback, this);
     footForceSub[2] = nh.subscribe("/visual/RR_foot_contact/the_force", 1, &qrRobotA1Sim::RRfootCallback, this);
     footForceSub[3] = nh.subscribe("/visual/RL_foot_contact/the_force", 1, &qrRobotA1Sim::RLfootCallback, this);
 
-    jointCmdPub[0] = nh.advertise<unitree_legged_msgs::MotorCmd>("a1_gazebo/FR_hip_controller/command", 1);
-    jointCmdPub[1] = nh.advertise<unitree_legged_msgs::MotorCmd>("a1_gazebo/FR_thigh_controller/command", 1);
-    jointCmdPub[2] = nh.advertise<unitree_legged_msgs::MotorCmd>("a1_gazebo/FR_calf_controller/command", 1);
-    jointCmdPub[3] = nh.advertise<unitree_legged_msgs::MotorCmd>("a1_gazebo/FL_hip_controller/command", 1);
-    jointCmdPub[4] = nh.advertise<unitree_legged_msgs::MotorCmd>("a1_gazebo/FL_thigh_controller/command", 1);
-    jointCmdPub[5] = nh.advertise<unitree_legged_msgs::MotorCmd>("a1_gazebo/FL_calf_controller/command", 1);
-    jointCmdPub[6] = nh.advertise<unitree_legged_msgs::MotorCmd>("a1_gazebo/RR_hip_controller/command", 1);
-    jointCmdPub[7] = nh.advertise<unitree_legged_msgs::MotorCmd>("a1_gazebo/RR_thigh_controller/command", 1);
-    jointCmdPub[8] = nh.advertise<unitree_legged_msgs::MotorCmd>("a1_gazebo/RR_calf_controller/command", 1);
-    jointCmdPub[9] = nh.advertise<unitree_legged_msgs::MotorCmd>("a1_gazebo/RL_hip_controller/command", 1);
-    jointCmdPub[10] = nh.advertise<unitree_legged_msgs::MotorCmd>("a1_gazebo/RL_thigh_controller/command", 1);
-    jointCmdPub[11] = nh.advertise<unitree_legged_msgs::MotorCmd>("a1_gazebo/RL_calf_controller/command", 1);
+    jointCmdPub[0] = nh.advertise<unitree_legged_msgs::MotorCmd>(robotName + "_gazebo/FR_hip_controller/command", 1);
+    jointCmdPub[1] = nh.advertise<unitree_legged_msgs::MotorCmd>(robotName + "_gazebo/FR_thigh_controller/command", 1);
+    jointCmdPub[2] = nh.advertise<unitree_legged_msgs::MotorCmd>(robotName + "_gazebo/FR_calf_controller/command", 1);
+    jointCmdPub[3] = nh.advertise<unitree_legged_msgs::MotorCmd>(robotName + "_gazebo/FL_hip_controller/command", 1);
+    jointCmdPub[4] = nh.advertise<unitree_legged_msgs::MotorCmd>(robotName + "_gazebo/FL_thigh_controller/command", 1);
+    jointCmdPub[5] = nh.advertise<unitree_legged_msgs::MotorCmd>(robotName + "_gazebo/FL_calf_controller/command", 1);
+    jointCmdPub[6] = nh.advertise<unitree_legged_msgs::MotorCmd>(robotName + "_gazebo/RR_hip_controller/command", 1);
+    jointCmdPub[7] = nh.advertise<unitree_legged_msgs::MotorCmd>(robotName + "_gazebo/RR_thigh_controller/command", 1);
+    jointCmdPub[8] = nh.advertise<unitree_legged_msgs::MotorCmd>(robotName + "_gazebo/RR_calf_controller/command", 1);
+    jointCmdPub[9] = nh.advertise<unitree_legged_msgs::MotorCmd>(robotName + "_gazebo/RL_hip_controller/command", 1);
+    jointCmdPub[10] = nh.advertise<unitree_legged_msgs::MotorCmd>(robotName + "_gazebo/RL_thigh_controller/command", 1);
+    jointCmdPub[11] = nh.advertise<unitree_legged_msgs::MotorCmd>(robotName + "_gazebo/RL_calf_controller/command", 1);
 
     usleep(300000); // must wait 300ms, to get first state
 
