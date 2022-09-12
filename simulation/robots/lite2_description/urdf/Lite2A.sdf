@@ -1,0 +1,608 @@
+<sdf version='1.6'>
+  <model name='MiniLiteV2'>
+    <link name='TORSO'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0.046396 -0.001759 0.028665 0 -0 0</pose>
+        <mass>5.298</mass>
+        <inertia>
+          <ixx>0.0095569</ixx>
+          <ixy>5.9672e-05</ixy>
+          <ixz>9.3193e-05</ixz>
+          <iyy>0.014357</iyy>
+          <iyz>1.9063e-05</iyz>
+          <izz>0.01949</izz>
+        </inertia>
+      </inertial>
+      <collision name='TORSO_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.234 0.184 0.08</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name='TORSO_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/TORSO.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <link name='FL_HIP'>
+      <pose frame=''>0.175 0.055 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-0.0047 -0.0091 -0.0018 0 -0 0</pose>
+        <mass>0.428</mass>
+        <inertia>
+          <ixx>0.00014538</ixx>
+          <ixy>8.1579e-07</ixy>
+          <ixz>-1.264e-05</ixz>
+          <iyy>0.00024024</iyy>
+          <iyz>1.3443e-06</iyz>
+          <izz>0.00013038</izz>
+        </inertia>
+      </inertial>
+      <visual name='FL_HIP_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/FL_HIP.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='FL_HipX' type='revolute'>
+      <child>FL_HIP</child>
+      <parent>TORSO</parent>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-0.523</lower>
+          <upper>0.523</upper>
+          <effort>13.2</effort>
+          <velocity>20</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='FL_THIGH'>
+      <pose frame=''>0.175 0.136 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-0.00523 -0.0216 -0.0273 0 -0 0</pose>
+        <mass>0.61</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>-2.5e-06</ixy>
+          <ixz>-0.000112</ixz>
+          <iyy>0.00116</iyy>
+          <iyz>3.75e-07</iyz>
+          <izz>0.000268</izz>
+        </inertia>
+      </inertial>
+      <collision name='FL_THIGH_collision'>
+        <pose frame=''>0 0 -0.06 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.04 0.03 0.12</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name='FL_THIGH_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/L_THIGH.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='FL_HipY' type='revolute'>
+      <child>FL_THIGH</child>
+      <parent>FL_HIP</parent>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>-3.49</lower>
+          <upper>0.349</upper>
+          <effort>13.2</effort>
+          <velocity>20</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='FL_SHANK'>
+      <pose frame=''>0.175 0.136 -0.18 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0.00585 -1e-06 -0.12 0 -0 0</pose>
+        <mass>0.145</mass>
+        <inertia>
+          <ixx>0.000668</ixx>
+          <ixy>-1.24e-08</ixy>
+          <ixz>6.91e-06</ixz>
+          <iyy>0.000686</iyy>
+          <iyz>5.65e-09</iyz>
+          <izz>3.155e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='FL_SHANK_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/SHANK.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='FL_SHANK_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/SHANK.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='FL_Knee' type='revolute'>
+      <child>FL_SHANK</child>
+      <parent>FL_THIGH</parent>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>0.419</lower>
+          <upper>2.53</upper>
+          <effort>28</effort>
+          <velocity>20</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='FR_HIP'>
+      <pose frame=''>0.175 -0.055 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-0.0047 0.0091 -0.0018 0 -0 0</pose>
+        <mass>0.428</mass>
+        <inertia>
+          <ixx>0.00014538</ixx>
+          <ixy>-8.1551e-07</ixy>
+          <ixz>-1.2639e-05</ixz>
+          <iyy>0.00024024</iyy>
+          <iyz>-1.3441e-06</iyz>
+          <izz>0.00013038</izz>
+        </inertia>
+      </inertial>
+      <visual name='FR_HIP_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/FR_HIP.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='FR_HipX' type='revolute'>
+      <child>FR_HIP</child>
+      <parent>TORSO</parent>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <limit>
+          <lower>-0.523</lower>
+          <upper>0.523</upper>
+          <effort>13.2</effort>
+          <velocity>20</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='FR_THIGH'>
+      <pose frame=''>0.175 -0.135 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-0.00523 0.0216 -0.0273 0 -0 0</pose>
+        <mass>0.61</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>2.5e-06</ixy>
+          <ixz>-0.000112</ixz>
+          <iyy>0.00116</iyy>
+          <iyz>-3.75e-07</iyz>
+          <izz>0.000268</izz>
+        </inertia>
+      </inertial>
+      <collision name='FR_THIGH_collision'>
+        <pose frame=''>0 0 -0.06 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.04 0.03 0.12</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name='FR_THIGH_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/R_THIGH.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='FR_HipY' type='revolute'>
+      <child>FR_THIGH</child>
+      <parent>FR_HIP</parent>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>-3.49</lower>
+          <upper>0.349</upper>
+          <effort>13.2</effort>
+          <velocity>20</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='FR_SHANK'>
+      <pose frame=''>0.175 -0.135 -0.18 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0.00585 -1e-06 -0.12 0 -0 0</pose>
+        <mass>0.145</mass>
+        <inertia>
+          <ixx>0.000668</ixx>
+          <ixy>-1.24e-08</ixy>
+          <ixz>6.91e-06</ixz>
+          <iyy>0.000686</iyy>
+          <iyz>5.65e-09</iyz>
+          <izz>3.155e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='FR_SHANK_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/SHANK.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='FR_SHANK_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/SHANK.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='FR_Knee' type='revolute'>
+      <child>FR_SHANK</child>
+      <parent>FR_THIGH</parent>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>0.419</lower>
+          <upper>2.53</upper>
+          <effort>28</effort>
+          <velocity>20</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='HL_HIP'>
+      <pose frame=''>-0.175 0.055 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0.0047 -0.0091 -0.0018 0 -0 0</pose>
+        <mass>0.428</mass>
+        <inertia>
+          <ixx>0.00014538</ixx>
+          <ixy>-8.1585e-07</ixy>
+          <ixz>1.2639e-05</ixz>
+          <iyy>0.00024024</iyy>
+          <iyz>1.3444e-06</iyz>
+          <izz>0.00013038</izz>
+        </inertia>
+      </inertial>
+      <visual name='HL_HIP_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/HL_HIP.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='HL_HipX' type='revolute'>
+      <child>HL_HIP</child>
+      <parent>TORSO</parent>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-0.523</lower>
+          <upper>0.523</upper>
+          <effort>13.2</effort>
+          <velocity>20</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='HL_THIGH'>
+      <pose frame=''>-0.175 0.136 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-0.00523 -0.0216 -0.0273 0 -0 0</pose>
+        <mass>0.61</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>-2.5e-06</ixy>
+          <ixz>-0.000112</ixz>
+          <iyy>0.00116</iyy>
+          <iyz>3.75e-07</iyz>
+          <izz>0.000268</izz>
+        </inertia>
+      </inertial>
+      <collision name='HL_THIGH_collision'>
+        <pose frame=''>0 0 -0.06 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.04 0.03 0.12</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name='HL_THIGH_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/L_THIGH.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='HL_HipY' type='revolute'>
+      <child>HL_THIGH</child>
+      <parent>HL_HIP</parent>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>-3.49</lower>
+          <upper>0.349</upper>
+          <effort>13.2</effort>
+          <velocity>20</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='HL_SHANK'>
+      <pose frame=''>-0.175 0.136 -0.18 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0.00585 -1e-06 -0.12 0 -0 0</pose>
+        <mass>0.145</mass>
+        <inertia>
+          <ixx>0.000668</ixx>
+          <ixy>-1.24e-08</ixy>
+          <ixz>6.91e-06</ixz>
+          <iyy>0.000686</iyy>
+          <iyz>5.65e-09</iyz>
+          <izz>3.155e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='HL_SHANK_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/SHANK.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='HL_SHANK_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/SHANK.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='HL_Knee' type='revolute'>
+      <child>HL_SHANK</child>
+      <parent>HL_THIGH</parent>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>0.419</lower>
+          <upper>2.53</upper>
+          <effort>28</effort>
+          <velocity>20</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='HR_HIP'>
+      <pose frame=''>-0.175 -0.055 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0.0047 0.0091 -0.0018 0 -0 0</pose>
+        <mass>0.428</mass>
+        <inertia>
+          <ixx>0.00014538</ixx>
+          <ixy>8.1545e-07</ixy>
+          <ixz>1.2639e-05</ixz>
+          <iyy>0.00024024</iyy>
+          <iyz>-1.344e-06</iyz>
+          <izz>0.00013038</izz>
+        </inertia>
+      </inertial>
+      <visual name='HR_HIP_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/HR_HIP.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='HR_HipX' type='revolute'>
+      <child>HR_HIP</child>
+      <parent>TORSO</parent>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <limit>
+          <lower>-0.523</lower>
+          <upper>0.523</upper>
+          <effort>13.2</effort>
+          <velocity>20</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='HR_THIGH'>
+      <pose frame=''>-0.175 -0.136 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-0.00523 0.0216 -0.0273 0 -0 0</pose>
+        <mass>0.61</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>2.5e-06</ixy>
+          <ixz>-0.000112</ixz>
+          <iyy>0.00116</iyy>
+          <iyz>-3.75e-07</iyz>
+          <izz>0.000268</izz>
+        </inertia>
+      </inertial>
+      <collision name='HR_THIGH_collision'>
+        <pose frame=''>0 0 -0.06 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.04 0.03 0.12</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name='HR_THIGH_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/R_THIGH.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='HR_HipY' type='revolute'>
+      <child>HR_THIGH</child>
+      <parent>HR_HIP</parent>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>-3.49</lower>
+          <upper>0.349</upper>
+          <effort>13.2</effort>
+          <velocity>20</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='HR_SHANK'>
+      <pose frame=''>-0.175 -0.136 -0.18 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0.00585 -1e-06 -0.12 0 -0 0</pose>
+        <mass>0.145</mass>
+        <inertia>
+          <ixx>0.000668</ixx>
+          <ixy>-1.24e-08</ixy>
+          <ixz>6.91e-06</ixz>
+          <iyy>0.000686</iyy>
+          <iyz>5.65e-09</iyz>
+          <izz>3.155e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='HR_SHANK_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/SHANK.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='HR_SHANK_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://robot_function_pkg/meshes/meshes/SHANK.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='HR_Knee' type='revolute'>
+      <child>HR_SHANK</child>
+      <parent>HR_THIGH</parent>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>0.419</lower>
+          <upper>2.53</upper>
+          <effort>28</effort>
+          <velocity>20</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+  </model>
+</sdf>

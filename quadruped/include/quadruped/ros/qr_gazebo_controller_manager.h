@@ -60,14 +60,17 @@ bool stopControllers(ros::NodeHandle &nodeHandle, std::string serviceName);
  * @brief restart simultion by system command
  * 
  */
-bool ResetRobotBySystem(ros::NodeHandle &nodeHandle);
+bool ResetRobotBySystem(ros::NodeHandle &nodeHandle, std::string robotName);
 
 /**
  * @brief restart simulation by gazebo-ros service
  * @param modelStateClient
  * @param jointStateClient
  */
-bool ResetRobotByService(ros::NodeHandle &nodeHandle,ros::ServiceClient &modelStateClient, ros::ServiceClient &jointStateClient);
+bool ResetRobotByService(ros::NodeHandle &nodeHandle,
+                         ros::ServiceClient &modelStateClient, 
+                         ros::ServiceClient &jointStateClient, 
+                         std::string robotName);
 
 
 #endif //QR_GAZEBO_CONTROLLER_MANAGER_H

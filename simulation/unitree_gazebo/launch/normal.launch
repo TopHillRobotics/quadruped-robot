@@ -34,7 +34,7 @@
     <group unless="$(arg use_xacro)">
         <param name="robot_description" command="cat $(arg dollar)$(arg robot_path)/urdf/robot.urdf"/>
     </group>
-
+    <param name="robotName" value="$(arg rname)"/>
      <node pkg="gazebo_ros" type="spawn_model" name="urdf_spawner" respawn="false" output="screen"
           args="-urdf -z 0.6 -model $(arg rname)_gazebo -param robot_description -unpause"/>
     <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
