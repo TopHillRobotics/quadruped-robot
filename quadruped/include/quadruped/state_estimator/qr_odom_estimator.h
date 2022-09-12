@@ -20,7 +20,10 @@ private:
 //    RobotEstimator *robotEstimator;
 
 //    LocomotionController *locomotionController;
+    double odomEstimateX;
 
+    double odomEstimateY;
+    
     ros::NodeHandle &nh;
 
     ros::Publisher pubOdometry;

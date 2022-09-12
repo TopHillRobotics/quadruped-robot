@@ -6,21 +6,28 @@ qrRobotOdometryEstimator::qrRobotOdometryEstimator(qrRobot *robotIn,
 {
     pubOdometry = nh.advertise<nav_msgs::Odometry>("legOdom", 1);
     lastTime = ros::Time::now();
+    odomEstimateX = robot->GetBasePosition()[0];
+    odomEstimateY = robot->GetBasePosition()[1];
     ROS_INFO("robot_odom_estimator init success...");
 }
 
 void qrRobotOdometryEstimator::PublishOdometry()
 {
+    ros::spinOnce();
     currentTime = ros::Time::now();
     // ControlDataFlow* controlDataFlow = robot->controlDataFlow;
     const Vec3<float> estimatedVelocity = robot->GetBaseVelocity();
-    const Vec3<float> &basePosition = robot->GetBasePosition();
     const Vec3<float> &baserpy = robot->GetBaseRollPitchYaw();
     const Vec3<float> &baseRollPitchYawRate = robot->GetBaseRollPitchYawRate();
     float vX = estimatedVelocity[0];
     float vY = estimatedVelocity[1];
 
-    // Vec3<float>  basePosition = robot->basePosition();
+    double dt = (currentTime - lastTime).toSec();
+    double dx, dy;
+    dx = (vX * cos(baseRollPitchYawRate[2]) - vY * sin(baseRollPitchYawRate[2])) * dt;
+    dy = (vX * sin(baseRollPitchYawRate[2]) + vY * cos(baseRollPitchYawRate[2])) * dt;
+    odomEstimateX += dx;
+    odomEstimateY += dy;
     // since all odometry is 6DOF we'll need a quaternion created from yaw
     geometry_msgs::Quaternion odomQuat = tf::createQuaternionMsgFromYaw(baserpy[2]);
 
@@ -28,11 +35,12 @@ void qrRobotOdometryEstimator::PublishOdometry()
     geometry_msgs::TransformStamped odomTrans;
     odomTrans.header.stamp = currentTime;
     odomTrans.header.frame_id = "odom";
-    odomTrans.child_frame_id = "base_link";
-    odomTrans.transform.translation.x = basePosition[0];
-    odomTrans.transform.translation.y = basePosition[1];
+    odomTrans.child_frame_id = "base";
+    odomTrans.transform.translation.x = odomEstimateX;
+    odomTrans.transform.translation.y = odomEstimateY;
     odomTrans.transform.translation.z = 0.0;
     odomTrans.transform.rotation = odomQuat;
+    
     // send the transform
     odomBroadcaster.sendTransform(odomTrans);
 
@@ -41,12 +49,12 @@ void qrRobotOdometryEstimator::PublishOdometry()
     odom.header.stamp = currentTime;
     odom.header.frame_id = "odom";
     //set the position
-    odom.pose.pose.position.x = basePosition[0];
-    odom.pose.pose.position.y = basePosition[1];
+    odom.pose.pose.position.x = odomEstimateX;
+    odom.pose.pose.position.y = odomEstimateY;
     odom.pose.pose.position.z = 0.0;
     odom.pose.pose.orientation = odomQuat;
     //set the velocity
-    odom.child_frame_id = "base_link";
+    odom.child_frame_id = "base";
     odom.twist.twist.linear.x = vX;
     odom.twist.twist.linear.y = vY;
     odom.twist.twist.angular.z = baseRollPitchYawRate[2];
