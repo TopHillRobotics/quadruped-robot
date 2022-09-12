@@ -24,13 +24,13 @@ robot_params:
                            [ -0.175, 0.135, 0 ] ]
   default_standup_angle:
     ab: 0
-    hip: 0.9
-    knee: -1.8
+    hip: -0.628
+    knee: 1.36
 
   default_sitdown_angle:
-    ab: -0.167136
-    hip: 0.934969
-    knee: -2.54468
+    ab: 0.524
+    hip: -0.901
+    knee: 2.530
 
 motor_params:
   kps: [ 100,100,100 ]

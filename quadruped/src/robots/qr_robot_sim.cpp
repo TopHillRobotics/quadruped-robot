@@ -27,20 +27,6 @@
 qrRobotSim::qrRobotSim(ros::NodeHandle &nhIn, std::string robotName, LocomotionMode mode):
     qrRobot(robotName + "_sim", mode), nh(nhIn)
 {
-    float standUpAbAngle, standUpHipAngle, standUpKneeAngle;
-    standUpAbAngle = 0.f;
-    standUpHipAngle = std::acos(config->bodyHeight / 2.f / config->upperLegLength);
-    standUpKneeAngle = -2.f * standUpHipAngle;
-    Eigen::Matrix<float, 3, 1> defaultStandUpAngle(standUpAbAngle, standUpHipAngle, standUpKneeAngle);
-    standUpMotorAngles << defaultStandUpAngle, defaultStandUpAngle, defaultStandUpAngle, defaultStandUpAngle;
-
-    float sitDownAbAngle, sitDownHipAngle, sitDownKneeAngle;
-    sitDownAbAngle = -0.167136f;
-    sitDownHipAngle = 0.934969f;
-    sitDownKneeAngle = -2.54468f;
-    Eigen::Matrix<float, 3, 1> defaultSitDownAngle(sitDownAbAngle, sitDownHipAngle, sitDownKneeAngle);
-    sitDownMotorAngles << defaultSitDownAngle, defaultSitDownAngle, defaultSitDownAngle, defaultSitDownAngle;
-
     // set up ros subscribers and publishers of joint angles, IMU and force feed back
     imuSub = nh.subscribe("/trunk_imu", 1, &qrRobotSim::ImuCallback, this);
     jointStateSub[0] = nh.subscribe(robotName + "_gazebo/FR_hip_controller/state", 1, &qrRobotSim::FRhipCallback, this);

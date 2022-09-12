@@ -35,7 +35,7 @@ namespace Action {
             float blendRatio = (t - startTime) / standUpTime;
             Eigen::Matrix<float, 12, 1> action;
             if (blendRatio < 1.0f) {
-                action = blendRatio * robot->standUpMotorAngles + (1 - blendRatio) * motorAnglesBeforeStandUP;
+                action = blendRatio * robot->config->standUpMotorAngles + (1 - blendRatio) * motorAnglesBeforeStandUP;
                 robot->Step(action, MotorMode::POSITION_MODE);
                 while (robot->GetTimeSinceReset() < t + timeStep) {}
             } else {
@@ -52,12 +52,12 @@ namespace Action {
         float endTime = startTime + sitDownTime;
         Eigen::Matrix<float, 12, 1> motorAnglesBeforeSitDown = robot->GetMotorAngles();
         std::cout << "motorAnglesBeforeSitDown: \n" << motorAnglesBeforeSitDown.transpose() << std::endl;
-        std::cout << "robot->sitDownMotorAngles: \n" << robot->sitDownMotorAngles.transpose() << std::endl;
+        std::cout << "robot->sitDownMotorAngles: \n" << robot->config->sitDownMotorAngles.transpose() << std::endl;
 
         for (float t = startTime; t < endTime; t += timeStep) {
             float blendRatio = (t - startTime) / sitDownTime;
             Eigen::Matrix<float, 12, 1> action;
-            action = blendRatio * robot->sitDownMotorAngles + (1 - blendRatio) * motorAnglesBeforeSitDown;
+            action = blendRatio *  robot->config->sitDownMotorAngles + (1 - blendRatio) * motorAnglesBeforeSitDown;
             robot->Step(action, MotorMode::POSITION_MODE);
             while (robot->GetTimeSinceReset() < t + timeStep) {}
         }
@@ -67,8 +67,7 @@ namespace Action {
     {
         float startTime = robot->GetTimeSinceReset();
         float endTime = startTime + KeepStandTime;
-        Eigen::Matrix<float, 12, 1>
-            motorAnglesBeforeKeepStand = robot->standUpMotorAngles;
+        Eigen::Matrix<float, 12, 1> motorAnglesBeforeKeepStand =  robot->config->standUpMotorAngles;
         Eigen::Matrix<float, 12, 1> motorAngles;
         for (float t = startTime; t < endTime; t += timeStep) {
             motorAngles = motorAnglesBeforeKeepStand;

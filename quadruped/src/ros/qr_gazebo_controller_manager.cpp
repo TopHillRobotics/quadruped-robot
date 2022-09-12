@@ -72,7 +72,7 @@ bool ResetRobotBySystem(ros::NodeHandle &nodeHandle, std::string robotName) {
     int deleteModelId = system(std::string("rosservice call gazebo/delete_model '{model_name: " + robotName + "_gazebo}'").c_str());
     ROS_INFO("delete state: %d", deleteModelId);
 
-    int urdfStateId = system(std::string("rosrun gazebo_ros spawn_model -urdf -z 0.6 -model " + robotName + "_gazebo -param robot_description -unpause").c_str());
+    int urdfStateId = system(std::string("rosrun gazebo_ros spawn_model -urdf -z 0.4 -model " + robotName + "_gazebo -param robot_description -unpause").c_str());
     ROS_INFO("spawn model state: %d", urdfStateId);
 
     int controllersStateId = system(std::string("rosrun controller_manager spawner __ns:=/" + robotName + "_gazebo joint_state_controller "\

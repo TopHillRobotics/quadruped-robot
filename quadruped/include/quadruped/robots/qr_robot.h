@@ -191,16 +191,6 @@ public:
     }
 
     /**
-     * @brief motor angles after robot stands up
-     */
-    Eigen::Matrix<float, 12, 1> standUpMotorAngles; // default motor angle when robot stands.
-
-    /**
-     * @brief motor angles after robot sits down
-     */
-    Eigen::Matrix<float, 12, 1> sitDownMotorAngles;
-
-    /**
      * @brief locomotion mode of the robot
      */
     LocomotionMode locomotionMode;
