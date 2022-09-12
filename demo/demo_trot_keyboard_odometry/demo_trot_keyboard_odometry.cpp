@@ -26,7 +26,7 @@
 
 #include "quadruped/exec/runtime.h"
 #include "quadruped/ros/qr_telekeyboard.h"
-#include "quadruped/robots/qr_robot_a1_sim.h"
+#include "quadruped/robots/qr_robot_sim.h"
 #include "quadruped/ros/qr_gazebo_controller_manager.h"
 #include "quadruped/state_estimator/qr_odom_estimator.h"
 
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     std::cout << "---------Ros Module Init finished---------" << std::endl;
 
     // create the quadruped robot.
-    qrRobot *quadruped = new qrRobotA1Sim(nh, robotName);
+    qrRobot *quadruped = new qrRobotSim(nh, robotName);
 
     // add an odometry estimator
     qrRobotOdometryEstimator* odomEstimator = new qrRobotOdometryEstimator(quadruped, nh);

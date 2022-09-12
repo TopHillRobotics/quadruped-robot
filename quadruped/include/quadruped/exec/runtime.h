@@ -36,7 +36,7 @@
 #include "planner/qr_foothold_planner.h"
 #include "action/qr_action.h"
 #include "ros/qr_vel_param_receiver.h"
-#include "robots/qr_robot_a1_sim.h"
+#include "robots/qr_robot_sim.h"
 #include "state_estimator/qr_robot_estimator.h"
 
 

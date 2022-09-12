@@ -23,7 +23,7 @@
 // SOFTWARE.
 
 #include "quadruped/exec/runtime.h"
-#include "quadruped/robots/qr_robot_a1_sim.h"
+#include "quadruped/robots/qr_robot_sim.h"
 #include "quadruped/ros/qr_gazebo_controller_manager.h"
 
 int main(int argc, char **argv)
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
     ROS_INFO("---------finished: ROS, Gazebo controller and loading robot model---------");
 
     // create a quadruped robot.
-    qrRobot *quadruped = new qrRobotA1Sim(nh, robotName, LocomotionMode::VELOCITY_LOCOMOTION);
+    qrRobot *quadruped = new qrRobotSim(nh, robotName, LocomotionMode::VELOCITY_LOCOMOTION);
     quadruped->ReceiveObservation();
 
     // perform the first action: standing up

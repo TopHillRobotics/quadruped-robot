@@ -22,14 +22,14 @@
 /**
  * @brief a1 robot class in simulation.
  */
-class qrRobotA1Sim : public qrRobot {
+class qrRobotSim : public qrRobot {
 public:
     /**
      * @brief constructor for Unitree A1 robot
      * @param nhIn: ros node
      * @param robotName: name of robot to create
      */
-    qrRobotA1Sim(ros::NodeHandle &nhIn, std::string robotName, LocomotionMode mode = LocomotionMode::VELOCITY_LOCOMOTION);
+    qrRobotSim(ros::NodeHandle &nhIn, std::string robotName, LocomotionMode mode = LocomotionMode::VELOCITY_LOCOMOTION);
 
     /**
      * @brief send command to gazebo controller
