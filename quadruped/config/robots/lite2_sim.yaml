@@ -1,0 +1,50 @@
+name: lite2_sim
+robot_params:
+  body_mass: 10.6
+  body_inertia: [ 0.24, 0, 0, 0, 0.80, 0, 0, 0, 1.0 ]
+  body_height: 0.30
+  hip_l: 0.081
+  upper_l: 0.18
+  lower_l: 0.19
+
+  velocity:  
+    com_offset: [ 0.046396,-0.0017592,0.028665] # vel mode
+  position:
+    com_offset: [ -0.005, 0.0024, 0.000515 ] # pos mode
+  walk:
+    com_offset: [ -0.005, 0.0012, 0.000515 ] # walk mode
+    # com_offset: [ -0.01, 0.003, 0.000515 ] # mpc/walk
+  hip_offset: [ [ 0.175, -0.055, 0. ],
+                [ 0.175, 0.055, 0. ],
+                [ -0.175, -0.055, 0. ],
+                [ -0.175, 0.055, 0. ] ]
+  default_hip_positions: [ [ 0.175, -0.135, 0 ],
+                           [ 0.175, 0.135, 0 ],
+                           [ -0.175, -0.135, 0 ],
+                           [ -0.175, 0.135, 0 ] ]
+  default_standup_angle:
+    ab: 0
+    hip: -0.628
+    knee: 1.36
+
+  default_sitdown_angle:
+    ab: 0.524
+    hip: -0.901
+    knee: 2.530
+
+motor_params:
+  kps: [ 100,100,100 ]
+  kds: [ 1.0,1.0,1.0 ]
+  joint_directions: [ 1,1,1, 1,1,1, 1,1,1, 1,1,1 ]
+  joint_offsets: [ 0,0,0, 0,0,0, 0,0,0, 0,0,0 ]
+  stand_angle: [ 0,0.67,-1.25 ]
+
+  abad_p: 100.0
+  abad_d: 1.0
+  hip_p: 100.0
+  hip_d: 2.0
+  knee_p: 100.0
+  knee_d: 2.0
+
+# is simulate or not
+is_sim: true

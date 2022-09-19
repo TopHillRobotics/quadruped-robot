@@ -28,6 +28,8 @@
 #include "quadruped/ros/qr_telekeyboard.h"
 #include "quadruped/robots/qr_robot_sim.h"
 #include "quadruped/ros/qr_gazebo_controller_manager.h"
+#include "quadruped/state_estimator/qr_odom_estimator.h"
+
 using namespace std;
 
 int main(int argc, char **argv)
@@ -58,6 +60,10 @@ int main(int argc, char **argv)
 
     // create the quadruped robot.
     qrRobot *quadruped = new qrRobotSim(nh, robotName);
+
+    // add an odometry estimator
+    qrRobotOdometryEstimator* odomEstimator = new qrRobotOdometryEstimator(quadruped, nh);
+
     quadruped->ReceiveObservation();
     std::cout << "BaseOrientation:\n" << quadruped->GetBaseOrientation().transpose() << std::endl;
 
@@ -114,17 +120,16 @@ int main(int argc, char **argv)
             ROS_ERROR("The dog is going down, main function exit.");
             break;
         }
-
+        odomEstimator->PublishOdometry();
         // wait until this step has cost the timestep to synchronizing frequency.
         while (quadruped->GetTimeSinceReset() - startTimeWall < quadruped->timeStep) {}
     }
-    ROS_INFO("Time is up, end now.");
-
     // exit the thread of keyboard receiving.
     keyboard->finish = true;
     std::cout << "Please push any key to exit!" << std::endl;
     keyboardTh.join();
-
+    
+    ROS_INFO("Time is up, end now.");
     ros::shutdown();
     return 0;
 }

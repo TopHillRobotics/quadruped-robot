@@ -3,18 +3,15 @@ project(quadprogpp)
 
 catkin_package(
     INCLUDE_DIRS include
-    LIBRARIES quadprog
+    LIBRARIES quadprogpp
 )
 
 include_directories(include)
 
-add_subdirectory(include/${PROJECT_NAME})
+file(GLOB sources include/${PROJECT_NAME}/*.cc)
+file(GLOB headers include/${PROJECT_NAME}/*.hh)
 
-install(TARGETS quadprog
-  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
-
-install(DIRECTORY include/${PROJECT_NAME}
-        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}/quadprog
-        FILES_MATCHING PATTERN "*.h+")
+set(library_sources ${sources})
+add_library(quadprogpp STATIC ${library_sources} ${headers})
+set_property(TARGET quadprogpp PROPERTY POSITION_INDEPENDENT_CODE 1)
+set_property(TARGET quadprogpp PROPERTY PUBLIC_HEADER ${headers})

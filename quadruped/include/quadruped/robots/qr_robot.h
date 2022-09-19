@@ -153,6 +153,12 @@ public:
         return state.footContact;
     }
 
+
+    inline Eigen::Matrix<float, 3, 1> GetBaseVelocity() const
+    {
+        return state.baseVelocity;
+    }
+
     /**
      * @brief get current time of one step
      * @return time step
@@ -183,16 +189,6 @@ public:
     {
         return timer.GetTimeSinceReset();
     }
-
-    /**
-     * @brief motor angles after robot stands up
-     */
-    Eigen::Matrix<float, 12, 1> standUpMotorAngles; // default motor angle when robot stands.
-
-    /**
-     * @brief motor angles after robot sits down
-     */
-    Eigen::Matrix<float, 12, 1> sitDownMotorAngles;
 
     /**
      * @brief locomotion mode of the robot

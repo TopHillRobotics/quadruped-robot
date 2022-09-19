@@ -110,8 +110,10 @@ source ${your_workspace}/devel/setup.bash
 Second, run the Gazebo simulator and load a robot.
 
 ```
-roslaunch unitree_gazebo normal.launch
+roslaunch unitree_gazebo normal.launch rname:=a1 use_xacro:=true
 ```
+
+In this command, **rname** specifies the robot you use, **use_xacro** means whether you use URDF or XACRO file.
 
 Third, in a new terminal, launch a demo and run the quadruped controller node. Here, a demo helloworld lets the quadruped robot stand up.
 
@@ -119,7 +121,7 @@ Third, in a new terminal, launch a demo and run the quadruped controller node. H
 rosrun demo demo_helloworld
 ```
 
-For more demos, please check out the directory /demos. If you have a robot **YAML** configuration file as long as  **xacro** or **URDF**, you can specify the file location when instantiate the **qrRobotA1Sim** class, or write your own subclass to run your robot and then configure  your xacro and URDF files in **simulation** package, you can try your own robot.
+For more demos, please check out the directory /demos. If you have a robot **YAML** configuration file as long as  **xacro** or **URDF**, you can specify the file location when instantiate the **qrRobotSim** class, or write your own subclass to run your robot and then configure  your xacro and URDF files in **simulation** package, you can try your own robot.
 
 ---
 

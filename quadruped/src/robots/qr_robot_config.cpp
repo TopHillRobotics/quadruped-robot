@@ -43,6 +43,22 @@ void qrRobotConfig::Load(std::string path, LocomotionMode mode)
     hipLength = node["robot_params"]["hip_l"].as<float>();
     upperLegLength = node["robot_params"]["upper_l"].as<float>();
     lowerLegLength = node["robot_params"]["lower_l"].as<float>();
+
+
+    float standUpAbAngle, standUpHipAngle, standUpKneeAngle;
+    standUpAbAngle = node["robot_params"]["default_standup_angle"]["ab"].as<float>();
+    standUpHipAngle = node["robot_params"]["default_standup_angle"]["hip"].as<float>();
+    standUpKneeAngle = node["robot_params"]["default_standup_angle"]["knee"].as<float>();
+    Eigen::Matrix<float, 3, 1> defaultStandUpAngle(standUpAbAngle, standUpHipAngle, standUpKneeAngle);
+    standUpMotorAngles << defaultStandUpAngle, defaultStandUpAngle, defaultStandUpAngle, defaultStandUpAngle;
+        
+    float sitDownAbAngle, sitDownHipAngle, sitDownKneeAngle;
+    sitDownAbAngle = node["robot_params"]["default_sitdown_angle"]["ab"].as<float>();
+    sitDownHipAngle = node["robot_params"]["default_sitdown_angle"]["hip"].as<float>();
+    sitDownKneeAngle = node["robot_params"]["default_sitdown_angle"]["knee"].as<float>();
+    Eigen::Matrix<float, 3, 1> defaultSitDownAngle(sitDownAbAngle, sitDownHipAngle, sitDownKneeAngle);
+    sitDownMotorAngles << defaultSitDownAngle, defaultSitDownAngle, defaultSitDownAngle, defaultSitDownAngle;
+
     isSim = node["is_sim"].as<bool>();
 
     LoadComOffset(mode);

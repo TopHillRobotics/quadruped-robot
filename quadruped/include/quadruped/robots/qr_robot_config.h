@@ -112,6 +112,16 @@ public:
     Eigen::Matrix<float, 3, 4> defaultHipPosition;
 
     /**
+     * @brief motor angles after robot stands up
+     */
+    Eigen::Matrix<float, 12, 1> standUpMotorAngles; // default motor angle when robot stands.
+
+    /**
+     * @brief motor angles after robot sits down
+     */
+    Eigen::Matrix<float, 12, 1> sitDownMotorAngles;
+
+    /**
      * @brief motor position stiffness (unit: N.m/rad )
      */
     Eigen::Matrix<float, 12, 1> motorKps;

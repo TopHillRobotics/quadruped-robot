@@ -35,6 +35,7 @@ qrRobotState::qrRobotState()
     motorVelocities = Eigen::Matrix<float, 12, 1>::Zero();
     footForce << 0.f, 0.f, 0.f, 0.f;
     footContact << 1, 1, 1, 1;
+    baseVelocity << 0.0, 0.0, 0.0;
 }
 
 qrRobotState::qrRobotState(qrRobotConfig* config): qrRobotState()

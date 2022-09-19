@@ -114,6 +114,7 @@ void qrTeleKeyboard::run()
         // receive CTRL + v
         if(key == '\x03' || finish){
             std::cout << "Break from keyboard." << std::endl;
+            finish = false;
             break;
         }
         twMsg.linear.x = moveCmd[0];
