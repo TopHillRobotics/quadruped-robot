@@ -6,19 +6,25 @@
       <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
     </plugin>
   </gazebo>
-  <link name="TORSO">
-    <visual>
-      <origin rpy="-1.570796 3.1415926 3.1415926" xyz="0 0 0"/>
-      <geometry>
-        <mesh filename="package://lite2_description/meshes/TORSO2.dae" />
-      </geometry>
-    </visual>
-    <collision>
-      <geometry>
-        <box size="0.234 0.184 0.08"/>
-      </geometry>
-    </collision>
-  </link>
+  <gazebo reference="imu_link">
+    <gravity>true</gravity>
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>1000</update_rate>
+      <visualize>true</visualize>
+      <topic>__default_topic__</topic>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>trunk_imu</topicName>
+        <bodyName>imu_link</bodyName>
+        <updateRateHZ>1000.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>imu_link</frameName>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
+  </gazebo>
   <!-- Foot contacts. -->
   <gazebo reference="FR_SHANK">
     <sensor name="FR_foot_contact" type="contact">
@@ -157,19 +163,60 @@
     <kp value="1000000.0"/>
     <kd value="1.0"/>
   </gazebo>
-  <link name="INERTIA">
+  <gazebo reference="imu_link">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Red</material>
+  </gazebo>
+<link name="TORSO">
+    <visual>
+      <origin rpy="-1.570796 3.1415926 3.1415926" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://lite2_description/meshes/TORSO2.dae" />
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.234 0.184 0.08"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Torso2Inertia" type="fixed">
+    <parent link="TORSO" />
+    <child link="INERTIA" />
+  </joint>
+<link name="INERTIA">
     <inertial>
       <origin xyz="0.046396 -0.0017592 0.028665" />
       <mass value="5.298" />
       <inertia ixx="0.0095569" ixy="5.9672E-05" ixz="9.3193E-05" iyy="0.014357" iyz="1.9063E-05" izz="0.01949" />
     </inertial>
   </link>
-
-  <joint name="Torso2Inertia" type="fixed">
-    <parent link="TORSO" />
-    <child link="INERTIA" />
+    <joint name="imu_joint" type="fixed">
+    <parent link="TORSO"/>
+    <child link="imu_link"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
   </joint>
-
+  <link name="imu_link">
+    <inertial>
+      <mass value="0.001"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size=".001 .001 .001"/>
+      </geometry>
+    </collision>
+  </link>  
   <link name="FL_HIP">
     <inertial>
       <origin xyz="-0.0047 -0.0091 -0.0018" />

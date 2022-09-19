@@ -8,7 +8,7 @@ robot_params:
   lower_l: 0.19
 
   velocity:  
-    com_offset: [ 0,0,0] # vel mode
+    com_offset: [ 0.046396,-0.0017592,0.028665] # vel mode
   position:
     com_offset: [ -0.005, 0.0024, 0.000515 ] # pos mode
   walk:
