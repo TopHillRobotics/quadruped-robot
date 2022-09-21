@@ -68,7 +68,6 @@ bool stopControllers(ros::NodeHandle &nodeHandle, std::string serviceName) {
 }
 
 bool ResetRobotBySystem(ros::NodeHandle &nodeHandle, std::string robotName) {
-    stopControllers(nodeHandle, "/" + robotName + "_gazebo/controller_manager/switch_controller");
     int deleteModelId = system(std::string("rosservice call gazebo/delete_model '{model_name: " + robotName + "_gazebo}'").c_str());
     ROS_INFO("delete state: %d", deleteModelId);
 
@@ -82,6 +81,8 @@ bool ResetRobotBySystem(ros::NodeHandle &nodeHandle, std::string robotName) {
           "RR_hip_controller RR_thigh_controller RR_calf_controller &").c_str());
     ROS_INFO("controller statu: %d", controllersStateId);
     sleep(1);
+
+    stopControllers(nodeHandle, "/" + robotName + "_gazebo/controller_manager/switch_controller");
     startControllers(nodeHandle, "/" + robotName + "_gazebo/controller_manager/switch_controller");
     return true;
 }

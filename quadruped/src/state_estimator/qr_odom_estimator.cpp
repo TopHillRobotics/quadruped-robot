@@ -24,8 +24,8 @@ void qrRobotOdometryEstimator::PublishOdometry()
 
     double dt = (currentTime - lastTime).toSec();
     double dx, dy;
-    dx = (vX * cos(baseRollPitchYawRate[2]) - vY * sin(baseRollPitchYawRate[2])) * dt;
-    dy = (vX * sin(baseRollPitchYawRate[2]) + vY * cos(baseRollPitchYawRate[2])) * dt;
+    dx = (vX * cos(baserpy[2]) - vY * sin(baserpy[2])) * dt;
+    dy = (vX * sin(baserpy[2]) + vY * cos(baserpy[2])) * dt;
     odomEstimateX += dx;
     odomEstimateY += dy;
     // since all odometry is 6DOF we'll need a quaternion created from yaw
