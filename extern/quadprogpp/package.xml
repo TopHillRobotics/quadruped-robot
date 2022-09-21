@@ -3,7 +3,7 @@
   <name>quadprogpp</name>
   <version>0.1.0</version>
   <description>The Quadprogpp package</description>
-  <maintainer email="sherman@todo.todo">sherman</maintainer>
+  <maintainer email="5121502047@stu.ecnu.edu.cn">sherman</maintainer>
   <license>MIT</license>
   <buildtool_depend>catkin</buildtool_depend>
   <export>

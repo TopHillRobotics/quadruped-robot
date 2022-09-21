@@ -3,7 +3,7 @@
   <name>amd</name>
   <version>0.1.0</version>
   <description>The amd package</description>
-  <maintainer email="shermandozer@todo.todo">shermandozer</maintainer>
+  <maintainer email="5121502047@stu.ecnu.edu.cn">shermandozer</maintainer>
   <license>MIT</license>
   <buildtool_depend>catkin</buildtool_depend>
   <export>
