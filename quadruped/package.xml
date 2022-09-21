@@ -18,12 +18,15 @@
     <exec_depend>tinyekf</exec_depend>
     <exec_depend>quadprogpp</exec_depend>
     <exec_depend>tinynurbs</exec_depend>
+    <depend>amd</depend>
+    <depend>osqp</depend>
     <exec_depend>unitree_legged_sdk</exec_depend>
     <exec_depend>roscpp</exec_depend>
     <exec_depend>roslib</exec_depend>
     <exec_depend>unitree_legged_msgs</exec_depend>
     <depend>tf</depend>
     <depend>nav_msgs</depend>
+
     <export>
     </export>
 </package>
