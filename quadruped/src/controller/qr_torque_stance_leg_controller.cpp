@@ -129,7 +129,7 @@ void qrStanceLegController::VelocityLocomotionProcess(Quat<float> &robotComOrien
     robotComPosition = {0., 0., robot->state.basePosition[2]}; 
     robotComRpy[2] = 0.f;
     // if not horizontal plane then adjust the orientation.
-    if (groundEstimator->terrain.terrainType>=2) { 
+    if (groundEstimator->terrain.terrainType != TerrainType::PLANE) { 
         robotComPosition = math::TransformVecByQuat(math::quatInverse(controlFrameOrientation), robotComPosition);      
         robotComPosition[0] = 0.f;
         robotComPosition[1] = 0.f;
