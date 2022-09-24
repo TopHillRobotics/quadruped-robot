@@ -16,6 +16,7 @@
     <depend>unitree_legged_msgs</depend>
     <depend>amd</depend>
     <depend>osqp</depend>
+    <depend>qpOASES</depend>
     <depend>tf</depend>
     <depend>nav_msgs</depend>
 

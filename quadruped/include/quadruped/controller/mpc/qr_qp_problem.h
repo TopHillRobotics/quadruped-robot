@@ -28,6 +28,7 @@
 #include <vector>
 #include <eigen3/Eigen/SparseCholesky>
 #include <eigen3/Eigen/Sparse>
+
 #include "common/qr_cTypes.h"
 #include "common/qr_algebra.h"
 #include "qr_cholesky_solver.h"
