@@ -1,0 +1,16 @@
+<launch>
+    <arg name="project" default="gammping"/>
+
+    <!-- demo_trot_keyboard_odometry -->
+    <node pkg= "demo" type="demo_publish_odom" name= "demo_publish_odom"/>
+
+    <!--pointcloud_to_laser-->>
+    <include file="$(find slam)/launch/pointcloud_to_laser.launch" />
+    
+    <!--- gmapping -->
+    <include file="$(find slam)/launch/gmapping.launch" />
+
+    <!--- Run Rviz-->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find slam)/rviz/gmapping.rviz"/>
+
+</launch>
