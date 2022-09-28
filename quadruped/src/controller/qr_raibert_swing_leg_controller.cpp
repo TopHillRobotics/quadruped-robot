@@ -197,7 +197,13 @@ void qrSwingLegController::PositionLocomotionProcess(Matrix<float, 3, 1> &footPo
     // transfer foot position to base frame
     footPositionInBaseFrame = math::RigidTransform(robot->state.basePosition,
                                                     robot->state.baseOrientation,
-                                                    footPositionInWorldFrame); 
+                                                   footPositionInWorldFrame);
+}
+
+void qrSwingLegController::UpdateControlParameters(const Vector3f& linSpeed, const float& angSpeed)
+{
+    desiredSpeed = linSpeed;
+    desiredTwistingSpeed = angSpeed;
 }
 
 map<int, Matrix<float, 5, 1>> qrSwingLegController::GetAction()

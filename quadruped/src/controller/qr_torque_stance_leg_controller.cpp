@@ -295,3 +295,10 @@ std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLe
     std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> actionContactForce(action, contactForces);
     return actionContactForce;
 }
+
+
+void qrStanceLegController::UpdateControlParameters(const Eigen::Vector3f& linSpeed, const float& angSpeed)
+{
+    desiredSpeed = linSpeed;
+    desiredTwistingSpeed = angSpeed;
+}

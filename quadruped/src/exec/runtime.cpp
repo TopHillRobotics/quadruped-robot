@@ -56,17 +56,6 @@ qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir,
 
     std::cout << "init swingLegController finish\n" << std::endl;
 
-//    qrStanceLegController *stanceLegController = new qrStanceLegController(quadruped,
-//                                                                           gaitGenerator,
-//                                                                           stateEstimator,
-//                                                                           groundEsitmator,
-//                                                                           comPlanner,
-//                                                                           footholdPlanner,
-//                                                                           desiredSpeed,
-//                                                                           desiredTwistingSpeed,
-//                                                                           quadruped->config->bodyHeight,
-//                                                                           qrRobotConfig::numLegs,
-//                                                                           homeDir + "/config/stance_leg_controller.yaml");
     qrStanceLegController *stanceLegController = qrStanceLegController::createStanceController(
           quadruped,
           gaitGenerator,
@@ -94,13 +83,10 @@ qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir,
     std::cout << "init locomotionController finish\n" << std::endl;
 
     return locomotionController;
-
 }
 
 void updateControllerParams(qrLocomotionController *controller, Eigen::Vector3f linSpeed, float angSpeed)
 {
-    controller->swingLegController->desiredSpeed = linSpeed;
-    controller->swingLegController->desiredTwistingSpeed = angSpeed;
-    controller->stanceLegController->desiredSpeed = linSpeed;
-    controller->stanceLegController->desiredTwistingSpeed = angSpeed;
+    controller->swingLegController->UpdateControlParameters(linSpeed, angSpeed);
+    controller->stanceLegController->UpdateControlParameters(linSpeed, angSpeed);
 }
