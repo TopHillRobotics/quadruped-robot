@@ -56,7 +56,8 @@ enum SubLegState { // for walk
 enum LocomotionMode {
     VELOCITY_LOCOMOTION,
     POSITION_LOCOMOTION,
-    WALK_LOCOMOTION
+    WALK_LOCOMOTION,
+    ADVANCED_TROT_LOCOMOTION
 };
 
 enum TerrainType {

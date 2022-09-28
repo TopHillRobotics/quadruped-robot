@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
         unitree_legged_sdk
         amd
         osqp
+        qpOASES
         tinyekf
         quadprogpp
         tinynurbs

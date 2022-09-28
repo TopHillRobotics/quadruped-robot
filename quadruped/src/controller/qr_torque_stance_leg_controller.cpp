@@ -24,7 +24,10 @@
 
 #include "controller/qr_torque_stance_leg_controller.h"
 #include "controller/qr_qp_torque_optimizer.h"
+
 using namespace std;
+
+extern std::unordered_map<int, std::string> modeMap;
 
 qrStanceLegController::qrStanceLegController(qrRobot *robot,
                                             qrGaitGenerator *gaitGenerator,
@@ -56,9 +59,6 @@ qrStanceLegController::qrStanceLegController(qrRobot *robot,
 
 void qrStanceLegController::Reset(float currentTime_)
 {   
-    std::unordered_map<int, std::string> modeMap = {{0, "velocity"}, 
-                                                    {1, "position"}, 
-                                                    {2, "walk"}};
     string controlModeStr;
     if (modeMap.count(robot->locomotionMode) > 0) {
         controlModeStr = modeMap[robot->locomotionMode];
