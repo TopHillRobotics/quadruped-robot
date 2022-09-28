@@ -787,8 +787,11 @@ void qrMITConvexMPCStanceLegController::UpdateDesCommand()
 void qrMITConvexMPCStanceLegController::UpdateControlParameters(const Eigen::Vector3f& linSpeed, const float &angSpeed)
 {
     qrStanceLegController::UpdateControlParameters(linSpeed, angSpeed);
-    stateDes.segment(6, 3) = linSpeed;
-    stateDes(11) = angSpeed;
+
+    float filterFactor = 0.02f;
+
+    stateDes.segment(6, 3) = stateDes.segment(6, 3) * (1.0f - filterFactor) + linSpeed * filterFactor;
+    stateDes(11) = stateDes(11) * (1.0f - filterFactor) + angSpeed * filterFactor;
 }
 
 void qrMITConvexMPCStanceLegController::initStateDes()
