@@ -13,7 +13,7 @@
     <!-- Debug mode will hung up the robot, use "true" or "false" to switch it. -->
     <arg name="user_debug" default="false"/>
     <arg name="use_camera" default="false"/>
-    <arg name="use_laser" default="false"/>
+    <arg name="use_lidar" default="false"/>
     <arg name="use_gps" default="false"/>
     <arg name="use_xacro" default="true"/>
     
@@ -32,7 +32,7 @@
             command="$(find xacro)/xacro --inorder '$(arg dollar)$(arg robot_path)/xacro/robot.xacro' 
             DEBUG:=$(arg user_debug)
             USE_CAMERA:=$(arg use_camera)
-            USE_LASER:=$(arg use_laser)
+            USE_LIDAR:=$(arg use_lidar)
             USE_GPS:=$(arg use_gps)"/>
     </group>
     <group unless="$(arg use_xacro)">

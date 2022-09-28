@@ -11,7 +11,7 @@
         <xacro:include filename="$(find a1_description)/xacro/realsense_d435.xacro"/>
     </xacro:if> 
 
-    <xacro:if value="$(arg USE_LASER)">
+    <xacro:if value="$(arg USE_LIDAR)">
         <xacro:include filename="$(find a1_description)/xacro/VLP-16.xacro"/>
     </xacro:if> 
 
@@ -175,7 +175,7 @@
         </xacro:realsense_d435>
     </xacro:if> 
 
-    <xacro:if value="$(arg USE_LASER)">
+    <xacro:if value="$(arg USE_LIDAR)">
         <xacro:VLP-16 sensor_name="velodyne" parent= "trunk" rate= "15">
             <origin rpy="0 0 0 " xyz="0 0 0.055"/>
         </xacro:VLP-16>
