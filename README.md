@@ -1,6 +1,6 @@
 # 1. Overview
 
-This project provides an architecture and some key algorithms to control quadruped robots, including state estimator, gait generator, stance and swing leg controllers. 
+This project provides an architecture and a few key algorithms to control quadruped robots, including state estimator, gait generator, stance and swing leg controllers. 
 This project supports three control modes
 
 - **velocity mode** allows a user to control the robot's linear and angular velocity.
@@ -135,6 +135,6 @@ You can help to ensure your issue gets fixed if you provide sufficient detail.
 
 # 6. Documentation
 
-There is also a [readthedocs](https://quadruped-robot-docs.readthedocs.io/en/main/index.html)  for the helps, tutorials, demo explanation. 
+Check out the [readthedocs](https://quadruped-robot-docs.readthedocs.io/en/main/index.html)  for helps, tutorials, demo explanation. 
 
 ---
