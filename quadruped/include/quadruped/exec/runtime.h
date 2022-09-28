@@ -50,9 +50,10 @@ float footClearance = 0.01f;
  * @brief Launch all controllers, planners  and esimators.
  * @param quadruped Pointer to A1Robot.
  * @param homeDir Package path.
+ * @param useMPC: whether to use MPC
  * @return pointer to qrLocomotionController.
  */
-qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir);
+qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, bool useMPC = false);
 
 /** 
  * @brief Setup the desired speed for robot.

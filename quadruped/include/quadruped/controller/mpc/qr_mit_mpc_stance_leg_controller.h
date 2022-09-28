@@ -106,7 +106,7 @@ class MITTimer {
   struct timespec _startTime;
 };
 
-class qrMITConvexMPCStanceLegController: qrStanceLegController {
+class qrMITConvexMPCStanceLegController: public qrStanceLegController {
 
 public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -135,6 +135,9 @@ public:
     bool currently_jumping = false;
     Vec4<float> contact_state;
     Eigen::Matrix<float, Eigen::Dynamic, 4, Eigen::RowMajor> _mpcTable;
+
+
+    void initStateDes();
 
 private:
     void _SetupCommand();

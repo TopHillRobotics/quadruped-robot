@@ -81,7 +81,7 @@
             <axis xyz="0 1 0"/>
             <dynamics damping="${damping}" friction="${friction}"/>
             <limit effort="${thigh_torque_max}" velocity="${thigh_velocity_max}" lower="${thigh_min*PI/180.0}" upper="${thigh_max*PI/180.0}"/>
-        </joint>
+        </joint>r
 
         <link name="${name}_thigh">
             <visual>

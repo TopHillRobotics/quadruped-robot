@@ -33,6 +33,7 @@
 #include "planner/qr_com_planner.h"
 #include "planner/qr_foothold_planner.h"
 
+
 /**
  * @brief Control stance leg of robot
  */
@@ -66,6 +67,26 @@ public:
                           int numLegs,
                           std::string configFilepath,
                           std::vector<float> frictionCoeffs = {0.45, 0.45, 0.45, 0.45});
+
+
+    /**
+     * @brief factory function for stance controller
+     * @param useMPC: whether use model predictive control
+     * @return stance controller
+     */
+    static qrStanceLegController* createStanceController(qrRobot *robot,
+                                                         qrGaitGenerator *gaitGenerator,
+                                                         qrRobotEstimator *robotEstimator,
+                                                         qrGroundSurfaceEstimator *groundEstimatorIn,
+                                                         qrComPlanner *comPlanner,
+                                                         qrFootholdPlanner *footholdPlanner,
+                                                         Eigen::Matrix<float, 3, 1> desiredSpeed,
+                                                         float desiredTwistingSpeed,
+                                                         float desiredBodyHeight,
+                                                         int numLegs,
+                                                         std::string configFilepath,
+                                                         std::vector<float> frictionCoeffs,
+                                                         bool useMPC);
 
     /**
      * @brief Default desconstructor of qrStanceLegController
@@ -179,7 +200,7 @@ public:
     /**
      * @brief Desired robot's body height. Overwrite in the class constructor by robot->bodyHeight
      */
-    float desiredBodyHeight = 0.45; //overwrite in the class constructor by robot->bodyHeight
+    float desiredBodyHeight = 0.28; //overwrite in the class constructor by robot->bodyHeight
     
     /**
      * @brief The number of legs.
