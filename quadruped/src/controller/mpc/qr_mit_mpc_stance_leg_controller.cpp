@@ -44,6 +44,7 @@ qrMITConvexMPCStanceLegController::qrMITConvexMPCStanceLegController(
     // std::cout << "Xweight = " <<XWeight << std::endl;
     //std::cout << "controlModeStr " << controlModeStr <<  param["stance_leg_params"][controlModeStr]["Q"] << std::endl;
     // if use advanced trot, use Q matrix
+    std::cout << "MPC path:" << configFilepath << std::endl;
     YAML::Node param = YAML::LoadFile(configFilepath);
     std::vector<float> QIN =
         param["stance_leg_params"][modeMap[LocomotionMode::ADVANCED_TROT_LOCOMOTION]]["Q"].as<std::vector<float>>();
@@ -55,6 +56,7 @@ qrMITConvexMPCStanceLegController::qrMITConvexMPCStanceLegController(
     for(u8 i(0); i<12; ++i) {
         Q[i] = QIN[i];
     }
+    initStateDes();
 }
 
 void qrMITConvexMPCStanceLegController::Reset(float t)
@@ -665,28 +667,28 @@ void qrMITConvexMPCStanceLegController::UpdateDesCommand()
 
    //TODO: currently, set world frame to true
    bool computeForceInWorldFrame = true;
-           if (computeForceInWorldFrame) {
-               robotComPosition = {0., 0., robot->GetBasePosition()[2]}; // vel mode in base frame, height is in world frame.
-               // robotComRpy[2] = 0.f;
-               robotComVelocity = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComVelocity); // in world frame
-               robotComRpyRate = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComRpyRate); // in world frame
-           } else { // in control frame
-               robotComPosition = {0., 0., robot->GetBasePosition()[2]}; // vel mode in base frame, height is in world frame.
-               robotComRpy[2] = 0.f;
-               if (groundEstimator->terrain.terrainType>=2) { // not horizontal plane
-                   robotComPosition = math::TransformVecByQuat(math::quatInverse(controlFrameOrientation), robotComPosition);
-                   robotComPosition[0] = 0.f;
-                   robotComPosition[1] = 0.f;
-                   robotComPosition = {0., 0., robot->config->bodyHeight}; // vel mode in base frame, height is in world frame.
+   if (computeForceInWorldFrame) {
+       robotComPosition = {0., 0., robot->GetBasePosition()[2]}; // vel mode in base frame, height is in world frame.
+       // robotComRpy[2] = 0.f;
+       robotComVelocity = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComVelocity); // in world frame
+       robotComRpyRate = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComRpyRate); // in world frame
+   } else { // in control frame
+       robotComPosition = {0., 0., robot->GetBasePosition()[2]}; // vel mode in base frame, height is in world frame.
+       robotComRpy[2] = 0.f;
+       if (groundEstimator->terrain.terrainType>=2) { // not horizontal plane
+           robotComPosition = math::TransformVecByQuat(math::quatInverse(controlFrameOrientation), robotComPosition);
+           robotComPosition[0] = 0.f;
+           robotComPosition[1] = 0.f;
+           robotComPosition = {0., 0., robot->config->bodyHeight}; // vel mode in base frame, height is in world frame.
 
-                   robotComVelocity = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComVelocity); // in world frame
-                   robotComVelocity = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComVelocity); // in control frame
+           robotComVelocity = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComVelocity); // in world frame
+           robotComVelocity = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComVelocity); // in control frame
 
-                   robotComRpy = math::rotationMatrixToRPY(Rcb.transpose()); // body orientation in control frame.
-                   robotComRpyRate = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComRpyRate); // in world frame
-                   robotComRpyRate = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComRpyRate); // in control frame
-               }
-           }
+           robotComRpy = math::rotationMatrixToRPY(Rcb.transpose()); // body orientation in control frame.
+           robotComRpyRate = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComRpyRate); // in world frame
+           robotComRpyRate = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComRpyRate); // in control frame
+       }
+   }
 
            // robotComPosition = robotics::math::invertRigidTransform({0,0,0}, robotComOrientation, robotComPosition); // in world frame
            // robotComPosition = robotics::math::RigidTransform({0,0,0}, controlFrameOrientation, robotComPosition); // in control frame
@@ -696,47 +698,47 @@ void qrMITConvexMPCStanceLegController::UpdateDesCommand()
    robotDq << robotComVelocity, robotComRpyRate;
    // std::cout << "[torque stance]: des command = " << desiredStateCommand->stateDes << std::endl;
    /// desired robot status  ///
-           if (computeForceInWorldFrame) {
-               auto &comAdjPosInBaseFrame = comPlanner->GetComPosInBaseFrame();
-               Vec3<float> newComPosInWorldFrame = Rb * comAdjPosInBaseFrame + robot->GetBasePosition();
-               desiredComPosition = {newComPosInWorldFrame[0], newComPosInWorldFrame[1], stateDes(2)}; // todo
+   if (computeForceInWorldFrame) {
+       auto &comAdjPosInBaseFrame = comPlanner->GetComPosInBaseFrame();
+       Vec3<float> newComPosInWorldFrame = Rb * comAdjPosInBaseFrame + robot->GetBasePosition();
+       desiredComPosition = {newComPosInWorldFrame[0], newComPosInWorldFrame[1], stateDes(2)}; // todo
 
-               // desiredComPosition << 0, 0, desiredStateCommand->stateDes(2);
-               float pitch = groundRPY[1];
-               float pitchMax = 0.5;
-               if (abs(pitch) < 0.1) {
-                   pitch = 0;
-               } else if (pitch > pitchMax) {
-                   pitch = pitchMax;
-               } else if (pitch < -pitchMax) {
-                   pitch = -pitchMax;
-               }
-               desiredComRpy << 0.f, pitch, 0.f;
-               // std::cout << "pitch = " << pitch << std::endl;
-               Eigen::Matrix<float,3,4> footPosInBaseFrame = robot->state.GetFootPositionsInBaseFrame();
-               float scaleFactor = 1;
-               // Eigen::Matrix<float,3,4> com2FootInWorldFrame = footPoseWorld.colwise() - robot->basePosition;
-               float footX = std::min(footPosInBaseFrame(0, 0), footPosInBaseFrame(0, 1));
-               if (footX < 0.1) {
-                   scaleFactor = std::max(0.1f, footX / 0.1f);
-               }
-               // std::cout << "scaleFactor = " << scaleFactor << std::endl;
-               // is com in support polygon ?
-               // todo
+       // desiredComPosition << 0, 0, desiredStateCommand->stateDes(2);
+       float pitch = groundRPY[1];
+       float pitchMax = 0.5;
+       if (abs(pitch) < 0.1) {
+           pitch = 0;
+       } else if (pitch > pitchMax) {
+           pitch = pitchMax;
+       } else if (pitch < -pitchMax) {
+           pitch = -pitchMax;
+       }
+       desiredComRpy << 0.f, pitch, 0.f;
+       // std::cout << "pitch = " << pitch << std::endl;
+       Eigen::Matrix<float,3,4> footPosInBaseFrame = robot->state.GetFootPositionsInBaseFrame();
+       float scaleFactor = 1;
+       // Eigen::Matrix<float,3,4> com2FootInWorldFrame = footPoseWorld.colwise() - robot->basePosition;
+       float footX = std::min(footPosInBaseFrame(0, 0), footPosInBaseFrame(0, 1));
+       if (footX < 0.1) {
+           scaleFactor = std::max(0.1f, footX / 0.1f);
+       }
+       // std::cout << "scaleFactor = " << scaleFactor << std::endl;
+       // is com in support polygon ?
+       // todo
 
-               desiredComVelocity = (scaleFactor * stateDes.segment(6,3)); // in base
-               if (pitch < 0.1 && desiredComVelocity[2] > 0.01) {
-                   desiredComPosition[2] += 0.04 * abs(pitch/pitchMax); // todo
-               }
-               desiredComAngularVelocity = stateDes.segment(9,3); // in base
-           } else { // in control frame
-               desiredComPosition << 0.f, 0.f, desiredBodyHeight*std::abs(std::cos(groundRPY[1]));
-               desiredComPosition[2] = robotComPosition[2]*0.7 + desiredComPosition[2]*0.3;
-               desiredComRpy << -groundRPY[0], 0.f, -groundRPY[2]; // not control roll/yaw
-               desiredComVelocity = {desiredSpeed[0], desiredSpeed[1], 0.f}; // in base/control frame
-               desiredComVelocity = Rc * desiredComVelocity;
-               desiredComAngularVelocity = {0.f, 0.f, desiredTwistingSpeed};
-           }
+       desiredComVelocity = (scaleFactor * stateDes.segment(6,3)); // in base
+       if (pitch < 0.1 && desiredComVelocity[2] > 0.01) {
+           desiredComPosition[2] += 0.04 * abs(pitch/pitchMax); // todo
+       }
+       desiredComAngularVelocity = stateDes.segment(9,3); // in base
+   } else { // in control frame
+       desiredComPosition << 0.f, 0.f, desiredBodyHeight*std::abs(std::cos(groundRPY[1]));
+       desiredComPosition[2] = robotComPosition[2]*0.7 + desiredComPosition[2]*0.3;
+       desiredComRpy << -groundRPY[0], 0.f, -groundRPY[2]; // not control roll/yaw
+       desiredComVelocity = {desiredSpeed[0], desiredSpeed[1], 0.f}; // in base/control frame
+       desiredComVelocity = Rc * desiredComVelocity;
+       desiredComAngularVelocity = {0.f, 0.f, desiredTwistingSpeed};
+   }
 
    desiredQ << desiredComPosition, desiredComRpy;
    //std::cout << "desiredQ" << desiredQ.transpose() << std::endl;
@@ -776,4 +778,18 @@ void qrMITConvexMPCStanceLegController::UpdateDesCommand()
    stateCur << robotQ, robotDq;
    //ddqDes.head(6) = desiredDdq;
    // std::cout << "contact for force compute " << contacts.transpose() << std::endl;
+}
+
+void qrMITConvexMPCStanceLegController::initStateDes()
+{
+    stateDes.segment(6, 3) = desiredSpeed;
+    stateDes(0) = dt * stateDes(6);
+    stateDes(1) = dt * stateDes(7);
+    stateDes(2) = desiredBodyHeight;
+    stateDes(3) = 0.0f;
+    stateDes(4) = 0.0f;
+    stateDes(5) = dt * desiredTwistingSpeed;
+    stateDes(9) = 0.0f;
+    stateDes(10) = 0.0f;
+    stateDes(11) = desiredTwistingSpeed;
 }
