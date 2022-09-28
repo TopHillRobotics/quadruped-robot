@@ -130,7 +130,7 @@ void qrGaitGenerator::Update(float currentTime)
 {
     this->ModifyGait();
     Eigen::Matrix<bool, 4, 1> contactState = robot->GetFootContacts();
-    float fullCyclePeriod, augmentedTime, phaseInFullCycle, ratio;
+    float fullCyclePeriod, augmentedTime, ratio;
 
     for (int legId = 0; legId < initialLegState.size(); legId++) {
         if (initialLegState[legId] == LegState::USERDEFINED_SWING) {
@@ -147,16 +147,16 @@ void qrGaitGenerator::Update(float currentTime)
         
         fullCyclePeriod = stanceDuration[legId] / dutyFactor[legId];
         augmentedTime = initialLegPhase[legId] * fullCyclePeriod + currentTime;
-        phaseInFullCycle = fmod(augmentedTime, fullCyclePeriod) / fullCyclePeriod;
+        phaseInFullCycle[legId] = fmod(augmentedTime, fullCyclePeriod) / fullCyclePeriod;
         
         ratio = initStateRadioInCycle[legId];
-        if (phaseInFullCycle < ratio) {
+        if (phaseInFullCycle[legId] < ratio) {
             desiredLegState[legId] = initialLegState[legId];
-            normalizedPhase[legId] = phaseInFullCycle / ratio;
+            normalizedPhase[legId] = phaseInFullCycle[legId] / ratio;
             
         } else {
             desiredLegState[legId] = nextLegState[legId];
-            normalizedPhase(legId) = (phaseInFullCycle - ratio) / (1 - ratio);
+            normalizedPhase(legId) = (phaseInFullCycle[legId] - ratio) / (1 - ratio);
         }
         
         legState[legId] = desiredLegState[legId];

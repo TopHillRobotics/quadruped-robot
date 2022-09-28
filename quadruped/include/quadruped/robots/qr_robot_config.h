@@ -194,6 +194,7 @@ public:
                                                 Eigen::Matrix<float, 3, 1> legAngles,
                                                 Eigen::Matrix<float, 3, 1> footLocalVelocity);
 
+
 private:
 
     /**

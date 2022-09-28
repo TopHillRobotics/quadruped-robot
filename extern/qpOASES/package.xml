@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>qpOASES</name>
+  <version>0.1.0</version>
+  <description>The qpOASES package</description>
+  <maintainer email="5121502047@stu.ecnu.edu.cn">sherman</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <export>
+  </export>
+</package>
