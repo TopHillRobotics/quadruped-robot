@@ -1,12 +1,12 @@
 # 1.Overview
 
-This navigation package provides the functions of robot simultaneous localization and mapping (SLAM) and autonomous navigation, and is being updated 
+This navigation package provides the functions of robot simultaneous localization and mapping (SLAM) and autonomous navigation.
 
 Here some pictures in simulation
 
 <p align="left">
-    <image src = "media/gmapping_demo.png" height = "300"/>
-    <image src = "media/cartographer_demo.png" height = "300"/>
+    <image src = "https://github.com/TopHillRobotics/quadruped-robot/blob/develop/media/gmapping_demo.png" height = "300"/>
+    <image src = "https://github.com/TopHillRobotics/quadruped-robot/blob/develop/media/cartographer_demo.png" height = "300"/>
 </p>
 
 # 2. Source Code Structure
@@ -15,7 +15,7 @@ This source code include four directories
 
 - **sensor_gazebo_plugin** contains some sensor gazebo_plugin
 
-- **slam** contains some slam demos of some basic frameworks, such as radar-based gmapping, cartographer, as well as tests and configuration files for the current mainstream SLAM frameworks. Such as vision-based ORB-SLAM2, vision and IMU fusion ORB-SLAM3, radar, IMU,gps fusion LIO-SAM, radar, vision, IMU fusion LVI-SAM, etc.
+- **slam** contains some slam demos of some basic frameworks, such as radar-based gmapping, cartographer, as well as tests and configuration files for the current mainstream SLAM frameworks. Such as vision-based ORB-SLAM2, vision and IMU fusion ORB-SLAM3, radar, IMU and gps fusion LIO-SAM, radar, vision and IMU fusion LVI-SAM, etc.
 
 - **navigation** Contains some demos for path planning and autonomous navigation.
 
