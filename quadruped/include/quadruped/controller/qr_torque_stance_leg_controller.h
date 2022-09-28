@@ -157,6 +157,13 @@ public:
     virtual std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> GetAction();
 
     /**
+     * @brief update linear velocity and angular velocity of controllers
+     * @param linSpeed: linear velocity
+     * @param angSpeed: yaw twist velocity
+     */
+    virtual void UpdateControlParameters(const Eigen::Vector3f& linSpeed, const float& angSpeed);
+
+    /**
      * @brief The robot object pointer.
      */
     qrRobot *robot;

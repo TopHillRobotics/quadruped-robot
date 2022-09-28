@@ -136,6 +136,12 @@ public:
     Vec4<float> contact_state;
     Eigen::Matrix<float, Eigen::Dynamic, 4, Eigen::RowMajor> _mpcTable;
 
+    /**
+     * @brief update linear velocity and angular velocity of controllers
+     * @param linSpeed: linear velocity
+     * @param angSpeed: yaw twist velocity
+     */
+    void UpdateControlParameters(const Eigen::Vector3f& linSpeed, const float& angSpeed) override;
 
     void initStateDes();
 

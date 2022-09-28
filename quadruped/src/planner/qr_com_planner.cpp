@@ -52,7 +52,7 @@ void qrComPlanner ::Reset(float current_time)
 }
 
 // See the MIT paper for details:https://ieeexplore.ieee.org/document/8593885
-Eigen::Matrix<float, 3, 1> qrComPlanner ::Update(float current_time)
+Eigen::Matrix<float, 3, 1> qrComPlanner::Update(float current_time)
 {
 
     legState = gaitGenerator->legState;
