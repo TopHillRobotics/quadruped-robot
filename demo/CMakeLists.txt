@@ -30,10 +30,7 @@ add_executable(demo_trot_joystick demo_trot_joystick/demo_trot_joystick.cpp)
 add_executable(external_force_motion external_force_motion/external_force_motion.cpp)
 add_executable(demo_publish_odom demo_publish_odom/demo_publish_odom.cpp)
 
-add_executable(demo_helloworld_real demo_helloworld_real/demo_helloworld_real.cpp)
-
 target_link_libraries(demo_helloworld ${catkin_LIBRARIES})
-target_link_libraries(demo_helloworld_real ${catkin_LIBRARIES})
 target_link_libraries(demo_trot_velocity ${catkin_LIBRARIES})
 target_link_libraries(demo_trot_velocity_mpc ${catkin_LIBRARIES})
 target_link_libraries(demo_trot_keyboard ${catkin_LIBRARIES})

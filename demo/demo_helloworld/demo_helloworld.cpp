@@ -21,9 +21,10 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-
+#include <typeinfo>
 #include "quadruped/exec/runtime.h"
 #include "quadruped/robots/qr_robot_sim.h"
+#include "quadruped/robots/qr_robot_real.h"
 #include "quadruped/ros/qr_gazebo_controller_manager.h"
 
 int main(int argc, char **argv)
@@ -35,18 +36,26 @@ int main(int argc, char **argv)
     // get the node package path
     std::string pathToPackage = ros::package::getPath("demo");
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
+    std::string robotName = "a1";
+    nh.setParam("isSim", true);
+    qrRobot *quadruped;
+    if(argc == 1 || (argc == 2 && std::string(argv[1]) == "sim")) {
+        nh.getParam("robotName", robotName);
 
-    std::string robotName;
-    nh.getParam("robotName", robotName);
+        // reset the gazebo controller and robot
+        ResetRobotBySystem(nh, robotName);
+        ros::AsyncSpinner spinner(1); // one threads
+        spinner.start();
+        ROS_INFO("---------finished: ROS, Gazebo controller and loading robot model---------");
+        
+        // create a quadruped robot.
+        quadruped = new qrRobotSim(nh, robotName, LocomotionMode::VELOCITY_LOCOMOTION);
+    
+    } else if(argc == 2 && std::string(argv[1]) == "real"){
+        nh.setParam("isSim", false);
+        quadruped = new qrRobotReal(robotName, LocomotionMode::VELOCITY_LOCOMOTION);
+    }
 
-    // reset the gazebo controller and robot
-    ResetRobotBySystem(nh, robotName);
-    ros::AsyncSpinner spinner(1); // one threads
-    spinner.start();
-    ROS_INFO("---------finished: ROS, Gazebo controller and loading robot model---------");
-
-    // create a quadruped robot.
-    qrRobot *quadruped = new qrRobotSim(nh, robotName, LocomotionMode::VELOCITY_LOCOMOTION);
     quadruped->ReceiveObservation();
 
     // perform the first action: standing up
@@ -59,7 +68,7 @@ int main(int argc, char **argv)
     float startTimeWall = startTime;
 
     // keep the quadruped robot standing for 20.0 seconds and 0.001 is the time step
-    Action::KeepStand(quadruped, 20.f, 0.001f);
+    Action::KeepStand(quadruped, 5.f, 0.001f);
     
     // let the quadruped robot sit down. It takes 3 seconds to finish the action.
     Action::SitDown(quadruped, 3.f, 0.001f);

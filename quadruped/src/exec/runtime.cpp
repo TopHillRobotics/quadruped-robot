@@ -24,14 +24,17 @@
 
 #include "exec/runtime.h"
 
-qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, bool useMPC)
+qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, ros::NodeHandle &nh, bool useMPC)
 {
     qrGaitGenerator *gaitGenerator;
-    gaitGenerator = new qrGaitGenerator(quadruped, homeDir + "/config/openloop_gait_generator.yaml");
+    bool isSim;
+    nh.getParam("isSim", isSim);
+    std::string prefix = isSim ? "sim" : "real";
+    gaitGenerator = new qrGaitGenerator(quadruped, homeDir + "/" + prefix + "_config/openloop_gait_generator.yaml");
                                                                      
     std::cout << "init gaitGenerator finish\n" << std::endl;
 
-    qrGroundSurfaceEstimator *groundEsitmator = new qrGroundSurfaceEstimator(quadruped, homeDir + "/config/terrain.yaml");
+    qrGroundSurfaceEstimator *groundEsitmator = new qrGroundSurfaceEstimator(quadruped, homeDir + "/" + prefix + "_config/terrain.yaml");
     std::cout << "init groundEsitmator finish\n" << std::endl;
     
     qrRobotEstimator *stateEstimator = new qrRobotEstimator(quadruped, gaitGenerator, groundEsitmator);
@@ -52,7 +55,7 @@ qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir,
                                                                         desiredTwistingSpeed,
                                                                         quadruped->config->bodyHeight,
                                                                         0.01f,
-                                                                        homeDir + "/config/swing_leg_controller.yaml");
+                                                                        homeDir + "/" + prefix + "_config/swing_leg_controller.yaml");
 
     std::cout << "init swingLegController finish\n" << std::endl;
 
@@ -67,7 +70,7 @@ qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir,
           desiredTwistingSpeed,
           quadruped->config->bodyHeight,
           qrRobotConfig::numLegs,
-          homeDir + "/config/stance_leg_controller.yaml",
+          homeDir + "/" + prefix + "_config/stance_leg_controller.yaml",
           std::vector<float>{0.45f, 0.45f, 0.45f, 0.45f},
           useMPC);
     std::cout << "init stanceLegController finish\n" << std::endl;

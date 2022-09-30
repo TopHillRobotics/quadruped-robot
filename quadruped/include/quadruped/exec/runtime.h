@@ -53,7 +53,7 @@ float footClearance = 0.01f;
  * @param useMPC: whether to use MPC
  * @return pointer to qrLocomotionController.
  */
-qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, bool useMPC = false);
+qrLocomotionController *setUpController(qrRobot *quadruped, std::string homeDir, ros::NodeHandle &nh, bool useMPC = false);
 
 /** 
  * @brief Setup the desired speed for robot.
