@@ -290,14 +290,14 @@ void qrMITConvexMPCStanceLegController::run(std::map<int, qrMotorCommand>& legCo
 //    Vec12<float> baseStartState = footholdPlanner->firstSwingBaseState;
 
 //    for (u8 axis(0); axis<2; ++axis) {
-//        // auto sPoint = robotics::math::Spline::Point(0, 0, 0);
-//        // auto ePoint = robotics::math::Spline::Point(0.2, 0.1, 0);
+//        // auto sPoint = math::Spline::Point(0, 0, 0);
+//        // auto ePoint = math::Spline::Point(0.2, 0.1, 0);
 //        auto sPoint = math::Spline::Point(baseStartState[axis], baseStartState[3+axis], 0.05);
 //        auto ePoint = math::Spline::Point(comDestination[axis], v_des_world[axis], 0.05);
 //        res.x = (1-t) *sPoint.x + t* ePoint.x;
 //        res.xd = ePoint.xd;
 //        // res.xd = ePoint.xd;
-//        // auto spline = robotics::math::FifthOrderPolySpline(st, et, sPoint, ePoint);
+//        // auto spline = math::FifthOrderPolySpline(st, et, sPoint, ePoint);
 
 //        // for (t = 0; t < et+0.01; t+=0.01) {
 
@@ -690,8 +690,8 @@ void qrMITConvexMPCStanceLegController::UpdateDesCommand()
         }
     }
 
-    // robotComPosition = robotics::math::invertRigidTransform({0,0,0}, robotComOrientation, robotComPosition); // in world frame
-    // robotComPosition = robotics::math::RigidTransform({0,0,0}, controlFrameOrientation, robotComPosition); // in control frame
+    // robotComPosition = math::invertRigidTransform({0,0,0}, robotComOrientation, robotComPosition); // in world frame
+    // robotComPosition = math::RigidTransform({0,0,0}, controlFrameOrientation, robotComPosition); // in control frame
 
     robotQ << robotComPosition, robotComRpy;//world frame
     robotDq << robotComVelocity, robotComRpyRate;
@@ -752,18 +752,18 @@ void qrMITConvexMPCStanceLegController::UpdateDesCommand()
 //   if (computeForceInWorldFrame && robot->controlParams["mode"]!=LocomotionMode::ADVANCED_TROT) {
 //       // dq
 //       // method 1: R(dR^T-->rpy)
-//       Mat3<float> robotR = robotics::math::rpyToRotMat(robotComRpy).transpose();
-//       Mat3<float> desiredRobotRT = robotics::math::rpyToRotMat(desiredComRpy);
+//       Mat3<float> robotR = math::rpyToRotMat(robotComRpy).transpose();
+//       Mat3<float> desiredRobotRT = math::rpyToRotMat(desiredComRpy);
 //       Mat3<float> dR = desiredRobotRT*robotR;
-//       dq.tail(3) = robotR * robotics::math::rotationMatrixToRPY(dR);
+//       dq.tail(3) = robotR * math::rotationMatrixToRPY(dR);
 //       //  method 2:   (R*dR)^T --> rpy
-//       // dq.tail(3) = robotics::math::rotationMatrixToRPY(robotR * dR);
+//       // dq.tail(3) = math::rotationMatrixToRPY(robotR * dR);
 
 //       // ddq
 //       // method 1 : R*((/hat(WBdes) - /hat(WBcurr))---> to skewV)
-//       Mat3<float> RTWdes = robotics::math::vectorToSkewMat(desiredRobotRT *  desiredComAngularVelocity);
-//       Mat3<float> RTWcur = robotics::math::vectorToSkewMat(robotR.transpose() *  robotComRpyRate);
-//       Vec3<float> dw = robotR * robotics::math::matToSkewVec(RTWdes - RTWcur);
+//       Mat3<float> RTWdes = math::vectorToSkewMat(desiredRobotRT *  desiredComAngularVelocity);
+//       Mat3<float> RTWcur = math::vectorToSkewMat(robotR.transpose() *  robotComRpyRate);
+//       Vec3<float> dw = robotR * math::matToSkewVec(RTWdes - RTWcur);
 //       ddq.tail(3) =  dw;
 //       // method 2: do nothing
 //   } else if(groundEstimator->terrain.terrainType >= 2) { // not horizontal ground, computeForceInControlFrame

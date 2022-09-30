@@ -145,7 +145,7 @@ void SparseCMPC::buildCT() {
   // loop over trajectory
   for(u32 i = 0; i < _trajectoryLength; i++) {
     // rotation from world into yaw frame
-    //Mat3<double> Ryaw = robotics::math::coordinateRotation(robotics::math::CoordinateAxis::Z, _stateTrajectory[i][2]); // todo check
+    //Mat3<double> Ryaw = math::coordinateRotation(math::CoordinateAxis::Z, _stateTrajectory[i][2]); // todo check
     Mat3<double> Ryaw = math::coordinateRotation(math::CoordinateAxis::Z, _rpy0[2]);
 
     // transform inertia to world and invert
