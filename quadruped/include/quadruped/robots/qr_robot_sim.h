@@ -22,8 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef ROBOTS_A1_SIM_H
-#define ROBOTS_A1_SIM_H
+#ifndef QR_ROBOT_SIM_H
+#define QR_ROBOT_SIM_H
 
 #include <ros/ros.h>
 #include <sensor_msgs/Imu.h>
@@ -200,4 +200,4 @@ public:
     ros::Subscriber imuSub;
 };
 
-#endif //ROBOTS_A1_SIM_H
+#endif //QR_ROBOT_SIM_H

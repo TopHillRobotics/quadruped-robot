@@ -24,6 +24,7 @@
 
 #include "controller/qr_torque_stance_leg_controller.h"
 #include "controller/qr_qp_torque_optimizer.h"
+#include "controller/mpc/qr_mit_mpc_stance_leg_controller.h"
 
 using namespace std;
 
@@ -54,7 +55,33 @@ qrStanceLegController::qrStanceLegController(qrRobot *robot,
     this->desiredBodyHeight = desiredBodyHeight;
     this->numLegs = numLegs;
     this->frictionCoeffs = frictionCoeffs;
-    Reset(0.f);
+  Reset(0.f);
+}
+
+qrStanceLegController *qrStanceLegController::createStanceController(qrRobot *robot,
+                                                                     qrGaitGenerator *gaitGenerator,
+                                                                     qrRobotEstimator *robotEstimator,
+                                                                     qrGroundSurfaceEstimator *groundEstimatorIn,
+                                                                     qrComPlanner *comPlanner,
+                                                                     qrFootholdPlanner *footholdPlanner,
+                                                                     Eigen::Matrix<float, 3, 1> desiredSpeed,
+                                                                     float desiredTwistingSpeed,
+                                                                     float desiredBodyHeight,
+                                                                     int numLegs,
+                                                                     std::string configFilepath,
+                                                                     std::vector<float> frictionCoeffs,
+                                                                     bool useMPC)
+{
+    if(!useMPC){
+        return new qrStanceLegController(robot, gaitGenerator, robotEstimator, groundEstimatorIn,
+                                         comPlanner, footholdPlanner, desiredSpeed, desiredTwistingSpeed,
+                                         desiredBodyHeight, numLegs, configFilepath, frictionCoeffs);
+    }
+    else {
+        return new qrMITConvexMPCStanceLegController(robot, gaitGenerator, robotEstimator, groundEstimatorIn,
+                                                     comPlanner, footholdPlanner, desiredSpeed, desiredTwistingSpeed,
+                                                     desiredBodyHeight, numLegs, configFilepath, frictionCoeffs);
+    }
 }
 
 void qrStanceLegController::Reset(float currentTime_)
@@ -267,4 +294,11 @@ std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> qrStanceLe
 
     std::tuple<std::map<int, qrMotorCommand>, Eigen::Matrix<float, 3, 4>> actionContactForce(action, contactForces);
     return actionContactForce;
+}
+
+
+void qrStanceLegController::UpdateControlParameters(const Eigen::Vector3f& linSpeed, const float& angSpeed)
+{
+    desiredSpeed = linSpeed;
+    desiredTwistingSpeed = angSpeed;
 }

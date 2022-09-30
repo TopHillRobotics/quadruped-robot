@@ -30,15 +30,15 @@
 #include <unordered_map>
 #include <Eigen/Dense>
 #include <yaml-cpp/yaml.h>
-
-#include "unitree_legged_sdk/unitree_interface.h"
 #include "config.h"
+#include "unitree_legged_sdk/unitree_interface.h"
 #include "common/qr_enums.h"
 #include "robots/qr_timer.h"
 #include "robots/qr_motor.h"
 #include "common/qr_se3.h"
 #include "qr_robot_config.h"
 #include "qr_robot_state.h"
+
 
 
 /**
@@ -253,6 +253,11 @@ public:
      * @brief default base frame orientation in gazebo
      */
     Eigen::Matrix<float, 4, 1> gazeboBaseOrientation = {1.f,0.f,0.f,0.f}; //robot base orientation in world frame
+
+    /**
+     * @brief robot state interface for real robot
+     */
+    RobotInterface robotInterface;
 
 };
 
