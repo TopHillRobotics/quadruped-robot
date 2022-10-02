@@ -1,10 +1,7 @@
 <launch>  
   
     <param name="/use_sim_time" value="true" />  
-
-    <!-- demo_trot_keyboard -->
-    <node pkg= "demo" type="demo_trot_keyboard" name= "demo_trot_keyboard"/>
-
+    
     <!--pointcloud_to_laser-->
     <include file="$(find slam)/launch/pointcloud_to_laser.launch" />
 
@@ -16,7 +13,7 @@
             -configuration_directory $(find slam)/config/cartographer_config/
             -configuration_basename VLP16.lua"
         output="screen">
-        <remap from="points2" to="/velodyne_points" />
+        <remap from="points2" to="/scan" />
         <remap from="imu" to="/trunk_imu" />
     </node>
     <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
