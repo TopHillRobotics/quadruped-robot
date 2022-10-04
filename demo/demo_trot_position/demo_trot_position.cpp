@@ -41,10 +41,7 @@ int main(int argc, char **argv)
     ros::AsyncSpinner spinner(1); // one threads
     spinner.start();
     nh.setParam("isSim", true);
-
-    // create command receiver to update velocity if changed.
-    qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
-    
+  
     // create a service client to receive the link state from gazebo.
     ros::ServiceClient baseStateClient = nh.serviceClient<gazebo_msgs::GetLinkState>("/gazebo/get_link_state");
     std::cout << "---------Ros Module Init finished---------" << std::endl;
@@ -63,6 +60,8 @@ int main(int argc, char **argv)
         nh.setParam("isSim", false);
         quadruped = new qrRobotReal(robotName, LocomotionMode::POSITION_LOCOMOTION);
     }
+    // create command receiver to update velocity if changed.
+    qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
     quadruped->ReceiveObservation();
 
     /* the quadruped robot stands up.

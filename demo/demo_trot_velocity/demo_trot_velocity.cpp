@@ -42,8 +42,6 @@ int main(int argc, char **argv)
     spinner.start();
     nh.setParam("isSim", true);
 
-    // create command receiver to update velocity if changed.
-    qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
     std::cout << "---------Ros Module Init finished---------" << std::endl;
 
     if(argc == 1 || (argc == 2 && std::string(argv[1]) == "sim")) {
@@ -61,6 +59,8 @@ int main(int argc, char **argv)
         nh.setParam("isSim", false);
         quadruped = new qrRobotReal(robotName, LocomotionMode::VELOCITY_LOCOMOTION);
     }
+    // create command receiver to update velocity if changed.
+    qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
     quadruped->ReceiveObservation();
 
     /* the quadruped robot stands up.

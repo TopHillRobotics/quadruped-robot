@@ -22,6 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include <thread>
+
 #include "quadruped/exec/runtime.h"
 #include "quadruped/ros/qr_msg_convert.h"
 #include "quadruped/robots/qr_robot_sim.h"
@@ -46,9 +48,6 @@ int main(int argc, char **argv)
     // create a convertor for joymsgs.
     std::cout << "Joy start receving..." << std::endl;
     qrJoy2Twist * msgConvert = new qrJoy2Twist(nh, pathToNode);
-
-    // create command receiver to update velocity from joystick.
-    qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
     std::cout << "---------Ros Module Init finished---------" << std::endl;
 
     if(argc == 1 || (argc == 2 && std::string(argv[1]) == "sim")) {
@@ -65,6 +64,9 @@ int main(int argc, char **argv)
         nh.setParam("isSim", false);
         quadruped = new qrRobotReal(robotName, LocomotionMode::VELOCITY_LOCOMOTION);
     }
+    // create command receiver to update velocity from joystick.
+    qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
+    std::thread joystickTh(&qrJoy2Twist::BringUpJoyNode, msgConvert);
     quadruped->ReceiveObservation();
 
     /* the quadruped robot stands up.
@@ -120,6 +122,7 @@ int main(int argc, char **argv)
         // wait until this step has cost the timestep to synchronizing frequency.
         while (quadruped->GetTimeSinceReset() - startTimeWall < quadruped->timeStep) {}
     }
+    joystickTh.join();
     
     ROS_INFO("Time is up, end now.");
     ros::shutdown();

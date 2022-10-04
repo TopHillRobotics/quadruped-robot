@@ -29,7 +29,6 @@
 #include "quadruped/robots/qr_robot_sim.h"
 #include "quadruped/robots/qr_robot_real.h"
 #include "quadruped/ros/qr_gazebo_controller_manager.h"
-using namespace std;
 
 int main(int argc, char **argv)
 {
@@ -49,10 +48,8 @@ int main(int argc, char **argv)
     // start keyboard receiving thread.
     qrTeleKeyboard *keyboard = new qrTeleKeyboard(nh);
     std::cout << "---------Keyboard start receving---------" << std::endl;
-    thread keyboardTh(&qrTeleKeyboard::run, keyboard);
+    std::thread keyboardTh(&qrTeleKeyboard::run, keyboard);
 
-    // create command receiver to update velocity from keyboard.
-    qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
     std::cout << "---------Ros Module Init finished---------" << std::endl;
 
     // create the quadruped robot.
@@ -73,6 +70,8 @@ int main(int argc, char **argv)
         nh.setParam("isSim", false);
         quadruped = new qrRobotReal(robotName, LocomotionMode::VELOCITY_LOCOMOTION);
     }
+    // create command receiver to update velocity from keyboard.
+    qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
     quadruped->ReceiveObservation();
 
     /* the quadruped robot stands up.

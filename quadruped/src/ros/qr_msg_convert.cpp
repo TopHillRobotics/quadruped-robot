@@ -49,3 +49,8 @@ void qrJoy2Twist::JoyCmdCallback(const sensor_msgs::Joy::ConstPtr &joyMsg)
     msg.angular.z = joyMsg->axes[3] * joyCmdVelYawMax;
     twistPublisher.publish(msg);
 }
+
+void qrJoy2Twist::BringUpJoyNode()
+{
+    system(std::string("rosrun joy joy_node -dev /dev/input/js0").c_str());
+}
