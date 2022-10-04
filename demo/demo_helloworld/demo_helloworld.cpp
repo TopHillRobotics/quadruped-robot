@@ -37,8 +37,9 @@ int main(int argc, char **argv)
     std::string pathToPackage = ros::package::getPath("demo");
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
     std::string robotName = "a1";
-    nh.setParam("isSim", true);
     qrRobot *quadruped;
+    nh.setParam("isSim", true);
+    
     if(argc == 1 || (argc == 2 && std::string(argv[1]) == "sim")) {
         nh.getParam("robotName", robotName);
 

@@ -27,6 +27,7 @@
 #include "quadruped/exec/runtime.h"
 #include "quadruped/ros/qr_telekeyboard.h"
 #include "quadruped/robots/qr_robot_sim.h"
+#include "quadruped/robots/qr_robot_real.h"
 #include "quadruped/ros/qr_gazebo_controller_manager.h"
 using namespace std;
 
@@ -39,30 +40,39 @@ int main(int argc, char **argv)
     // get the node package path
     std::string pathToPackage = ros::package::getPath("demo");
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
-    std::string robotName;
-    nh.getParam("robotName", robotName);
+    std::string robotName = "a1";
+    qrRobot *quadruped;
+    nh.setParam("isSim", true);
 
     // start keyboard receiving thread.
     qrTeleKeyboard *keyboard = new qrTeleKeyboard(nh);
     std::cout << "---------Keyboard start receving---------" << std::endl;
     thread keyboardTh(&qrTeleKeyboard::run, keyboard);
 
-    // reset the gazebo controller and robot
-    ros::ServiceClient modelStateClient = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
-    ros::ServiceClient jointStateClient = nh.serviceClient<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
-    ResetRobotByService(nh,  modelStateClient,  jointStateClient, robotName);
-    
-    ros::AsyncSpinner spinner(1); // one threads
-    spinner.start();
-
     // create command receiver to update velocity from keyboard.
     qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
     std::cout << "---------Ros Module Init finished---------" << std::endl;
 
     // create the quadruped robot.
-    qrRobot *quadruped = new qrRobotSim(nh, robotName);
+    if(argc == 1 || (argc == 2 && std::string(argv[1]) == "sim")) {
+        nh.getParam("robotName", robotName);
+
+        // reset the gazebo controller and robot
+        ros::ServiceClient modelStateClient = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
+        ros::ServiceClient jointStateClient = nh.serviceClient<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
+        ResetRobotByService(nh,  modelStateClient,  jointStateClient, robotName);
+        ros::AsyncSpinner spinner(1); // one threads
+        spinner.start();
+        ROS_INFO("---------finished: ROS, Gazebo controller and loading robot model---------");
+        
+        // create a quadruped robot.
+        quadruped = new qrRobotSim(nh, robotName, LocomotionMode::VELOCITY_LOCOMOTION);
+    
+    } else if(argc == 2 && std::string(argv[1]) == "real"){
+        nh.setParam("isSim", false);
+        quadruped = new qrRobotReal(robotName, LocomotionMode::VELOCITY_LOCOMOTION);
+    }
     quadruped->ReceiveObservation();
-    std::cout << "BaseOrientation:\n" << quadruped->GetBaseOrientation().transpose() << std::endl;
 
     /* the quadruped robot stands up.
     (the parameters are robot, the time that stand up need, the total time before excuting other action and time step)
