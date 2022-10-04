@@ -75,6 +75,11 @@ public:
      * @brief motor command defined by Unitree
      */
     unitree_legged_msgs::LowCmd lowCmd;
+
+    /**
+     * @brief robot state interface for real robot
+     */
+    RobotInterface robotInterface;
 };
 
 #endif //QR_ROBOT_REAL__H

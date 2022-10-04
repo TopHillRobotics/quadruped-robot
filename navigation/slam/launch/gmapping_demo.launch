@@ -37,10 +37,7 @@
         <param name="lasamplerange" value="0.005"/>
         <param name="lasamplestep" value="0.005"/>
     </node>
-
-    <!-- demo_publish_odometry -->
-    <node pkg= "demo" type="demo_publish_odom" name= "demo_publish_odom"/>
-
+    
     <!--pointcloud_to_laser-->>
     <include file="$(find slam)/launch/pointcloud_to_laser.launch" />
 

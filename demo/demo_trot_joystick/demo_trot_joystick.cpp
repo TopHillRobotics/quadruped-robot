@@ -25,6 +25,7 @@
 #include "quadruped/exec/runtime.h"
 #include "quadruped/ros/qr_msg_convert.h"
 #include "quadruped/robots/qr_robot_sim.h"
+#include "quadruped/robots/qr_robot_real.h"
 #include "quadruped/ros/qr_gazebo_controller_manager.h"
 
 int main(int argc, char **argv)
@@ -36,24 +37,34 @@ int main(int argc, char **argv)
     // get the node package path
     std::string pathToPackage = ros::package::getPath("demo");
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
-    std::string robotName;
-    nh.getParam("robotName", robotName);
+    std::string robotName = "a1";
+    qrRobot *quadruped;
+    nh.setParam("isSim", true);
     
     // create a convertor for joymsgs.
     std::cout << "Joy start receving..." << std::endl;
     qrJoy2Twist * msgConvert = new qrJoy2Twist(nh, pathToNode);
 
-    // reset the gazebo controller and robot
-    ResetRobotBySystem(nh, robotName);
-    ros::AsyncSpinner spinner(1); // one threads
-    spinner.start();
-
     // create command receiver to update velocity from joystick.
     qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
     std::cout << "---------Ros Module Init finished---------" << std::endl;
 
-    // create the quadruped robot.
-    qrRobot *quadruped = new qrRobotSim(nh, robotName, LocomotionMode::VELOCITY_LOCOMOTION);
+    if(argc == 1 || (argc == 2 && std::string(argv[1]) == "sim")) {
+        nh.getParam("robotName", robotName);
+
+        // reset the gazebo controller and robot
+        ResetRobotBySystem(nh, robotName);
+        ros::AsyncSpinner spinner(1); // one threads
+        spinner.start();
+        ROS_INFO("---------finished: ROS, Gazebo controller and loading robot model---------");
+        
+        // create a quadruped robot.
+        quadruped = new qrRobotSim(nh, robotName, LocomotionMode::VELOCITY_LOCOMOTION);
+    
+    } else if(argc == 2 && std::string(argv[1]) == "real"){
+        nh.setParam("isSim", false);
+        quadruped = new qrRobotReal(robotName, LocomotionMode::VELOCITY_LOCOMOTION);
+    }
     quadruped->ReceiveObservation();
 
     /* the quadruped robot stands up.
@@ -62,7 +73,7 @@ int main(int argc, char **argv)
     Action::StandUp(quadruped, 3.f, 5.f, 0.001);
 
     // create the locomotion controller.
-    qrLocomotionController *locomotionController = setUpController(quadruped, pathToNode);
+    qrLocomotionController *locomotionController = setUpController(quadruped, pathToNode,nh);
     locomotionController->Reset();
     
     // initialize the desired speed of the robot.

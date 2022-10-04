@@ -63,11 +63,11 @@ In this command, **rname** specifies the robot you use, **wname** specifies the 
 Third, in a new terminal, launch the slam demo. It will start the node of rviz and the demo_trot_keyboard, you can move the robot through the keyboard to build the map.
 
 ```
-roslaunch slam gmapping_demo.launch
+rosrun demo demo_slam_gmapping
 ```
 Similarly，you also can launch.
 ```
-roslaunch slam cartographer_demo.launch
+rosrun demo demo_slam_cartographer
 ```
 
 

@@ -1,4 +1,4 @@
-// The MIT License
+// The BSD License
 
 // Copyright (c) 2022
 // Robot Motion and Vision Laboratory at East China Normal University
@@ -22,44 +22,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "quadruped/exec/runtime.h"
-#include "quadruped/robots/qr_robot_real.h"
-#include "quadruped/ros/qr_gazebo_controller_manager.h"
+#include <thread>
+#include <string>
+#include <ros/ros.h>
+#include <ros/package.h>
+#include <iostream>
 
+void run_publish_odom() {
+    int run_publish_odom = system(std::string("rosrun demo demo_publish_odom").c_str());
+}
 int main(int argc, char **argv)
 {
     // initialize ROS nodes
-    ros::init(argc, argv, "demo_helloworld_real");
+    ros::init(argc, argv, "demo_slam_gmapping");
     ros::NodeHandle nh;
 
-    // get the node package path
-    std::string pathToPackage = ros::package::getPath("demo");
-    std::string pathToNode =  pathToPackage + ros::this_node::getName();
+   // confirm the environment
+    std::string pathTOgmapping = ros::package::getPath("gmapping");
+   
+    bool  if_use_lidar;
+    nh.getParam("if_use_lidar", if_use_lidar);
 
-    std::string robotName = "a1";
+    if (pathTOgmapping.empty()) {
+        std::cout << "--------- Please Install Gmapping Package  ---------" << std::endl;
+        return false;
+    }
 
-    // create a quadruped robot.
-    qrRobot *quadruped = new qrRobotReal(robotName, LocomotionMode::VELOCITY_LOCOMOTION);
-    quadruped->ReceiveObservation();
+    if (if_use_lidar == false) {
+        std::cout <<"--------- Please Set Up use_lidar:=true ----------" << std::endl;
+        return false;
+    }
 
-    // perform the first action: standing up
-    // It takes 3 seconds to stand up and keep 5 seconds before any other action
-    // 0.0001 is the specified time step.
-    Action::StandUp(quadruped, 3.f, 5.f, 0.001f);
+   //publish odom
+    std::thread run_odom(run_publish_odom);
+    run_odom.detach();
 
-    float startTime = quadruped->GetTimeSinceReset();
-    float currentTime = startTime;
-    float startTimeWall = startTime;
-
-    // keep the quadruped robot standing for 20.0 seconds and 0.001 is the time step
-    Action::KeepStand(quadruped, 20.f, 0.001f);
-    
-    // let the quadruped robot sit down. It takes 3 seconds to finish the action.
-    Action::SitDown(quadruped, 3.f, 0.001f);
-
-    // shutdown all the ROS nodes
-    ROS_INFO("The demo is closed!");
-    ros::shutdown();
-
+    sleep(6);
+    int launch_gmapping = system(std::string("roslaunch slam gmapping_demo.launch").c_str());
     return 0;
 }

@@ -42,6 +42,7 @@ namespace Action {
                 robot->Step(action, MotorMode::POSITION_MODE);
                 while (robot->GetTimeSinceReset() < t + timeStep) {}
             }
+            // std::cout << "motorAngles: \n" << robot->GetMotorAngles().transpose() << std::endl;
         }
         std::cout << "---------------------Stand Up Finished---------------------" << std::endl;
     }
@@ -50,7 +51,7 @@ namespace Action {
     {
         float startTime = robot->GetTimeSinceReset();
         float endTime = startTime + sitDownTime;
-        Eigen::Matrix<float, 12, 1> motorAnglesBeforeSitDown = robot->GetMotorAngles();
+        Eigen::Matrix<float, 12, 1> motorAnglesBeforeSitDown = robot->config->standUpMotorAngles;
         std::cout << "motorAnglesBeforeSitDown: \n" << motorAnglesBeforeSitDown.transpose() << std::endl;
         std::cout << "robot->sitDownMotorAngles: \n" << robot->config->sitDownMotorAngles.transpose() << std::endl;
 
@@ -73,6 +74,7 @@ namespace Action {
             motorAngles = motorAnglesBeforeKeepStand;
             
             robot->Step(motorAngles, MotorMode::POSITION_MODE);
+            // std::cout << "motorAngles: \n" << robot->GetMotorAngles().transpose() << std::endl;
             while (robot->GetTimeSinceReset() < t + timeStep) {}
         }
     }

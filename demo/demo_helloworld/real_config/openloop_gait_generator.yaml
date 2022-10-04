@@ -1,4 +1,4 @@
-name: a1_sim
+name: a1_real
 gait_params:
   gait: "trot" # trot or walk, reserved param, fixed config by code, modificate here dose not take effect.
   trot:

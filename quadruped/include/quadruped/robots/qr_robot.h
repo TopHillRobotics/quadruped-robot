@@ -257,7 +257,7 @@ public:
     /**
      * @brief robot state interface for real robot
      */
-    RobotInterface robotInterface;
+    // RobotInterface robotInterface;
 
 };
 
