@@ -39,6 +39,8 @@ int main(int argc, char **argv)
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
     std::string robotName = "a1";
     qrRobot *quadruped;
+    ros::AsyncSpinner spinner(1); // one threads
+    spinner.start();
     nh.setParam("isSim", true);
     
     // create a convertor for joymsgs.
@@ -54,8 +56,6 @@ int main(int argc, char **argv)
 
         // reset the gazebo controller and robot
         ResetRobotBySystem(nh, robotName);
-        ros::AsyncSpinner spinner(1); // one threads
-        spinner.start();
         ROS_INFO("---------finished: ROS, Gazebo controller and loading robot model---------");
         
         // create a quadruped robot.

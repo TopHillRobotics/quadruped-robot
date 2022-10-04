@@ -42,6 +42,8 @@ int main(int argc, char **argv)
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
     std::string robotName = "a1";
     qrRobot *quadruped;
+    ros::AsyncSpinner spinner(1); // one threads
+    spinner.start();
     nh.setParam("isSim", true);
 
     // start keyboard receiving thread.
@@ -61,8 +63,7 @@ int main(int argc, char **argv)
         ros::ServiceClient modelStateClient = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
         ros::ServiceClient jointStateClient = nh.serviceClient<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
         ResetRobotByService(nh,  modelStateClient,  jointStateClient, robotName);
-        ros::AsyncSpinner spinner(1); // one threads
-        spinner.start();
+
         ROS_INFO("---------finished: ROS, Gazebo controller and loading robot model---------");
         
         // create a quadruped robot.
