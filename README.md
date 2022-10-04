@@ -1,21 +1,17 @@
 # 1. Overview
 
-This project provides an architecture and some key algorithms to control quadruped robots, including state estimator, gait generator, stance and swing leg controllers. 
+This project provides an architecture and some key algorithms to control quadruped robots, including state estimator, gait generator, stance and swing leg controllers.
 This project supports three control modes
 
 - **velocity mode** allows a user to control the robot's linear and angular velocity.
-
 - **position mode** generates user-defined gaits using gait configurations.
-
 - **hybrid mode** uses position and torque to implement flexible locomotion.
 
 The project now supports Unitree A1 robot and DeepRobotics Lite2A robot, and can be extended to support other quadruped robots such as Unitree AlienGO/GO1, DeepRobotics Jueying/X20 and Anymal. For more information about quadruped robots, check out the following websites
 
--  [Unitree](https://github.com/unitreerobotics)
-
--  [DEEPRobotics](https://www.deeprobotics.cn/)
-
--  [Anybotics](https://www.anybotics.com/anymal-autonomous-legged-robot/)
+- [Unitree](https://github.com/unitreerobotics)
+- [DEEPRobotics](https://www.deeprobotics.cn/)
+- [Anybotics](https://www.anybotics.com/anymal-autonomous-legged-robot/)
 
 Here some snapshots in simulation.
 
@@ -40,11 +36,8 @@ Here is a demo for a real quadruped robot (Unitree A1).
 This source code include four directories
 
 - **demo** contains various demos to understand the software architecture and algorithms.
-
 - **extern** contains the third-party dependencies to successfully run our code.
-
 - **quadruped** contains the core algorithms of our project.
-
 - **simulation** contains the configuration to run the simulation.
 
 ---
@@ -85,6 +78,7 @@ sudo apt install libglm-dev
 cd ${your_workspace}
 catkin_make
 ```
+
 For a smooth compilation, we suggest using CMake version 3.15 or greater.
 
 ---
@@ -93,11 +87,11 @@ For a smooth compilation, we suggest using CMake version 3.15 or greater.
 
 ## 4.1 Browse the demos
 
-Browse the directories `src/demo/${robot}` to find the corresponding demo. We support the robots provided by two companies: unitree and deeprobotics. 
+Browse the directories `src/demo/${robot}` to find the corresponding demo. We support the robots provided by two companies: unitree and deeprobotics.
 
 Our locomotion controllers support two modes:  velocity control and position control. Please check out the corresponding demos.
 
-## 4.2 Run a demo
+## 4.2 Run a demo in a simulator
 
 First, in one terminal, source the `setup.bash` to set up the environment
 
@@ -115,24 +109,41 @@ In this command, **rname** specifies the robot you use, **use_xacro** means whet
 
 Third, in a new terminal, launch a demo and run the quadruped controller node. Here, a demo helloworld lets the quadruped robot stand up.
 
+## 4.3 Run a demo in a real quadruped robot
+
+You can run a demo for a real quadruped robot either using your own computer or a miniPC embedded in the quadruped. If you want to control the robot using your own computer,  you have to connect your computer directly to the real quarduped robot with either a Ethernet cable and WIFI. This allows a robot to exchange messages between your computer and the quarduped. Please check out user manual for how to build a connection. More specifically, you can run a demo for a real quadruped robot as follows.
+
+First, in one terminal, source the `setup.bash` to set up the environment
+
 ```
-rosrun demo demo_helloworld
+source ${your_workspace}/devel/setup.bash
 ```
 
-For more demos, please check out the directory /demos. If you have a robot **YAML** configuration file as long as  **xacro** or **URDF**, you can specify the file location when instantiate the **qrRobotSim** class, or write your own subclass to run your robot and then configure  your xacro and URDF files in **simulation** package, you can try your own robot.
+Second,  run `roscore` to start ROS service.  Because a real robot use LCM and ROS to communicate, you must run `roscore` . Please open a new terminal to run this command:
 
----
+```shell
+roscore
+```
+
+Third, in a new terminal, launch a demo for a real quadruped , and run the quadruped controller node. Here, a demo helloworld lets the quadruped robot stand up.
+
+```
+rosrun demo demo_helloworld real
+```
+
+For more demos, please check out the directory /demos. If you have a robot **YAML** configuration file as long as  **xacro** or **URDF**, you can specify the file location when instantiate the **qrRobotSim** class, or write your own subclass to run your robot and then configure  your xacro and URDF files in **simulation** package, you can try your own robot. For simulation,  append a parameter `real` in the rosrun command.
+
 
 # 5. Feedback and Bugs
 
 Please file bugs and feature requests here: [https://github.com/TopHillRobotics/quadruped-robot/issues](https://github.com/TopHillRobotics/quadruped-robot/issues)
 
-You can help to ensure your issue gets fixed if you provide sufficient detail. 
+You can help to ensure your issue gets fixed if you provide sufficient detail.
 
 ---
 
 # 6. Documentation
 
-There is also a [readthedocs](https://quadruped-robot-docs.readthedocs.io/en/main/index.html)  for the helps, tutorials, demo explanation. 
+There is also a [readthedocs](https://quadruped-robot-docs.readthedocs.io/en/main/index.html)  for the helps, tutorials, demo explanation.
 
 ---
