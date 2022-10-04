@@ -39,7 +39,8 @@
         <param name="robot_description" command="cat $(arg dollar)$(arg robot_path)/urdf/robot.urdf"/>
     </group>
     <param name="robotName" value="$(arg rname)"/>
-     <node pkg="gazebo_ros" type="spawn_model" name="urdf_spawner" respawn="false" output="screen"
+    <param name="if_use_lidar" value="$(arg use_lidar)"/>
+    <node pkg="gazebo_ros" type="spawn_model" name="urdf_spawner" respawn="false" output="screen"
           args="-urdf -z 0.4 -model $(arg rname)_gazebo -param robot_description -unpause"/>
 
     <!-- Load joint controller configurations from YAML file to parameter server -->
