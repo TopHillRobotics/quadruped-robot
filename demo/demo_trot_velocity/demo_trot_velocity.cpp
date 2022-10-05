@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 
         ROS_INFO("---------finished: ROS, Gazebo controller and loading robot model---------");
         
-        // create a quadruped robot.
+        // create a quadruped robot and set locomotion mode to VELOCITY_LOCOMOTION
         quadruped = new qrRobotSim(nh, robotName, LocomotionMode::VELOCITY_LOCOMOTION);
     
     } else if(argc == 2 && std::string(argv[1]) == "real"){
@@ -63,7 +63,6 @@ int main(int argc, char **argv)
     
     // create a velocity parameter receiver to receive any velocity change
     qrVelocityParamReceiver* cmdVelReceiver = new qrVelocityParamReceiver(nh, pathToNode);
-    
     
     quadruped->ReceiveObservation();
 
@@ -113,7 +112,7 @@ int main(int argc, char **argv)
         
         // stop if the robot falls (roll>0.5 or pitch>0.5)
         if (abs(quadruped->GetBaseRollPitchYaw()[0]) > 0.5f || abs(quadruped->GetBaseRollPitchYaw()[1]) > 0.5f) {
-            ROS_ERROR("The dog is falling!");
+            ROS_ERROR("The robot is falling!");
             break;
         }
 
