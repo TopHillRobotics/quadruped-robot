@@ -9,7 +9,7 @@ This project supports three control modes
 
 The project now supports A1 robot (Unitree-Robotics) and Lite2A robot (Deep-Robotics). This project can be easily extended to support other quadruped robots such as AlienGO/GO1 (Unitree-Robotics), Jueying/X20(Deep-Robotics) and Anymal. For more information about quadruped robots, check out the following websites
 
-- [Unitre](https://github.com/unitreerobotics)e Robotics
+- [Unitree Robotics](https://github.com/unitreerobotics)
 - [DeepRobotics](https://www.deeprobotics.cn/)
 - [Anybotics](https://www.anybotics.com/anymal-autonomous-legged-robot/)
 
@@ -118,21 +118,21 @@ Here, `sim` indicates that the demo is running in simulation. For more demo exam
 
 ## 4.3 Run a demo in a real quadruped robot
 
-You can run a demo for a real quadruped robot either using your own computer or a miniPC embedded in the quadruped. If you want to control the robot using your own computer,  you have to connect your computer directly to the real quarduped robot with either a Ethernet cable and WIFI. This allows a robot to exchange messages between your computer and the quarduped. Please check out user manual for how to build a connection. More specifically, you can run a demo for a real quadruped robot as follows.
+You can run a demo for a real quadruped robot either using your own external computer or a built-in miniPC (refer to A1 or Lite2A user manual). If you want to control the robot using your own computer,  you need to connect your computer directly to the real quarduped robot with either an Ethernet cable or WiFi. This network connection allows a robot to exchange messages between your computer and the quarduped. Please check out the A1 or Lite2A user manual for how to build a connection. Some details are given bellow to explain running a demo for a real quadruped robot.
 
-First, in one terminal, source the `setup.bash` to set up the environment
+First, in one terminal, source the `setup.bash` to set up the development environment
 
 ```
 source ${your_workspace}/devel/setup.bash
 ```
 
-Second,  run `roscore` to start ROS service.  Because a real robot use LCM and ROS to communicate, you must run `roscore` . Please open a new terminal to run this command:
+Second,  run `roscore` to start ROS since a real robot use LCM and ROS for communication. Please open a new terminal to run this command
 
 ```shell
 roscore
 ```
 
-Third, in a new terminal, launch a demo for a real quadruped , and run the quadruped controller node. Here, a demo helloworld lets the quadruped robot stand up.
+Third, in a new terminal, launch a demo for a real quadruped, and run the quadruped controller node. The demo helloworld lets the quadruped robot stand up.
 
 ```
 rosrun demo demo_helloworld real
