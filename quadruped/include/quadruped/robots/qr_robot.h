@@ -30,15 +30,15 @@
 #include <unordered_map>
 #include <Eigen/Dense>
 #include <yaml-cpp/yaml.h>
-
-#include "unitree_legged_sdk/unitree_interface.h"
 #include "config.h"
+#include "unitree_legged_sdk/unitree_interface.h"
 #include "common/qr_enums.h"
 #include "robots/qr_timer.h"
 #include "robots/qr_motor.h"
 #include "common/qr_se3.h"
 #include "qr_robot_config.h"
 #include "qr_robot_state.h"
+
 
 
 /**
@@ -91,6 +91,14 @@ public:
     virtual void Step(const std::vector<qrMotorCommand> &motorCommands, MotorMode motorControlMode) {};
 
     /**
+     * @brief get body mass of the robot
+     * @return body mass of the robot
+     */
+    inline float GetBodyMass(){
+        return this->config->bodyMass;
+    }
+
+    /**
      * @brief get current 12 motor angles
      * @return vector of current motor angles
      */
@@ -116,6 +124,7 @@ public:
     {
         return state.basePosition;
     };
+
 
     /**
      * @brief Get robot base orientation in world frame.
@@ -244,8 +253,12 @@ public:
      * @brief default base frame orientation in gazebo
      */
     Eigen::Matrix<float, 4, 1> gazeboBaseOrientation = {1.f,0.f,0.f,0.f}; //robot base orientation in world frame
-    
-    // std::unordered_map<int, std::string> modeMap = {{0, "velocity"}, {1, "position"}, {2, "walk"}};
+
+    /**
+     * @brief robot state interface for real robot
+     */
+    // RobotInterface robotInterface;
+
 };
 
 #endif //QR_ROBOT_H

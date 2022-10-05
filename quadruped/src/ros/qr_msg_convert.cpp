@@ -41,11 +41,16 @@ qrJoy2Twist::qrJoy2Twist(ros::NodeHandle &nh, std::string pathToNode):nh(nh)
 
 void qrJoy2Twist::JoyCmdCallback(const sensor_msgs::Joy::ConstPtr &joyMsg)
 {
-    msg.linear.x = joyMsg->axes[5] * joyCmdVelXMax;
-    msg.linear.y = joyMsg->axes[2] * joyCmdVelYMax;
-    msg.linear.z = joyMsg->axes[1] * joyCmdVelZMax;
+    msg.linear.x = joyMsg->axes[1] * joyCmdVelXMax;
+    msg.linear.y = joyMsg->axes[0] * joyCmdVelYMax;
+    msg.linear.z = joyMsg->axes[7] * joyCmdVelZMax;
     msg.angular.x = joyMsg->axes[6] * joyCmdVelRollMax;
-    msg.angular.y = joyMsg->axes[7] * joyCmdVelPitchMax;
-    msg.angular.z = joyMsg->axes[0] * joyCmdVelYawMax;
+    msg.angular.y = joyMsg->axes[4] * joyCmdVelPitchMax;
+    msg.angular.z = joyMsg->axes[3] * joyCmdVelYawMax;
     twistPublisher.publish(msg);
+}
+
+void qrJoy2Twist::BringUpJoyNode()
+{
+    system(std::string("rosrun joy joy_node -dev /dev/input/js0").c_str());
 }

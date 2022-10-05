@@ -108,6 +108,14 @@ public:
                                     Eigen::Matrix<float, 3, 1> &footPositionInBaseFrame, 
                                     int legId);
 
+
+    /**
+     * @brief update linear velocity and angular velocity of controllers
+     * @param linSpeed: linear velocity
+     * @param angSpeed: yaw twist velocity
+     */
+    virtual void UpdateControlParameters(const Eigen::Vector3f& linSpeed, const float& angSpeed);
+
     /**
      * @brief Reset the controller parameters.
      */

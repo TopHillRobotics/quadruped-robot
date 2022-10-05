@@ -29,6 +29,7 @@
 #include "common/qr_se3.h"
 #include "qr_robot_config.h"
 
+
 /**
  * @brief The qrIMU struct stores the information of IMU
  */

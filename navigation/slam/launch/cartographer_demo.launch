@@ -1,0 +1,22 @@
+<launch>  
+  
+    <param name="/use_sim_time" value="true" />  
+    
+    <!--pointcloud_to_laser-->
+    <include file="$(find slam)/launch/pointcloud_to_laser.launch" />
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher"
+     type="robot_state_publisher" />
+ 
+    <node name="cartographer_node" pkg="cartographer_ros"
+        type="cartographer_node" args="
+            -configuration_directory $(find slam)/config/cartographer_config/
+            -configuration_basename VLP16.lua"
+        output="screen">
+        <remap from="points2" to="/scan" />
+        <remap from="imu" to="/trunk_imu" />
+    </node>
+    <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
+        type="cartographer_occupancy_grid_node" args="-resolution 0.05" />
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find slam)/rviz/cartographer_2d.rviz"/>
+</launch>

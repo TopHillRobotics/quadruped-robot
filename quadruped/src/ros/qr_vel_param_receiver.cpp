@@ -28,8 +28,11 @@ qrVelocityParamReceiver::qrVelocityParamReceiver (ros::NodeHandle &nhIn, std::st
 {
     ROS_INFO("command velocity topic: %s", cmdVelTopic.c_str());
     cmdVelSub = nh.subscribe(cmdVelTopic, 10, &qrVelocityParamReceiver::CmdVelCallback, this);
-
-    YAML::Node mainConfig = YAML::LoadFile(pathToNode + "/config/main.yaml");
+    
+    bool isSim;
+    nh.getParam("isSim", isSim);
+    std::string prefix = isSim ? "sim" : "real";
+    YAML::Node mainConfig = YAML::LoadFile(pathToNode + "/" + prefix + "_config/main.yaml");
     std::vector<float> linear = mainConfig["const_twist"]["linear"].as<std::vector<float >>();
     linearVel << linear[0], linear[1], linear[2];
     angularVel[2] = mainConfig["const_twist"]["angular"].as<float>();

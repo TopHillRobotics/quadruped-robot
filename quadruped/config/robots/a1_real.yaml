@@ -1,0 +1,62 @@
+name: a1_real
+robot_params:
+  body_mass: 10 # 12
+  body_size: [0.267, 0.194, 0.114]
+  body_inertia: [ 0.24, 0, 0, 0, 0.80, 0, 0, 0, 1.0 ]
+  links_inertia: [[0.000469246, -9.409e-06, -3.42e-07,-9.409e-06, 0.00080749,-4.66e-07,-3.42e-07, -4.66e-07, 0.000552929],
+                  [0.005529065, 4.825e-06, 0.000343869, 4.825e-06, 0.005139339, 2.2448e-05, 0.000343869, 2.2448e-05, 0.001367788],
+                  [0.002997972, 0.0,-0.000141163, 0.0, 0.003014022, 0.0, -0.000141163, 0.0, 3.2426e-05]] # for one leg
+  links_mass: [0.696, 1.013, 0.166] # for one leg
+  body_height: 0.28
+  hip_l: 0.08505
+  upper_l: 0.2
+  lower_l: 0.2
+
+  velocity:
+    # com_offset: [ 0.005, 0.0028, 0.000515 ] # vel mode
+    com_offset: [ 0.005, 0.002, 0.000515 ] # vel mode
+  position:
+    # com_offset: [ 0.005, 0.0028, 0.000515 ]
+    com_offset: [ 0.005, -0.000, 0.000515 ]
+  walk:
+    com_offset: [ -0.01, 0.003, 0.000515 ] # mpc, walk mode
+  advanced_trot:
+    # com_offset: [ -0.004, 0.00145, 0.000515 ] # vel mode
+    # com_offset: [ 0.0, 0.00195, 0.000515 ] # yh-mpc
+    com_offset: [ 0., 0., 0. ] # only for test
+  hip_offset: [ [ 0.1805, -0.047, 0. ],
+                [ 0.1805, 0.047, 0. ],
+                [ -0.1805, -0.047, 0. ],
+                [ -0.1805, 0.047, 0. ] ]
+  # default_hip_positions: [ [ 0.17, -0.135, 0 ],
+  #                         [ 0.17, 0.13, 0 ],
+  #                         [ -0.195, -0.135, 0 ],
+  #                         [ -0.195, 0.13, 0 ] ]
+  default_hip_positions: [ [ 0.185, -0.135, 0 ],
+                           [ 0.185, 0.135, 0 ],
+                           [ -0.185, -0.135, 0 ],
+                           [ -0.185, 0.135, 0 ] ]
+  default_standup_angle:
+    ab: 0
+    hip: 0.9
+    knee: -1.8
+
+  default_sitdown_angle:
+    ab: -0.167136
+    hip: 0.934969
+    knee: -2.54468
+
+motor_params:
+  kps: [ 100,100,100 ]
+  kds: [ 1.0,1.0,1.0 ]
+  joint_directions: [ 1,1,1, 1,1,1, 1,1,1, 1,1,1 ]
+  joint_offsets: [ 0,0,0, 0,0,0, 0,0,0, 0,0,0 ]
+  stand_angle: [ 0, 0.8, -1.6 ]
+
+  abad_p: 100.0
+  abad_d: 1.0
+  hip_p: 100.0
+  hip_d: 2.0
+  knee_p: 100.0
+  knee_d: 2.0
+is_sim: false

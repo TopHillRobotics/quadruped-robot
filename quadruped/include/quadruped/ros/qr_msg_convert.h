@@ -64,6 +64,11 @@ public:
      */
     void JoyCmdCallback(const sensor_msgs::Joy::ConstPtr &joyMsg);
 
+    /**
+     * @brief bring up joy node.
+     */
+    void BringUpJoyNode();
+
 private:
 
     /**

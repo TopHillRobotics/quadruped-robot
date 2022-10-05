@@ -24,7 +24,7 @@
 
 #include "robots/qr_robot_config.h"
 
-std::unordered_map<int, std::string> modeMap = {{0, "velocity"}, {1, "position"}, {2, "walk"}};
+std::unordered_map<int, std::string> modeMap = {{0, "velocity"}, {1, "position"}, {2, "walk"}, {3, "advanced_trot"}};
 
 qrRobotConfig::qrRobotConfig(std::string path, LocomotionMode mode)
 {
@@ -70,8 +70,8 @@ void qrRobotConfig::Load(std::string path, LocomotionMode mode)
 
 void qrRobotConfig::LoadKps()
 {
-    float abadKp, hipKp, kneeKp;
-    abadKp = node["motor_params"]["abad_p"].as<float>();
+  float abadKp, hipKp, kneeKp;
+  abadKp = node["motor_params"]["abad_p"].as<float>();
     hipKp = node["motor_params"]["hip_p"].as<float>();
     kneeKp = node["motor_params"]["knee_p"].as<float>();
     Eigen::Matrix<float, 3, 1> kps(abadKp, hipKp, kneeKp);

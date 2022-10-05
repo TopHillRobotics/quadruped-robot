@@ -200,6 +200,8 @@ public:
     *
     */
     std::string nextGaitType;
+
+    Eigen::Matrix<float, 4, 1> phaseInFullCycle;
 };
 
 #endif //QR_GAIT_GENERATOR_H
