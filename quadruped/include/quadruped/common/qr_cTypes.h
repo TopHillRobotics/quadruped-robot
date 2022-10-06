@@ -22,8 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef PROJECT_CTYPES_H
-#define PROJECT_CTYPES_H
+#ifndef QR_CTYPES_H
+#define QR_CTYPES_H
 
 #include <stddef.h>  // for size_t
 #include <stdint.h>
@@ -38,4 +38,5 @@ typedef int16_t s16;
 typedef int32_t s32;
 typedef int64_t s64;
 typedef float fpt;
-#endif  // PROJECT_CTYPES_H
+
+#endif  // QR_CTYPES_H

@@ -22,8 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef ASCEND_MATH_GEOMETRY_H
-#define ASCEND_MATH_GEOMETRY_H
+#ifndef QR_GEOMETRY_H
+#define QR_GEOMETRY_H
 
 #include <cmath>
 #include <iostream>
@@ -354,4 +354,4 @@ namespace math {
     };
 } //  namespace math
 
-#endif//ASCEND_MATH_GEOMETRY_H
+#endif// QR_GEOMETRY_H

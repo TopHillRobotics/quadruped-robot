@@ -22,8 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef QR_FOOT_STEPPER_H_
-#define QR_FOOT_STEPPER_H_
+#ifndef QR_FOOT_STEPPER_H
+#define QR_FOOT_STEPPER_H
 
 #include <iostream>
 #include <string>
@@ -156,4 +156,4 @@ protected:
     quadprogpp::Vector<double> x;
 };
 
-#endif //QR_FOOT_STEPPER_H_
+#endif //QR_FOOT_STEPPER_H
