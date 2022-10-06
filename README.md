@@ -11,7 +11,7 @@ This project provides an architecture and many key algorithms to control quadrup
 The project now supports A1 robot (Unitree-Robotics) and Lite2A robot (Deep-Robotics). This project can be easily extended to support other quadruped robots such as AlienGO/GO1 (Unitree-Robotics), Jueying/X20(Deep-Robotics) and Anymal. For more information about quadruped robots, check out the following websites
 
 - [Unitree Robotics](https://github.com/unitreerobotics)
-- [DeepRobotics](https://www.deeprobotics.cn/)
+- [Deep Robotics](https://www.deeprobotics.cn/)
 - [Anybotics](https://www.anybotics.com/anymal-autonomous-legged-robot/)
 
 Here are some snapshots in simulation and in real environments
