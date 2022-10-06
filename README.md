@@ -1,11 +1,12 @@
 # 1. Overview
 
 This project provides an architecture and many key algorithms to control quadruped robots, including state estimation, gait generation, stance and swing leg controllers.
-This project supports three control modes
 
+<!-- This project supports three control modes
 - **velocity mode** allows a user to control the robot's linear and angular velocity.
 - **position mode** generates user-defined gaits using gait configurations and control the robot's step position .
 - **hybrid mode** uses position and torque to implement flexible locomotion.
+-->
 
 The project now supports A1 robot (Unitree-Robotics) and Lite2A robot (Deep-Robotics). This project can be easily extended to support other quadruped robots such as AlienGO/GO1 (Unitree-Robotics), Jueying/X20(Deep-Robotics) and Anymal. For more information about quadruped robots, check out the following websites
 
