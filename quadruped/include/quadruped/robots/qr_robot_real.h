@@ -22,8 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef QR_ROBOT_REAL__H
-#define QR_ROBOT_REAL__H
+#ifndef QR_ROBOT_REAL_H
+#define QR_ROBOT_REAL_H
 
 #include <ros/ros.h>
 #include <sensor_msgs/Imu.h>
@@ -82,4 +82,4 @@ public:
     RobotInterface robotInterface;
 };
 
-#endif //QR_ROBOT_REAL__H
+#endif //QR_ROBOT_REAL_H

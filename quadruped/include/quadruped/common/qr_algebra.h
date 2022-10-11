@@ -22,8 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef PROJECT_MATH_ALGEBRA_H
-#define PROJECT_MATH_ALGEBRA_H
+#ifndef QR_ALGEBRA_H
+#define QR_ALGEBRA_H
 
 #include <Eigen/Dense>
 
@@ -73,4 +73,4 @@ namespace math {
 
 } //  namespace math
 
-#endif  // PROJECT_MATH_ALGEBRA_H
+#endif  // QR_ALGEBRA_H

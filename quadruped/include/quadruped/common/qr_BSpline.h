@@ -22,8 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef GEOMETRY_BSPLINE_H
-#define GEOMETRY_BSPLINE_H
+#ifndef QR_BSPLINE_H
+#define QR_BSPLINE_H
 
 #include <tinynurbs/tinynurbs.h>
 #include <glm/glm.hpp>

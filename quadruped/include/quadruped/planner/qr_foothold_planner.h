@@ -23,8 +23,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef QR_FOOTHOLD_PLANNER_H_
-#define QR_FOOTHOLD_PLANNER_H_
+#ifndef QR_FOOTHOLD_PLANNER_H
+#define QR_FOOTHOLD_PLANNER_H
 
 
 #include "planner/qr_foot_stepper.h"
@@ -171,4 +171,4 @@ public:
     Eigen::Matrix<float, 3, 4> desiredFootholds;
 };
 
-#endif //QR_FOOTHOLD_PLANNER_H_
+#endif // QR_FOOTHOLD_PLANNER_H

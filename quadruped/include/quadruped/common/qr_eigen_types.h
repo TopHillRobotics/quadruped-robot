@@ -22,8 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef PROJECT_CPPTYPES_H
-#define PROJECT_CPPTYPES_H
+#ifndef QR_CPPTYPES_H
+#define QR_CPPTYPES_H
 // UCOMMENT TO DISABLE ASSERT(0)
 // #define NDEBUG
 #include <cassert>
@@ -144,4 +144,4 @@ using vectorAligned = typename std::vector<T, Eigen::aligned_allocator<T>>;
 
 enum class RobotType { A1, CHEETAH_3, MINI_CHEETAH };
 
-#endif  // PROJECT_CPPTYPES_H
+#endif  // QR_CPPTYPES_H

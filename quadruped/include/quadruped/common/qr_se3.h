@@ -24,8 +24,8 @@
 
 
 // THIS FILE combines DWL and CHEETAH's math Lib.
-#ifndef ASCEND_MATH_SE3_H
-#define ASCEND_MATH_SE3_H
+#ifndef QR_SE3_H
+#define QR_SE3_H
 
 #include <Eigen/Geometry>
 #include <cmath>
@@ -539,4 +539,4 @@ namespace math {
     } 
 }
 
-#endif//ASCEND_MATH_SE3_H
+#endif// QR_SE3_H
