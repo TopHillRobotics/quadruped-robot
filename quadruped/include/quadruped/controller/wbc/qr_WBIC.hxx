@@ -22,11 +22,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "controller/wbc/qr_WBIC.hpp"
-
 template <typename T>
 WBIC<T>::WBIC(size_t num_qdot, const std::vector<qrContactSpec<T>*>* contact_list,
-    const std::vector<Task<T>*>* task_list)
+    const std::vector<qrTask<T>*>* task_list)
   : WBC<T>(num_qdot), _dim_floating(6) 
 {
     _contact_list = contact_list; // stance leg 
@@ -277,4 +275,4 @@ void WBIC<T>::_SetOptimizationSize()
     }
 }
 
-template class WBIC<float>;
+//template class WBIC<float>;

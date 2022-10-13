@@ -213,3 +213,247 @@ Eigen::Matrix<float, 3, 1> qrRobotConfig::ComputeMotorVelocityFromFootLocalVeloc
     return dq;
     // return {0,0,0};
 }
+
+Vec3<float> qrRobotConfig::withLegSigns(const Vec3<float>& v, int legID)
+{
+    switch (legID) {
+        case 0:
+            return Vec3<float>(v[0], -v[1], v[2]);
+        case 1:
+            return Vec3<float>(v[0], v[1], v[2]);
+        case 2:
+            return Vec3<float>(-v[0], -v[1], v[2]);
+        case 3:
+            return Vec3<float>(-v[0], v[1], v[2]);
+        default:
+            throw std::runtime_error("Invalid leg id!");
+    }
+}
+
+bool qrRobotConfig::BuildDynamicModel()
+{
+    // we assume the cheetah's body (not including rotors) can be modeled as a
+    // uniformly distributed box.
+    std::vector<float> bodySize = node["robot_params"]["body_size"].as<std::vector<float>>(); // Length, Width, Height
+    Vec3<float> bodyDims(bodySize[0], bodySize[1], bodySize[2]);
+    
+    // locations
+    Vec3<float> _abadRotorLocation = {0.14f, 0.047f, 0.f};
+    Vec3<float> _abadLocation = {0.1805f, 0.047f, 0.f};
+    Vec3<float> _hipLocation = Vec3<float>(0, hipLength, 0);
+    Vec3<float> _hipRotorLocation = Vec3<float>(0, 0.04, 0);
+    Vec3<float> _kneeLocation = Vec3<float>(0, 0, -upperLegLength);
+    Vec3<float> _kneeRotorLocation = Vec3<float>(0, 0, 0);
+
+    float scale_ = 1e-2;
+    // rotor inertia if the rotor is oriented so it spins around the z-axis
+    Mat3<float> rotorRotationalInertiaZ;
+    rotorRotationalInertiaZ << 33, 0, 0,
+                                0, 33, 0,
+                                0, 0, 63;
+    rotorRotationalInertiaZ.setIdentity();
+    rotorRotationalInertiaZ = scale_*1e-6 * rotorRotationalInertiaZ;
+
+    Mat3<float> RY = coordinateRotation<float>(CoordinateAxis::Y, M_PI / 2);
+    Mat3<float> RX = coordinateRotation<float>(CoordinateAxis::X, M_PI / 2);
+    Mat3<float> rotorRotationalInertiaX = RY * rotorRotationalInertiaZ * RY.transpose();
+    Mat3<float> rotorRotationalInertiaY = RX * rotorRotationalInertiaZ * RX.transpose();
+
+    // spatial inertias
+    Mat3<float> abadRotationalInertia;
+    abadRotationalInertia << 469.2, -9.4, -0.342,
+                                -9.4, 807.5, -0.466,
+                                -0.342, -0.466,  552.9;
+    // abadRotationalInertia.setIdentity();
+    abadRotationalInertia = abadRotationalInertia * 1e-6;
+    // Vec3<float> abadCOM(0, 0.036, 0);  // mini-cheetah
+    Vec3<float> abadCOM(-0.0033, 0, 0);
+    SpatialInertia<float> abadInertia(0.696, abadCOM, abadRotationalInertia);
+
+    Mat3<float> hipRotationalInertia;
+    hipRotationalInertia << 5529, 4.825, 343.9,
+                            4.825, 5139.3, 22.4,
+                            343.9, 22.4, 1367.8;
+    // hipRotationalInertia.setIdentity();
+    hipRotationalInertia = hipRotationalInertia * 1e-6;
+    // Vec3<float> hipCOM(0, 0.016, -0.02);
+    Vec3<float> hipCOM(-0.003237, -0.022327, -0.027326); // left, for right filp y-axis value.
+    SpatialInertia<float> hipInertia(1.013, hipCOM, hipRotationalInertia);
+    std::cout << "hipInertia -----" <<std::endl;
+    std::cout << hipInertia.getInertiaTensor() << std::endl;
+    std::cout << hipInertia.flipAlongAxis(CoordinateAxis::Y).getInertiaTensor() << std::endl;
+    std::cout << "----- hipInertia " <<std::endl;
+    
+    
+    Mat3<float> kneeRotationalInertia, kneeRotationalInertiaRotated;
+    kneeRotationalInertiaRotated << 2998, 0,   -141.2,
+                                    0,    3014, 0,
+                                    -141.2, 0,   32.4;
+    // kneeRotationalInertiaRotated.setIdentity();
+    kneeRotationalInertiaRotated = kneeRotationalInertiaRotated * 1e-6;
+    kneeRotationalInertia = kneeRotationalInertiaRotated;//RY * kneeRotationalInertiaRotated * RY.transpose();
+    // Vec3<float> kneeCOM(0, 0, -0.061);
+    Vec3<float> kneeCOM(0.006435, 0, -0.107);
+    SpatialInertia<float> kneeInertia(0.166, kneeCOM, kneeRotationalInertia);
+
+    Vec3<float> rotorCOM(0, 0, 0);
+    float rotorMass = 1e-8; //0.055
+    SpatialInertia<float> rotorInertiaX(rotorMass, rotorCOM, rotorRotationalInertiaX);
+    SpatialInertia<float> rotorInertiaY(rotorMass, rotorCOM, rotorRotationalInertiaY);
+
+    Mat3<float> bodyRotationalInertia;
+    bodyRotationalInertia << 15853, 0, 0,
+                                0, 37799, 0,
+                                0, 0, 45654;
+    bodyRotationalInertia = bodyRotationalInertia * 1e-6;
+    Vec3<float> bodyCOM(0, 0, 0);
+    // Vec3<float> bodyCOM(0, 0.004, -0.0005);
+    SpatialInertia<float> bodyInertia(6, bodyCOM, bodyRotationalInertia);
+    
+    model.addBase(bodyInertia);
+    // add contact for the cheetah's body
+    model.addGroundContactBoxPoints(5, bodyDims);
+
+    const int baseID = 5;
+    int bodyID = baseID;
+    float sideSign = -1;
+
+    Mat3<float> I3 = Mat3<float>::Identity();
+
+    auto& abadRotorInertia = rotorInertiaX;
+    float abadGearRatio = 1; // 6
+    auto& hipRotorInertia = rotorInertiaY;
+    float hipGearRatio = 1; // 6
+    auto& kneeRotorInertia = rotorInertiaY;
+    float kneeGearRatio = 1; // 9.33
+    float kneeLinkY_offset = 0.004;
+
+    // loop over 4 legs
+    for (int legID = 0; legID < 4; legID++) {
+        // Ab/Ad joint
+        //  int addBody(const SpatialInertia<T>& inertia, const SpatialInertia<T>&
+        //  rotorInertia, T gearRatio,
+        //              int parent, JointType jointType, CoordinateAxis jointAxis,
+        //              const Mat6<T>& Xtree, const Mat6<T>& Xrot);
+        bodyID++;
+        Mat6<float> xtreeAbad = createSXform(I3, withLegSigns(_abadLocation, legID));
+        Mat6<float> xtreeAbadRotor = createSXform(I3, withLegSigns(_abadRotorLocation, legID));
+        if (sideSign < 0) {
+            model.addBody(abadInertia.flipAlongAxis(CoordinateAxis::Y),
+                            abadRotorInertia.flipAlongAxis(CoordinateAxis::Y),
+                            abadGearRatio, baseID, JointType::Revolute,
+                            CoordinateAxis::X, xtreeAbad, xtreeAbadRotor);
+        } else {
+            model.addBody(abadInertia, abadRotorInertia, abadGearRatio, baseID,
+                            JointType::Revolute, CoordinateAxis::X, xtreeAbad,
+                            xtreeAbadRotor);
+        }
+
+        // Hip Joint
+        bodyID++;
+        Mat6<float> xtreeHip =
+            createSXform(I3, //coordinateRotation(CoordinateAxis::Z, float(M_PI)),
+                        withLegSigns(_hipLocation, legID)); // 0, hipLength=0.085, 0
+        Mat6<float> xtreeHipRotor =
+            createSXform(coordinateRotation(CoordinateAxis::Z, float(M_PI)),
+                        withLegSigns(_hipRotorLocation, legID));
+        if (sideSign < 0) {
+            model.addBody(hipInertia.flipAlongAxis(CoordinateAxis::Y),
+                            hipRotorInertia.flipAlongAxis(CoordinateAxis::Y),
+                            hipGearRatio, bodyID - 1, JointType::Revolute,
+                            CoordinateAxis::Y, xtreeHip, xtreeHipRotor);
+        } else {
+            model.addBody(hipInertia, hipRotorInertia, hipGearRatio, bodyID - 1,
+                            JointType::Revolute, CoordinateAxis::Y, xtreeHip,
+                            xtreeHipRotor);
+        }
+
+        // add knee ground contact point
+        model.addGroundContactPoint(bodyID, Vec3<float>(0, 0, -upperLegLength));
+
+        // Knee Joint
+        bodyID++;
+        Mat6<float> xtreeKnee = createSXform(I3, _kneeLocation);
+        Mat6<float> xtreeKneeRotor = createSXform(I3, _kneeRotorLocation);
+        if (sideSign < 0) {
+            model.addBody(kneeInertia, //.flipAlongAxis(CoordinateAxis::Y),
+                            kneeRotorInertia.flipAlongAxis(CoordinateAxis::Y),
+                            kneeGearRatio, bodyID - 1, JointType::Revolute,
+                            CoordinateAxis::Y, xtreeKnee, xtreeKneeRotor);
+
+            model.addGroundContactPoint(bodyID, Vec3<float>(0, kneeLinkY_offset, -lowerLegLength), true);
+        } else {
+            model.addBody(kneeInertia, kneeRotorInertia, kneeGearRatio, bodyID - 1,
+                            JointType::Revolute, CoordinateAxis::Y, xtreeKnee,
+                            xtreeKneeRotor);
+
+            model.addGroundContactPoint(bodyID, Vec3<float>(0, -kneeLinkY_offset, -lowerLegLength), true);
+        }
+
+        // add foot
+        //model.addGroundContactPoint(bodyID, Vec3<T>(0, 0, -_kneeLinkLength), true);
+
+        sideSign *= -1;
+    }
+
+    Vec3<float> g(0, 0, -9.81);
+    model.setGravity(g);
+
+    bool test_fb = false;
+    if (test_fb) {
+        FBModelState<float> fb;
+        // for (size_t i(0); i < 3; ++i) {
+        // _state.bodyVelocity[i] = omegaBody[i]; // in body frame
+        // _state.bodyVelocity[i + 3] = vBody[i];
+
+        //     for (size_t leg(0); leg < 4; ++leg) {
+        //         _state.q[3 * leg + i] = q[3 * leg + i];
+        //         _state.qd[3 * leg + i] = dq[3 * leg + i];
+        //         _full_config[3 * leg + i + 6] = _state.q[3 * leg + i];
+        //     }
+        // }
+        printf("339\n");
+        fb.bodyOrientation << 1,0,0,0;//0.896127, 0.365452,0.246447,-0.0516205;
+        // fb.bodyPosition << 0.00437649, 0.000217693, 0.285963;
+        fb.bodyVelocity <<  3,3,3, 0.2, 0.1, 0.1;
+        fb.bodyPosition.setZero();
+        printf("343\n");
+        fb.q.resize(12,1);
+        fb.q.setZero();
+        fb.q << 0.2, 0, -0.2,
+                0.2, 0, -0.2, // 0, 0.7, 0,
+                0, 0.3, 0.5, // 0, 0.8, 0
+                0, 0.3, 0.5,
+        fb.qd.resize(12, 1);
+        fb.qd.setZero();
+        // fb.qd << 0.2, 0, 0,
+        //             0.1, 0, 0.,
+        //             0, -0.3, 0.6,
+        //             0, 0.3, 1;
+                    
+        printf("346\n");
+        model.setState(fb);
+        printf("348\n");
+        model.forwardKinematics();
+        model.massMatrix();
+        Eigen::MatrixXf A;
+        Eigen::Matrix<float,18,1> dq;
+        dq << fb.bodyVelocity, fb.qd;
+        // model.generalizedGravityForce();
+        // model.generalizedCoriolisForce();
+        A = model.getMassMatrix();
+        for(int i=0; i <18 ; ++i) {
+            for (int j=0; j<18; ++j) {
+                if (A(i,j)<1e-6) A(i,j) = 0;
+            }
+        }
+        std::cout << "A = \n" << A << std::endl;
+        float energy = 0.5*dq.dot(A*dq);
+        std::cout << "energy = " << energy << std::endl;
+        
+        // model.getPosition(8);
+        printf("351\n");
+        throw std::domain_error("finished!!!!");
+    }
+    return true;
+}

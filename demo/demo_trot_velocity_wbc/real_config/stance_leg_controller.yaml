@@ -1,0 +1,30 @@
+name: a1_real
+stance_leg_params:
+    force_dim: 3
+    velocity:    
+        KP: [100., 100., 100., 100., 100., 0.] # robot_com_position, robot_com_roll_pitch_yaw
+        KD: [40., 30., 10., 10., 10., 20.] # robot_com_velocity, robot_com_roll_pitch_yaw_rate
+        max_ddq: [10., 10., 10., 20., 20., 20.]
+        min_ddq: [-10., -10., -10., -20., -20., -20.]
+        acc_weight: [1., 1., 1., 1., 1., 1.]
+    position:    
+        KP: [100., 100., 100., 100., 100., 100.] # robot_com_position, robot_com_roll_pitch_yaw
+        KD: [30., 30., 10., 10., 10., 20.] # robot_com_velocity, robot_com_roll_pitch_yaw_rate
+        max_ddq: [10., 10., 10., 20., 20., 20.]
+        min_ddq: [-10., -10., -10., -20., -20., -20.]
+        acc_weight: [1., 1., 1., 1., 1., 1.]    
+    walk:
+        # for walk
+        KP:  [100., 100., 100., 200., 200., 200.] # robot_com_position, robot_com_roll_pitch_yaw
+        KD:  [40., 30., 10., 10., 10., 30.] # robot_com_velocity, robot_com_roll_pitch_yaw_rate
+        max_ddq: [10., 10., 10., 20., 20., 20.]
+        min_ddq: [-10., -10., -10., -20., -20., -20.]
+        acc_weight: [1., 1., 1., 10., 10., 1.]
+    advanced_trot:
+        KP:  [100., 100., 100., 200., 200., 100] # robot_com_position, robot_com_roll_pitch_yaw
+        KD:  [30., 20., 10., 20., 20., 25.] # robot_com_velocity, robot_com_roll_pitch_yaw_rate
+        max_ddq: [10., 10., 10., 10., 10., 10.]
+        min_ddq: [-10., -10., -10., -10., -10., -10.]        
+        acc_weight: [1., 1., 1., 10., 10., 1.]
+        X_weight: [20., 15., 15., 20., 20., 50., 1., 1., 1., 1., 1., 1., 50.]     
+    

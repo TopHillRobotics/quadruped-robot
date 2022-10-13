@@ -24,6 +24,22 @@
 
 #ifndef QR_TYPES_H
 #define QR_TYPES_H
+
+/*!
+* Link indices for cheetah-shaped robots
+*/
+namespace linkID {
+    constexpr size_t FR = 9;   // Front Right Foot
+    constexpr size_t FL = 11;  // Front Left Foot
+    constexpr size_t HR = 13;  // Hind Right Foot
+    constexpr size_t HL = 15;  // Hind Left Foot
+
+    constexpr size_t FR_abd = 2;  // Front Right Abduction
+    constexpr size_t FL_abd = 0;  // Front Left Abduction
+    constexpr size_t HR_abd = 3;  // Hind Right Abduction
+    constexpr size_t HL_abd = 1;  // Hind Left Abduction
+}  // namespace linkID
+
 enum MotorMode {
     POSITION_MODE,
     TORQUE_MODE,

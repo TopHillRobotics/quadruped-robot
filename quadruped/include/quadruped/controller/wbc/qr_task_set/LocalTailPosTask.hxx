@@ -21,6 +21,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+#include "quadruped/common/qr_enums.h"
 
 template <typename T>
 LocalTailPosTask<T>::LocalTailPosTask(const FloatingBaseModel<T>* robot)

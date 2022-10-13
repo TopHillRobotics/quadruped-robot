@@ -23,6 +23,7 @@
 // SOFTWARE.
 
 #include "LocalHeadPosTask.hpp"
+#include "quadruped/common/qr_enums.h"
 
 #include <Configuration.h>
 #include <Dynamics/FloatingBaseModel.h>

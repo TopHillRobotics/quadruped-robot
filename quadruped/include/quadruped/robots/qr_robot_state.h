@@ -87,6 +87,62 @@ struct qrMotorState
 };
 
 /**
+ * @brief The data of whole body control.
+ */
+class qrWbcCtrlData {
+public:
+    /**
+     * @brief desired body position.
+     */
+    Vec3<float> pBody_des;
+
+    /**
+     * @brief desired body velocity.
+     */
+    Vec3<float> vBody_des;
+
+    /**
+     * @brief desired body acceleration.
+     */
+    Vec3<float> aBody_des;
+
+    /**
+     * @brief desired body roll, pitch, yaw.
+     */
+    Vec3<float> pBody_RPY_des;
+
+    /**
+     * @brief desired body orientation.
+     */
+    Vec3<float> vBody_Ori_des;
+
+    /**
+     * @brief desired foot position.
+     */
+    Vec3<float> pFoot_des[4];
+
+    /**
+     * @brief desired foot velocity.
+     */
+    Vec3<float> vFoot_des[4];
+
+    /**
+     * @brief desired foot acceleration.
+     */
+    Vec3<float> aFoot_des[4];
+
+    /**
+     * @brief desired extern forces.
+     */
+    Vec3<float> Fr_des[4];
+
+    /**
+     * @brief current contact state.
+     */
+    Vec4<bool> contact_state;
+};
+
+/**
  * @brief The qrRobotState class stores the current status of the robot
  */
 class qrRobotState{
@@ -165,6 +221,11 @@ public:
      * @brief state of 12 motors
      */
     std::array<qrMotorState, 12> motorState;
+
+    /**
+     * @brief the data which needed by whole body controller
+     */
+    qrWbcCtrlData wbcData;
 
     /**
      * @brief update current robot states

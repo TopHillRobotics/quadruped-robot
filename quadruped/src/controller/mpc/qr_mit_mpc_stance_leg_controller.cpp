@@ -500,7 +500,7 @@ void qrMITConvexMPCStanceLegController::updateMPCIfNeeded(qrRobot *_quadruped, b
         }
 
 
-        MITTimer solveTimer;
+        // MITTimer solveTimer;
         // int cmpc_use_sparse = 0;
         // if (cmpc_use_sparse > 0.5) {
         //     solveSparseMPC(_quadruped);

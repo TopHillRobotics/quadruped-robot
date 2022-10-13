@@ -30,6 +30,7 @@
 #define DEFAULT_WINDOW_SIZE 20
 #define A1_BODY_HIGHT 0.27  // for robot position init
 #define NumLeg 4
+#define NumMotor 12
 const int numMotorOfOneLeg = 3;
 const float MAXIMUM_STEP = 0.3001f;
 

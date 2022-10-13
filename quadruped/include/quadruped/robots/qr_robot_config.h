@@ -32,6 +32,7 @@
 #include "common/qr_eigen_types.h"
 #include "common/qr_se3.h"
 #include "common/qr_enums.h"
+#include "dynamics/qr_floating_base_model.hpp"
 
 /**
  * @brief The qrRobotConfig class stores the configuration of specific robot
@@ -194,6 +195,15 @@ public:
                                                 Eigen::Matrix<float, 3, 1> legAngles,
                                                 Eigen::Matrix<float, 3, 1> footLocalVelocity);
 
+    Vec3<float> withLegSigns(const Vec3<float>& v, int legID);
+
+    /**
+     * @brief Build the floating base model.
+     * @return true if building model successfully else false.
+     */
+    bool BuildDynamicModel();
+
+    FloatingBaseModel<float> model;
 
 private:
 
