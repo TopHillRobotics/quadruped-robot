@@ -88,7 +88,7 @@
     </xacro:if> 
 
     <xacro:if value="$(arg USE_LIDAR)">
-        <xacro:VLP-16 sensor_name="velodyne" parent= "trunk" rate= "15">
+        <xacro:VLP-16 sensor_name="velodyne" parent= "trunk" rate= "10">
             <origin rpy="0 0 0 " xyz="0 0 0.055"/>
         </xacro:VLP-16>
     </xacro:if> 

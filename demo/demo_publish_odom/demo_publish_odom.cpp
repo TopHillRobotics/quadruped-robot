@@ -50,9 +50,7 @@ int main(int argc, char **argv)
     thread keyboardTh(&qrTeleKeyboard::run, keyboard);
 
     // reset the gazebo controller and robot
-    ros::ServiceClient modelStateClient = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
-    ros::ServiceClient jointStateClient = nh.serviceClient<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
-    ResetRobotByService(nh,  modelStateClient,  jointStateClient, robotName);
+    ResetRobotBySystem(nh, robotName);
     ros::AsyncSpinner spinner(1); // one threads
     spinner.start();
 

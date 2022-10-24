@@ -5,13 +5,13 @@
 
     <xacro:property name="topic" value="/velodyne_points"/>
     <xacro:property name="lasers" value="16"/>
-    <xacro:property name="samples" value="1875"/>
+    <xacro:property name="samples" value="1024"/>
     <xacro:property name="collision_range" value="0.3"/>
     <xacro:property name="min_range" value="0.9"/>
-    <xacro:property name="max_range" value="130.0"/>
+    <xacro:property name="max_range" value="100"/>
     <xacro:property name="min_angle" value="-${M_PI} "/>
     <xacro:property name="max_angle" value="${M_PI} "/>
-    <xacro:property name="gpu" value="true"/>
+    <xacro:property name="gpu" value="false"/>
     <xacro:property name="noise" value="0.008"/>
 
 
