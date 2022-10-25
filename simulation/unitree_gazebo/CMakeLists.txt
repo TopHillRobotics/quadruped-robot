@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(unitree_gazebo)
+project(qr_gazebo)
 
 set (CMAKE_AUTOMOC ON)
 

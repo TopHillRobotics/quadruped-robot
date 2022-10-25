@@ -104,7 +104,7 @@ source ${your_workspace}/devel/setup.bash
 Second, run the Gazebo simulator and load a robot.
 
 ```
-roslaunch unitree_gazebo normal.launch rname:=a1 use_xacro:=true
+roslaunch qr_gazebo normal.launch rname:=a1 use_xacro:=true
 ```
 
 In this command, **rname** specifies the robot you use and **use_xacro** indicates if you use URDF or XACRO description file.
