@@ -32,10 +32,18 @@
 
 using namespace std;
 
+void publish_odom(qrRobotOdometryEstimator* odomEstimator){
+    ros::Rate loop_rate(500);
+    while(ros::ok()) {
+    odomEstimator->PublishOdometry();
+    loop_rate.sleep();
+    }
+}
+
 int main(int argc, char **argv)
 {
     // initialize ROS nodes
-    ros::init(argc, argv, "demo_trot_keyboard");
+    ros::init(argc, argv, "demo_publish_odom");
     ros::NodeHandle nh;
 
     // get the node package path
@@ -44,15 +52,8 @@ int main(int argc, char **argv)
     std::string robotName;
     nh.getParam("robotName", robotName);
 
-    // start keyboard receiving thread.
-    qrTeleKeyboard *keyboard = new qrTeleKeyboard(nh);
-    std::cout << "---------Keyboard start receving---------" << std::endl;
-    thread keyboardTh(&qrTeleKeyboard::run, keyboard);
-
     // reset the gazebo controller and robot
-    ros::ServiceClient modelStateClient = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
-    ros::ServiceClient jointStateClient = nh.serviceClient<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
-    ResetRobotByService(nh,  modelStateClient,  jointStateClient, robotName);
+    ResetRobotBySystem(nh, robotName);
     ros::AsyncSpinner spinner(1); // one threads
     spinner.start();
 
@@ -91,11 +92,21 @@ int main(int argc, char **argv)
 
     std::cout << "----------------Main Loop Starting------------------" << std::endl;
 
+    // start publish_odom thread.
+    std::thread publish_odom_thread(publish_odom, odomEstimator);
+    publish_odom_thread.detach();
+
+    // start keyboard receiving thread.
+    qrTeleKeyboard *keyboard = new qrTeleKeyboard(nh);
+    std::cout << "---------Keyboard start receving---------" << std::endl;
+    thread keyboardTh(&qrTeleKeyboard::run, keyboard);
+
     // start the control loop until the time arrive at MAX_TIME_SECONDS.
     std::cout << "You can use 'w' 'a' 's' 'd' 'r' 'f' to control the robot's position,\n" << 
                 "and use 'i' 'k' 'j' 'l' 'u' 'o' to control the robot's orientation,\n" <<
                 "input CTRL + c to exit keyboard control,\n" << 
                 "other key to set all velocity to 0." << std::endl;
+
     while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS) {
         startTimeWall = quadruped->GetTimeSinceReset();
 
@@ -122,7 +133,6 @@ int main(int argc, char **argv)
             ROS_ERROR("The dog is going down, main function exit.");
             break;
         }
-        odomEstimator->PublishOdometry();
         // wait until this step has cost the timestep to synchronizing frequency.
         while (quadruped->GetTimeSinceReset() - startTimeWall < quadruped->timeStep) {}
     }
