@@ -55,7 +55,7 @@ source ${your_workspace}/devel/setup.bash
 Second, run the Gazebo simulator and load a robot.
 
 ```
-roslaunch unitree_gazebo normal.launch rname:=a1 wname:=mini_maze use_xacro:=true use_lidar:=true
+roslaunch qr_gazebo normal.launch rname:=a1 wname:=mini_maze use_xacro:=true use_lidar:=true
 ```
 
 In this command, **rname** specifies the robot you use, **wname** specifies the gazebo_world you use, **use_xacro** means whether you use URDF or XACRO file, **use_lidar** means whether you use the sensor of lidar.

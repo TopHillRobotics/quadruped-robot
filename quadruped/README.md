@@ -32,7 +32,7 @@ Please always run `devel/setup.bash` before running these demo.
 You need to start the gazebo simulation environment to load the robot model first.
 
 ```
-roslaunch unitree_gazebo normal.launch
+roslaunch qr_gazebo normal.launch
 ```
 
 Then in another new terminal, launch the controller node. This is the simplest demo which makes the quadruped robot stand up only.

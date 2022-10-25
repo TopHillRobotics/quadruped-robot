@@ -8,7 +8,7 @@ Robot description: `go1_description`, `a1_description`, `aliengo_description`, `
 
 Robot and joints controller: `unitree_controller`
 
-Simulation related: `unitree_gazebo`, `unitree_legged_control`
+Simulation related: `qr_gazebo`, `unitree_legged_control`
 
 # Dependencies
 
@@ -32,11 +32,11 @@ Else if your ROS is kinetic:
 sudo apt-get install ros-kinetic-controller-manager ros-kinetic-ros-control ros-kinetic-ros-controllers ros-kinetic-joint-state-controller ros-kinetic-effort-controllers ros-kinetic-velocity-controllers ros-kinetic-position-controllers ros-kinetic-robot-controllers ros-kinetic-robot-state-publisher ros-kinetic-gazebo8-ros ros-kinetic-gazebo8-ros-control ros-kinetic-gazebo8-ros-pkgs ros-kinetic-gazebo8-ros-dev
 ```
 
-And open the file `unitree_gazebo/worlds/stairs.world`. At the end of the file:
+And open the file `qr_gazebo/worlds/stairs.world`. At the end of the file:
 
 ```
 <include>
-    <uri>model:///home/unitree/catkin_ws/src/unitree_ros/unitree_gazebo/worlds/building_editor_models/stairs</uri>
+    <uri>model:///home/unitree/catkin_ws/src/unitree_ros/qr_gazebo/worlds/building_editor_models/stairs</uri>
 </include>
 ```
 
@@ -65,12 +65,12 @@ Namely the description of Go1, A1, Aliengo and Laikago. Each package include mes
 roslaunch laikago_description laikago_rviz.launch
 ```
 
-## unitree_gazebo & unitree_controller:
+## qr_gazebo & unitree_controller:
 
 You can launch the Gazebo simulation by the following command:
 
 ```
-roslaunch unitree_gazebo normal.launch rname:=a1 wname:=stairs
+roslaunch qr_gazebo normal.launch rname:=a1 wname:=stairs
 ```
 
 Where the `rname` means robot name, which can be `laikago`, `aliengo`, `a1` or `go1`. The `wname` means world name, which can be `earth`, `space` or `stairs`. And the default value of `rname` is `laikago`, while the default value of `wname` is `earth`. In Gazebo, the robot should be lying on the ground with joints not activated.
