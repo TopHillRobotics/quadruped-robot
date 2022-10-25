@@ -21,7 +21,9 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+
 #include <typeinfo>
+#include <iostream>
 #include "quadruped/exec/runtime.h"
 #include "quadruped/robots/qr_robot_sim.h"
 #include "quadruped/robots/qr_robot_real.h"
@@ -47,7 +49,7 @@ int main(int argc, char **argv)
 
         // reset the gazebo controller and robot
         ResetRobotBySystem(nh, robotName);
-        ROS_INFO("---------finished: ROS, Gazebo controller and loading robot model---------");
+        ROS_INFO("---------loading ROS, Gazebo controller and robot model---------");
         
         // create a quadruped robot.
         quadruped = new qrRobotSim(nh, robotName, LocomotionMode::VELOCITY_LOCOMOTION);
@@ -59,6 +61,7 @@ int main(int argc, char **argv)
 
     quadruped->ReceiveObservation();
 
+    std::cout << "In this demo, a quadruped robot stands up and then lies down!\n"
     // perform the first action: standing up
     // It takes 3 seconds to stand up and keep 5 seconds before any other action
     // 0.0001 is the specified time step.
@@ -68,14 +71,14 @@ int main(int argc, char **argv)
     float currentTime = startTime;
     float startTimeWall = startTime;
 
-    // keep the quadruped robot standing for 20.0 seconds and 0.001 is the time step
+    // keep the quadruped robot standing for 5.0 seconds and 0.001 is the time step
     Action::KeepStand(quadruped, 5.f, 0.001f);
     
     // let the quadruped robot sit down. It takes 3 seconds to finish the action.
     Action::SitDown(quadruped, 3.f, 0.001f);
 
-    // shutdown all the ROS nodes
-    ROS_INFO("The demo is closed!");
+    // close all the ROS nodes
+    ROS_INFO("The demo is closed! \n");
     ros::shutdown();
 
     return 0;
