@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 
     quadruped->ReceiveObservation();
 
-    std::cout << "In this demo, a quadruped robot stands up and then lies down!\n"
+    std::cout << "In this demo, a quadruped robot stands up and then lies down!\n";
     // perform the first action: standing up
     // It takes 3 seconds to stand up and keep 5 seconds before any other action
     // 0.0001 is the specified time step.
