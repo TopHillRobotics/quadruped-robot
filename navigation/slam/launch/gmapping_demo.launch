@@ -40,6 +40,9 @@
     <!--pointcloud_to_laser-->>
     <include file="$(find slam)/launch/pointcloud_to_laser.launch" />
 
+     <!-- Move_base used for navigation -->
+    <include file="$(find navigation_2d)/launch/move_base.launch"/>
+    
     <!--- Run Rviz-->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find slam)/rviz/gmapping.rviz"/>
 
