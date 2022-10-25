@@ -13,8 +13,9 @@
             -configuration_directory $(find slam)/config/cartographer_config/
             -configuration_basename VLP16.lua"
         output="screen">
-        <remap from="points2" to="/scan" />
+        <remap from="scan" to="/scan" />
         <remap from="imu" to="/trunk_imu" />
+        <remap from="odom" to="/legOdom" />
     </node>
     <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
         type="cartographer_occupancy_grid_node" args="-resolution 0.05" />

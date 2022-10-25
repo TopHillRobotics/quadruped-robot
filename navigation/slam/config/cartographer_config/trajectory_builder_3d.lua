@@ -15,19 +15,19 @@
 MAX_3D_RANGE = 60.
 
 TRAJECTORY_BUILDER_3D = {
-  min_range = 1.,
+  min_range = 1,
   max_range = MAX_3D_RANGE,
   num_accumulated_range_data = 1,
   voxel_filter_size = 0.15,
 
   high_resolution_adaptive_voxel_filter = {
-    max_length = 2.,
+    max_length = 2,
     min_num_points = 150,
-    max_range = 15.,
+    max_range = 15,
   },
 
   low_resolution_adaptive_voxel_filter = {
-    max_length = 4.,
+    max_length = 4,
     min_num_points = 200,
     max_range = MAX_3D_RANGE,
   },
@@ -35,15 +35,15 @@ TRAJECTORY_BUILDER_3D = {
   use_online_correlative_scan_matching = false,
   real_time_correlative_scan_matcher = {
     linear_search_window = 0.15,
-    angular_search_window = math.rad(1.),
+    angular_search_window = math.rad(1),
     translation_delta_cost_weight = 1e-1,
     rotation_delta_cost_weight = 1e-1,
   },
 
   ceres_scan_matcher = {
-    occupied_space_weight_0 = 1.,
-    occupied_space_weight_1 = 6.,
-    translation_weight = 5.,
+    occupied_space_weight_0 = 1,
+    occupied_space_weight_1 = 6,
+    translation_weight = 5,
     rotation_weight = 4e2,
     only_optimize_yaw = false,
     ceres_solver_options = {
@@ -59,12 +59,12 @@ TRAJECTORY_BUILDER_3D = {
     max_angle_radians = 0.004,
   },
 
-  imu_gravity_time_constant = 10.,
+  imu_gravity_time_constant = 10,
   rotational_histogram_size = 120,
 
   submaps = {
     high_resolution = 0.10,
-    high_resolution_max_range = 20.,
+    high_resolution_max_range = 20,
     low_resolution = 0.45,
     num_range_data = 160,
     range_data_inserter = {
