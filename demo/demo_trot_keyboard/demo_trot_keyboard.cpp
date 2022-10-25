@@ -36,13 +36,14 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "demo_trot_keyboard");
     ros::NodeHandle nh;
 
+    ros::AsyncSpinner spinner(1); // one threads
+    spinner.start();
+
     // get the node package path
     std::string pathToPackage = ros::package::getPath("demo");
     std::string pathToNode =  pathToPackage + ros::this_node::getName();
     std::string robotName = "a1";
     qrRobot *quadruped;
-    ros::AsyncSpinner spinner(1); // one threads
-    spinner.start();
     nh.setParam("isSim", true);
 
     // start keyboard receiving thread.
