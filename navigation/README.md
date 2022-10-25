@@ -86,7 +86,7 @@ You alse can run the demo
 ```
 rosrun demo demo_navigation_2d_gmapping
 ```
-It don't need the map,you can map and navigate in real time.
+It don't need the map,you can map and navigate in real time.Likewise, you can use cartographer instead of gmapping.
 
 
 
