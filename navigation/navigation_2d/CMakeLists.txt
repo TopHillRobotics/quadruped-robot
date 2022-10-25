@@ -8,11 +8,6 @@ find_package(catkin REQUIRED COMPONENTS
 	message_generation
 	controller_manager
 	gazebo_ros
-	move_base
-	map_server
-	amcl
-	gmapping
-	dwa_local_planner
 )
 
 catkin_package(
