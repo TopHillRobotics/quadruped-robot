@@ -58,10 +58,7 @@ int main(int argc, char **argv)
         nh.getParam("robotName", robotName);
 
         // reset the gazebo controller and robot
-        ros::ServiceClient modelStateClient = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
-        ros::ServiceClient jointStateClient = nh.serviceClient<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
-        ResetRobotByService(nh,  modelStateClient,  jointStateClient, robotName);
-
+        ResetRobotBySystem(nh, robotName);
         ROS_INFO("---------finished: ROS, Gazebo controller and loading robot model---------");
         
         // create a quadruped robot.

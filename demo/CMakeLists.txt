@@ -32,6 +32,9 @@ add_executable(external_force_motion external_force_motion/external_force_motion
 add_executable(demo_publish_odom demo_publish_odom/demo_publish_odom.cpp)
 add_executable(demo_slam_gmapping demo_slam_gmapping/demo_slam_gmapping.cpp)
 add_executable(demo_slam_cartographer demo_slam_cartographer/demo_slam_cartographer.cpp)
+add_executable(demo_navigation_2d_use_map demo_navigation_2d/demo_navigation_2d_use_map.cpp)
+add_executable(demo_navigation_2d_gmapping demo_navigation_2d/demo_navigation_2d_gmapping.cpp)
+
 
 target_link_libraries(demo_helloworld ${catkin_LIBRARIES})
 target_link_libraries(demo_trot_velocity ${catkin_LIBRARIES})
@@ -44,3 +47,7 @@ target_link_libraries(external_force_motion ${catkin_LIBRARIES})
 target_link_libraries(demo_publish_odom ${catkin_LIBRARIES})
 target_link_libraries(demo_slam_gmapping ${catkin_LIBRARIES})
 target_link_libraries(demo_slam_cartographer ${catkin_LIBRARIES})
+target_link_libraries(demo_navigation_2d_use_map ${catkin_LIBRARIES})
+target_link_libraries(demo_navigation_2d_gmapping ${catkin_LIBRARIES})
+
+
