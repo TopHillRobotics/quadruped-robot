@@ -6,7 +6,7 @@ include "trajectory_builder.lua"
     trajectory_builder = TRAJECTORY_BUILDER,
     map_frame = "map",
     tracking_frame = "base",
-    published_frame = "odom",
+    published_frame = "base",
     odom_frame = "odom",
     provide_odom_frame = true,
     publish_frame_projected_to_2d = false,
