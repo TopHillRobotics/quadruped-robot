@@ -45,6 +45,13 @@ But the version of ros-noetic  do not release, you should install it by source h
 
 If you want to know more,please visit https://google-cartographer-ros.readthedocs.io/en/latest/ 
 
+## 3.3 Install navigation
+The amcl package and move_base package is already integrated with ros
+```
+sudo apt install ros-${your_ros_version}-navigation
+```
+If you want to know more,please visit http://wiki.ros.org/navigation
+
 # 4. Run Demos
 First, in one terminal, source the `setup.bash` to set up the environment
 
@@ -65,10 +72,24 @@ Third, in a new terminal, launch the slam demo. It will start the node of rviz a
 ```
 rosrun demo demo_slam_gmapping
 ```
-Similarly，you also can launch.
+Similarly，you also can run
 ```
 rosrun demo demo_slam_cartographer
 ```
+You can run the navigation demo
+```
+rosrun demo demo_navigation_2d_use_map
+```
+Use the 2D Nav Goal to navigate your robot to the target point,you can chose the lidar or camera to avoid obstacles.The map is provided by the demo of slam,you can use the map_server to save the map.
+
+You alse can run the demo
+```
+rosrun demo demo_navigation_2d_gmapping
+```
+It don't need the map,you can map and navigate in real time.Likewise, you can use cartographer instead of gmapping.
+
+
+
 
 
 

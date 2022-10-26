@@ -31,12 +31,12 @@ Visualization Manager:
   Class: ""
   Displays:
     - Alpha: 0.5
-      Cell Size: 0.5
+      Cell Size: 1
       Class: rviz/Grid
       Color: 88; 88; 90
       Enabled: true
       Line Style:
-        Line Width: 0.0299999993
+        Line Width: 0.03
         Value: Lines
       Name: Grid
       Normal Cell Count: 0
@@ -45,10 +45,10 @@ Visualization Manager:
         Y: 0
         Z: 0
       Plane: XY
-      Plane Cell Count: 80
+      Plane Cell Count: 40
       Reference Frame: map
       Value: true
-    - Angle Tolerance: 0.100000001
+    - Angle Tolerance: 0.1
       Class: rviz/Odometry
       Covariance:
         Orientation:
@@ -60,7 +60,7 @@ Visualization Manager:
           Scale: 1
           Value: true
         Position:
-          Alpha: 0.300000012
+          Alpha: 0.3
           Color: 204; 51; 204
           Scale: 1
           Value: true
@@ -68,54 +68,54 @@ Visualization Manager:
       Enabled: false
       Keep: 100
       Name: Odometry
-      Position Tolerance: 0.100000001
+      Position Tolerance: 0.1
       Shape:
         Alpha: 1
         Axes Length: 1
-        Axes Radius: 0.100000001
+        Axes Radius: 0.1
         Color: 255; 25; 0
-        Head Length: 0.300000012
-        Head Radius: 0.100000001
+        Head Length: 0.3
+        Head Radius: 0.1
         Shaft Length: 1
-        Shaft Radius: 0.0500000007
+        Shaft Radius: 0.05
         Value: Arrow
-      Topic: /odom
+      Topic: /legOdom
       Unreliable: false
       Value: false
-    - Angle Tolerance: 0.100000001
+    - Angle Tolerance: 0.1
       Class: rviz/Odometry
       Covariance:
         Orientation:
           Alpha: 0.5
-          Color: 255; 255; 127
+          Color: 255; 255; 130
           Color Style: Unique
           Frame: Local
           Offset: 1
           Scale: 1
           Value: true
         Position:
-          Alpha: 0.300000012
+          Alpha: 0.3
           Color: 204; 51; 204
           Scale: 1
           Value: true
         Value: true
       Enabled: false
       Keep: 100
-      Name: Odometry EKF
-      Position Tolerance: 0.100000001
-      Shape:
-        Alpha: 1
-        Axes Length: 1
-        Axes Radius: 0.100000001
-        Color: 255; 25; 0
-        Head Length: 0.300000012
-        Head Radius: 0.100000001
-        Shaft Length: 1
-        Shaft Radius: 0.0500000007
-        Value: Arrow
-      Topic: /odom
-      Unreliable: false
-      Value: false
+      # Name: Odometry EKF
+      # Position Tolerance: 0.1
+      # Shape:
+      #   Alpha: 1
+      #   Axes Length: 1
+      #   Axes Radius: 0.100000001
+      #   Color: 255; 25; 0
+      #   Head Length: 0.300000012
+      #   Head Radius: 0.100000001
+      #   Shaft Length: 1
+      #   Shaft Radius: 0.0500000007
+      #   Value: Arrow
+      # Topic: /legOdom
+      # Unreliable: false
+      # Value: false
     - Alpha: 1
       Class: rviz/RobotModel
       Collision Enabled: false
@@ -260,8 +260,8 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 0.30399999
-        Min Value: 0.30399999
+        Max Value: 0.3
+        Min Value: 0.3
         Value: true
       Axis: Z
       Channel Name: intensity
@@ -280,7 +280,7 @@ Visualization Manager:
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.100000001
+      Size (m): 0.1
       Style: Spheres
       Topic: /scan
       Unreliable: false
@@ -302,45 +302,47 @@ Visualization Manager:
       Topic: /initialpose
     - Class: rviz/SetGoal
       Topic: /move_base_simple/goal
+      Single click: true
+      Topic: clicked_point
   Value: true
   Views:
     Current:
-      Class: rviz/XYOrbit
-      Distance: 11.4054165
+      Class: rviz/ThirdPersonFollower
+      Distance: 30
       Enable Stereo Rendering:
-        Stereo Eye Separation: 0.0599999987
+        Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 2.62088394
-        Y: 3.62886548
-        Z: 4.76837158e-07
+        X: -5
+        Y: -0.5
+        Z: 3
       Focal Shape Fixed Size: true
-      Focal Shape Size: 0.0500000007
+      Focal Shape Size: 0.05
       Invert Z Axis: false
       Name: Current View
-      Near Clip Distance: 0.00999999978
-      Pitch: 1.19539785
+      Near Clip Distance: 0.01
+      Pitch: 1.5
       Target Frame: <Fixed Frame>
-      Value: XYOrbit (rviz)
-      Yaw: 1.57039797
+      Value: ThirdPersonFollower (rviz)
+      Yaw: 3.14
     Saved: ~
 Window Geometry:
   Displays:
-    collapsed: false
-  Height: 874
-  Hide Left Dock: false
-  Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000016a00000324fc0200000005fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006400fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000198000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000002800000324000000dd00ffffff000000010000010f00000324fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000002800000324000000b000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004a00000003efc0100000002fb0000000800540069006d00650000000000000004a00000030000fffffffb0000000800540069006d00650100000000000004500000000000000000000003de0000032400000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+    collapsed: true
+  Height: 1155
+  Hide Left Dock: true
+  Hide Right Dock: true
+  QMainWindow State: 000000ff00000000fd0000000400000000000001f10000041dfc0200000004fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afc0000003d0000041d0000000000fffffffaffffffff0100000002fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000000ffffffff0000009d00fffffffb000000100044006900730070006c0061007900730000000000000001f10000015600ffffff000000010000010f00000433fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000002800000433000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004a00000003efc0100000002fb0000000800540069006d00650000000000000004a0000002eb00fffffffb0000000800540069006d00650100000000000004500000000000000000000003a90000041d00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
     collapsed: false
   Tool Properties:
-    collapsed: false
+    collapsed: true
   Views:
-    collapsed: false
-  Width: 1358
-  X: 298
-  Y: 104
+    collapsed: true
+  Width: 900
+  X: 600
+  Y: 30
