@@ -4,8 +4,8 @@
     <version>0.0.0</version>
     <description>The qr_gazebo package. It can start a gazebo simulation</description>
 
-    <maintainer email="laikago@unitree.cc">unitree</maintainer>
-    <license>TODO</license>
+    <maintainer email="tophill.robotics@gmail.com">TopHill Robotics</maintainer>
+    <license>MIT</license>
 
     <buildtool_depend>catkin</buildtool_depend>
     <buildtool_depend>genmsg</buildtool_depend>
