@@ -39,7 +39,7 @@
     <gazebo reference="FR_foot">
         <visual>
             <plugin name="draw_trajectory_Plugin" filename="libDrawTrajectoryPlugin.so">
-                <position>1 1 1</position>
+                <position>0 0 0</position>
                 <material>Gazebo/Blue</material>
             </plugin>
         </visual>
