@@ -8,41 +8,6 @@
         </plugin>
     </gazebo>
 
-    <!-- Show the trajectory of trunk center. -->
-
-    <!-- <gazebo>
-        <plugin name="3dplot" filename="libLinkPlot3DPlugin.so">
-            <frequency>10</frequency>
-            <plot>
-                <link>base</link>
-                <pose>0 0 0 0 0 0</pose>
-                <material>Gazebo/Yellow</material>
-            </plot>
-        </plugin>
-    </gazebo> -->
-
-    <!-- Show the trajectory of foot. You can add another trajectory about another foot. -->
-    <!-- <gazebo>
-        <plugin name="3dplot" filename="libLinkPlot3DPlugin.so">
-            <frequency>100</frequency>
-            <plot>
-                <link>FL_calf</link>
-                <pose>0 0 -0.2 0 0 0</pose>
-                <material>Gazebo/Green</material>
-            </plot>
-        </plugin>
-    </gazebo>
-    <gazebo>
-        <plugin name="3dplot" filename="libLinkPlot3DPlugin.so">
-            <frequency>100</frequency>
-            <plot>
-                <link>FR_calf</link>
-                <pose>0 0 -0.2 0 0 0</pose>
-                <material>Gazebo/Red</material>
-            </plot>
-        </plugin>
-    </gazebo> -->
-
     <gazebo>
         <plugin filename="libgazebo_ros_force.so" name="gazebo_ros_force">
             <bodyName>trunk</bodyName>
@@ -69,12 +34,49 @@
             <pose>0 0 0 0 0 0</pose>
         </sensor>
     </gazebo>
+
+    <!-- Show the trajectory of foot. You can add another trajectory about another foot. -->
+    <gazebo reference="FR_foot">
+        <visual>
+            <plugin name="draw_trajectory_Plugin" filename="libDrawTrajectoryPlugin.so">
+                <position>1 1 1</position>
+                <material>Gazebo/Blue</material>
+            </plugin>
+        </visual>
+    </gazebo>
+    <gazebo reference="FL_foot">
+        <visual>
+            <plugin name="draw_trajectory_Plugin" filename="libDrawTrajectoryPlugin.so">
+                <position>0 0 0</position>
+                <material>Gazebo/Red</material>
+            </plugin>
+        </visual>
+    </gazebo>
+    <gazebo reference="RR_foot">
+        <visual>
+            <plugin name="draw_trajectory_Plugin" filename="libDrawTrajectoryPlugin.so">
+                <position>0 0 0</position>
+                <material>Gazebo/Turquoise</material>
+            </plugin>
+        </visual>
+    </gazebo>
+    <gazebo reference="RL_foot">
+        <visual>
+            <plugin name="draw_trajectory_Plugin" filename="libDrawTrajectoryPlugin.so">
+                <position>0 0 0</position>
+                <material>Gazebo/Orange</material>
+            </plugin>
+        </visual>
+    </gazebo>
     
     <!-- Foot contacts. -->
     <gazebo reference="FR_calf">
         <sensor name="FR_foot_contact" type="contact">
         <update_rate>100</update_rate>
         <plugin name="contactPlugin" filename="libunitreeFootContactPlugin.so"/>
+        <plugin name="draw_contact_Plugin" filename="libDrawContactPlugin.so">
+            <material>Gazebo/Yellow</material>
+        </plugin>
         <contact>
             <collision>FR_calf_fixed_joint_lump__FR_foot_collision_1</collision>
         </contact>
@@ -84,6 +86,9 @@
         <sensor name="FL_foot_contact" type="contact">
         <update_rate>100</update_rate>
         <plugin name="contactPlugin" filename="libunitreeFootContactPlugin.so"/>
+        <plugin name="draw_contact_Plugin" filename="libDrawContactPlugin.so">
+            <material>Gazebo/Yellow</material>
+        </plugin>
         <contact>
             <collision>FL_calf_fixed_joint_lump__FL_foot_collision_1</collision>
         </contact>
@@ -93,6 +98,9 @@
         <sensor name="RR_foot_contact" type="contact">
         <update_rate>100</update_rate>
         <plugin name="contactPlugin" filename="libunitreeFootContactPlugin.so"/>
+        <plugin name="draw_contact_Plugin" filename="libDrawContactPlugin.so">
+            <material>Gazebo/White</material>
+        </plugin>
         <contact>
             <collision>RR_calf_fixed_joint_lump__RR_foot_collision_1</collision>
         </contact>
@@ -102,6 +110,9 @@
         <sensor name="RL_foot_contact" type="contact">
         <update_rate>100</update_rate>
         <plugin name="contactPlugin" filename="libunitreeFootContactPlugin.so"/>
+        <plugin name="draw_contact_Plugin" filename="libDrawContactPlugin.so">
+            <material>Gazebo/White</material>
+        </plugin>
         <contact>
             <collision>RL_calf_fixed_joint_lump__RL_foot_collision_1</collision>
         </contact>
@@ -109,7 +120,7 @@
     </gazebo>
 
     <!-- Visualization of Foot contacts. -->
-    <!-- <gazebo reference="FR_foot">
+    <gazebo reference="FR_foot">
         <visual>
             <plugin name="drawForcePlugin" filename="libunitreeDrawForcePlugin.so">
                 <topicName>FR_foot_contact</topicName>
@@ -136,7 +147,7 @@
                 <topicName>RL_foot_contact</topicName>
             </plugin>
         </visual>
-    </gazebo> -->
+    </gazebo>
 
     <!-- Show planned pose location -->
      <!-- <gazebo reference="base">

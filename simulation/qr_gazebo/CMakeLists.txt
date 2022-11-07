@@ -49,3 +49,8 @@ target_link_libraries(unitreeFootContactPlugin ${catkin_LIBRARIES} ${GAZEBO_LIBR
 add_library(unitreeDrawForcePlugin SHARED plugin/draw_force_plugin.cc)
 target_link_libraries(unitreeDrawForcePlugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
+add_library(DrawContactPlugin SHARED plugin/draw_contact_plugin.cc)
+target_link_libraries(DrawContactPlugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
+add_library(DrawTrajectoryPlugin SHARED plugin/draw_trajectory_plugin.cc)
+target_link_libraries(DrawTrajectoryPlugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
