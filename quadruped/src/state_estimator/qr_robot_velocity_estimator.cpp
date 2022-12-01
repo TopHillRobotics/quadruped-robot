@@ -56,16 +56,16 @@ void qrRobotVelocityEstimator::Reset(float currentTime)
     estimatedAngularVelocity << 0.f, 0.f, 0.f;
 }
 
-float qrRobotVelocityEstimator::ComputeDeltaTime(const LowState *robotState)
+float qrRobotVelocityEstimator::ComputeDeltaTime(const float tick)
 {
     float deltaTime = 0.001;
     if (std::abs(lastTimestamp) < 1e-5) {
         // First timestamp received, return an estimated delta_time.
         deltaTime = robot->timeStep;
     } else {
-        deltaTime = (robotState->tick - lastTimestamp) / 1000.;
+        deltaTime = (tick - lastTimestamp) / 1000.;
     }
-    lastTimestamp = robotState->tick;
+    lastTimestamp = tick;
     return deltaTime;
 }
 
@@ -73,8 +73,7 @@ void qrRobotVelocityEstimator::Update(float currentTime)
 {
     const qrRobotState &state = robot->state;
     // Propagate current state estimate with new accelerometer reading."""
-    const LowState lowstate = robot->lowstate;
-    float deltaTime = ComputeDeltaTime(&lowstate);
+    float deltaTime = ComputeDeltaTime(robot->tick);
     const auto &acc = state.imu.accelerometer;
     Vec3<float> sensorAcc(acc[0], acc[1], acc[2]);
     Quat<float> baseOrientation = robot->GetBaseOrientation(); // w,x,y,z

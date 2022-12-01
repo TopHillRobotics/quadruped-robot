@@ -11,6 +11,7 @@
     <depend>quadprogpp</depend>
     <depend>tinynurbs</depend>
     <depend>unitree_legged_sdk</depend>
+    <depend>deeprobotics_legged_sdk</depend>
     <depend>roscpp</depend>
     <depend>roslib</depend>
     <depend>unitree_legged_msgs</depend>

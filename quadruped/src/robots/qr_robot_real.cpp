@@ -39,12 +39,30 @@ qrRobotReal::qrRobotReal(std::string robotName, LocomotionMode mode):
 
 void qrRobotReal::SendCommand(const std::array<float, 60> motorcmd)
 {
-    robotInterface.SendCommand(motorcmd);
+    a1Interface.SendCommand(motorcmd);
 }
 
 void qrRobotReal::UpdateRobotState()
 {
-    lowstate = robotInterface.ReceiveObservation();
+    // switch (robotname)
+    // {
+    // case "a1":
+    //     UpdateRobotStateA1();
+    //     break;
+    // case "lite2":
+    //     UpdateRobotStateLite2();
+    //     break;
+    // default:
+    //     break;
+    // }
+    UpdateRobotStateA1();
+}
+
+void qrRobotReal::UpdateRobotStateA1()
+{
+    LowState lowstate = a1Interface.ReceiveObservation();
+
+    tick = lowstate.tick;
 
     // update motorState
     for(int motorId = 0; motorId < qrRobotConfig::numMotors; ++motorId){
@@ -70,7 +88,7 @@ void qrRobotReal::UpdateRobotState()
     state.imu.rpy[1] = rpy[1];
     state.imu.rpy[2] = rpy[2];
 
-    // set angular acceleration
+    // set angular velocity
     state.imu.gyroscope[0] = lowstate.imu.gyroscope[0];
     state.imu.gyroscope[1] = lowstate.imu.gyroscope[1];
     state.imu.gyroscope[2] = lowstate.imu.gyroscope[2];
@@ -84,6 +102,51 @@ void qrRobotReal::UpdateRobotState()
     for(int i = 0; i < qrRobotConfig::numLegs; ++i) {
         state.footForce[i] = lowstate.footForce[i];
     }
+    state.Update();
+}
+
+void qrRobotReal::UpdateRobotStateLite2()
+{
+    RobotState robotstate = lite2Receiver.get_recv();
+
+    tick = robotstate.tick;
+
+    // update motorState
+    for(int motorId = 0; motorId < qrRobotConfig::numMotors; ++motorId){
+        state.motorState[motorId].q = robotstate.motor_state.joint_data[motorId].pos;
+        state.motorState[motorId].dq = robotstate.motor_state.joint_data[motorId].vel;
+    }
+
+    // set roll pitch yaw information
+    state.imu.rpy[0] = robotstate.imu.angle_roll;
+    state.imu.rpy[1] = robotstate.imu.angle_pitch;
+    state.imu.rpy[2] = robotstate.imu.angle_yaw;
+
+    Eigen::Matrix<float, 3, 1> rpy = {state.imu.rpy[0],
+                                      state.imu.rpy[1],
+                                      state.imu.rpy[2]};
+    Eigen::Matrix<float, 4, 1> quaternion = math::rpyToQuat(rpy);
+
+    // update imu
+    state.imu.quaternion[0] = quaternion[0];
+    state.imu.quaternion[1] = quaternion[1];
+    state.imu.quaternion[2] = quaternion[2];
+    state.imu.quaternion[3] = quaternion[3];
+
+    // set angular velocity
+    state.imu.gyroscope[0] = robotstate.imu.angular_velocity_roll;
+    state.imu.gyroscope[1] = robotstate.imu.angular_velocity_pitch;
+    state.imu.gyroscope[2] = robotstate.imu.angular_velocity_yaw;
+
+    // set linear acceleration
+    state.imu.accelerometer[0] = robotstate.imu.acc_x;
+    state.imu.accelerometer[1] = robotstate.imu.acc_y;
+    state.imu.accelerometer[2] = robotstate.imu.acc_z;
+
+    // update foot force
+    // for(int i = 0; i < qrRobotConfig::numLegs; ++i) {
+    //     state.footForce[i] = lowstate.footForce[i];
+    // }
     state.Update();
 }
 

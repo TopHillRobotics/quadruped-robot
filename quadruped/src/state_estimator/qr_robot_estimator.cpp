@@ -53,16 +53,16 @@ void qrRobotEstimator::Reset(float currentTime)
     std::cout << "reset pos= " << estimatedPosition.transpose() << std::endl;
 }
 
-float qrRobotEstimator::ComputeDeltaTime(const LowState *robotState)
+float qrRobotEstimator::ComputeDeltaTime(const float tick)
 {
     float deltaTime;
     if (std::abs(lastTimestamp) < 1e-5) {
         // First timestamp received, return an estimated delta_time.
         deltaTime = robot->timeStep;
     } else {
-        deltaTime = (robotState->tick - lastTimestamp) / 1000.;
+        deltaTime = (tick - lastTimestamp) / 1000.;
     }
-    lastTimestamp = robotState->tick;
+    lastTimestamp = tick;
     return deltaTime;
 }
 

@@ -31,34 +31,34 @@
       <update_rate>100</update_rate>
       <plugin filename="libunitreeFootContactPlugin.so" name="contactPlugin"/>
       <contact>
-        <collision>FR_calf_fixed_joint_lump__FR_foot_collision_1</collision>
+        <collision>FR_SHANK_fixed_joint_lump__FR_FOOT_collision_1</collision>
       </contact>
     </sensor>
   </gazebo>
-    <gazebo reference="FL_SHANK">
+  <gazebo reference="FL_SHANK">
     <sensor name="FL_foot_contact" type="contact">
       <update_rate>100</update_rate>
       <plugin filename="libunitreeFootContactPlugin.so" name="contactPlugin"/>
       <contact>
-        <collision>FL_calf_fixed_joint_lump__FR_foot_collision_1</collision>
+        <collision>FL_SHANK_fixed_joint_lump__FL_FOOT_collision_1</collision>
       </contact>
     </sensor>
   </gazebo>
-    <gazebo reference="HR_SHANK">
-    <sensor name="HR_foot_contact" type="contact">
+  <gazebo reference="HR_SHANK">
+    <sensor name="RR_foot_contact" type="contact">
       <update_rate>100</update_rate>
       <plugin filename="libunitreeFootContactPlugin.so" name="contactPlugin"/>
       <contact>
-        <collision>HR_calf_fixed_joint_lump__FR_foot_collision_1</collision>
+        <collision>HR_SHANK_fixed_joint_lump__HR_FOOT_collision_1</collision>
       </contact>
     </sensor>
   </gazebo>
-    <gazebo reference="HL_SHANK">
-    <sensor name="HL_foot_contact" type="contact">
+  <gazebo reference="HL_SHANK">
+    <sensor name="RL_foot_contact" type="contact">
       <update_rate>100</update_rate>
       <plugin filename="libunitreeFootContactPlugin.so" name="contactPlugin"/>
       <contact>
-        <collision>HL_calf_fixed_joint_lump__FR_foot_collision_1</collision>
+        <collision>HL_SHANK_fixed_joint_lump__HL_FOOT_collision_1</collision>
       </contact>
     </sensor>
   </gazebo>
@@ -168,7 +168,7 @@
     <mu2>0.2</mu2>
     <material>Gazebo/Red</material>
   </gazebo>
-<link name="TORSO">
+  <link name="TORSO">
     <visual>
       <origin rpy="-1.570796 3.1415926 3.1415926" xyz="0 0 0"/>
       <geometry>
@@ -185,14 +185,14 @@
     <parent link="TORSO" />
     <child link="INERTIA" />
   </joint>
-<link name="INERTIA">
+  <link name="INERTIA">
     <inertial>
       <origin xyz="0.046396 -0.0017592 0.028665" />
       <mass value="5.298" />
       <inertia ixx="0.0095569" ixy="5.9672E-05" ixz="9.3193E-05" iyy="0.014357" iyz="1.9063E-05" izz="0.01949" />
     </inertial>
   </link>
-    <joint name="imu_joint" type="fixed">
+  <joint name="imu_joint" type="fixed">
     <parent link="TORSO"/>
     <child link="imu_link"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -261,8 +261,8 @@
     <origin xyz="0 0.081 0"  rpy="0 0 0"/>
     <parent link="FL_HIP" />
     <child link="FL_THIGH" />
-    <axis xyz="0 -1 0" />
-    <limit lower="-3.49" upper="0.349" effort="13.2" velocity="20" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.349" upper="3.49" effort="13.2" velocity="20" />
   </joint>
 
   <link name="FL_SHANK">
@@ -284,12 +284,12 @@
     </collision>
   </link>
 
-  <joint name="FL_calf_joint" type="revolute">
+  <joint name="FL_shank_joint" type="revolute">
     <origin xyz="0 0 -0.18"  rpy="0 0 0"/>
     <parent link="FL_THIGH" />
     <child link="FL_SHANK" />
-    <axis xyz="0 -1 0" />
-    <limit lower="0.419" upper="2.53" effort="28" velocity="20" />
+    <axis xyz="0 1 0" />
+    <limit lower="-2.53" upper="-0.419" effort="28" velocity="20" />
   </joint>
 
   <link name="FL_FOOT">
@@ -331,12 +331,12 @@
     </actuator>
   </transmission>
 
-  <transmission name="FL_calf_tran">
+  <transmission name="FL_shank_tran">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="FL_calf_joint">
+    <joint name="FL_shank_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="FL_calf_motor">
+    <actuator name="FL_shank_motor">
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
@@ -358,7 +358,7 @@
     <origin xyz="0.175 -0.055 0"  rpy="0 0 0"/>
     <parent link="TORSO" />
     <child link="FR_HIP" />
-    <axis xyz="-1 0 0" />
+    <axis xyz="1 0 0" />
     <limit lower="-0.523" upper="0.523" effort="13.2" velocity="20" />
   </joint>
 
@@ -386,8 +386,8 @@
     <origin xyz="0 -0.08 0"  rpy="0 0 0"/>
     <parent link="FR_HIP" />
     <child link="FR_THIGH" />
-    <axis xyz="0 -1 0" />
-    <limit lower="-3.49" upper="0.349" effort="13.2" velocity="20" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.349" upper="3.49" effort="13.2" velocity="20" />
   </joint>
 
   <link name="FR_SHANK">
@@ -409,12 +409,12 @@
     </collision>
   </link>
 
-  <joint name="FR_calf_joint" type="revolute">
+  <joint name="FR_shank_joint" type="revolute">
     <origin xyz="0 0 -0.18" rpy="0 0 0"/>
     <parent link="FR_THIGH" />
     <child link="FR_SHANK" />
-    <axis xyz="0 -1 0" />
-    <limit lower="0.419" upper="2.53" effort="28" velocity="20" />
+    <axis xyz="0 1 0" />
+    <limit lower="-2.53" upper="-0.419" effort="28" velocity="20" />
   </joint>
 
  <link name="FR_FOOT">
@@ -456,12 +456,12 @@
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  <transmission name="FR_calf_tran">
+  <transmission name="FR_shank_tran">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="FR_calf_joint">
+    <joint name="FR_shank_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="FR_calf_motor">
+    <actuator name="FR_shank_motor">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
@@ -480,7 +480,7 @@
     </visual>
   </link>
 
-  <joint name="RL_hip_joint" type="revolute">
+  <joint name="HL_hip_joint" type="revolute">
     <origin xyz="-0.175 0.055 0"  rpy="0 0 0"/>
     <parent link="TORSO" />
     <child link="HL_HIP" />
@@ -507,12 +507,12 @@
     </collision>
   </link>
 
-  <joint name="RL_thigh_joint" type="revolute">
+  <joint name="HL_thigh_joint" type="revolute">
     <origin xyz="0 0.081 0"  rpy="0 0 0"/>
     <parent link="HL_HIP" />
     <child link="HL_THIGH" />
-    <axis xyz="0 -1 0" />
-    <limit lower="-3.49" upper="0.349" effort="13.2" velocity="20" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.349" upper="3.49" effort="13.2" velocity="20" />
   </joint>
 
   <link name="HL_SHANK">
@@ -534,12 +534,12 @@
     </collision>
   </link>
 
-  <joint name="RL_calf_joint" type="revolute">
+  <joint name="HL_shank_joint" type="revolute">
     <origin xyz="0 0 -0.18"  rpy="0 0 0"/>
     <parent link="HL_THIGH" />
     <child link="HL_SHANK" />
-    <axis xyz="0 -1 0" />
-    <limit lower="0.419" upper="2.53" effort="28" velocity="20" />
+    <axis xyz="0 1 0" />
+    <limit lower="-2.53" upper="-0.419" effort="28" velocity="20" />
   </joint>
 
  <link name="HL_FOOT">
@@ -555,38 +555,38 @@
     </collision>
   </link>
 
-  <joint name="RL_foot_fixed" type="fixed">
+  <joint name="HL_foot_fixed" type="fixed">
     <origin xyz="0 0 -0.19" rpy="0 0 0"/>
     <parent link="HL_SHANK" />
     <child link="HL_FOOT" />
   </joint>
 
-  <transmission name="RL_hip_tran">
+  <transmission name="HL_hip_tran">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="RL_hip_joint">
+    <joint name="HL_hip_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="RL_hip_motor">
+    <actuator name="HL_hip_motor">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  <transmission name="RL_thigh_tran">
+  <transmission name="HL_thigh_tran">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="RL_thigh_joint">
+    <joint name="HL_thigh_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="RL_thigh_motor">
+    <actuator name="HL_thigh_motor">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  <transmission name="RL_calf_tran">
+  <transmission name="HL_shank_tran">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="RL_calf_joint">
+    <joint name="HL_shank_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="RL_calf_motor">
+    <actuator name="HL_shank_motor">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
@@ -605,11 +605,11 @@
     </visual>
   </link>
 
-  <joint name="RR_hip_joint" type="revolute">
+  <joint name="HR_hip_joint" type="revolute">
     <origin xyz="-0.175 -0.055 0"  rpy="0 0 0"/>
     <parent link="TORSO" />
     <child link="HR_HIP" />
-    <axis xyz="-1 0 0" />
+    <axis xyz="1 0 0" />
     <limit lower="-0.523" upper="0.523" effort="13.2" velocity="20" />
   </joint>
 
@@ -633,12 +633,12 @@
     </collision>
   </link>
 
-  <joint name="RR_thigh_joint" type="revolute">
+  <joint name="HR_thigh_joint" type="revolute">
     <origin xyz="0 -0.081 0"  rpy="0 0 0"/>
     <parent link="HR_HIP" />
     <child link="HR_THIGH" />
-    <axis xyz="0 -1 0" />
-    <limit lower="-3.49" upper="0.349" effort="13.2" velocity="20" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.349" upper="3.49" effort="13.2" velocity="20" />
   </joint>
 
   <link name="HR_SHANK">
@@ -660,12 +660,12 @@
     </collision>
   </link>
 
-  <joint name="RR_calf_joint" type="revolute">
+  <joint name="HR_shank_joint" type="revolute">
     <origin xyz="0 0 -0.18"  rpy="0 0 0"/>
     <parent link="HR_THIGH" />
     <child link="HR_SHANK" />
-    <axis xyz="0 -1 0" />
-    <limit lower="0.419" upper="2.53" effort="28" velocity="20" />
+    <axis xyz="0 1 0" />
+    <limit lower="-2.53" upper="-0.419" effort="28" velocity="20" />
   </joint>
 
  <link name="HR_FOOT">
@@ -681,38 +681,38 @@
     </collision>
   </link>
 
-  <joint name="RR_foot_fixed" type="fixed">
+  <joint name="HR_foot_fixed" type="fixed">
     <origin xyz="0 0 -0.19" rpy="0 0 0"/>
     <parent link="HR_SHANK" />
     <child link="HR_FOOT" />
   </joint>
 
-  <transmission name="RR_hip_tran">
+  <transmission name="HR_hip_tran">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="RR_hip_joint">
+    <joint name="HR_hip_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="RR_hip_motor">
+    <actuator name="HR_hip_motor">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  <transmission name="RR_thigh_tran">
+  <transmission name="HR_thigh_tran">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="RR_thigh_joint">
+    <joint name="HR_thigh_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="RR_thigh_motor">
+    <actuator name="HR_thigh_motor">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  <transmission name="RR_calf_tran">
+  <transmission name="HR_shank_tran">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="RR_calf_joint">
+    <joint name="HR_shank_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="RR_calf_motor">
+    <actuator name="HR_shank_motor">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>

@@ -17,7 +17,7 @@ lite2_gazebo:
 
     FL_calf_controller:
         type: unitree_legged_control/UnitreeJointController
-        joint: FL_calf_joint
+        joint: FL_shank_joint
         pid: {p: 300.0, i: 0.0, d: 8.0}
 
     # FR Controllers ---------------------------------------
@@ -33,38 +33,38 @@ lite2_gazebo:
 
     FR_calf_controller:
         type: unitree_legged_control/UnitreeJointController
-        joint: FR_calf_joint
+        joint: FR_shank_joint
         pid: {p: 300.0, i: 0.0, d: 8.0}
 
     # RL Controllers ---------------------------------------
     RL_hip_controller:
         type: unitree_legged_control/UnitreeJointController
-        joint: RL_hip_joint
+        joint: HL_hip_joint
         pid: {p: 100.0, i: 0.0, d: 5.0}
 
     RL_thigh_controller:
         type: unitree_legged_control/UnitreeJointController
-        joint: RL_thigh_joint
+        joint: HL_thigh_joint
         pid: {p: 300.0, i: 0.0, d: 8.0}
 
     RL_calf_controller:
         type: unitree_legged_control/UnitreeJointController
-        joint: RL_calf_joint
+        joint: HL_shank_joint
         pid: {p: 300.0, i: 0.0, d: 8.0}
 
     # RR Controllers ---------------------------------------
     RR_hip_controller:
         type: unitree_legged_control/UnitreeJointController
-        joint: RR_hip_joint
+        joint: HR_hip_joint
         pid: {p: 100.0, i: 0.0, d: 5.0}
 
     RR_thigh_controller:
         type: unitree_legged_control/UnitreeJointController
-        joint: RR_thigh_joint
+        joint: HR_thigh_joint
         pid: {p: 300.0, i: 0.0, d: 8.0}
 
     RR_calf_controller:
         type: unitree_legged_control/UnitreeJointController
-        joint: RR_calf_joint
+        joint: HR_shank_joint
         pid: {p: 300.0, i: 0.0, d: 8.0}
 

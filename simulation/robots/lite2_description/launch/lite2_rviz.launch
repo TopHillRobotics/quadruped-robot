@@ -16,7 +16,7 @@
         <param name="publish_frequency" type="double" value="1000.0"/>
     </node>
 
-    <!-- <node pkg="rviz" type="rviz" name="rviz" respawn="false" output="screen"
-        args="-d $(find lite2_description)/launch/check_joint.rviz"/> -->
+    <node pkg="rviz" type="rviz" name="rviz" respawn="false" output="screen"
+        args="-d $(find lite2_description)/launch/check_joint.rviz"/>
 
 </launch>

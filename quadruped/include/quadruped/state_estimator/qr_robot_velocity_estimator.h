@@ -68,7 +68,7 @@ public:
     void Reset(float currentTime);
 
     /** @brief compute the time period between two adjacent imu message */
-    float ComputeDeltaTime(const LowState *robotState);
+    float ComputeDeltaTime(const float tick);
 
     /** @brief Estimate the velocity */
     void Update(float currentTime);

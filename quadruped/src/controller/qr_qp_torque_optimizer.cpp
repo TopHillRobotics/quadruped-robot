@@ -200,7 +200,7 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
     Eigen::Matrix<float, 4, 3> X;
     int invalidResNum = 0;
     for (int index = 0; index < x.size(); index++) {
-        if (isnan(x[index])) {
+        if (std::isnan(x[index])) {
             invalidResNum++;
         }
     }
@@ -287,7 +287,7 @@ Eigen::Matrix<float, 3, 4> ComputeContactForce(qrRobot *robot,
     Eigen::Matrix<float, 4, 3> X;
     int invalidResNum = 0;
     for (int index = 0; index < x.size(); index++) {
-        if (isnan(x[index])) {
+        if (std::isnan(x[index])) {
             invalidResNum++;
         }
     }

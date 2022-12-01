@@ -31,7 +31,6 @@
 #include <Eigen/Dense>
 #include <yaml-cpp/yaml.h>
 #include "config.h"
-#include "unitree_legged_sdk/unitree_interface.h"
 #include "common/qr_enums.h"
 #include "robots/qr_timer.h"
 #include "robots/qr_motor.h"
@@ -227,7 +226,8 @@ public:
     /**
      * @brief real robot state used for compution time for each loop
      */
-    LowState lowstate;
+    // qrLowState lowstate;
+    float tick = 0.f;
 
     /**
      * @brief restore the state of the robot

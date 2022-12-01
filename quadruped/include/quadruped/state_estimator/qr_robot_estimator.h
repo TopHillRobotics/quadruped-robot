@@ -43,7 +43,7 @@ public:
 
     void Reset(float currentTime);
 
-    float ComputeDeltaTime(const LowState *robotState);
+    float ComputeDeltaTime(const float tick);
 
     void Update(float currentTime);
 

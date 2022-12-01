@@ -32,6 +32,9 @@
 #include "unitree_legged_msgs/LowState.h"
 #include "unitree_legged_msgs/MotorCmd.h"
 #include "unitree_legged_msgs/MotorState.h"
+#include "unitree_legged_sdk/unitree_interface.h"
+#include "deeprobotics_legged_sdk/parse_cmd.h"
+#include "deeprobotics_legged_sdk/send_to_robot.h"
 #include "qr_robot.h"
 
 /**
@@ -70,6 +73,8 @@ public:
      * @brief update robot state
      */
     void UpdateRobotState();
+    void UpdateRobotStateA1();
+    void UpdateRobotStateLite2();
 
     /**
      * @brief motor command defined by Unitree
@@ -79,7 +84,10 @@ public:
     /**
      * @brief robot state interface for real robot
      */
-    RobotInterface robotInterface;
+    RobotInterface a1Interface;
+    ParseCMD lite2Receiver;
+    SendToRobot lite2Sender;
+
 };
 
 #endif //QR_ROBOT_REAL_H
