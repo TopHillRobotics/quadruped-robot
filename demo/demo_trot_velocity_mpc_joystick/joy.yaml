@@ -1,0 +1,9 @@
+# joy stick
+vel_linear_max:
+  x: 0.6
+  y: 0.3
+  z: 0.04
+vel_angular_max:
+  r: 0.4
+  p: 0.4
+  y: 0.8

@@ -31,7 +31,7 @@
 int main(int argc, char **argv)
 {
     // initialize ROS nodes
-    ros::init(argc, argv, "demo_trot_velocity_mpc");
+    ros::init(argc, argv, "demo_trot_velocity_mpc_joystick");
     ros::NodeHandle nh;
 
     // get the node package path
@@ -119,7 +119,8 @@ int main(int argc, char **argv)
         // wait until this step has cost the timestep to synchronizing frequency.
         while (quadruped->GetTimeSinceReset() - startTimeWall < quadruped->timeStep) {}
     }
-    
+    joystickTh.join();
+
     ROS_INFO("Time is up, end now.");
     ros::shutdown();
     return 0;
