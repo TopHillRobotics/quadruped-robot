@@ -1,0 +1,63 @@
+material Plugin/chess_1
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture plugin/chess_1.jpg
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+
+material Plugin/flat_1
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture plugin/flat_1.jpg
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+
+material Plugin/perlin_1
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture plugin/perlin_1.jpg
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+
+material Plugin/gradient_1
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture plugin/gradient_1.jpg
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}

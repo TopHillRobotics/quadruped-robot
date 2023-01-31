@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<sdf version="1.6"> 
+  <model name="custom_camera">
+
+    <static>true</static>
+    <pose>0 0 -6 0 0 0</pose>
+
+    <link name="link">
+
+      <!--
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.1 0.1 0.1</size>
+          </box>
+        </geometry>
+      </collision>
+      -->
+      
+      <visual name="visual">
+        <cast_shadows>false</cast_shadows>
+        <geometry>
+          <box>
+            <size>0.1 0.1 0.1</size>
+          </box>
+        </geometry>
+        <material>
+          <script>Gazebo/Orange</script>
+        </material>
+      </visual>
+
+      <sensor type="camera" name="camera1">
+        <update_rate>30.0</update_rate>
+        <camera name="head">
+          <horizontal_fov>1.8962634</horizontal_fov>
+          <image>
+            <width>1920</width>
+            <height>1080</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <!--
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+          -->
+        </camera>
+        <!-- gazebo-utils camera plugin -->
+        <plugin name='camera_utils' filename='libCameraUtils.so'>
+          <!-- Output directory -->
+          <output_dir>train/SHAPES2018/images/</output_dir>
+          <!-- Output image extension -->
+          <extension>.png</extension>
+        </plugin>
+      </sensor>
+
+    </link>
+  </model>
+</sdf>

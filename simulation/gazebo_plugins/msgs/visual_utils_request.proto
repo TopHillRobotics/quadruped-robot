@@ -1,0 +1,29 @@
+package gap.msgs;
+
+/// \ingroup gap_msgs
+/// \interface VisualUtilsRequest
+/// \brief A request for Visual Utils plugin
+
+import "pose.proto";
+import "vector3d.proto";
+
+message VisualUtilsRequest
+{
+    /// Type of request 
+    enum Type
+    {
+        /// Update 
+        UPDATE          = 1;
+        /// Set default pose
+        DEFAULT_POSE    = 2;
+    }
+
+    /// Type of request 
+    optional Type                   type        = 1;
+    /// Targets of request
+    repeated string                 targets     = 2;
+    /// Set of poses
+    repeated gazebo.msgs.Pose       poses       = 3;
+    /// Set of scale vectors
+    repeated gazebo.msgs.Vector3d   scale       = 4;
+}

@@ -1,0 +1,61 @@
+# Build release archive
+
+1. Update NEWS (use Markdown syntax)
+2. Verify that all manpages are up to date
+3. Bump the version number in:
+  a. lcm/lcm_version.h
+  b. lcm-lua/rock/lcm-<version>-0.rockspec
+4. Commit the above changes and create the vX.Y.Z git tag.
+  $ git commit -a -m "Release X.Y.Z"
+  $ git tag vX.Y.Z
+5. Create the release artifact
+  $ git archive --format zip -o lcm-X.Y.Z.zip --prefix lcm-X.Y.Z/ vX.Y.Z
+6. Take the resulting artifact, extract it, build it, install it, make sure
+  the basic executables run
+  $ unzip lcm-X.Y.Z.zip
+  $ cd lcm-X.Y.Z
+  $ mkdir build
+  $ cd build
+  $ cmake ..
+  $ make
+  $ make install
+
+# Test
+
+1. Build and run all unit tests.  Verify that they all pass.
+  $ make test
+2. Repeat unit tests on:
+  * GNU/Linux
+  * OS X
+3. Test C/C++ library on Windows.  Run lcm-source.exe and lcm-sink.exe
+4. Test on other available platforms
+5. Fix any errors that appear, and repeat as necessary.
+
+# Upload release artifact
+
+1. Push the changes and release tag to GitHub.
+  $ git push origin master
+  $ git push origin vX.Y.Z
+2. Draft a new release on GitHub
+  a. Associate the release with tag vX.Y.Z
+  b. Name the release title "vX.Y.Z"
+  c. Add release notes from the NEWS file
+
+# Update documentation
+
+1. Build docs
+  $ make doc
+2. Clone the documentation repository
+  $ git clone https://github.com/lcm-proj/lcm-proj.github.io
+  $ cd lcm-proj.github.io
+3. Copy the built docs to the lcm.www repository
+  $ cp -r ../docs/html/* .
+4. Commit the changes, tag the release, and push to origin
+  $ git commit -a -m "Release X.Y.Z"
+  $ git tag vX.Y.Z
+  $ git push origin master
+  $ git push origin vX.Y.Z
+
+# Notify the mailing list
+
+1. Send e-mail to lcm-users@googlegroups.com

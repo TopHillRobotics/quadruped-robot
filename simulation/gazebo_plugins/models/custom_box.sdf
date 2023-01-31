@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <model name="custom_box">
+    <pose>0 0 -3 0 0 0</pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>1 1 1</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0 0 -3 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>1 1 1</size>
+          </box>
+        </geometry>
+        <plugin name="visual_utils" filename="libVisualUtils.so">
+          <uid>box_uid</uid>
+          <patterns>
+            Plugin/
+          </patterns>
+        </plugin>
+      </visual>
+    </link>
+  </model>
+</sdf>

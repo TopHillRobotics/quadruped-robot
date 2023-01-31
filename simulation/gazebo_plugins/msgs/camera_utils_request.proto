@@ -1,0 +1,37 @@
+package gap.msgs;
+
+/// \ingroup gap_msgs
+/// \interface CameraUtilsRequest
+/// \brief A request for Camera Utils plugin
+
+import "pose.proto";
+import "point_projection.proto";
+
+message CameraUtilsRequest
+{
+    /// Type of request 
+    enum Type
+    {
+        /// Acquire frame and save it to disk 
+        CAPTURE     = 1;
+        /// Change output directory and/or file extension
+        OPTIONS     = 2;
+        /// Move camera
+        MOVE        = 3;
+        /// Project 3D point to 2D in camera plane
+        PROJECTION  = 4;
+    }
+
+    /// Type of request 
+    optional Type               type        = 1;
+    /// File path of captured frame
+    optional string             file_name   = 2;
+    /// Path to the output folder 
+    optional string             output_dir  = 3;
+    /// Output file extension 
+    optional string             extension   = 4;
+    /// Expected camera pose
+    optional gazebo.msgs.Pose   pose        = 5;
+    /// 3D to 2D point projection 
+    repeated PointProjection    projections = 6;
+}

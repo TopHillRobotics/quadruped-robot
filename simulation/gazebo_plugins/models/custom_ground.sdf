@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <model name="plugin_ground_plane">
+
+    <static>true</static>
+    <pose>0 0 0 0 0 0</pose>
+
+    <link name="link">
+
+      <collision name="collision">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>30 30</size>
+          </plane>
+        </geometry>
+      </collision>
+
+      <visual name="visual">
+        <cast_shadows>false</cast_shadows>
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>30 30</size>
+          </plane>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+        </material>
+        <plugin name="visual_utils" filename="libVisualUtils.so">
+          <uid>ground</uid>
+          <patterns>
+            HDPlugin/
+          </patterns>
+        </plugin>
+      </visual>
+
+    </link>
+  </model>
+</sdf>

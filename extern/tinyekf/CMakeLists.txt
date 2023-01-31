@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(tinyekf)
 
+ADD_COMPILE_OPTIONS(-D_cplusplus)
+
 find_package(catkin REQUIRED)
 
 catkin_package(
@@ -8,9 +10,10 @@ catkin_package(
     LIBRARIES ${PROJECT_NAME}
 )
 
-add_library(${PROJECT_NAME} include/${PROJECT_NAME}/tiny_ekf.c)
+add_library(${PROJECT_NAME} INTERFACE)
+
 target_include_directories(${PROJECT_NAME}
-    PUBLIC include/${PROJECT_NAME}
+    INTERFACE include/${PROJECT_NAME}
 )
 
 install(TARGETS ${PROJECT_NAME}

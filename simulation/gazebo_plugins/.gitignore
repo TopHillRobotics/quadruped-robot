@@ -1,0 +1,12 @@
+# Binaries
+build/
+
+# Textures
+media/
+
+# Dataset
+dataset/
+train/
+
+# Documentation
+doc/html/

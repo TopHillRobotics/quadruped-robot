@@ -1,0 +1,22 @@
+package gap.msgs;
+
+/// \ingroup gap_msgs
+/// \interface WorldUtilsResponse
+/// \brief A response from World Utils plugin
+
+message WorldUtilsResponse
+{
+    /// \brief Type of response 
+    enum Type
+    {
+        /// \brief World status information 
+        INFO    = 1;
+        /// \brief Object properties 
+        SUCCESS  = 2;
+    }
+
+    /// \brief Type of request 
+    optional Type   type            = 1;
+    /// \brief Object count 
+    optional int32  object_count    = 2;
+}

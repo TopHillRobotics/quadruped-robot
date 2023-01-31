@@ -1,0 +1,6 @@
+name: a1_robot
+
+speed_update_mode: 0 # 0: const, 1: ros cmd_vel
+const_twist:
+  linear: [0., 0., 0.]
+  angular: 0.

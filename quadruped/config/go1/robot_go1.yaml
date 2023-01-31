@@ -1,0 +1,60 @@
+name: go1
+urdf_path: src/simulation/robots/a1_description/urdf/a1.urdf
+robot_params:
+  total_mass: 13
+  total_inertia: [ 0.24, 0, 0, 0, 0.80, 0, 0, 0, 1.0 ] 
+  body_mass: 6
+  body_size: [0.267, 0.194, 0.114]
+  body_inertia: [ 0.24, 0, 0, 0, 0.80, 0, 0, 0, 1.0 ]
+  links_inertia: [[0.000469246, -9.409e-06, -3.42e-07,-9.409e-06, 0.00080749,-4.66e-07,-3.42e-07, -4.66e-07, 0.000552929],
+                  [0.005529065, 4.825e-06, 0.000343869, 4.825e-06, 0.005139339, 2.2448e-05, 0.000343869, 2.2448e-05, 0.001367788],
+                  [0.002997972, 0.0,-0.000141163, 0.0, 0.003014022, 0.0, -0.000141163, 0.0, 3.2426e-05]] # for one leg
+  links_mass: [0.696, 1.013, 0.166] # for one leg
+  links_com_pos: [[-0.0033, 0, 0], [-0.003237, -0.022327, -0.027326], [0.006435, 0, -0.107]] # for FL leg
+  body_height: 0.295
+  hip_l: 0.08505
+  upper_l: 0.213
+  lower_l: 0.213
+
+  # x++ back++     y++ right++
+  velocity:
+    com_offset: [ -0.038, -0.005, 0.0005 ] # for GO1
+  hip_offset: [ [ 0.17, -0.055, 0. ],
+                [ 0.17, 0.055, 0. ],
+                [ -0.21, -0.055, 0. ],
+                [ -0.21, 0.055, 0. ] ]
+  default_hip_positions: [ [ 0.19, -0.14, 0 ],
+                           [ 0.19, 0.14, 0 ],
+                           [ -0.19, -0.14, 0 ],
+                           [ -0.19, 0.14, 0 ] ]
+  default_standup_angle:
+    ab: 0
+    hip: 0.8
+    knee: -1.6
+   
+  default_sitdown_angle:
+    ab: -0.167136
+    hip: 0.934969
+    knee: -2.54468
+
+motor_params:
+  # kps: [ 100,100,100 ]
+  # kds: [ 1.0,2.0,2.0 ]
+  joint_directions: [ 1,1,1, 1,1,1, 1,1,1, 1,1,1 ]
+  joint_offsets: [ 0,0,0, 0,0,0, 0,0,0, 0,0,0 ]
+  stand_angle: [ 0,0.67,-1.25 ]
+
+  abad_p: 50.0
+  abad_d: 0.5 # 1
+  hip_p: 50.0
+  hip_d: 0.5 # 2
+  knee_p: 50.0
+  knee_d: 0.5 # 2
+
+controller_params:
+  mode: 0 # VEL_MODE
+  # mode: 1 # POS_MODE
+  # mode: 2 # WALK_LOCOMOTION
+  # mode: 3 # ADVANCED_TROT
+
+is_sim: false

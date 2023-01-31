@@ -9,13 +9,11 @@
 #ifndef TINYEKF_TINYEKF_TINYEKF_H
 #define TINYEKF_TINYEKF_TINYEKF_H
 
-#define Nsta 3 // dimension of state
-#define Mobs 3 // dimension of observation
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "tiny_ekf_struct.h"
-//#include "tiny_ekf.h"
+
+#include "tiny_ekf.h"
 
 // Support both Arduino and command-line versions
  #ifdef _cplusplus
@@ -31,10 +29,12 @@
  * A header-only class for the Extended Kalman Filter.  Your implementing class should #define the constant N and 
  * and then #include <TinyEKF.h>  You will also need to implement a model() method for your application.
  */
+
+template<unsigned int N=Nsta, unsigned int M=Mobs>
 class TinyEKF {
 
 private:
-    ekf_t ekf;
+    ekf_t<N,M> ekf;
 
 public:    // protected:
     // ekf_t ekf;
@@ -43,14 +43,14 @@ public:    // protected:
     // Initializes a TinyEKF object
     TinyEKF() 
     { 
-        ekf_init(&this->ekf, Nsta, Mobs); 
+        ekf_init(&this->ekf, N, M); 
         this->x = this->ekf.x; 
     }
 
     TinyEKF(float x, float initialVariance, float accelerometerVariance, float sensorVariance)
     {
-        ekf_init(&this->ekf, Nsta, Mobs);
-        for(int i=0; i < Nsta; ++i) {
+        ekf_init(&this->ekf, N, M);
+        for(int i=0; i < N; ++i) {
             this->ekf.x[i] = x;
             this->x = this->ekf.x;
         }
@@ -61,12 +61,36 @@ public:    // protected:
         // Q.setIdentity();
         // R.setIdentity(); 
         // P = P * initialVariance;
-        for(int i=0; i< Nsta; ++i) {
+        for(int i = 0; i < N; ++i) {
             this->setQ(i, i, accelerometerVariance);
+        }
+        for (int i = 0; i < M; ++i) {
             this->setR(i, i, sensorVariance);
         }
     };
 
+    TinyEKF(float* x, float initialVariance, float* accelerometerVariance, float* sensorVariance)
+    {
+        ekf_init(&this->ekf, N, M);
+        for(int i=0; i < N; ++i) {
+            this->ekf.x[i] = x[i];
+            this->x = this->ekf.x;
+        }
+        // F.setIdentity();
+        // C.setIdentity();
+        
+        // P.setIdentity();
+        // Q.setIdentity();
+        // R.setIdentity(); 
+        // P = P * initialVariance;
+        for(int i = 0; i < N; ++i) {
+            this->setQ(i, i, accelerometerVariance[i]);
+            // this->setP(i, i, initialVariance);
+        }
+        for (int i = 0; i < M; ++i) {
+            this->setR(i, i, sensorVariance[i]);
+        }
+    };
 
     /**
      * Deallocates memory for a TinyEKF object.
@@ -80,8 +104,8 @@ public:    // protected:
      * @param hx gets output of observation function <i>h(x<sub>0 .. n-1</sub>)</i>
      * @param H gets <i>m &times; n</i> Jacobian of <i>h(x)</i>
      */
-    // virtual void model(double fx[Nsta], double F[Nsta][Nsta], double hx[Mobs], double H[Mobs][Nsta]) = 0;
-    void model(double fx[Nsta], double F[Nsta][Nsta], double hx[Mobs], double H[Mobs][Nsta], double deltaV[Nsta], double z[Mobs])
+    // virtual void model(double fx[N], double F[N][N], double hx[M], double H[M][N]) = 0;
+    void model(double fx[N], double F[N][N], double hx[M], double H[M][N], double deltaV[N], double z[M])
     {
         // Process model is f(x) = x
         fx[0] = this->x[0] + deltaV[0];
@@ -162,10 +186,20 @@ public:
         * @param z observation vector, length <i>m</i>
         * @return true on success, false on failure caused by non-positive-definite matrix.
         */
-    bool step(double* deltaV, double * z) 
-    { 
+    bool step(double* deltaV, double * z)
+    {
         this->model(this->ekf.fx, this->ekf.F, this->ekf.hx, this->ekf.H, deltaV, z); 
 
+        return ekf_step(&this->ekf, z) ? false : true;
+    }
+    
+    bool step(double fx[N], double F[N][N], double hx[M], double H[M][N], double* z)
+    {
+        memcpy(this->ekf.fx, fx, N*sizeof(double)); 
+        memcpy(this->ekf.F,  F, N*N*sizeof(double));
+        memcpy(this->ekf.hx, hx, M*sizeof(double));
+        memcpy(this->ekf.H,  H, M*N*sizeof(double));
+        
         return ekf_step(&this->ekf, z) ? false : true;
     }
 };

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <model name="custom_sphere">
+    <pose>0 0 -3 0 0 0</pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <sphere>
+            <radius>0.5</radius>
+          </sphere>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0 0 -3 0 0 0</pose>
+        <geometry>
+          <sphere>
+            <radius>0.5</radius>
+          </sphere>
+        </geometry>
+        <plugin name="visual_utils" filename="libVisualUtils.so">
+          <uid>sphere_uid</uid>
+          <patterns>
+            Plugin/
+          </patterns>
+        </plugin>
+      </visual>
+    </link>
+  </model>
+</sdf>

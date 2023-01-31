@@ -1,0 +1,53 @@
+.TH lcm_source 1 2007-12-13 "LCM" "Lightweight Communications and Marshalling (LCM)"
+.SH NAME
+lcm_source
+.SH SYNOPSIS
+.TP 5
+\fBlcm_source \fI[options]\fR
+
+.SH DESCRIPTION
+.PP
+\fBlcm_source\fR is a utility for testing the Lightweight Communications library
+(LC).  \fBlcm_source\fR transmits random messages on either a specified LC
+channel or random LC channels.  Messages can be randomly sized, or a specified
+fixed size.
+
+.SH OPTIONS
+The following options are provided by \fBlcm_source\fR:
+.TP
+.B \-m \fICHAN\fR
+Transmits messages on channel \fICHAN\fR (default: random channels)
+.TP
+.B \-p \fIDELAY\fR
+Wait \fIDELAY\fR microseconds between transmissions (default: 10000)
+.TP
+.B \-s \fISIZE\fR
+Transmit packets of size \fISIZE\fR bytes.  If \fISIZE\fR is 0 (default),
+then packets are randomly sized between 1 and 65,000 bytes
+.TP
+.B \-v
+verbose mode.  Prints a summary of each packet
+.TP
+.B \-h
+Prints this help text and exits.
+
+.SH COPYRIGHT
+
+lcm-source is part of the Lightweight Communications and Marshalling (LCM) project.
+Permission is granted to copy, distribute and/or modify it under the terms of
+the GNU Lesser General Public License as published by the Free Software
+Foundation; either version 2.1 of the License, or (at your option) any later
+version.  See the file COPYING in the LCM distribution for more details
+regarding distribution.
+
+LCM is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+You should have received a copy of the GNU Lesser General Public
+License along with LCM; if not, write to the Free Software Foundation, Inc., 51
+Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
+.SH AUTHOR
+
+This manual page was written by Albert Huang.

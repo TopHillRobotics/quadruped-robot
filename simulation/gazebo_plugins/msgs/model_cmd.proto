@@ -1,0 +1,16 @@
+syntax = "proto2";
+package gap.msgs;
+
+/// \ingroup gap_msgs
+/// \interface Model command
+/// \brief Model command
+
+import "joint_cmd.proto";
+
+message ModelCmd
+{
+    /// Model name
+    required string                model_name = 1; 
+    /// Physics
+    repeated gazebo.msgs.JointCmd  joint_cmd  = 2;
+}
