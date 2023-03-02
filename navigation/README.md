@@ -34,7 +34,7 @@ If you want to know more,please visit https://wiki.ros.org/slam_gmapping
 
 We also should install the pointcloud_to_laserscan ros package to convert our 3D point cloud to 2D laser.
 ```
-sudo apt install ros-${your_ros_version}-pointcloud_to_laserscan
+sudo apt install ros-${your_ros_version}-pointcloud-to-laserscan
 ```
 ## 3.2 Install catrographer
 The cartographer_ros package is already integrated with ros, you just need to run .
