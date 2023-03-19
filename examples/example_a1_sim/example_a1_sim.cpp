@@ -1,6 +1,30 @@
-#include "quadruped/exec/runtime.h"
-#include "quadruped/robots/robot_a1_sim.h"
-#include "quadruped/ros/control2gazebo_msg.h"
+// The MIT License
+
+// Copyright (c) 2022
+// Robot Motion and Vision Laboratory at East China Normal University
+// Contact: tophill.robotics@gmail.com
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#include "quadruped/exec/qr_robot_runner.h"
+#include "quadruped/robots/qr_robot_a1_sim.h"
+#include "quadruped/ros/qr_control2gazebo_msg.h"
 
 #include <gazebo_msgs/ModelState.h>
 #include <gazebo_msgs/SetModelState.h>
@@ -19,57 +43,6 @@
 
 using namespace std;
 using namespace Quadruped;
-
-bool startControllers(ros::NodeHandle &n, std::string serviceName, std::vector<std::string> &controllersToStart)
-{
-    ros::ServiceClient switchController = n.serviceClient<controller_manager_msgs::SwitchController>(serviceName);
-    controller_manager_msgs::SwitchController switchControllerMsg;
-    switchControllerMsg.request.start_controllers = controllersToStart;
-    switchControllerMsg.request.strictness = switchControllerMsg.request.STRICT;
-    ros::service::waitForService(serviceName, -1);
-    switchController.call(switchControllerMsg);
-
-    if (switchControllerMsg.response.ok){
-        ROS_INFO_STREAM("Controller start correctly");
-        return true;
-    } else {
-        ROS_ERROR_STREAM("Error occured trying to start controller");
-        return false;
-    }
-}
-
-bool stopControllers(ros::NodeHandle &n, std::string serviceName, std::vector<std::string> &controllers_to_stop)
-{
-    ros::ServiceClient switchController = n.serviceClient<controller_manager_msgs::SwitchController>(serviceName);
-    controller_manager_msgs::SwitchController switchControllerMsg;
-    switchControllerMsg.request.stop_controllers = controllers_to_stop;
-    switchControllerMsg.request.strictness = switchControllerMsg.request.STRICT;
-    switchControllerMsg.request.start_asap = false;
-    ros::service::waitForService(serviceName, -1);
-    switchController.call(switchControllerMsg);
-    if (switchControllerMsg.response.ok){
-        ROS_INFO_STREAM("Controller stop correctly");
-        return true;
-    } else {
-        ROS_ERROR_STREAM("Error occured trying to stop controller");
-        return false;
-    }
-}
-
-bool ResetRobotBySystem() {
-    int flag = system("rosservice call gazebo/delete_model '{model_name: a1_gazebo}'");
-    ROS_INFO("delete statu: %d", flag);
-    int statu0 = system("rosrun gazebo_ros spawn_model -urdf -z 0.6 -model a1_gazebo -param robot_description -unpause");
-    ROS_INFO("spawn model statu: %d", statu0);
-    int statu1 = system("rosrun controller_manager spawner __ns:=/a1_gazebo joint_state_controller "\
-          "FL_hip_controller FL_thigh_controller FL_calf_controller "\
-          "FR_hip_controller FR_thigh_controller FR_calf_controller "\
-          "RL_hip_controller RL_thigh_controller RL_calf_controller "\
-          "RR_hip_controller RR_thigh_controller RR_calf_controller &");
-    ROS_INFO("controller statu: %d", statu1);
-    sleep(1);
-    return true;
-}
 
 bool ResetRobot(ros::ServiceClient &modelStateClient, ros::ServiceClient &jointStateClient)
 {
@@ -129,7 +102,7 @@ bool ResetRobot(ros::ServiceClient &modelStateClient, ros::ServiceClient &jointS
     }
 }
 
-void GetComPositionInWorldFrame(Robot* quadruped, ros::ServiceClient& baseStateClient)
+void GetComPositionInWorldFrame(qrRobot* quadruped, ros::ServiceClient& baseStateClient)
 {
     gazebo_msgs::GetLinkState gls_request;
     if (baseStateClient.exists()) {
@@ -170,29 +143,21 @@ int main(int argc, char **argv)
     std::string homeDir = ros::package::getPath("quadruped") + "/";
     std::string robotName = "a1_sim";
 
-    std::vector<std::string> controllerList = {"joint_state_controller", "FL_hip_controller", "FL_thigh_controller",
-                                               "FL_calf_controller", "FR_hip_controller", "FR_thigh_controller",
-                                               "FR_calf_controller", "RL_hip_controller", "RL_thigh_controller",
-                                               "RL_calf_controller", "RR_hip_controller", "RR_thigh_controller",
-                                               "RR_calf_controller"};
-
     ros::init(argc, argv, "a1_sim");
     ros::NodeHandle nh;
     ros::NodeHandle privateNh("~");
 
-    stopControllers(nh, "/a1_gazebo/controller_manager/switch_controller", controllerList);
     ros::ServiceClient modelStateClient = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
     ros::ServiceClient jointStateClient = nh.serviceClient<gazebo_msgs::SetModelConfiguration>("/gazebo/set_model_configuration");
 
     bool flag = ResetRobot(modelStateClient, jointStateClient);
     ROS_INFO("Reset the Robot pose");
-    startControllers(nh, "/a1_gazebo/controller_manager/switch_controller", controllerList);
 
     ros::AsyncSpinner spinner(1); // one threads
     spinner.start();
     std::cout << "---------ROS node init finished---------" << std::endl;
 
-    Robot *quadruped = new A1Sim(nh, privateNh, homeDir + "config/a1_sim/a1_sim.yaml");
+    qrRobot *quadruped = new qrRobotA1Sim(nh, privateNh, homeDir + "config/a1_sim/a1_sim.yaml");
 
     std::cout << "robot created........" << std::endl;
 
@@ -203,21 +168,21 @@ int main(int argc, char **argv)
     Visualization2D& vis = quadruped->stateDataFlow.visualizer;
     vis.SetLabelNames({"pitch", "H", "vx in world", "vy in world","vz in world"});
 
-    RobotRunner robotRunner(quadruped, homeDir, nh);
+    qrRobotRunner robotRunner(quadruped, homeDir, nh);
     // ros::Rate loop_rate(round(1.0 / quadruped->timeStep)); // 500--1000 Hz
     ros::Rate loop_rate1(1000);
     ros::Rate loop_rate2(500);
     ROS_INFO("loop rate %f\n", round(1.0 / quadruped->timeStep));
 
     ROS_INFO("LocomotionController Init Finished");
-    LocomotionController* locomotionController = robotRunner.GetLocomotionController();
-    StateEstimatorContainer<float>* stateEstimators = robotRunner.GetStateEstimator();
+    qrLocomotionController* locomotionController = robotRunner.GetLocomotionController();
+    qrStateEstimatorContainer* stateEstimators = robotRunner.GetStateEstimator();
     // ros module init
     ros::ServiceClient baseStateClient = nh.serviceClient<gazebo_msgs::GetLinkState>("/gazebo/get_link_state");
     // RobotOdometryEstimator *legOdom = new RobotOdometryEstimator(quadruped, nh);
     // CmdVelReceiver *cmdVelReceiver = new CmdVelReceiver(nh, privateNh);
     // SLAMPoseReceiver *slamPoseReceiver = new SLAMPoseReceiver(nh, privateNh);
-    Controller2GazeboMsg *controller2gazeboMsg = new Controller2GazeboMsg(quadruped, locomotionController, nh);
+    qrController2GazeboMsg *controller2gazeboMsg = new qrController2GazeboMsg(quadruped, locomotionController, nh);
     // SwitchModeReceiver *switchModeReceiver = new SwitchModeReceiver(nh, privateNh);
     ROS_INFO("ROS Modules Init Finished");
 
@@ -237,8 +202,8 @@ int main(int argc, char **argv)
     }
     Eigen::Matrix<float,12,1> motorAngles;
     Eigen::Matrix<float, 12, 1> kps, kds;
-    kps = quadruped->GetMotorPositionGains();
-    kds = quadruped->GetMotorVelocityGains();
+    kps = quadruped->GetMotorKps();
+    kds = quadruped->GetMotorKdp();
 
     // locomotionController->Update();
 
@@ -334,8 +299,6 @@ int main(int argc, char **argv)
 
         count++;
     }
-
-    stopControllers(nh, "/a1_gazebo/controller_manager/switch_controller", controllerList);
 
     // if (count > 20000) {
     //     quadruped->stateDataFlow.visualizer.Show();

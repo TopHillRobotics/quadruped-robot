@@ -16,7 +16,7 @@ initialVariance: 0.1
 movingWindowFilterSize: 120
 
 # swing controller
-desiredHeight: 0.28
+desiredHeight: 0.29 # 0.29
 desiredSpeed: [0., 0., 0.]
 desiredTwistingSpeed: 0.
 footClearance: 0.01

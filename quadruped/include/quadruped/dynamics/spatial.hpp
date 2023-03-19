@@ -10,7 +10,7 @@
 
 #include <iostream>
 #include <type_traits>
-#include "utils/se3.h"
+#include "utils/qr_se3.h"
 
 namespace spatial {
     using namespace robotics::math;

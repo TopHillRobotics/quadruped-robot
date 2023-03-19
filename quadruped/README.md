@@ -38,7 +38,7 @@ or in ROS env (recommended),
 cd ${ROBOTS_DIR}
 catkin_make
 ```
-Currently, the locomotion controller support Velocity Mode(normal trot), Position Mode(for walk through gaps), Walk Mode(static walk) and Advanced-trot Mode(for climb up stairs), among which you can browse through `src/ascend-quadruped-cpp/config` directory to select corresponding configuration. There are several terrains, such as slope of 15 degree, slope of 30 degree, stairs of 10cm height. You can chose each of them by modifying the value of variable `wname` in `uniree_gazebo/launch/normal.launch`. To load the slope terrain, you need to append substring `${ROBOT_DIR}/src/simulation/unitree_gazebo/worlds/building_editor_models` to the env variable `GAZEBO_MODEL_PATH`.
+Currently, the locomotion controller support Velocity Mode(normal trot), Position Mode(for walk through gaps), Walk Mode(static walk) and Advanced-trot Mode(for climb up stairs), among which you can browse through `src/ascend-quadruped-cpp/config` directory to select corresponding configuration. There are several terrains, such as slope of 15 degree, slope of 30 degree, stairs of 10cm height. You can chose each of them by modifying the value of variable `wname` in `qr_gazebo/launch/normal.launch`. To load the slope terrain, you need to append substring `${ROBOT_DIR}/src/simulation/qr_gazebo/worlds/building_editor_models` to the env variable `GAZEBO_MODEL_PATH`.
 
 In a word, the table1 list gaits for different terrains.
 
@@ -53,10 +53,17 @@ In a word, the table1 list gaits for different terrains.
 ## Step 4: run the controller
 You need not to login into subdirectories to launch exec file, instead input the commands
 ```
-roslaunch unitree_gazebo normal.launch
+roslaunch qr_gazebo gazebo_startup.launch
 ```
 to launch gazebo simulation env.
-Then in another new terminal, launch the controller node,
+
+And in another new terminal, use command
+```
+roslaunch qr_gazebo model_spawn.launch
+```
+to spawn model and manage controllers in the simulation env.
+
+Then in a new terminal, launch the controller node,
 ```
 rosrun ascend_quadruped_cpp sim
 ```
@@ -83,7 +90,7 @@ before launch local ROS nodes.
 
 * Realsense Camera
 
-    In `normal.launch` file, you can determines wheather to use camera or not, by setting `use_camera` param true or false.
+    In `model_spawn.launch` file, you can determines wheather to use camera or not, by setting `use_camera` param true or false.
 
 
 

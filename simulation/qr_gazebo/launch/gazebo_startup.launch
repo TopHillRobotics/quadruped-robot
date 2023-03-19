@@ -1,0 +1,27 @@
+<launch>
+    <!-- Add Gazebo model path. -->
+    <env name="GAZEBO_MODEL_PATH" value="$(find qr_gazebo)/worlds/building_editor_models"/>
+
+    <arg name="wname" default="earth"/>
+
+    <arg name="paused" default="true"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="gui" default="true"/>
+    <arg name="headless" default="false"/>
+    <arg name="debug" default="false"/>
+    <arg name="verbose" default="false"/>
+    <!-- Debug mode will hung up the robot, use "true" or "false" to switch it. -->
+    
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find qr_gazebo)/worlds/$(arg wname).world"/>
+        <arg name="debug" value="$(arg debug)"/>
+        <arg name="gui" value="$(arg gui)"/>
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+        <arg name="headless" value="$(arg headless)"/>
+
+    </include>
+
+    <node pkg="controller_manager" type="controller_manager" name="controllers_manager" output="screen"/>
+
+</launch>

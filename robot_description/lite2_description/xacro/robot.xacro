@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<robot name="Lite2" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find lite2_description)/xacro/gazebo.xacro"/>
+    <xacro:include filename="$(find lite2_description)/xacro/body.xacro"/>
+    <xacro:include filename="$(find lite2_description)/xacro/transmission.xacro"/>
+
+</robot>
