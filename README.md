@@ -3,12 +3,13 @@
 This project provides an architecture and many key algorithms to control quadruped robots, including state estimation, gait generation, stance and swing leg controllers.
 
 <!-- This project supports three control modes
+
 - **velocity mode** allows a user to control the robot's linear and angular velocity.
 - **position mode** generates user-defined gaits using gait configurations and control the robot's step position .
 - **hybrid mode** uses position and torque to implement flexible locomotion.
 -->
 
-The project now supports A1 robot (Unitree-Robotics) and Lite2A robot (Deep-Robotics). This project can be easily extended to support other quadruped robots such as AlienGO/GO1 (Unitree-Robotics), Jueying/X20(Deep-Robotics) and Anymal. For more information about quadruped robots, check out the following websites
+The project now supports A1 robot (Unitree-Robotics) and Lite3 robot (Deep-Robotics). This project can be easily extended to support other quadruped robots such as AlienGO/GO1 (Unitree-Robotics) and Jueying/X20(Deep-Robotics) by editing some parameters in the control algorithm. For more information about quadruped robots, check out the following websites
 
 - [Unitree Robotics](https://github.com/unitreerobotics)
 - [Deep Robotics](https://www.deeprobotics.cn/)
@@ -143,7 +144,11 @@ rosrun demo demo_helloworld real
 
 Here, `real` indicates that the demo is running in a real environment using a real quadruped robot. Given a robot **YAML** configuration file such as  **XACRO** or **URDF**, a **qrRobotReal**  object is constructed.
 
-# 5. Feedback and Bugs
+# 5. MPC-WBC controllers
+
+We have now developed an MPC-WBC controller for quadruped. This controller uses [Whole Body Impulse Control](https://arxiv.org/abs/1909.06586#). The controller also includes a finite state machine to stand up, sit down and trot. For more information, please check [MPC-WBC](https://github.com/TopHillRobotics/quadruped-robot/tree/mpc-wbc) branch.
+
+# 6. Feedback and Bugs
 
 Please file bugs and feature requests here: [https://github.com/TopHillRobotics/quadruped-robot/issues](https://github.com/TopHillRobotics/quadruped-robot/issues)
 
@@ -151,7 +156,7 @@ You can help to ensure your issue gets fixed if you provide sufficient detail.
 
 ---
 
-# 6. Documentation
+# 7. Documentation
 
 Read a [readthedocs](https://quadruped-robot-docs.readthedocs.io/en/main/index.html) for the helps, tutorials, demo explanation.
 
