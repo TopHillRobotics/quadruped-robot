@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "exec/qr_runtime.h"
+#include "exec/qr_robot_runner.h"
 #include "sim/aliengo_sim.h"
 #include "ros/control2gazebo_msg.h"
 

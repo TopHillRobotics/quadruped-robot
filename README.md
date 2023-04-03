@@ -1,4 +1,4 @@
-# 0. Build the project
+# 1. Build the project
 
 After jump to your workspace by command:
 ```
@@ -9,15 +9,15 @@ using ROS tool `catkin_make` to build the project
 catkin_make
 ```
 If you want to speed up the program, you can
-1. (For Sim) Lower down the `<real_time_update_rate>` in the `.world` file of `qr_gazebo` folder.
-2. Uncomment the `BLAS` related content in the `CMakeLists.txt` of `quadruped` folder.
+1. (For Sim) Lower down the `<real_time_update_rate>` in the `.world` file of **simulation/qr_gazebo/worlds** folder.
+2. Uncomment the `BLAS` related content in the `CMakeLists.txt` of **quadruped** folder.
 
 For intel-chip users, the program can be easily speed up by MKL library. To install MKL, download Intel oneAPI Math Kernel Library Offline Installer. Make it work by using command below before `catkin_make` your workspace.
 ```
 source /opt/intel/oneapi/setvars.sh
 ```
 
-# 1. Run the simulation
+# 2. Run the simulation
 
 ## Step 1: Set up the ROS environment
 Source `setup.bash` to set up the ROS development environment
@@ -49,8 +49,12 @@ Now in another new terminal, you can run the example, like
 ```
 rosrun examples example_a1_sim
 ```
+To run an example controlled by the keyboard, use the following command instead:
+```
+rosrun examples example_a1_sim_keyboard
+```
 
-# 2. Run on Real Robot
+# 3. Run on Real Robot
 
 ## Step 1: Start a ROS master
 Use ROS by running a ROS master node with command:
@@ -68,7 +72,7 @@ and then, you can run the example, like
 rosrun examples example_a1_real
 ```
 
-# 3. Joy Control
+# 4. Joy Control
 
 In this branch, we do not provide some simple examples such as standing up and sitting down. We recommand users to run and debug with a joystick. With the ROS joy package, you can use a gamepad (such as Logitech F710) to send speed commands to control a quadruped robot. After opening the joy node, press the `A` key on the handle to switch joy-control mode, then manipulate the handle to control the robot.
 
@@ -97,14 +101,29 @@ Press the `B` key to stop trot;
 
 Press the `Y` key to sit down and exit;
 
-# 4. Code Structure
+# 5. Keyboard Control
+
+If you have run a keyboard example, you can also use the keyboard to control the robot. Press the `K` key to switch joy-control mode, then you can control the quadruped robot by pressing keys on the keyboard.
+
+Press the `K` key to switch joy-control mode;
+
+Press the `J` key to change the gait;
+
+Press the `W` `A` `S` `D` keys to control its movement;
+
+Press the `Q` `E` keys to control its rotation;
+
+Press the `L` key to stop trot;
+
+Press the `I` key to sit down and exit;
+
+# 6. Code Structure
 
 The code is quite different from that in main branch. The process structure will seems like:
 
 <div align="center">
     <img src="./img/mpc-wbc process diagram.png">
 </div>
+
 Currently, the code is tested on Unitree A1 and Deeprobotics Lite3 robots. If you wanna test it on your own robot, you may need to adjust the parameters in **quadruped/config** folder. If you wanna fine-tune the MPC-WBC algorithm, you will need to adjust some parameters(usually KP and KD in **quadruped/controllers/task_set** and weights in WBC locomotion controller).
-
-
 
