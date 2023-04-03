@@ -1,4 +1,21 @@
+# 0. Build the project
 
+After jump to your workspace by command:
+```
+cd ${your_workspace}
+```
+using ROS tool `catkin_make` to build the project
+```
+catkin_make
+```
+If you want to speed up the program, you can
+1. (For Sim) Lower down the `<real_time_update_rate>` in the `.world` file of `qr_gazebo` folder.
+2. Uncomment the `BLAS` related content in the `CMakeLists.txt` of `quadruped` folder.
+
+For intel-chip users, the program can be easily speed up by MKL library. To install MKL, download Intel oneAPI Math Kernel Library Offline Installer. Make it work by using command below before `catkin_make` your workspace.
+```
+source /opt/intel/oneapi/setvars.sh
+```
 
 # 1. Run the simulation
 
@@ -7,6 +24,7 @@ Source `setup.bash` to set up the ROS development environment
 ```
 source ${your_workspace}/devel/setup.bash
 ```
+
 ## Step 2: Start simulation environment
 Run the Gazebo simulator with the command below:
 ```
@@ -32,9 +50,25 @@ Now in another new terminal, you can run the example, like
 rosrun examples example_a1_sim
 ```
 
+# 2. Run on Real Robot
 
+## Step 1: Start a ROS master
+Use ROS by running a ROS master node with command:
+```
+roscore
+```
 
-# 2. Joy Control
+## Step 2: Run an example
+In a new terminal, source `setup.bash` to set up the ROS development environment
+```
+source ${your_workspace}/devel/setup.bash
+```
+and then, you can run the example, like
+```
+rosrun examples example_a1_real
+```
+
+# 3. Joy Control
 
 In this branch, we do not provide some simple examples such as standing up and sitting down. We recommand users to run and debug with a joystick. With the ROS joy package, you can use a gamepad (such as Logitech F710) to send speed commands to control a quadruped robot. After opening the joy node, press the `A` key on the handle to switch joy-control mode, then manipulate the handle to control the robot.
 
@@ -63,9 +97,7 @@ Press the `B` key to stop trot;
 
 Press the `Y` key to sit down and exit;
 
-
-
-# 3. Code Structure
+# 4. Code Structure
 
 The code is quite different from that in main branch. The process structure will seems like:
 

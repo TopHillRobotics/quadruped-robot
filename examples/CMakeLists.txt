@@ -11,7 +11,7 @@ include_directories(
     ${catkin_INCLUDE_DIRS}
 )
 
-#add_executable(example_a1_real example_a1_real/example_a1_real.cpp)
+add_executable(example_a1_real example_a1_real/example_a1_real.cpp)
 add_executable(example_a1_sim example_a1_sim/example_a1_sim.cpp)
 #add_executable(example_lite2sim_standup example_lite2_sim/example_lite2sim_standup.cpp)
 add_executable(example_lite2sim example_lite2_sim/example_lite2sim.cpp)
@@ -24,7 +24,7 @@ add_executable(example_lite3_real example_lite3_real/example_lite3_real.cpp)
 #add_executable(lite2_with_ros    example_lite2_real/lite2_with_ros.cpp)
 #add_executable(example_lite2hw   example_lite2_real/example_lite2hw.cpp)
 
-#target_link_libraries(example_a1_real ${catkin_LIBRARIES})
+target_link_libraries(example_a1_real ${catkin_LIBRARIES})
 target_link_libraries(example_a1_sim ${catkin_LIBRARIES})
 #target_link_libraries(example_lite2sim_standup ${catkin_LIBRARIES})
 target_link_libraries(example_lite2sim ${catkin_LIBRARIES})

@@ -144,6 +144,7 @@ target_link_libraries(quadruped PUBLIC
     ${YAML_CPP_LIBRARIES}
     ${catkin_LIBRARIES}
     ${UNITREE_SDK_LIB}
+    # ${BLAS_LIBRARIES}
     deeprobotics_legged_sdk
     lcm tinynurbs::tinynurbs
     xpp_states xpp_vis
