@@ -1,0 +1,40 @@
+controlFrequency: 1000 # hz
+
+# ground estimator
+filterWindowSize: 50
+
+# velocity estimator
+## in sim
+# accelerometerVariance: 0.01
+# sensorVariance: 0.01
+# initialVariance: 0.01
+# movingWindowFilterSize: 50
+## in reality
+accelerometerVariance: 0.1
+sensorVariance: 0.1
+initialVariance: 0.1
+movingWindowFilterSize: 120
+
+# swing controller
+desiredHeight: 0.29 # 0.29
+desiredSpeed: [0., 0., 0.]
+desiredTwistingSpeed: 0.
+footClearance: 0.01
+frictionCoeffs: [0.45, 0.45, 0.45, 0.45]
+swingKp:
+  trot: [0.03, 0.03, 0.03] # -0.01
+  # advanced_trot: [0.16, 0.16, 0.16] # sim
+  advanced_trot: [0.01, 0.03, 0.01 ] # real
+
+defaultFootPos: [0.185, 0.185, -0.185, -0.185,
+                0.14, -0.14, 0.14, -0.14,
+                -0.28, -0.28, -0.28, -0.28]
+
+# stance controller
+computeForceInWorldFrame: true
+
+# mit stance leg controller
+useWBC: true
+
+stairsVel: 0.1
+stairsTime: 13.0

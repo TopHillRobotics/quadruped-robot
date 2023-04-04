@@ -1,0 +1,43 @@
+package // comments after package keyword
+lcmtest // comments after package name
+;
+
+/// Contains a number of primitive data types
+struct // comment after struct keyword
+comments_t // comment after struct name
+{
+    // Comments immediately preceding a field are attached to that field.
+    int8_t   field_a;
+
+    // Both single line comments.
+    /* And multi-line
+     * comments.
+     */
+    int16_t field_b;
+
+    // Test empty comments.
+    //
+    int32_t  field_c; //
+    /**/
+    int64_t field_d;
+    /**/
+    //
+
+    float // comment after type specifier
+      /* */
+      field_e // comment after field name
+      /* */
+      ;
+
+    const // comment after const keyword
+      int8_t // comment after const type specifier
+       const_field // comment after const field name
+        = // comment after const '='
+        5 // comment after const field value
+        ;
+
+    int32_t array[ // comment after array opening brace
+      field_a // comment after array length
+      ] // comment after array closing bace.
+      ;
+}

@@ -1,0 +1,35 @@
+package gap.msgs;
+
+/// \ingroup gap_msgs
+/// \interface CameraUtilsResponse
+/// \brief A response from Camera Utils plugin
+
+import "pose.proto";
+import "point_projection.proto";
+
+message CameraUtilsResponse
+{
+    /// \brief Type of request
+    enum Type
+    {
+        /// \brief Acquire frame and save it to disk 
+        CAPTURE     = 1;
+        /// \brief Change output directory 
+        DIR         = 2;
+        /// \brief Get camera info 
+        MOVE        = 3;
+        /// \brief From 3d to 2d camera point 
+        PROJECTION  = 4;
+    }
+
+    /// \brief Type of request 
+    optional Type             type          = 1;
+    /// \brief File path of captured frame
+    optional string           filename      = 2;
+    /// \brief Success 
+    optional bool             success       = 3;
+    /// \brief Current camera pose
+    optional gazebo.msgs.Pose pose          = 4;
+    /// \brief 3D to 2D point projection 
+    repeated PointProjection  projections   = 5;
+}

@@ -1,0 +1,22 @@
+syntax = "proto2";
+package gap.msgs;
+
+/// \ingroup gap_msgs
+/// \interface domain randomization request
+/// \brief Domain randomization plugin request
+
+import "physics.proto";
+import "model.proto";
+import "model_cmd.proto";
+
+message DRRequest
+{
+    /// Physics
+    optional gazebo.msgs.Physics   physics    = 1;
+    /// Models
+    repeated gazebo.msgs.Model     model      = 2;
+    /// Model PID commands
+    repeated ModelCmd              model_cmd  = 3;
+    /// Whether to report back
+    optional bool                  feedback   = 4;
+}

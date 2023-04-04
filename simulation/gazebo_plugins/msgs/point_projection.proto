@@ -1,0 +1,18 @@
+package gap.msgs;
+
+/// \ingroup gap_msgs
+/// \interface PointProjection
+/// \brief A projection of 3D points to 2D
+
+import "vector2d.proto";
+import "vector3d.proto";
+
+message PointProjection
+{
+    /// \brief Set of projected 2D points 
+    repeated gazebo.msgs.Vector2d   point2  = 1;
+    /// \brief Set of 3D point to project
+    repeated gazebo.msgs.Vector3d   point3  = 2;
+    /// \brief Optional name describing set of points
+    optional string                 name    = 3;
+}

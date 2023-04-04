@@ -1,0 +1,6 @@
+name: robot_go1
+
+speed_update_mode: 0 # const twist
+const_twist:
+  linear: [0.1, 0., 0.]
+  angular: 0.

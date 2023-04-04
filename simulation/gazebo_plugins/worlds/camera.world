@@ -1,0 +1,76 @@
+<?xml version="1.0"?> 
+<gazebo version="1.0">
+  <world name="default">
+   
+   <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    
+    <model name="box">
+      <link name="link">
+        <origin pose="0 0 0.5 0 0 0"/>
+        <inertial mass="1.0">
+          <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+        </inertial>
+
+        <collision name="collision">
+          <geometry>
+            <box size="1 1 1"/>
+          </geometry>
+         <surface>
+            <friction>
+              <ode mu="0" mu2="0"/>
+            </friction>
+          </surface>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box size="1 1 1"/>
+          </geometry>
+        </visual>
+
+        <sensor name='cam_sensor1' type='camera' always_on='1' update_rate='10'>
+          <origin pose='0 0 0 0 0 1.57'/>
+          <camera>
+            <horizontal_fov angle='1.57'/>
+            <image width='640' height='480' format='R8G8B8'/>
+          </camera>
+          <plugin name='camera_utils' filename='libCameraUtils.so'>
+            <output_dir>/tmp/camera_world</output_dir>
+            <!-- Output image extension -->
+            <extension>.png</extension>
+          </plugin>
+        </sensor>
+      </link>
+    </model>
+
+    <model name="box2">
+      <origin pose="0 1.5 0 0 0 0"/>
+      <link name="body">
+        <origin pose="0 0 0.5 0 0 0"/>
+        <inertial mass="1.0">
+          <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+        </inertial>
+
+        <collision name="collision">
+          <geometry>
+            <box size="1 1 1"/>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box size="1 1 1"/>
+          </geometry>
+          <material script="Gazebo/WoodPallet"/>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</gazebo>

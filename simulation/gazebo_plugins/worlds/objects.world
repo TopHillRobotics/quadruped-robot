@@ -1,0 +1,939 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+<world name="default">
+
+    <plugin name="object_spawner" filename="libWorldUtils.so"/>
+
+    <model name="sphere_1">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>sphere_1</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="sphere_2">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>sphere_2</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="sphere_3">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>sphere_3</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="sphere_4">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>sphere_4</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="sphere_5">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>sphere_5</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="sphere_6">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>sphere_6</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="sphere_7">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>sphere_7</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="sphere_8">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>sphere_8</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="sphere_9">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>sphere_9</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="sphere_10">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <sphere>
+                <radius>0.5</radius>
+              </sphere>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>sphere_10</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    
+
+
+
+    <model name="box_1">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>box_1</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="box_2">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>box_2</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="box_3">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>box_3</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="box_4">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>box_4</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="box_5">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>box_5</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="box_6">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>box_6</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="box_7">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>box_7</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="box_8">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>box_8</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="box_9">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>box_9</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="box_10">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>box_10</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    
+
+
+
+
+
+    <model name="cylinder_1">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>cylinder_1</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="cylinder_2">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>cylinder_2</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="cylinder_3">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>cylinder_3</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="cylinder_4">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>cylinder_4</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="cylinder_5">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>cylinder_5</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="cylinder_6">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>cylinder_6</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="cylinder_7">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>cylinder_7</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="cylinder_8">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>cylinder_8</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="cylinder_9">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>cylinder_9</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+    <model name="cylinder_10">
+        <pose>0 0 -3 0 0 0</pose>
+        <link name="link">
+          <collision name="collision">
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+          </collision>
+          <visual name="visual">
+            <pose>0 0 -3 0 0 0</pose>
+            <geometry>
+              <cylinder>
+                <radius>0.5</radius>
+                <length>1</length>
+              </cylinder>
+            </geometry>
+            <plugin name="visual_utils" filename="libVisualUtils.so">
+              <uid>cylinder_10</uid>
+              <patterns>
+                Plugin/flat_
+                Plugin/gradient_
+                Plugin/chess_
+                Plugin/perlin_
+              </patterns>
+              <variants>100</variants>
+            </plugin>
+          </visual>
+        </link>
+    </model>
+
+  </world>
+</sdf>

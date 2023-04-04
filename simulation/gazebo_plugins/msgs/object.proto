@@ -1,0 +1,51 @@
+package gap.msgs;
+
+/// \ingroup gap_msgs
+/// \interface Object
+/// \brief An object representation
+
+import "pose.proto";
+import "vector3d.proto";
+
+message Object
+{
+
+    /// \brief Type of model to be spawned
+    enum ModelType{
+        /// \brief Spawn sphere in simulation
+        SPHERE          = 1;
+        /// \brief Spawn cylinder in simulation
+        CYLINDER        = 2;
+        /// \brief Spawn cube in simulation
+        BOX             = 3;
+        /// \brief Spawn custom object from sdf string
+        CUSTOM          = 4;
+        /// \brief Spawn custom light from sdf string
+        CUSTOM_LIGHT    = 5;
+        /// \brief Spawn a model included in gazebo model path
+        MODEL           = 6;
+    }
+
+
+    /// \brief Model type for spawn
+    optional ModelType              model_type      = 1;
+    /// \brief Model name
+    optional string                 name            = 2;
+    /// \brief Model pose
+    optional gazebo.msgs.Pose       pose            = 3;
+    /// \brief Model mass
+    optional double                 mass            = 5;
+    /// \brief Material script uri
+    optional string                 texture_uri     = 6;
+    /// \brief Material script name
+    optional string                 texture_name    = 7;
+    /// \brief radius of a cylinder or a sphere
+    optional double                 radius          = 8;
+    /// \brief Length of a cylinder
+    optional double                 length          = 9;
+    /// \brief Dimensions of a box
+    optional gazebo.msgs.Vector3d   box_size        = 10;
+    /// \brief Custom object sdf string
+    optional string                 sdf             = 11;
+
+}

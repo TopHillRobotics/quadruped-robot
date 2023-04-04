@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<sdf version="1.4">
+  <world name="default">
+
+    <plugin name="world_tools" filename="libWorldUtils.so"/>
+
+  </world>
+</sdf>

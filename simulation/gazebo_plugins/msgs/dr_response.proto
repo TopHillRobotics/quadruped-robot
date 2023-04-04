@@ -1,0 +1,12 @@
+syntax = "proto2";
+package gap.msgs;
+
+/// \ingroup gap_msgs
+/// \interface domain randomization response
+/// \brief Domain randomization plugin response
+
+message DRResponse
+{
+    /// Whether operation was successful
+    optional bool success = 1;
+}

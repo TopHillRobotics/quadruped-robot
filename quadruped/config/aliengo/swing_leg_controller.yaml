@@ -1,0 +1,6 @@
+name: aliengo
+swing_leg_params:
+  foot_in_world: [ [ 0.25, 0.25, -0.21, -0.21 ],
+                   [ -0.165, 0.165, -0.165, 0.165 ],
+                   [ 0, 0, 0, 0 ] ]
+  foot_offset: 0.075

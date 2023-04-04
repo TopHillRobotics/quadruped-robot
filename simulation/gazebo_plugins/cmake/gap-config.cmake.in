@@ -1,0 +1,5 @@
+# GAP Messages library
+list(APPEND @PKG_NAME@_INCLUDE_DIRS @CMAKE_INSTALL_PREFIX@/@msgs_include_dest@)
+list(APPEND @PKG_NAME@_LIBRARY_DIRS @CMAKE_INSTALL_PREFIX@/@msgs_lib_dest@)
+
+list(APPEND @PKG_NAME@_CFLAGS -I@CMAKE_INSTALL_PREFIX@/@msgs_include_dest@)

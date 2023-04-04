@@ -1,0 +1,34 @@
+package gap.msgs;
+
+/// \ingroup gap_msgs
+/// \interface WorldUtilsRequest
+/// \brief A request for World Utils plugin
+
+import "object.proto";
+
+message WorldUtilsRequest
+{
+    /// \brief Type of request 
+    enum Type
+    {
+        /// \brief Spawn entity in simulation 
+        SPAWN   = 1;
+        /// \brief Move entity in simulation 
+        MOVE    = 2;
+        /// \brief Remove entity from simulation  
+        REMOVE  = 3;
+        /// \brief Start or stop physics simulation 
+        PHYSICS = 4;
+        /// \brief Pause or resume world 
+        PAUSE   = 5;
+        /// \brief Request entity or world information 
+        STATUS  = 6;
+    }
+
+    /// \brief Type of request 
+    optional Type                   type            = 1;
+    /// \brief Object of request 
+    repeated Object                 object          = 2;
+    /// \brief World physics state 
+    optional bool                   state           = 3;
+}

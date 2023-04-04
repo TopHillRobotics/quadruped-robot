@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>quadruped</name>
+    <version>1.11.0</version>
+    <description>The quadruped package</description>
+    <maintainer email="1973671061@qq.com">ZhenyuXu</maintainer>
+    <license>MIT</license>
+    <buildtool_depend>catkin</buildtool_depend>
+
+
+    <depend>roscpp</depend>
+    <depend>roslib</depend>
+    <depend>std_msgs</depend>
+    <depend>nav_msgs</depend>
+    <depend>tf</depend>
+    <depend>pcl_ros</depend>
+    <depend>sensor_msgs</depend>
+    <depend>pcl_conversions</depend>
+    <depend>message_filters</depend>
+    <depend>libpcl-all-dev</depend>
+    <depend>eigen</depend>
+    <depend>geometry_msgs</depend>
+    <depend>unitree_legged_msgs</depend>
+
+    <export>
+    </export>
+
+</package>

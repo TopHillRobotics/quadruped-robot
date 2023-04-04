@@ -1,0 +1,84 @@
+name: lite3
+urdf_path: src/simulation/robots/lite3_description/urdf/robot.urdf
+robot_params:
+  total_mass: 12.72
+  # total_inertia: [ 0.24, 0, 0, 0, 0.80, 0, 0, 0, 1.0 ] 
+  total_inertia: [ 0.24, 0, 0, 0, 1.0, 0, 0, 0, 1.0 ] 
+  body_mass: 7.5 # 5.298
+  body_size: [0.349, 0.124, 0.15]
+  # body_inertia: [0.0096, 0, 0, 0, 0.014, 0, 0, 0, 0.0195 ]
+  body_inertia: [ 0.24, 0, 0, 0, 1.0, 0, 0, 0, 1.0 ] # [0.03, 0, 0, 0, 0.10, 0, 0, 0, 0.1 ]
+  links_inertia: [[0.00014538, 8.1579e-07, -1.264e-05, 8.1579e-07, 0.00024024,1.3443e-06,-1.264e-05, 1.3443e-06, 0.00013038],
+                  [0.001, -2.5e-06, -0.000112, -2.5e-06, 0.00116, 3.75e-07, -0.000112, 3.75e-07, 0.000268],
+                  [0.000668, -1.2e-08,6.91e-06,-1.2e-08,6.86e-04, 5.65e-09, 6.91e-06,  5.65e-09, 3.155e-05]] # for one leg
+  links_mass: [0.428, 0.61, 0.145] # for one leg
+  links_com_pos: [[-0.0047, -0.0091, -0.0018], [-0.00523, -0.0216, -0.0273], [0.00585, 0, -0.12]] # for FL leg
+  body_height: 0.29
+  abad_location: [0.1745, 0.062, 0]
+  hip_l: 0.0985
+  upper_l: 0.20
+  lower_l: 0.21
+
+  velocity:
+    # com_offset: [ -0.005, 0.0022, 0.000515 ] # zang mpc
+    com_offset: [ 0.005, 0.00145, 0.000515 ] # vel mode
+  position:
+    com_offset: [ -0.005, 0.0024, 0.000515 ] # pos mode
+  walk:
+    com_offset: [ -0.005, 0.0012, 0.000515 ] # walk mode
+    # com_offset: [ -0.01, 0.003, 0.000515 ] # mpc/walk
+  advanced_trot:
+    # com_offset: [ -0.04, -0.025, 0. ]
+    # com_offset: [ -0.035, -0.015, 0.0 ] # mpc
+    com_offset: [ -0.04, -0.015, 0.0 ] # wbc
+  
+  hip_offset: [ [ 0.1745, -0.062, 0. ],
+                [ 0.1745, 0.062, 0. ],
+                [ -0.1745, -0.062, 0. ],
+                [ -0.1745, 0.062, 0. ] ]
+                
+  # hip_offset: [ [ 0.18, -0.062, 0. ],
+  #               [ 0.18, 0.062, 0. ],
+  #               [ -0.17, -0.062, 0. ],
+  #               [ -0.17, 0.062, 0. ] ] # for WBC
+  default_hip_positions: [ [ 0.1745, -0.16, 0 ],
+                           [ 0.1745, 0.16, 0 ],
+                           [ -0.1745, -0.16, 0 ],
+                           [ -0.1745, 0.16, 0 ] ] # only used for VELOCITY_LOCOMOTION
+  
+  default_standup_angle:
+    ab: 0.0
+    hip: 0.82 # 2.0 #0.82
+    knee: -1.5
+
+  default_sitdown_angle:
+    ab: -0.167136
+    hip: 0.934969
+    knee: -2.54468
+
+motor_params:
+  joint_directions: [ -1,-1,-1, -1,-1,-1, -1,-1,-1, -1,-1,-1 ]
+  joint_offsets: [ 0,0,0, 0,0,0, 0,0,0, 0,0,0 ]
+
+  # abad_p: 60
+  # abad_d: 1.2
+  # hip_p: 60
+  # hip_d: 1.2
+  # knee_p: 60
+  # knee_d: 1.2
+
+  abad_p: 60
+  abad_d: 1.0
+  hip_p: 80
+  hip_d: 0.8
+  knee_p: 80
+  knee_d: 0.8
+
+controller_params:
+  # mode: 0 # VEL_MODE
+  # mode: 1 # POS_MODE
+  # mode: 2 # WALK_LOCOMOTION
+  mode: 3 # ADVANCED_TROT
+
+# is simulate or not
+is_sim: false

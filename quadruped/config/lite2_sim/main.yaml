@@ -1,0 +1,6 @@
+name: a1_sim
+
+speed_update_mode: 0 # twist  0(const), 1(ros/cmd_vel)
+const_twist:
+  linear: [0.2, 0., 0.]
+  angular: 0. # 0.2

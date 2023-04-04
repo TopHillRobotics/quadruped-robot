@@ -1,0 +1,38 @@
+gait_params:
+  gait: "slow_trot"
+  trot:
+    stance_duration: [ 0.23, 0.23, 0.23, 0.23 ]
+    duty_factor: [ 0.6, 0.6, 0.6, 0.6 ]
+    init_phase_full_cycle: [ 0.5, 0., 0., 0.5 ]
+    initial_leg_state: [ 1, 1, 1, 1 ]  # STANCE: 1, SWING: 0
+    contact_detection_phase_threshold: 0.5
+  slow_trot:
+    stance_duration: [ 0.3, 0.3, 0.3, 0.3]
+    duty_factor: [0.6, 0.6, 0.6, 0.6] # 0.8
+    init_phase_full_cycle : [0.5, 0., 0., 0.5]
+    initial_leg_state : [1, 1, 1, 1]
+    contact_detection_phase_threshold: 0.5
+    # stance_duration: [ 1.0, 1.0, 1.0, 1.0 ]
+    # duty_factor: [0.8, 0.8, 0.8, 0.8] # 0.8
+    # init_phase_full_cycle : [0.25, 0., 0.75, 0.5]
+    # initial_leg_state : [1, 1, 1, 1]
+    # contact_detection_phase_threshold: 0.1  
+  walk:
+    stance_duration: [ 1.0, 1.0, 1.0, 1.0 ]
+    duty_factor: [0.75, 0.75, 0.75, 0.75] # 0.8
+    init_phase_full_cycle : [0.5, 0., 0.75, 0.25]
+    initial_leg_state : [1, 1, 1, 1]
+    contact_detection_phase_threshold: 0.1
+  stand:
+    stance_duration: [ 0.23, 0.23, 0.23, 0.23 ]
+    duty_factor: [ 1., 1., 1., 1. ]
+    init_phase_full_cycle: [ 0., 0., 0., 0. ]
+    initial_leg_state: [ 1, 1, 1, 1 ]  # STANCE: 1, SWING: 0
+    contact_detection_phase_threshold: 0.1
+  swing_FR:
+    stance_duration: [ 0.32, 0.32, 0.32, 0.32]
+    duty_factor: [ 0.55, 0.55, 0.55, 0.55]
+    init_phase_full_cycle: [ 0.95, 0., 0., 0.95 ]
+    initial_leg_state: [ 0, 1, 1, 0 ]
+    contact_detection_phase_threshold: 0.1
+    

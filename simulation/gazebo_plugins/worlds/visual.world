@@ -1,0 +1,128 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <world name="default">
+
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    
+    <model name="box">
+      <pose>0 0 0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.5 0.5 0.5</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.5 0.5 0.5</size>
+            </box>
+          </geometry>
+          <plugin name="visual_utils" filename="libVisualUtils.so">
+            <uid>box</uid>
+            <patterns>
+              Plugin/flat_
+            </patterns>
+            <variants>100</variants>
+          </plugin>
+        </visual>
+      </link>
+    </model>
+
+    <model name="sphere">
+      <pose>1 0 0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.5 0.5 0.5</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <sphere>
+              <radius>0.25</radius>
+            </sphere>
+          </geometry>
+          <plugin name="visual_utils" filename="libVisualUtils.so">
+            <uid>sphere</uid>
+            <patterns>
+              Plugin/chess_
+            </patterns>
+            <variants>100</variants>
+          </plugin>
+        </visual>
+      </link>
+    </model>
+
+    <model name="cylinder">
+      <pose>2 0 0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.5 0.5 0.5</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.25</radius>
+              <length>0.5</length>
+            </cylinder>
+          </geometry>
+          <plugin name="visual_utils" filename="libVisualUtils.so">
+            <uid>cylinder</uid>
+            <patterns>
+              Plugin/perlin_
+            </patterns>
+            <variants>100</variants>
+          </plugin>
+        </visual>
+      </link>
+    </model>
+
+    <model name="ground_plane">
+      <static>true</static>
+      <pose>0 0 0 0 0 0</pose>
+
+      <link name="link">
+
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>10 10</size>
+            </plane>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <cast_shadows>false</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>10 10</size>
+            </plane>
+          </geometry>
+          <plugin name="visual_utils" filename="libVisualUtils.so">
+            <uid>ground</uid>
+            <patterns>
+              Plugin/flat_
+              Plugin/gradient_
+              Plugin/chess_
+              Plugin/perlin_
+            </patterns>
+            <variants>100</variants>
+          </plugin>
+        </visual>
+      </link>
+    </model>
+  </world>
+</sdf>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>examples</name>
+  <version>0.1.0</version>
+  <description>The examples package</description>
+
+  <maintainer email="1973671061@qq.com">Zhenyu Xu</maintainer>
+
+  <license>MIT</license>
+
+  <author >Zhenyu Xu</author>
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>quadruped</depend>
+  <depend>roscpp</depend>
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+
+  </export>
+</package>

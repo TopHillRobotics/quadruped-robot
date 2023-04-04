@@ -1,0 +1,61 @@
+lite3_gazebo:
+
+    # Publish all joint states -----------------------------------
+    joint_state_controller:
+        # type: unitree_legged_control/UnitreeJointController
+        type: joint_state_controller/JointStateController
+        publish_rate: 1000  
+
+    # FL Controllers ---------------------------------------
+    FL_hip_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: FL_HipX
+
+    FL_thigh_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: FL_HipY
+
+    FL_calf_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: FL_Knee
+
+    # FR Controllers ---------------------------------------
+    FR_hip_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: FR_HipX
+
+    FR_thigh_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: FR_HipY
+
+    FR_calf_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: FR_Knee
+
+    # RL Controllers ---------------------------------------
+    RL_hip_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: HL_HipX
+
+    RL_thigh_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: HL_HipY
+
+    RL_calf_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: HL_Knee
+
+    # RR Controllers ---------------------------------------
+    RR_hip_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: HR_HipX
+
+    RR_thigh_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: HR_HipY
+
+    RR_calf_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: HR_Knee
+
+
