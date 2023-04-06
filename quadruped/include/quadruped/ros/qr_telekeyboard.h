@@ -68,9 +68,19 @@ public:
     void run();
 
     /**
+     * @brief Keep sending the default Twist message.
+     */
+    void run_default();
+
+    /**
      * @brief If the keyboard stop receiving event.
      */
     bool finish;
+
+    /**
+     * @brief mutex used to synchronize run and run_default thread.
+     */
+    bool mutex;
     
 private:
 

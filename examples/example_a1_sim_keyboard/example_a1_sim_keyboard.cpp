@@ -158,6 +158,7 @@ int main(int argc, char **argv)
     qrTeleKeyboard *keyboard = new qrTeleKeyboard(nh);
     std::cout << "---------Keyboard start receving---------" << std::endl;
     std::thread keyboardTh(&qrTeleKeyboard::run, keyboard);
+    std::thread keyboardTh_default(&qrTeleKeyboard::run_default, keyboard);
 
     ros::AsyncSpinner spinner(1); // one threads
     spinner.start();

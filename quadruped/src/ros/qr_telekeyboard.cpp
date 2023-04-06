@@ -27,6 +27,7 @@
 qrTeleKeyboard::qrTeleKeyboard(ros::NodeHandle &nhIn):nh(nhIn)
 {
     finish = false;
+    mutex = false;
 }
 
 int qrTeleKeyboard::getch(void)
@@ -81,10 +82,11 @@ void qrTeleKeyboard::run()
     rockers_binding['s'] = {4, -1.0};
     rockers_binding['d'] = {3, -1.0};
     rockers_binding['q'] = {0, 1.0};
-    rockers_binding['r'] = {0, -1.0};
+    rockers_binding['e'] = {0, -1.0};
 
     while(true){
         key = getch();
+        mutex = true;
 
         if(buttons_binding.count(key) == 1){
             joy_msg.buttons[buttons_binding[key]] = 1;
@@ -110,6 +112,21 @@ void qrTeleKeyboard::run()
         joy_msg.buttons = {0,0,0,0,0,0,0,0,0,0,0};
         joy_msg.axes = {0,0,0,0,0,0,0,0};
 
+        ros::spinOnce();
+        mutex = false;
+    }
+}
+
+void qrTeleKeyboard::run_default()
+{
+    ros::Publisher pub = nh.advertise<sensor_msgs::Joy>(cmdTopic, 1);
+    sensor_msgs::Joy joy_msg;
+    joy_msg.buttons = {0,0,0,0,0,0,0,0,0,0,0};
+    joy_msg.axes = {0,0,0,0,0,0,0,0};
+    while(true){
+        if(!mutex)
+            pub.publish(joy_msg);
+        sleep(1);
         ros::spinOnce();
     }
 }
