@@ -88,7 +88,6 @@
         <inertia ixx="6.68E-04" ixy="-1.24E-08" ixz="6.91E-06" iyy="6.86E-04" iyz="5.65E-09" izz="3.155E-05" />
       </inertial>
       <visual>
-        <origin rpy="0.88 0 1.5708" xyz="-0.171 0.25 -0.274"/>
         <geometry>
           <mesh filename="package://lite3_description/meshes/SHANK.dae" />
         </geometry>
@@ -184,7 +183,6 @@
         <inertia ixx="6.68E-04" ixy="-1.24E-08" ixz="6.91E-06" iyy="6.86E-04" iyz="5.65E-09" izz="3.155E-05" />
       </inertial>
       <visual>
-        <origin rpy="0.88 0 1.5708" xyz="-0.171 0.25 -0.274"/>
         <geometry>
           <mesh filename="package://lite3_description/meshes/SHANK.dae" />
         </geometry>
@@ -280,7 +278,6 @@
         <inertia ixx="6.68E-04" ixy="-1.24E-08" ixz="6.91E-06" iyy="6.86E-04" iyz="5.65E-09" izz="3.155E-05" />
       </inertial>
       <visual>
-        <origin rpy="0.88 0 1.5708" xyz="-0.171 0.25 -0.274"/>
         <geometry>
           <mesh filename="package://lite3_description/meshes/SHANK.dae" />
         </geometry>
@@ -376,7 +373,6 @@
         <inertia ixx="6.68E-04" ixy="-1.24E-08" ixz="6.91E-06" iyy="6.86E-04" iyz="5.65E-09" izz="3.155E-05" />
       </inertial>
       <visual>
-        <origin rpy="0.88 0 1.5708" xyz="-0.171 0.25 -0.274"/>
         <geometry>
           <mesh filename="package://lite3_description/meshes/SHANK.dae" />
         </geometry>
