@@ -34,20 +34,20 @@ list(APPEND includePath "/usr/include/eigen3")
 
 # If wanna use BLAS acceleration, uncomment this if needed.
 # if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel") # GNU
-if (${USE_BLAS})
-    message("--------------USE_BLAS-----------------")
-    set(BLA_VENDOR Intel10_64lp)
-    add_definitions(-DEIGEN_USE_MKL_ALL)
-#    set(BLA_VENDOR OpenBLAS)## if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel") # GNU
+#if (${USE_BLAS})
+#    message("--------------USE_BLAS-----------------")
 #    set(BLA_VENDOR Intel10_64lp)
 #    add_definitions(-DEIGEN_USE_MKL_ALL)
-#    set(BLA_VENDOR OpenBLAS)
-#    add_definitions(-DEIGEN_USE_BLAS)
-# endif()
-#    add_definitions(-DEIGEN_USE_BLAS)
-endif()
-find_package(BLAS REQUIRED)
-message(${BLAS_LIBRARIES})
+##    set(BLA_VENDOR OpenBLAS)## if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel") # GNU
+##    set(BLA_VENDOR Intel10_64lp)
+##    add_definitions(-DEIGEN_USE_MKL_ALL)
+##    set(BLA_VENDOR OpenBLAS)
+##    add_definitions(-DEIGEN_USE_BLAS)
+## endif()
+##    add_definitions(-DEIGEN_USE_BLAS)
+#endif()
+#find_package(BLAS REQUIRED)
+#message(${BLAS_LIBRARIES})
 
 # library yaml
 find_package(yaml-cpp REQUIRED)
