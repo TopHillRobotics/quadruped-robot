@@ -45,9 +45,11 @@ if (${USE_BLAS})
 #    add_definitions(-DEIGEN_USE_BLAS)
 # endif()
 #    add_definitions(-DEIGEN_USE_BLAS)
+    find_package(BLAS REQUIRED)
+    message(${BLAS_LIBRARIES})
+    target_link_libraries(quadruped PUBLIC ${BLAS_LIBRARIES})
 endif()
-find_package(BLAS REQUIRED)
-message(${BLAS_LIBRARIES})
+
 
 # library yaml
 find_package(yaml-cpp REQUIRED)
@@ -152,7 +154,6 @@ target_link_libraries(quadruped PUBLIC
     ${YAML_CPP_LIBRARIES}
     ${catkin_LIBRARIES}
     ${UNITREE_SDK_LIB}
-    ${BLAS_LIBRARIES}
     deeprobotics_legged_sdk
     lcm tinynurbs::tinynurbs
     xpp_states xpp_vis
