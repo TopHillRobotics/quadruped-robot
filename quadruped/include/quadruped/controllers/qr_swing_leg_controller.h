@@ -221,12 +221,6 @@ public:
     YAML::Node swingLegConfig;
 
     /**
-     * @brief Initial position of foot.
-     * Used in position mode
-     */
-    std::vector<std::vector<float>> footInitPose;
-
-    /**
      * @brief Foot offset. This member will be removed in the future.
      */
     float footOffset;

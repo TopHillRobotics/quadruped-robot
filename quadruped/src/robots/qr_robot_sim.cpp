@@ -28,10 +28,11 @@
 namespace Quadruped {
 
 qrRobotSim::qrRobotSim(ros::NodeHandle &nhIn, ros::NodeHandle &privateNhIn, std::string robotName, std::string homeDir):
-    qrRobot(robotName, homeDir + "config/" + robotName + "_sim/robot.yaml"),
+    qrRobot(robotName + "_sim", homeDir + "config/" + robotName + "_sim/robot.yaml"),
     nh(nhIn),
     privateNh(privateNhIn)
 {
+  std::cout << robotName <<std::endl;
     baseOrientation << 1.f, 0.f, 0.f, 0.f;
     baseRollPitchYaw << 0.f, 0.f, 0.f;
     baseRollPitchYawRate << 0.f, 0.f, 0.f;

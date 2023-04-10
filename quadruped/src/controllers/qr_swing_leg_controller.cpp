@@ -50,7 +50,6 @@ qrRaibertSwingLegController::qrRaibertSwingLegController(
     std::cout << config_path <<std::endl;
 
     swingLegConfig = YAML::LoadFile(config_path);
-    footInitPose = swingLegConfig["swing_leg_params"]["foot_in_world"].as<std::vector<std::vector<float>>>();
     footOffset = swingLegConfig["swing_leg_params"]["foot_offset"].as<float>();
     this->userParameters = &user_parameters;
 

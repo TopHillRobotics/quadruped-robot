@@ -4,11 +4,11 @@ robot_params:
 
   total_mass: 8.742 #12.72
 
-  #total_inertia: [ 0.24, 0, 0, 0, 0.80, 0, 0, 0, 1.0 ] 
+  #total_inertia: [ 0.24, 0, 0, 0, 0.80, 0, 0, 0, 1.0 ]
 
-  total_inertia: [ 0.016, 0, 0, 0, 0.03, 0, 0, 0, 0.042 ]
+  total_inertia: [ 0.24, 0, 0, 0, 0.6, 0, 0, 0, 1.0 ]
 
-  body_mass: 5.298  #7.5 # 5.298
+  body_mass: 5.298  #7.5 # 5.298s
 
   body_size: [0.349, 0.124, 0.15]
 
@@ -24,11 +24,11 @@ robot_params:
 
   links_com_pos: [[-0.0047, -0.0091, -0.0018], [-0.00523, -0.0216, -0.0273], [0.00585, 0, -0.12]] # for FL leg
 
-  body_height: 0.28
+  body_height: 0.27
 
   abad_location: [0.1745, 0.062, 0]
 
-  hip_l: 0.0875
+  hip_l: 0.0985
 
   upper_l: 0.20
 
@@ -49,7 +49,7 @@ robot_params:
     # com_offset: [ -0.04, -0.025, 0. ]
     # com_offset: [ -0.035, -0.015, 0.0 ] # mpc
     # com_offset: [ -0.04, -0.015, 0.0 ] # wbc
-    com_offset: [ 0.01, 0.04, 0 ] # simulation mpc
+    com_offset: [ -0.02, -0.02, 0.0] # [ -0.01, -0.03, 0 ] # simulation mpc
 
   #hip_offset: [ [ 0.1745, -0.062, 0. ],
                 #[ 0.1745, 0.062, 0. ],
@@ -81,7 +81,7 @@ robot_params:
     knee: -2.54468
 
 motor_params:
-  joint_directions: [ -1,-1,-1, 1,-1,-1, -1,-1,-1, 1,-1,-1 ]
+  joint_directions: [ -1,-1,-1, -1,-1,-1, -1,-1,-1, -1,-1,-1 ]
   joint_offsets: [ 0,0,0, 0,0,0, 0,0,0, 0,0,0 ]
 
   # abad_p: 60
@@ -91,12 +91,12 @@ motor_params:
   # knee_p: 60
   # knee_d: 1.2
 
-  abad_p: 60
+  abad_p: 100
   abad_d: 1.0
-  hip_p: 80
-  hip_d: 0.8
-  knee_p: 80
-  knee_d: 0.8
+  hip_p: 100
+  hip_d: 2.0
+  knee_p: 100
+  knee_d: 2.0
 
 controller_params:
   # mode: 0 # VEL_MODE
@@ -106,3 +106,5 @@ controller_params:
 
 # is simulate or not
 is_sim: true
+
+

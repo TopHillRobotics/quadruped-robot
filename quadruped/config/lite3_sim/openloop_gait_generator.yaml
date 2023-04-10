@@ -29,7 +29,7 @@ gait_params:
     # stance_duration: [ 3.7, 3.7, 3.7, 3.7 ]
     duty_factor: [ 0.75, 0.75, 0.75, 0.75 ]
     # init_phase_full_cycle: [ 0., 0.5, 0.25, 0.75 ] # RL
-    init_phase_full_cycle: [ 0.5, 0., 0.75, 0.25 ] # RR 
+    init_phase_full_cycle: [ 0.5, 0., 0.75, 0.25 ] # RR
     # init_phase_full_cycle: [ 0.25, 0.75, 0.5, 0. ] # FL
     # init_phase_full_cycle: [ 0.75, 0.25, 0., 0.5 ] # FR
     # init_phase_full_cycle: [ 0., 0.25, 0.5, 0.75 ] # anymal walk order
@@ -39,12 +39,9 @@ gait_params:
     state_ratio: [0.2, 0.3, 0.3, 0.2] # full_stance + unload/load force = stance duty_factor
     move_base_ratio_point: [0.75, 0.875]
   advanced_trot:
-    # stance_duration: [ 0.6, 0.6, 0.6, 0.6 ]
-    stance_duration: [ 0.5, 0.5, 0.5, 0.5 ]
+    stance_duration: [ 0.6, 0.6, 0.6, 0.6 ]
+    # stance_duration: [ 0.7, 0.7, 0.7, 0.7 ]
     duty_factor: [ 0.6, 0.6, 0.6, 0.6 ]
-    # duty_factor: [ 0.0001, 0.0001, 0.0001, 0.0001 ]
     init_phase_full_cycle: [ 0.5, 0., 0., 0.5 ]
     initial_leg_state: [ 1, 1, 1, 1 ]  # STANCE: 1, SWING: 0
-    contact_detection_phase_threshold: 0.5
-
-  
+    contact_detection_phase_threshold: 0.4

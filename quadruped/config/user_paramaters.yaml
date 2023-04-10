@@ -16,7 +16,7 @@ initialVariance: 0.1
 movingWindowFilterSize: 120
 
 # swing controller
-desiredHeight: 0.29 # 0.29
+desiredHeight: 0.27 # 0.29
 desiredSpeed: [0., 0., 0.]
 desiredTwistingSpeed: 0.
 footClearance: 0.01
@@ -34,7 +34,7 @@ defaultFootPos: [0.185, 0.185, -0.185, -0.185,
 computeForceInWorldFrame: true
 
 # mit stance leg controller
-useWBC: true
+useWBC: false
 
 stairsVel: 0.1
 stairsTime: 13.0
