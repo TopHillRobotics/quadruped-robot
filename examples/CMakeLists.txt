@@ -13,17 +13,18 @@ include_directories(
 
 add_executable(example_a1_real example_a1_real/example_a1_real.cpp)
 add_executable(example_a1_sim example_a1_sim/example_a1_sim.cpp)
-add_executable(example_a1_sim_keyboard example_a1_sim_keyboard/example_a1_sim_keyboard.cpp)
+
 add_executable(example_lite3_sim example_lite3_sim/example_lite3_sim.cpp)
-add_executable(example_lite3sim_standup example_lite3_sim/example_lite3sim_standup.cpp)
 add_executable(example_lite3_real example_lite3_real/example_lite3_real.cpp)
 
+add_executable(example_keyboard example_keyboard/example_keyboard.cpp)
 target_link_libraries(example_a1_real ${catkin_LIBRARIES})
 target_link_libraries(example_a1_sim ${catkin_LIBRARIES})
-target_link_libraries(example_a1_sim_keyboard ${catkin_LIBRARIES})
+
 target_link_libraries(example_lite3_sim ${catkin_LIBRARIES})
-target_link_libraries(example_lite3sim_standup ${catkin_LIBRARIES})
 target_link_libraries(example_lite3_real ${catkin_LIBRARIES})
+
+target_link_libraries(example_keyboard ${catkin_LIBRARIES})
 
 
 #target_link_libraries(lite2_without_ros ${catkin_LIBRARIES})

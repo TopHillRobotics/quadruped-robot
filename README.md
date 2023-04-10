@@ -49,10 +49,6 @@ Now in another new terminal, you can run the example, like
 ```
 rosrun examples example_a1_sim
 ```
-To run an example controlled by the keyboard, use the following command instead:
-```
-rosrun examples example_a1_sim_keyboard
-```
 
 # 3. Run on Real Robot
 
@@ -103,9 +99,22 @@ Press the `Y` key to sit down and exit;
 
 # 5. Keyboard Control
 
-If you have run a keyboard example, you can also use the keyboard to control the robot. Press the `K` key to switch joy-control mode, then you can control the quadruped robot by pressing keys on the keyboard.
+If you want to use the keyboard to control the robot.
 
-Press the `K` key to switch joy-control mode;
+## Step 1: Run a keyboard node
+Since the keyboard example is customized, you need to source `setup.bash` in the new terminal before running it to ensure that the necessary environment has been set up.
+```
+source ${your_workspace}/devel/setup.bash
+```
+Then, run our keyboard node with command
+```
+rosrun examples example_keyboard
+```
+
+## Step 2: Control robot by keyboard
+Now you can control the quadruped robot by pressing keys on the keyboard.
+
+Press the `K` key to switch control mode;
 
 Press the `J` key to change the gait;
 
