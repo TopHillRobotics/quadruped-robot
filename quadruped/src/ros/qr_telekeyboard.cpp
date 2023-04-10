@@ -84,24 +84,22 @@ void qrTeleKeyboard::run()
     rockers_binding['q'] = {0, 1.0};
     rockers_binding['e'] = {0, -1.0};
 
-    while(true){
+    while (ros::ok()) {
         key = getch();
         mutex = true;
 
-        if(buttons_binding.count(key) == 1){
+        if (buttons_binding.count(key) == 1) {
             joy_msg.buttons[buttons_binding[key]] = 1;
         }
-        else if(rockers_binding.count(key) == 1){
+        else if (rockers_binding.count(key) == 1) {
             joy_msg.axes[std::get<0>(rockers_binding[key])] =
                 std::get<1>(rockers_binding[key]);
-        } else {
-            std::cout<<'this key is not used'<<std::endl;
-          }
+        }
 
-        // receive CTRL + v
-        if(key == '\x03' || finish){
+        // receive Ctrl+C
+        if (key == '\x03') {
             std::cout << "Break from keyboard." << std::endl;
-            finish = false;
+            finish = true;
             break;
         }
 
@@ -123,8 +121,10 @@ void qrTeleKeyboard::run_default()
     sensor_msgs::Joy joy_msg;
     joy_msg.buttons = {0,0,0,0,0,0,0,0,0,0,0};
     joy_msg.axes = {0,0,0,0,0,0,0,0};
-    while(true){
-        if(!mutex)
+    while (ros::ok()) {
+        if (finish)
+            break;
+        if (!mutex)
             pub.publish(joy_msg);
         sleep(1);
         ros::spinOnce();

@@ -63,7 +63,7 @@ public:
 
     /**
      * @brief Keep receiving the event from the keyboard. Keep running until input 
-     *        CTRL + v.
+     *        Ctrl+C.
      */
     void run();
 
