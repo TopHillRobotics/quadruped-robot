@@ -137,9 +137,6 @@ void GetComPositionInWorldFrame(qrRobot* quadruped, ros::ServiceClient& baseStat
 int main(int argc, char **argv)
 {
 
-    //std::string pathToPackage = ros::package::getPath("quadruped");
-    //std::string pathToNode =  pathToPackage + ros::this_node::getName();
-
     std::string homeDir = ros::package::getPath("quadruped") + "/";
     std::string robotName = "a1_sim";
 
@@ -179,9 +176,7 @@ int main(int argc, char **argv)
     qrStateEstimatorContainer* stateEstimators = robotRunner.GetStateEstimator();
     // ros module init
     ros::ServiceClient baseStateClient = nh.serviceClient<gazebo_msgs::GetLinkState>("/gazebo/get_link_state");
-    // RobotOdometryEstimator *legOdom = new RobotOdometryEstimator(quadruped, nh);
-    // CmdVelReceiver *cmdVelReceiver = new CmdVelReceiver(nh, privateNh);
-    // SLAMPoseReceiver *slamPoseReceiver = new SLAMPoseReceiver(nh, privateNh);
+
     qrController2GazeboMsg *controller2gazeboMsg = new qrController2GazeboMsg(quadruped, locomotionController, nh);
     // SwitchModeReceiver *switchModeReceiver = new SwitchModeReceiver(nh, privateNh);
     ROS_INFO("ROS Modules Init Finished");
@@ -215,52 +210,17 @@ int main(int argc, char **argv)
 
     while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS && count < 20000) {
         startTimeWall = quadruped->GetTimeSinceReset();
-        // switchMode = switchModeReceiver->GetSwitchMode();
-         // if (twistMode == TwistMode::ROS) {
-            // desiredSpeed = cmdVelReceiver->GetLinearVelocity();
-            // desiredTwistingSpeed = cmdVelReceiver->GetAngularVelocity();
-        // }
-        // if (switchMode != 2 && quadruped->controlParams["mode"] != switchMode) {
-        //     ROS_INFO_STREAM("switch mode from " << quadruped->controlParams["mode"] << " to " << switchMode);
-        //     SwitchMode<A1Sim>(quadruped, locomotionController, desiredSpeed, desiredTwistingSpeed, switchMode, startTimeWall);
-        // }
-        // UpdateControllerParams(locomotionController,
-        //                         desiredSpeed,
-        //                         desiredTwistingSpeed); // ros velocity
-        // std::cout << "count = " <<count << std::endl;
-        // vis.datax.push_back(count);
+
         if (count % 3 ==0) {
             GetComPositionInWorldFrame(quadruped, baseStateClient);
             Vec3<float> robotComRpyRate = quadruped->GetBaseRollPitchYawRate();
             Vec4<float> footForces = quadruped->GetFootForce();
             Vec3<float> rpy = quadruped->GetBaseRollPitchYaw();
             Vec3<float> robotComVelocity = stateEstimators->GetRobotEstimator()->GetEstimatedVelocity();  // base frame
-            // vis.datax.push_back(count);
-            // vis.datay1.push_back(footPositionInBaseFrame(1,0));(quadruped->basePosition[2]); //robot->gazeboBaseVInBaseFrame[0]);//
-            // vis.datay2.push_back(quadruped->GetFootPositionsInBaseFrame()(1,0)); // quadruped->stateDataFlow.estimatedMoment[0]
-            // vis.datay3.push_back(quadruped->GetFootPositionsInBaseFrame()(2,0));
-
-            // vis.datay4.push_back(quadruped->stateDataFlow.zmp[0]); // robot->gazeboBaseVInBaseFrame[1]);//
-            // vis.datay5.push_back(quadruped->stateDataFlow.zmp[1]);
-
-            // datay4.push_back(desiredF(0,3));
-            // if (robot->gazeboFootPositionInWorldFrame(0,0)<1.0 || robot->gazeboFootPositionInWorldFrame(0,1) < 1.0)
-            // {
-            //     datay5.push_back(-1);
-            // } else if (robot->gazeboFootPositionInWorldFrame(0,0)<1.18 || robot->gazeboFootPositionInWorldFrame(0,1) < 1.18){
-            //     datay5.push_back(5);
-            // } else if (robot->gazeboFootPositionInWorldFrame(0,0)<1.4 || robot->gazeboFootPositionInWorldFrame(0,1) < 1.4) {
-            //     datay5.push_back(10);
-            // } else {
-            //     datay5.push_back(15);
-            // }
         }
 
         robotRunner.Update();
         robotRunner.Step();
-        //ros
-        // legOdom->PublishOdometry();
-        // controller2gazeboMsg->PublishGazeboStateCallback();
 
         currentTime = quadruped->GetTimeSinceReset();
         avgCost += (currentTime - startTimeWall);
@@ -284,15 +244,6 @@ int main(int argc, char **argv)
             break;
             // exit(0);
         }
-
-//        auto& vis2d = quadruped->stateDataFlow.visualizer;
-//        auto openloop = robotRunner.GetGaitGenerator();
-//        vis2d.datax.push_back(count);
-//        vis2d.datay1.push_back(openloop->phaseInFullCycle[0]);
-//        vis2d.datay2.push_back(openloop->desiredLegState[0]);
-//        vis2d.datay3.push_back(openloop->legState[0]);
-//        vis2d.datay4.push_back(currentTime);
-
         if (quadruped->useRosTime) {
             ros::spinOnce();
             // loop_rate.sleep();
@@ -310,10 +261,6 @@ int main(int argc, char **argv)
     }
 
     quadruped->stateDataFlow.visualizer.Show();
-
-    // if (count > 20000) {
-    //     quadruped->stateDataFlow.visualizer.Show();
-    // }
 
     ros::shutdown();
     return 0;

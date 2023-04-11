@@ -40,6 +40,6 @@
 #define JOY_CMD_PITCH_MAX 0.1
 
 const int NumMotorOfOneLeg = 3;
-const float MAXIMUM_STEP = 0.3001f;
+const float MAXIMUM_STEP = 0.001f;
 
 #endif //QR_CONFIG_H

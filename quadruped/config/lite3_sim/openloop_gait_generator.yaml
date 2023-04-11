@@ -1,4 +1,4 @@
-name: lite3
+name: lite3_sim
 gait_params:
   wait_time: 0.3
   gait: "advanced_trot"
@@ -44,4 +44,5 @@ gait_params:
     duty_factor: [ 0.6, 0.6, 0.6, 0.6 ]
     init_phase_full_cycle: [ 0.5, 0., 0., 0.5 ]
     initial_leg_state: [ 1, 1, 1, 1 ]  # STANCE: 1, SWING: 0
-    contact_detection_phase_threshold: 0.4
+    contact_detection_phase_threshold: 0.5
+

@@ -49,6 +49,7 @@ Now in another new terminal, you can run the example, like
 ```
 rosrun examples example_a1_sim
 ```
+If you want to switch A1 to Lite3, please check files, especially user_parameters.yaml,  in **config**  folder. Some parameters should be changed to fit the robot.
 
 # 3. Run on Real Robot
 

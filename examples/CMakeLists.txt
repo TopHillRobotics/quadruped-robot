@@ -26,7 +26,3 @@ target_link_libraries(example_lite3_real ${catkin_LIBRARIES})
 
 target_link_libraries(example_keyboard ${catkin_LIBRARIES})
 
-
-#target_link_libraries(lite2_without_ros ${catkin_LIBRARIES})
-#target_link_libraries(lite2_with_ros ${catkin_LIBRARIES})
-#target_link_libraries(example_lite2hw ${catkin_LIBRARIES})

@@ -26,10 +26,12 @@ swingKp:
   advanced_trot: [0.16, 0.16, 0.16] # sim
   # advanced_trot: [0.01, 0.03, 0.01 ] # real
 
-defaultFootPos: [0.185, 0.185, -0.185, -0.185,
-                0.14, -0.14, 0.14, -0.14,
-                -0.28, -0.28, -0.28, -0.28]
+# For A1
+# defaultFootPos: [0.185, 0.185, -0.185, -0.185,
+#                  0.14, -0.14, 0.14, -0.14,
+#                 -0.28, -0.28, -0.28, -0.28]
 
+# For Lite3
 defaultFootPos: [0.1745, 0.1745, -0.1745, -0.1745,
                 0.16, -0.16, 0.16, -0.16,
                 -0.27, -0.27, -0.27, -0.27]
@@ -38,7 +40,7 @@ defaultFootPos: [0.1745, 0.1745, -0.1745, -0.1745,
 computeForceInWorldFrame: true
 
 # mit stance leg controller
-useWBC: false
+useWBC: true
 
 stairsVel: 0.1
 stairsTime: 13.0

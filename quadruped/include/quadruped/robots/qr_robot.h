@@ -62,7 +62,7 @@ public:
      * @param robot_name: type of the robot.
      * @param config_file_path: path to robot config file.
      */
-    qrRobot(std::string robot_name, std::string config_file_path): robotName(robot_name), configFilePath(config_file_path) {
+    qrRobot(std::string robot_name, std::string config_file_path): robotName(robot_name), configFilePath(config_file_path), timer(useRosTime) {
     };
 
     virtual ~qrRobot() = default;
@@ -106,6 +106,7 @@ public:
      * @param motor_control_mode: control mode.
      */
     virtual void Step(const std::vector<qrMotorCommand> &motor_commands, MotorMode motor_control_mode) {
+      std::cout << "a opppp" << std::endl;
     };
 
     /**
@@ -498,7 +499,7 @@ public:
     /**
      * @brief Whether to use ROS time tools.
      */
-    bool useRosTime = false;
+    bool useRosTime = true;
 
     /**
      * @brief Timer that store time since robot starts.

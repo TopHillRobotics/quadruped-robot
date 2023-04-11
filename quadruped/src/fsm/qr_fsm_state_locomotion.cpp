@@ -100,7 +100,7 @@ void qrFSMStateLocomotion<T>::OnEnter()
             this->_data->gaitGenerator->gait = "trot";
             break;
         case Quadruped::RC_MODE::JOY_ADVANCED_TROT:
-            //this->_data->userParameters->controlFrequency = 500;
+            // this->_data->userParameters->controlFrequency = 500;
             this->_data->quadruped->controlParams["mode"] = LocomotionMode::ADVANCED_TROT;
             this->_data->gaitGenerator->gait = "advanced_trot";
             break;
