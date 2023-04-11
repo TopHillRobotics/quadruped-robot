@@ -498,7 +498,7 @@ public:
     /**
      * @brief Whether to use ROS time tools.
      */
-    bool useRosTime = true;
+    bool useRosTime = false;
 
     /**
      * @brief Timer that store time since robot starts.

@@ -135,7 +135,6 @@ qrRobotSim::qrRobotSim(ros::NodeHandle &nhIn, ros::NodeHandle &privateNhIn, std:
 
     imuSub = nh.subscribe("/trunk_imu", 1, &qrRobotSim::ImuCallback, this);
 
-
     std::cout << robotName + "_gazebo/FR_hip_controller/state" << std::endl;
 
     jointStateSub[0]  = nh.subscribe(robotName + "_gazebo/FR_hip_controller/state", 1, &qrRobotSim::FRhipCallback, this);

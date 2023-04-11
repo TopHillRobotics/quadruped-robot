@@ -151,7 +151,7 @@ int main(int argc, char **argv)
 
     float avgCost = 0.0f;
 
-    while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS) {
+    while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS && count < 20000) {
         startTimeWall = quadruped->GetTimeSinceReset();
 
         robotRunner.Update();
@@ -166,10 +166,10 @@ int main(int argc, char **argv)
         if (count % 3 ==0)
             GetComPositionInWorldFrame(quadruped, baseStateClient);
 
-        if((count+1) % 1000==0){
-            printf("avg time cost = %f [ms]\n", avgCost);
-            avgCost = 0.;
-        }
+//        if((count+1) % 1000==0){
+//            printf("avg time cost = %f [ms]\n", avgCost);
+//            avgCost = 0.;
+//        }
 //        if(quadruped->basePosition[2] < 0.10
 //            || quadruped->stateDataFlow.heightInControlFrame < 0.05
 //            || quadruped->basePosition[2]>0.40 || abs(quadruped->baseRollPitchYaw[0]) > 0.6){
@@ -179,6 +179,15 @@ int main(int argc, char **argv)
 //            // exit(0);
 //            break;
 //        }
+
+        auto& vis2d = quadruped->stateDataFlow.visualizer;
+        auto openloop = robotRunner.GetGaitGenerator();
+        vis2d.datax.push_back(count);
+        vis2d.datay1.push_back(openloop->phaseInFullCycle[0]);
+        vis2d.datay2.push_back(openloop->desiredLegState[0]);
+        vis2d.datay3.push_back(openloop->legState[0]);
+        vis2d.datay4.push_back(currentTime);
+
         if(quadruped->useRosTime){
             ros::spinOnce();
             // loop_rate.sleep();
@@ -192,7 +201,11 @@ int main(int argc, char **argv)
             while (quadruped->GetTimeSinceReset() - startTimeWall < quadruped->timeStep) {}
         }
         count++;
+
     }
+
+    quadruped->stateDataFlow.visualizer.Show();
+
     ros::shutdown();
     return 0;
 }

@@ -99,6 +99,7 @@ qrRobotRunner::qrRobotRunner(qrRobot* quadrupedIn, std::string& homeDir, ros::No
     desiredStateCommand(new qrDesiredStateCommand(nh, quadruped)),
     userParameters(homeDir+ "config/user_paramaters.yaml")
 {
+    std::cout <<"[Runner] name: "  << quadruped->robotName <<std::endl;
     std::cout << homeDir + "config/" + quadruped->robotName + "/main.yaml" << std::endl;
     YAML::Node mainConfig = YAML::LoadFile(homeDir + "config/" + quadruped->robotName + "/main.yaml");
     int twistMode = mainConfig["speed_update_mode"].as<int>();

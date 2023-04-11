@@ -121,7 +121,7 @@
     </link>
 
     <joint name="FL_Ankle" type="fixed">
-      <origin xyz="0 0 -0.21"/>
+      <origin xyz="0 0 -0.20"/>
       <parent link="FL_SHANK" />
       <child link="FL_FOOT" />
     </joint>
@@ -216,7 +216,7 @@
     </link>
 
     <joint name="FR_Ankle" type="fixed">
-      <origin xyz="0 0 -0.21"/>
+      <origin xyz="0 0 -0.20"/>
       <parent link="FR_SHANK" />
       <child link="FR_FOOT" />
     </joint>
@@ -311,7 +311,7 @@
     </link>
 
     <joint name="HL_Ankle" type="fixed">
-      <origin xyz="0 0 -0.21"/>
+      <origin xyz="0 0 -0.20"/>
       <parent link="HL_SHANK" />
       <child link="HL_FOOT" />
     </joint>
@@ -406,7 +406,7 @@
     </link>
 
     <joint name="HR_Ankle" type="fixed">
-      <origin xyz="0 0 -0.21"/>
+      <origin xyz="0 0 -0.20"/>
       <parent link="HR_SHANK" />
       <child link="HR_FOOT" />
     </joint>

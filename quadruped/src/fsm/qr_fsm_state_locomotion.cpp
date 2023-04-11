@@ -100,6 +100,7 @@ void qrFSMStateLocomotion<T>::OnEnter()
             this->_data->gaitGenerator->gait = "trot";
             break;
         case Quadruped::RC_MODE::JOY_ADVANCED_TROT:
+            //this->_data->userParameters->controlFrequency = 500;
             this->_data->quadruped->controlParams["mode"] = LocomotionMode::ADVANCED_TROT;
             this->_data->gaitGenerator->gait = "advanced_trot";
             break;
@@ -115,7 +116,9 @@ void qrFSMStateLocomotion<T>::OnEnter()
         /* Reset the locomotion controller entering the locomotion state. */
         this->_data->quadruped->Reset();
         this->_data->quadruped->timeStep = 1.0 / this->_data->userParameters->controlFrequency;
-    
+
+        std::cout << "Time Step: " << this->_data->quadruped->timeStep << std::endl;
+
         locomotionController->Reset();
         this->_data->stateEstimators->Reset();
     }

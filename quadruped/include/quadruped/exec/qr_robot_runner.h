@@ -92,6 +92,9 @@ public:
       return desiredStateCommand;
     }
 
+    inline qrGaitGenerator* GetGaitGenerator() {
+      return gaitGenerator;
+    }
 private:
 
     qrRobot* quadruped;

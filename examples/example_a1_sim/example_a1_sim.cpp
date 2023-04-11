@@ -213,7 +213,7 @@ int main(int argc, char **argv)
     float avgCost=0;
     const int n = 10000;
 
-    while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS) {
+    while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS && count < 20000) {
         startTimeWall = quadruped->GetTimeSinceReset();
         // switchMode = switchModeReceiver->GetSwitchMode();
          // if (twistMode == TwistMode::ROS) {
@@ -284,6 +284,15 @@ int main(int argc, char **argv)
             break;
             // exit(0);
         }
+
+//        auto& vis2d = quadruped->stateDataFlow.visualizer;
+//        auto openloop = robotRunner.GetGaitGenerator();
+//        vis2d.datax.push_back(count);
+//        vis2d.datay1.push_back(openloop->phaseInFullCycle[0]);
+//        vis2d.datay2.push_back(openloop->desiredLegState[0]);
+//        vis2d.datay3.push_back(openloop->legState[0]);
+//        vis2d.datay4.push_back(currentTime);
+
         if (quadruped->useRosTime) {
             ros::spinOnce();
             // loop_rate.sleep();
@@ -299,6 +308,8 @@ int main(int argc, char **argv)
 
         count++;
     }
+
+    quadruped->stateDataFlow.visualizer.Show();
 
     // if (count > 20000) {
     //     quadruped->stateDataFlow.visualizer.Show();

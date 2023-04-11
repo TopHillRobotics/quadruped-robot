@@ -32,7 +32,7 @@ robot_params:
 
   upper_l: 0.20
 
-  lower_l: 0.21
+  lower_l: 0.20
 
   velocity:
     # com_offset: [ -0.005, 0.0022, 0.000515 ] # zang mpc
@@ -91,12 +91,12 @@ motor_params:
   # knee_p: 60
   # knee_d: 1.2
 
-  abad_p: 100
+  abad_p: 40
   abad_d: 1.0
-  hip_p: 100
-  hip_d: 2.0
-  knee_p: 100
-  knee_d: 2.0
+  hip_p: 60
+  hip_d: 1.0
+  knee_p: 60
+  knee_d: 1.0
 
 controller_params:
   # mode: 0 # VEL_MODE

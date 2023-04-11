@@ -88,6 +88,7 @@ void qrOpenLoopGaitGenerator::Reset(float currentTime)
     initialLegPhase = Eigen::MatrixXf::Map(&initialLegPhaseList[0], 4, 1);
     contactDetectionPhaseThreshold = config["gait_params"][gait]["contact_detection_phase_threshold"].as<float>();
     waitTime = config["gait_params"]["wait_time"].as<float>();
+
     for (int legId = 0; legId < initialLegState.size(); legId++) {
         /* when dutyFactor is about 0, this leg stay in air. */
         if (robotics::math::almostEqual(dutyFactor[legId],0.f, 0.001f)) {
@@ -118,62 +119,8 @@ void qrOpenLoopGaitGenerator::Reset(float currentTime)
 
     qrGaitGenerator::Reset(currentTime);
     std::cout << "stanceDuration = " << stanceDuration << std::endl;
+    std::cout << "dutyfactor: " << this->dutyFactor << std::endl;
 }
-
-
-/*
-void OpenloopGaitGenerator::Update(float currentTime)
-{
-    timeSinceReset = currentTime;
-    Schedule(currentTime);
-
-    count++;
-    float augmentedTime, ratio;
-
-    for (int legId = 0; legId < initialLegState.size(); legId++) {
-
-        if (allowSwitchLegState.cast<int>().sum() == 4) {
-            if (!robot->stop || (robot->stop && lastLegState[legId]==LegState::SWING)) {
-                lastLegState[legId] = curLegState[legId];
-                curLegState[legId] = desiredLegState[legId];
-            }
-
-            augmentedTime = initialLegPhase[legId] * fullCyclePeriod[legId] + timeSinceReset;
-            phaseInFullCycle[legId] = fmod(augmentedTime, fullCyclePeriod[legId]) / fullCyclePeriod[legId];
-            // std::cout << "phaseInFullCycle = " <<phaseInFullCycle[legId] <<std::endl;
-
-            ratio = initStateRadioInCycle[legId];
-            if (phaseInFullCycle[legId] < ratio) {
-                desiredLegState[legId] = initialLegState[legId];
-                normalizedPhase[legId] = phaseInFullCycle[legId] / ratio;
-            } e    count++;lse {
-                desiredLegState[legId] = nextLegState[legId];
-                normalizedPhase(legId) = (phaseInFullCycle[legId] - ratio) / (1 - ratio);
-            }
-            // printf("leg %d normalizedPhase = %f\n", legId, normalizedPhase(legId));
-
-            legState[legId] = desiredLegState[legId];
-
-            if (normalizedPhase[legId] < contactDetectionPhaseThreshold) {
-                continue;
-            }
-            Eigen::Matrix<bool, 4, 1> contactState = robot->GetFootContacts();
-            if (legState[legId] == LegState::SWING && contactState[legId]) {
-                legState[legId] = LegState::EARLY_CONTACT;
-            }
-            if (legState[legId] == LegState::STANCE && !contactState[legId]) {
-                legState[legId] = LegState::LOSE_CONTACT;
-            }
-        }
-
-    }
-    lastTime = currentTime;
-
-    // std::cout << "desiredLegState " << desiredLegState.transpose() << std::endl;
-    // std::cout << "curLegState " << curLegState.transpose() << std::endl;
-    // std::cout << "legState " << legState.transpose() << std::endl;
-}
-*/
 
 
 void qrOpenLoopGaitGenerator::Update(float currentTime)
@@ -256,6 +203,7 @@ void qrOpenLoopGaitGenerator::Update(float currentTime)
         }
 
     }
+
     lastTime = currentTime;
 }
 

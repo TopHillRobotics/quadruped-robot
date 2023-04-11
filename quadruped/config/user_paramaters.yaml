@@ -23,12 +23,16 @@ footClearance: 0.01
 frictionCoeffs: [0.45, 0.45, 0.45, 0.45]
 swingKp:
   trot: [0.03, 0.03, 0.03] # -0.01
-  # advanced_trot: [0.16, 0.16, 0.16] # sim
-  advanced_trot: [0.01, 0.03, 0.01 ] # real
+  advanced_trot: [0.16, 0.16, 0.16] # sim
+  # advanced_trot: [0.01, 0.03, 0.01 ] # real
 
 defaultFootPos: [0.185, 0.185, -0.185, -0.185,
                 0.14, -0.14, 0.14, -0.14,
                 -0.28, -0.28, -0.28, -0.28]
+
+defaultFootPos: [0.1745, 0.1745, -0.1745, -0.1745,
+                0.16, -0.16, 0.16, -0.16,
+                -0.27, -0.27, -0.27, -0.27]
 
 # stance controller
 computeForceInWorldFrame: true
