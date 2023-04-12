@@ -9,7 +9,7 @@ Build the project using ROS tool `catkin_make`
 catkin_make
 ```
 If you have a less powerful machine, there are a few steps you can take to optimize the project performance.
-1. To improve simulation performance, navigate to the `.world` file located in the **simulation/qr_gazebo/worlds** folder and adjust the `<real_time_update_rate>`. The default value is 1000, but you can reduce it to 800 or lower.
+1. To improve simulation performance, navigate to the `.world` file (the default file is `earth.world`) located in the **simulation/qr_gazebo/worlds** folder and adjust the `<real_time_update_rate>`. The default value is 1000, but you can reduce it to 800 or lower. <real_time_factor>1.0</real_time_factor>
 2. Navigate to the **quadruped** folder, uncomment any `BLAS` related content in the `CMakeLists.txt` file if they are commented and then switch the followihng option to `ON`. 
 ```
 option(USE_BLAS   "USE MKL BLAS"     ON)
