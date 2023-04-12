@@ -77,10 +77,10 @@ void qrTeleKeyboard::run()
     buttons_binding['u'] = 5;//joy RL
 
     std::map<char, std::tuple<int, float>> rockers_binding;
-    rockers_binding['w'] = {4, 1.0};
-    rockers_binding['a'] = {3, 1.0};
-    rockers_binding['s'] = {4, -1.0};
-    rockers_binding['d'] = {3, -1.0};
+    rockers_binding['w'] = {4, 0.8};
+    rockers_binding['a'] = {3, 0.8};
+    rockers_binding['s'] = {4, -0.8};
+    rockers_binding['d'] = {3, -0.8};
     rockers_binding['q'] = {0, 1.0};
     rockers_binding['e'] = {0, -1.0};
 

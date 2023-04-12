@@ -97,7 +97,7 @@ void UpdateControllerParams(qrLocomotionController *controller, Eigen::Vector3f 
 qrRobotRunner::qrRobotRunner(qrRobot* quadrupedIn, std::string& homeDir, ros::NodeHandle& nh):
     quadruped(quadrupedIn),
     desiredStateCommand(new qrDesiredStateCommand(nh, quadruped)),
-    userParameters(homeDir+ "config/user_paramaters.yaml")
+    userParameters(homeDir+ "config/user_parameters.yaml")
 {
     std::cout <<"[Runner] name: "  << quadruped->robotName <<std::endl;
     std::cout << homeDir + "config/" + quadruped->robotName + "/main.yaml" << std::endl;

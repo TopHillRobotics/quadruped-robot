@@ -32,16 +32,16 @@ set(linkPath)
 
 list(APPEND includePath "/usr/include/eigen3")
 
-# If wanna use BLAS acceleration, uncomment this if needed.
-#if (${USE_BLAS})
-#    message("--------------USE_BLAS-----------------")
-#    set(BLA_VENDOR Intel10_64lp)
-#    add_definitions(-DEIGEN_USE_MKL_ALL)
+#To use BLAS acceleration, uncomment the following lines.
+if (${USE_BLAS})
+   message("--------------USE_BLAS-----------------")
+   set(BLA_VENDOR Intel10_64lp)
+   add_definitions(-DEIGEN_USE_MKL_ALL)
 
-#    find_package(BLAS REQUIRED)
-#    message(${BLAS_LIBRARIES})
-#    target_link_libraries(quadruped PUBLIC ${BLAS_LIBRARIES})
-#endif()
+   find_package(BLAS REQUIRED)
+   message(${BLAS_LIBRARIES})
+   target_link_libraries(quadruped PUBLIC ${BLAS_LIBRARIES})
+endif()
 
 
 # library yaml

@@ -208,7 +208,7 @@ int main(int argc, char **argv)
     float avgCost=0;
     const int n = 10000;
 
-    while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS && count < 20000) {
+    while (ros::ok() && currentTime - startTime < MAX_TIME_SECONDS) {
         startTimeWall = quadruped->GetTimeSinceReset();
 
         if (count % 3 ==0) {
