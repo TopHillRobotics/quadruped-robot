@@ -1,16 +1,16 @@
 # 1. Build the project
 
-After jump to your workspace by command:
+Locate your workspace
 ```
 cd ${your_workspace}
 ```
-using ROS tool `catkin_make` to build the project
+Build the project using ROS tool `catkin_make` 
 ```
 catkin_make
 ```
-If you want to speed up the program, you can
-1. (For Sim) Lower down the `<real_time_update_rate>` in the `.world` file of **simulation/qr_gazebo/worlds** folder.
-2. Uncomment the `BLAS` related content in the `CMakeLists.txt` of **quadruped** folder.
+If you have a less powerful machine, there are a few steps you can take to optimize the project performance.
+1. To improve simulation performance, navigate to the `.world` file located in the **simulation/qr_gazebo/worlds** folder and adjust the `<real_time_update_rate>`. The default value is 1000, but you can reduce it to 800 or lower.
+2. Navigate to the **quadruped** folder, remove the comment in the `CMakeLists.txt` file for any `BLAS` related content.
 
 For intel-chip users, the program can be easily speed up by MKL library. To install MKL, download Intel oneAPI Math Kernel Library Offline Installer. Make it work by using command below before `catkin_make` your workspace.
 ```
