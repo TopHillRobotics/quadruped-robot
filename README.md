@@ -1,6 +1,6 @@
 # 1. Build the project
 
-Locate your workspace
+Navigate to your workspace
 ```
 cd ${your_workspace}
 ```
