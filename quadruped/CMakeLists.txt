@@ -40,7 +40,6 @@ if (${USE_BLAS})
 
    find_package(BLAS REQUIRED)
    message(${BLAS_LIBRARIES})
-   target_link_libraries(quadruped PUBLIC ${BLAS_LIBRARIES})
 endif()
 
 
@@ -161,3 +160,6 @@ else() #A1 & AligenGo
     target_link_libraries(quadruped PUBLIC robot_interface)
 endif()
 
+if (${USE_BLAS})
+   target_link_libraries(quadruped PUBLIC ${BLAS_LIBRARIES})
+endif()

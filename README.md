@@ -7,7 +7,7 @@ Note that this branch is different from the one in the `main` branch. The archit
     <img src="./img/mpc-wbc process diagram.png">
 </div>
 
-The codes are tested for Unitree A1 and DeepRobotics Lite3. To fine-tune the MPC-WBC algorithm, you can adjust the corresponding parameters (e.g. KP and KD in **quadruped/controllers/task_set** or weights in WBC locomotion controller).
+The codes are tested for Unitree A1 and DeepRobotics Lite3. To fine-tune the MPC-WBC algorithm, you can adjust the corresponding parameters (e.g. KP and KD in **quadruped/src/controllers/wbc/task_set** or weights in WBC locomotion controller).
 
 # 2. Source Code Structure
 
