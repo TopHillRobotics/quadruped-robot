@@ -10,9 +10,11 @@ catkin_make
 ```
 If you have a less powerful machine, there are a few steps you can take to optimize the project performance.
 1. To improve simulation performance, navigate to the `.world` file located in the **simulation/qr_gazebo/worlds** folder and adjust the `<real_time_update_rate>`. The default value is 1000, but you can reduce it to 800 or lower.
-2. Navigate to the **quadruped** folder, remove the comment in the `CMakeLists.txt` file for any `BLAS` related content.
-
-For intel-chip users, the program can be easily speed up by MKL library. To install MKL, download Intel oneAPI Math Kernel Library Offline Installer. Make it work by using command below before `catkin_make` your workspace.
+2. Navigate to the **quadruped** folder, uncomment any `BLAS` related content in the `CMakeLists.txt` file if they are commented and then switch the followihng option to `ON`. 
+```
+option(USE_BLAS   "USE MKL BLAS"     ON)
+```
+3. To boost the performance of a program running on an Intel chip, consider using the MKL library. To install MKL, download the Intel oneAPI Math Kernel Library Offline Installer. After installation, execute the following command prior to running `catkin_make` on your workspace.
 ```
 source /opt/intel/oneapi/setvars.sh
 ```
