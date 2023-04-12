@@ -4,7 +4,7 @@ This project branch integrates some advanced algrithms such as MPC and WBC to co
 Note that this branch is different from the one in the `main` branch. The architecture and major modules are shown below
 
 <div align="center">
-    <img src="./img/mpc-wbc module diagram.png">
+    <img src="./img/mpc-wbc process diagram.png">
 </div>
 
 The codes are tested for Unitree A1 and DeepRobotics Lite3. To fine-tune the MPC-WBC algorithm, you can adjust the corresponding parameters (e.g. KP and KD in **quadruped/controllers/task_set** or weights in WBC locomotion controller).
