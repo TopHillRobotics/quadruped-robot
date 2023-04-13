@@ -1,6 +1,9 @@
 # 1. Overview
 
 This project branch integrates some advanced algrithms such as MPC and WBC to control quadruped robots.
+
+This branch have been tested under **ROS Noetic** and **Ubuntu 20.04**, for optimal performance, it is recommended to test this branch using the same environment.
+
 Note that this branch is different from the one in the `main` branch. The architecture and major modules are shown below
 
 <div align="center">
