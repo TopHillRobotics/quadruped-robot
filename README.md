@@ -24,6 +24,16 @@ The source code includes five major directories
 
 # 3. Build the Project
 
+## Step 1: Install the third party dependencies
+Please ensure that all required dependencies have been installed before building the project
+```
+sudo apt install libyaml-cpp-dev
+sudo apt install libeigen3-dev
+sudo apt install liblcm-dev
+sudo apt install libglm-dev
+```
+
+## Step 2: Compile the codes
 Navigate to your workspace
 ```
 cd ${your_workspace}
