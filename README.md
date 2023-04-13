@@ -147,6 +147,7 @@ Joystick : control robot's movement
 
 # 7. Run on Real Robot
 
+Note that, if you are running on an ARM architecture board, please navigate to the **quadruped** folder and uncomment any `aarch64` related content in the `CMakeLists.txt` file
 ## Step 1: Start a ROS master
 Launch a ROS master node
 ```
