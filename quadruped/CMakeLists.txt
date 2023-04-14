@@ -5,8 +5,6 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_BUILD_TYPE "RELEASE") #"RELEASE", "Debug" -DEIGEN_NO_DEBUG
 set(CMAKE_CXX_FLAGS "-O3 -DEIGEN_NO_DEBUG -fopenmp ${CMAKE_CXX_FLAGS}")
 #set(CMAKE_CXX_FLAGS "-O3 -g -Wall ${CMAKE_CXX_FLAGS}")
-# set(CMAKE_C_COMPILER "aarch64-linux-gnu-gcc")
-# set(CMAKE_CXX_COMPILER "aarch64-linux-gnu-g++")
 message("CMAKE_CXX_FLAGS = " ${CMAKE_CXX_FLAGS})
 ADD_COMPILE_OPTIONS(-D_cplusplus)
 ADD_COMPILE_OPTIONS(-D_useros)

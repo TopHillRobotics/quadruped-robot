@@ -70,9 +70,14 @@ roslaunch qr_gazebo gazebo_startup.launch wname:=earth
 ```
 The `wname` (optional) parameter specifies the world to be loaded in Gazebo. The default value is `earth`.
 
-In a new terminal, spawn a robot model and manage controllers in the simulation environment
+In a new terminal, spawn a robot model and manage controllers in the simulation environment.
+Below is for loading a Unitree A1 robot.
 ```
 roslaunch qr_gazebo model_spawn.launch rname:=a1 use_xacro:=true use_camera:=false
+```
+Below is for loading a DeepRobotics Lite3 robot.
+```
+roslaunch qr_gazebo model_spawn.launch rname:=lite3 use_xacro:=true use_camera:=false
 ```
 The `rname` (optional) parameter specifies the robot to be loaded in Gazebo. The default value is `a1`.
 
@@ -83,13 +88,16 @@ The `use_camera` (optional) parameter controls whether to load camera model with
 **Note that, after executing the command above, press the `Enter` key to start a robot’s controller. The low-level controller is now active and ready to support the movement of a quadruped robot.**
 
 ## Step 3: Run an example
-The following is an example to control Unitree robot A1 to move around. Please check the `user_parameters.yaml` file in the **quadruped/config** folder is properly configured for the Unitree robot A1.
+Here is an example to control Unitree robot A1 (or DeepRobotics Lite3) to move around. Please check the `user_parameters.yaml` file in the **quadruped/config** folder is properly configured for the robot.
 
 To run an example, open a new terminal and execute
 ```
-rosrun examples example_a1_sim
+rosrun examples example_a1_sim 
 ```
-If you want to switch from robot A1 to robot Lite3, modify the parameters in the `user_parameters.yaml` file and ensure they are set for the new robot.
+If you want to switch from robot A1 to Lite3, modify the parameters in the `user_parameters.yaml` file and ensure they are set for the new robot. Then execute
+```
+rosrun examples example_lite3_sim 
+```
 
 # 5. Control A Robot to Move Around using Keyboard
 
@@ -147,7 +155,12 @@ Joystick : control robot's movement
 
 # 7. Run on Real Robot
 
-Note that, if you are running on an ARM architecture board, please navigate to the **quadruped** folder and uncomment any `aarch64` related content in the `CMakeLists.txt` file
+Note that, if your code is running on an ARM architecture board (e.g. DeepRobotics Lite3), please navigate to the **quadruped** folder and add the following commands in the `CMakeLists.txt` file. 
+```
+set(CMAKE_C_COMPILER "aarch64-linux-gnu-gcc")
+set(CMAKE_CXX_COMPILER "aarch64-linux-gnu-g++")
+```
+
 ## Step 1: Start a ROS master
 Launch a ROS master node
 ```
@@ -155,7 +168,11 @@ roscore
 ```
 
 ## Step 2: Run an example
-To run a real robot example, open a new terminal and execute
+To run an example code on a real robot (A1), open a new terminal and execute
 ```
 rosrun examples example_a1_real
+```
+Or run the code on the Lite3
+```
+rosrun examples example_lite3_real
 ```
