@@ -285,7 +285,7 @@ map<int, Matrix<float, 5, 1>> qrRaibertSwingLegController::GetAction()
         switch (robot->controlParams["mode"]) {
 
         case LocomotionMode::VELOCITY_LOCOMOTION: {
-            hipOffset = hipPositions.col(legId);
+            hipOffset = hipPositions.col(legId).colwise() + robot->comOffset;
             twistingVector = Matrix<float, 3, 1>(-hipOffset[1], hipOffset[0], 0);
             hipHorizontalVelocity = baseVelocity + yawDot * twistingVector; // in base frame
             hipHorizontalVelocity = dR * hipHorizontalVelocity; // in control frame
