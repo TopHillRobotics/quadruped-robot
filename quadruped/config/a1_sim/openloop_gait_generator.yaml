@@ -39,8 +39,8 @@ gait_params:
     state_ratio: [0.2, 0.3, 0.3, 0.2] # full_stance + unload/load force = stance duty_factor
     move_base_ratio_point: [0.75, 0.875]
   advanced_trot:
-    stance_duration: [ 0.6, 0.6, 0.6, 0.6 ]
-    # stance_duration: [ 0.7, 0.7, 0.7, 0.7 ]
+    # stance_duration: [ 0.6, 0.6, 0.6, 0.6 ]
+    stance_duration: [ 0.5, 0.5, 0.5, 0.5 ]
     duty_factor: [ 0.6, 0.6, 0.6, 0.6 ]
     init_phase_full_cycle: [ 0.5, 0., 0., 0.5 ]
     initial_leg_state: [ 1, 1, 1, 1 ]  # STANCE: 1, SWING: 0

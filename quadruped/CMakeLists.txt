@@ -37,10 +37,10 @@ if (${USE_BLAS})
    message("--------------USE_BLAS-----------------")
    set(BLA_VENDOR Intel10_64lp)
    add_definitions(-DEIGEN_USE_MKL_ALL)
-
-   find_package(BLAS REQUIRED)
-   message(${BLAS_LIBRARIES})
 endif()
+
+find_package(BLAS REQUIRED)
+message(${BLAS_LIBRARIES})
 
 
 # library yaml
@@ -145,6 +145,7 @@ target_link_libraries(quadruped PUBLIC
     ${PYTHON_LIBRARIES}
     ${YAML_CPP_LIBRARIES}
     ${catkin_LIBRARIES}
+    ${BLAS_LIBRARIES}
     ${UNITREE_SDK_LIB}
     deeprobotics_legged_sdk
     lcm tinynurbs::tinynurbs
@@ -160,6 +161,6 @@ else() #A1 & AligenGo
     target_link_libraries(quadruped PUBLIC robot_interface)
 endif()
 
-if (${USE_BLAS})
-   target_link_libraries(quadruped PUBLIC ${BLAS_LIBRARIES})
-endif()
+# if (${USE_BLAS})
+#    target_link_libraries(quadruped PUBLIC ${BLAS_LIBRARIES})
+# endif()
